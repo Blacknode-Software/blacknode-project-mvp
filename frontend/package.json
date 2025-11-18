@@ -23,7 +23,8 @@
         "*.vue|*.ts": [
             "prettier --write",
             "eslint"
-        ]
+        ],
+        "!(*.vue|*.ts)": "prettier --write"
     },
     "dependencies": {
         "pinia": "^3.0.3",
