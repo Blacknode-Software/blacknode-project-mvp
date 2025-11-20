@@ -3,7 +3,7 @@ import { describe, it, expect } from 'vitest';
 import { mount } from '@vue/test-utils';
 import ProgressBar from '../ProgressBar.vue';
 
-describe('HelloWorld', () => {
+describe('UI Toolkit | Progress', () => {
     it('renders properly', () => {
         const wrapper = mount(ProgressBar, {
             props: { value: 50, maxValue: 100 },

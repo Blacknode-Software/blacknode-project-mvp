@@ -1,11 +1,20 @@
 <script setup lang="ts">
-defineProps({
+import { lerpColor } from '@/utils/LerpColor';
+import { computed } from 'vue';
+
+const props = defineProps({
     value: Number,
     maxValue: Number,
 });
 
-const startColor = '#2A7B9B';
-const endColor = '#EDDD53';
+const colors = computed(() => ({
+    start:
+        '#' +
+        lerpColor(0x238dde, 0x23dea0, (props.value || 0) / (props.maxValue || 1)).toString(16),
+    end:
+        '#' +
+        lerpColor(0x6123de, 0x23b9de, (props.value || 0) / (props.maxValue || 1)).toString(16),
+}));
 </script>
 
 <template>
@@ -16,7 +25,7 @@ const endColor = '#EDDD53';
                 class="progress-value"
                 :style="{
                     width: `${((value || 0) / (maxValue || 1)) * 100}%`,
-                    background: `linear-gradient(90deg, ${startColor} 0%, ${endColor} 100%)`,
+                    background: `linear-gradient(90deg, ${colors.start} 0%, ${colors.end} 100%)`,
                 }"
             ></div>
         </div>
