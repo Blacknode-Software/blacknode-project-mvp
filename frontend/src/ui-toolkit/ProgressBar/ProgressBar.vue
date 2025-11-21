@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { lerpColor } from '@/utils/LerpColor';
+import { lerpColor } from '@/utils';
 import { computed } from 'vue';
 
 const props = defineProps({
