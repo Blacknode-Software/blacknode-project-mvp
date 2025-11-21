@@ -5,7 +5,7 @@
  * @param b (hex color end val)
  * @param amount (the amount to fade from a to b)
  */
-export function lerpColor(a: number, b: number, amount: number) {
+export default function lerpColor(a: number, b: number, amount: number) {
     const ar = a >> 16,
         ag = (a >> 8) & 0xff,
         ab = a & 0xff,
