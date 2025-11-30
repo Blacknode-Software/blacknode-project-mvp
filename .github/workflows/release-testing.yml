@@ -1,9 +1,6 @@
 name: Connect to Netbird
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
 
 jobs:
   netbird:
@@ -19,7 +16,6 @@ jobs:
           setup-key: ${{ secrets.NETBIRD_SETUP_KEY }}
           hostname: 'blacknode-github-actions'
           management-url: 'https://connect.hinsinger.me'
-          args: '--custom-arg value'
-
+          
       - name: CLI 
         run: 'ping dns.int.hinsinger.me'
