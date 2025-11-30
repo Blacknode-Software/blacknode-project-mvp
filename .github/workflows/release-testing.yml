@@ -1,0 +1,25 @@
+name: Connect to Netbird
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  netbird:
+    name: Connect to Netbird
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Netbird Connect
+        uses: Alemiz112/netbird-connect@v1
+        with:
+          setup-key: ${{ secrets.NETBIRD_SETUP_KEY }}
+          hostname: 'blacknode-github-actions'
+          management-url: 'https://connect.hinsinger.me'
+          args: '--custom-arg value'
+
+      - name: CLI 
+        run: 'ping dns.int.hinsinger.me'
