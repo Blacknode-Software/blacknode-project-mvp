@@ -21,19 +21,5 @@ jobs:
           hostname: 'blacknode-github-actions'
           management-url: 'https://connect.hinsinger.me'
 
-      - name: Show DNS before change
-        run: |
-          resolvectl status
-
-      - name: Change DNS 
-        run: |
-          sudo resolvectl dns eth0 172.30.10.3
-          sudo resolvectl domain eth0 ~int.hinsinger.me ~int.blacknode.software
-          sudo resolvectl flush-caches
-
-      - name: Show DNS after change
-        run: |
-          resolvectl status
-
       - name: CLI
         run: ${{ inputs.command }}
