@@ -1,6 +1,10 @@
 name: Connect to Netbird
 on:
   workflow_dispatch:
+    inputs:
+      command:
+        required: false
+        type: string
 
 jobs:
   netbird:
@@ -18,4 +22,4 @@ jobs:
           management-url: 'https://connect.hinsinger.me'
           
       - name: CLI 
-        run: 'ping dns.int.hinsinger.me'
+        run: ${{ inputs.command }}
