@@ -20,6 +20,10 @@ jobs:
           setup-key: ${{ secrets.NETBIRD_SETUP_KEY }}
           hostname: 'blacknode-github-actions'
           management-url: 'https://connect.hinsinger.me'
-          
-      - name: CLI 
+
+      - name: Change DNS 
+        run: |
+          sudo sed -i '1i nameserver 172.30.10.3' /etc/resolv.conf
+
+      - name: CLI
         run: ${{ inputs.command }}
