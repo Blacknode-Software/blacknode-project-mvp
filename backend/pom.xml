@@ -1,0 +1,49 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>software.blacknode.backend</groupId>
+	<artifactId>blacknode-software-backend</artifactId>
+	<version>0.0.1-DEV</version>
+	<packaging>pom</packaging>
+	<name>Blacknode Software Backend</name>
+	<description>The system applies standard DDD partitions: aggregates,
+		entities, domain services, and repositories located in the
+		infrastructure layer. The backend handles business logic, data
+		operations, and communication with external resources. The frontend
+		manages application state and presents data to the user. Integrations
+		include a connection to SurrealDB, file handling in an S3-compatible
+		storage space, and real-time communication via WebSocket. The system’s
+		decomposition preserves the simplicity of an MVP while maintaining a
+		natural path for expansion into a full engineering-grade product.</description>
+
+	<properties>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<lombok.version>1.18.30</lombok.version>
+		<spring-boot.version>3.2.0</spring-boot.version>
+	</properties>
+	
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>${spring-boot.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok</artifactId>
+				<version>${lombok.version}</version>
+				<scope>provided</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<modules>
+		<module>blacknode-software-backend-api</module>
+	</modules>
+</project>
