@@ -7,8 +7,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 import lombok.Getter;
-import lombok.var;
 
 @Getter
 public class BaseResponse<T extends BaseResponse<T>> {
@@ -17,7 +20,7 @@ public class BaseResponse<T extends BaseResponse<T>> {
 	
 	private Optional<String> message = Optional.of(DEFAULT_SUCCESS_MESSAGE);
 	private Status status = Status.SUCCESS;
-
+	
 	private void success(String message) {
 		this.status = Status.SUCCESS;
 		this.message = Optional.of(message);
@@ -28,10 +31,12 @@ public class BaseResponse<T extends BaseResponse<T>> {
 		this.message = Optional.of(message);
 	}
 	
+	@JsonIgnore
 	public boolean isSuccess() {
 		return this.status == Status.SUCCESS;
 	}
 	
+	@JsonIgnore
 	public boolean isFailure() {
 		return this.status == Status.FAILURE;
 	}
@@ -96,6 +101,16 @@ public class BaseResponse<T extends BaseResponse<T>> {
 	
 	public static enum Status {
 		SUCCESS,
-		FAILURE
+		FAILURE;
+
+		@JsonValue
+		public String toLowerCase() {
+			return name().toLowerCase();
+		}
+
+		@JsonCreator
+		public static Status fromString(String value) {
+			return Status.valueOf(value.toUpperCase());
+		}
 	}
 }
