@@ -6,6 +6,7 @@ import java.util.Optional;
 import lombok.Getter;
 import me.hinsinger.projects.hinz.common.huid.HUID;
 import me.hinsinger.projects.hinz.common.time.timestamp.Timestamp;
+import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.modifier.create.Creatable;
 import software.blacknode.backend.domain.modifier.create.meta.CreationMeta;
 import software.blacknode.backend.domain.modifier.delete.Deletable;
@@ -33,18 +34,25 @@ public class Organization implements Creatable, Modifiable, Deletable {
 	@Getter private Timestamp deletationTimestamp;
 	
 	@Override
-	public void create(Optional<CreationMeta> meta0) {
-		if(!meta0.isPresent()) return;
+	public void create(Optional<CreationMeta> creationMeta0) {
+		if(creationMeta0.isEmpty()) BlacknodeException.throwWith("Creation meta must be provided when creating an organization.");
 		
-		CreationMeta meta1 = meta0.get();
+		CreationMeta meta1 = creationMeta0.get();
+		
+		id = HUID.random();
+		name = "Unnamed Organization";
+		
+		members = List.of();
+		projects = List.of();
+		roles = List.of();
+		
+		settings = new OrganizationSettings();
+		meta = new OrganizationMeta();
 		
 		if(meta1 instanceof OrganizationInitialCreationMeta) {
-			OrganizationInitialCreationMeta meta = (OrganizationInitialCreationMeta) meta1;
+			OrganizationInitialCreationMeta _meta = (OrganizationInitialCreationMeta) meta1;
 			
-			id = HUID.random();
-			name = meta.getName();
-			
-			
+			name = _meta.getName();
 		}
 		
 		creationTimestamp = Timestamp.now();
