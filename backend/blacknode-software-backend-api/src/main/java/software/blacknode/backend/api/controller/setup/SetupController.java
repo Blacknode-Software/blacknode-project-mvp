@@ -1,9 +1,16 @@
 package software.blacknode.backend.api.controller.setup;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import software.blacknode.backend.api.controller.setup.converter.InitialSetupRequestConverter;
 import software.blacknode.backend.api.controller.setup.converter.InitialSetupResponseConverter;
@@ -13,12 +20,24 @@ import software.blacknode.backend.application.setup.usecase.InitialSetupUseCase;
 
 @RequiredArgsConstructor
 @RestController	
+@Tag(name = "Setup", description = "Endpoints related to application setup")
 public class SetupController {
 	
 	private final InitialSetupUseCase initialSetupUseCase;
 	private final InitialSetupRequestConverter initialSetupRequestConverter;
 	private final InitialSetupResponseConverter initialSetupResponseConverter;
 
+	@Operation(summary = "Initial setup of the application", description = "Performs the initial setup process for the application using the provided setup request.")
+	@ApiResponses(value = {
+	    @ApiResponse(responseCode = "200", description = "Setup completed successfully",
+	        content = @Content(mediaType = "application/json",
+	        schema = @Schema(implementation = InitialSetupResponse.class))),
+	    @ApiResponse(responseCode = "400", description = "Invalid input",
+	        content = @Content(mediaType = "application/json")),
+	    @ApiResponse(responseCode = "500", description = "Internal server error",
+	        content = @Content(mediaType = "application/json"))
+	})
+	@PostMapping("/setup")
 	public ResponseEntity<InitialSetupResponse> setup(@RequestBody InitialSetupRequest request) {
 		var command = initialSetupRequestConverter.convert(request);
 		
@@ -26,7 +45,7 @@ public class SetupController {
 		
 		var response = initialSetupResponseConverter.convert(result);
 		
-		return ResponseEntity.ok(response);
+		return response.toOKResponse("Setup completed successfully");
 	}
 	
 
