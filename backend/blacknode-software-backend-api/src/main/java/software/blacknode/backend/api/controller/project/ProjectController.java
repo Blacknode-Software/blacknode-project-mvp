@@ -39,7 +39,7 @@ public class ProjectController extends BaseController {
 
 	@Operation(summary = "Get all projects for an organization")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Found projects") })
-	@GetMapping("/organization/{organizationId}/projects")
+	@GetMapping("/organizations/{organizationId}/projects")
 	public ResponseEntity<List<ProjectResponse>> getProjects(@PathVariable UUID organizationId) {
 		return ResponseEntity.ok(null);
 	}
@@ -47,7 +47,7 @@ public class ProjectController extends BaseController {
 	@Operation(summary = "Create a new project")
 	@ApiResponses(value = { @ApiResponse(responseCode = "201", description = "Project created"),
 			@ApiResponse(responseCode = "400", description = "Invalid input") })
-	@PostMapping("/organization/{organizationId}/projects")
+	@PostMapping("/organizations/{organizationId}/projects")
 	public ResponseEntity<ProjectCreateResponse> createProject(@PathVariable UUID organizationId,
 			@RequestBody ProjectCreateRequest request) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(null);
