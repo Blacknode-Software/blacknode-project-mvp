@@ -1,5 +1,7 @@
 package software.blacknode.backend.api.controller.organization.request;
 
-public class OrganizationPatchRequest {
+import software.blacknode.backend.api.controller.request.BaseRequest;
+
+public class OrganizationPatchRequest extends BaseRequest {
 
 }

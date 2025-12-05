@@ -2,6 +2,6 @@ package software.blacknode.backend.api.controller.channel.response;
 
 import software.blacknode.backend.api.controller.response.BaseResponse;
 
-public class ChannelPatchResponse extends BaseResponse {
+public class ChannelPatchResponse extends BaseResponse<ChannelPatchResponse> {
 
 }

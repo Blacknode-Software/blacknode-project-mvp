@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
 @Getter
-public class BaseResponse<T extends BaseResponse<T>> {
+public abstract class BaseResponse<T extends BaseResponse<T>> {
 	private static final String DEFAULT_SUCCESS_MESSAGE = "Operation completed successfully.";
 	private static final String DEFAULT_FAILURE_MESSAGE = "Operation failed.";
 	

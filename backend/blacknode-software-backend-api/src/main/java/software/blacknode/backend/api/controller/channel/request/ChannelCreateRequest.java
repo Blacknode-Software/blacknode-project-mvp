@@ -1,5 +1,7 @@
 package software.blacknode.backend.api.controller.channel.request;
 
-public class ChannelCreateRequest {
+import software.blacknode.backend.api.controller.request.BaseRequest;
+
+public class ChannelCreateRequest extends BaseRequest {
 	
 }

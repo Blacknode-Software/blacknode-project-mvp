@@ -3,20 +3,39 @@ package software.blacknode.backend.api.controller.request;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PatchRequest extends BaseRequest {
-	public List<PatchOpertation> operations = new ArrayList<>();
+import lombok.Getter;
+
+@Getter
+public abstract class PatchRequest extends BaseRequest {
+	public List<PatchProperty> properties = new ArrayList<>();
 	
-	public boolean hasOperationType(String type) {
-		for (PatchOpertation operation : operations) {
-			if (operation.isType(type)) {
+	public boolean hasPatchProperty(PatchProperty property) {
+		for (PatchProperty p : properties) {
+			if (p.is(property)) {
 				return true;
 			}
 		}
 		return false;
 	}
 	
-	public static interface PatchOpertation {
-		public boolean isType(String type);
-		public String getType();
+	public boolean hasPatchProperty(String property) {
+		for (PatchProperty p : properties) {
+			if (p.is(property)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static interface PatchProperty {
+		public default boolean is(PatchProperty property) {
+			return is(property.getName());
+		}
+		
+		public default boolean is(String type) {
+			return this.getName().equalsIgnoreCase(type);
+		}
+		
+		public String getName();
 	}
 }

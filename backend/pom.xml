@@ -40,10 +40,18 @@
 				<version>${lombok.version}</version>
 				<scope>provided</scope>
 			</dependency>
+			<dependency>
+				<groupId>me.hinsinger.projects</groupId>
+				<artifactId>hinz-common</artifactId>
+				<version>[0.0.1,]</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
 	<modules>
 		<module>blacknode-software-backend-api</module>
+		<module>blacknode-software-backend-application</module>
+		<module>blacknode-software-backend-domain</module>
+		<module>blacknode-software-backend-infrastructure</module>
 	</modules>
 </project>

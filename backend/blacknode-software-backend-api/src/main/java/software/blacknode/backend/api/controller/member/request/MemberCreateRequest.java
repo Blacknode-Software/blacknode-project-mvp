@@ -1,5 +1,7 @@
 package software.blacknode.backend.api.controller.member.request;
 
-public class MemberCreateRequest {
+import software.blacknode.backend.api.controller.request.BaseRequest;
+
+public class MemberCreateRequest extends BaseRequest {
 
 }

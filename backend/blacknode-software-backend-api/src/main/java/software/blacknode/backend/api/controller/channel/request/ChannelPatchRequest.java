@@ -1,5 +1,7 @@
 package software.blacknode.backend.api.controller.channel.request;
 
-public class ChannelPatchRequest {
+import software.blacknode.backend.api.controller.request.BaseRequest;
+
+public class ChannelPatchRequest extends BaseRequest {
 
 }
