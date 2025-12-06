@@ -1,12 +1,13 @@
 package software.blacknode.backend.domain.organization.meta.create;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import software.blacknode.backend.domain.modifier.create.meta.CreationMeta;
 
-@AllArgsConstructor
+@Getter
+@Builder
 public class OrganizationInitialCreationMeta implements CreationMeta {
 
-	@Getter private String name;
+	private String name;
 	
 }

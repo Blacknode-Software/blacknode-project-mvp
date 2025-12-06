@@ -1,17 +1,39 @@
 package software.blacknode.backend.domain.role.meta;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.With;
 
+@Getter
+@With
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class RoleMeta {
 	
-	@Getter @Setter private Scope scope;
+	@Builder.Default
+	private Scope scope = Scope.UNKNOWN;
+	
+	@Builder.Default
+	private String name = "Unknown";
+	
+	@Builder.Default
+	private String description = "Unknown role description";
+	
+	@Builder.Default
+	private String color = "#FF0000";
+	
+	@Builder.Default
+	private boolean byDefault = false;
 	
 	public static enum Scope {
 		GLOBAL,
 		ORGANIZATION,
 		PROJECT,
-		CHANNEL
+		CHANNEL,
+		UNKNOWN
 	}
 	
 }

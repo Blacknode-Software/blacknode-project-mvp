@@ -17,8 +17,6 @@ import software.blacknode.backend.domain.task.meta.TaskMeta;
 public class Task implements Creatable, Modifiable, Deletable {
 
 	@Getter private HUID id;
-	@Getter private String title;
-	@Getter private String description;
 	@Getter private int priority;
 	
 	@Getter private HUID statusId;
