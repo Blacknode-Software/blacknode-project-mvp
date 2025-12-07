@@ -13,9 +13,9 @@ import software.blacknode.backend.domain.modifier.delete.meta.DeletionMeta;
 import software.blacknode.backend.domain.modifier.modify.Modifiable;
 import software.blacknode.backend.domain.modifier.modify.meta.ModificationMeta;
 import software.blacknode.backend.domain.role.meta.RoleMeta;
-import software.blacknode.backend.domain.role.meta.create.RoleDefaultChannelScopeCreationMeta;
-import software.blacknode.backend.domain.role.meta.create.RoleDefaultOrganizationScopeCreationMeta;
-import software.blacknode.backend.domain.role.meta.create.RoleDefaultProjectScopeCreationMeta;
+import software.blacknode.backend.domain.role.meta.create.RoleInitialChannelScopeCreationMeta;
+import software.blacknode.backend.domain.role.meta.create.RoleInitialOrganizationScopeCreationMeta;
+import software.blacknode.backend.domain.role.meta.create.RoleInitialProjectScopeCreationMeta;
 
 public class Role implements Creatable, Modifiable, Deletable {
 
@@ -37,32 +37,50 @@ public class Role implements Creatable, Modifiable, Deletable {
 		
 		var meta = meta0.get();
 		
-		if(meta instanceof RoleDefaultOrganizationScopeCreationMeta orgMeta) {
-			this.meta.withName(orgMeta.getName())
-					.withDescription(orgMeta.getDescription())
-				 	.withColor(orgMeta.getColor())
+		if(meta instanceof RoleInitialOrganizationScopeCreationMeta orgMeta) {
+			var name = orgMeta.getName();
+			var description = orgMeta.getDescription();
+			var color = orgMeta.getColor();
+			var byDefaultAssigned = orgMeta.isByDefaultAssigned();
+			
+			this.meta.withName(name)
+					.withDescription(description)
+				 	.withColor(color)
+				 	.withByDefaultAssigned(byDefaultAssigned)
 				 	.withScope(RoleMeta.Scope.ORGANIZATION)
-				 	.withByDefault(true);
+				 	.withSystemDefault(true);
 			
 			this.organizationId = orgMeta.getOrganizationId();
 		} 
-		else if (meta instanceof RoleDefaultProjectScopeCreationMeta projMeta) {
-			this.meta.withName(projMeta.getName())
-					.withDescription(projMeta.getDescription())
-				 	.withColor(projMeta.getColor())
+		else if (meta instanceof RoleInitialProjectScopeCreationMeta projMeta) {
+			var name = projMeta.getName();
+			var description = projMeta.getDescription();
+			var color = projMeta.getColor();
+			var byDefaultAssigned = projMeta.isByDefaultAssigned();
+			
+			this.meta.withName(name)
+					.withDescription(description)
+				 	.withColor(color)
+				 	.withByDefaultAssigned(byDefaultAssigned)
 				 	.withScope(RoleMeta.Scope.PROJECT)
-				 	.withByDefault(true);
+				 	.withSystemDefault(true);
 			
 			this.organizationId = projMeta.getOrganizationId();
 		}
-		else if (meta instanceof RoleDefaultChannelScopeCreationMeta chanMeta) {
-			this.meta.withName(chanMeta.getName())
-					.withDescription(chanMeta.getDescription())
-				 	.withColor(chanMeta.getColor())
-				 	.withScope(RoleMeta.Scope.CHANNEL)
-				 	.withByDefault(true);
+		else if (meta instanceof RoleInitialChannelScopeCreationMeta chnlMeta) {
+			var name = chnlMeta.getName();
+			var description = chnlMeta.getDescription();
+			var color = chnlMeta.getColor();
+			var byDefaultAssigned = chnlMeta.isByDefaultAssigned();
 			
-			this.organizationId = chanMeta.getOrganizationId();
+			this.meta.withName(name)
+					.withDescription(description)
+				 	.withColor(color)
+				 	.withByDefaultAssigned(byDefaultAssigned)
+				 	.withScope(RoleMeta.Scope.CHANNEL)
+				 	.withSystemDefault(true);
+			
+			this.organizationId = chnlMeta.getOrganizationId();
 		}
 		else {
 			BlacknodeException.throwWith("Unsupported CreationMeta type for Role creation");

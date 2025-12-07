@@ -26,7 +26,10 @@ public class RoleMeta {
 	private String color = "#FF0000";
 	
 	@Builder.Default
-	private boolean byDefault = false;
+	private boolean systemDefault = false;
+	
+	@Builder.Default
+	private boolean byDefaultAssigned = false;
 	
 	public static enum Scope {
 		GLOBAL,

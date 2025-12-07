@@ -11,6 +11,5 @@ public class MemberAdminCreationMeta implements CreationMeta {
 
 	private HUID accountId;
 	private HUID organizationId;
-	private HUID roleId;
 	
 }

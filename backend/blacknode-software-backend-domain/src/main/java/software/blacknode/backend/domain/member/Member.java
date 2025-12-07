@@ -27,7 +27,6 @@ public class Member implements Creatable, Modifiable, Deletable {
 	@Getter private Timestamp modificationTimestamp;
 	@Getter private Timestamp deletationTimestamp;
 	
-	@Getter private HUID roleId;
 	@Getter private HUID accountId;
 	@Getter private HUID organizationId;
 	
@@ -42,7 +41,6 @@ public class Member implements Creatable, Modifiable, Deletable {
 		this.meta = new MemberMeta();
 		
 		if(meta instanceof MemberAdminCreationMeta adminMeta) {
-			this.roleId = adminMeta.getRoleId();
 			this.accountId = adminMeta.getAccountId();
 			this.organizationId = adminMeta.getOrganizationId();
 		} else {

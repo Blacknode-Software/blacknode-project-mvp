@@ -8,11 +8,14 @@ import software.blacknode.backend.domain.role.meta.RoleMeta.Scope;
 
 @Getter
 @Builder
-public class RoleDefaultChannelScopeCreationMeta implements CreationMeta {
+public class RoleInitialProjectScopeCreationMeta implements CreationMeta {
 
 	private String name;
 	private String description;
 	private String color;
+	
+	@Builder.Default
+	private boolean byDefaultAssigned = false;
 	
 	private HUID organizationId;
 }
