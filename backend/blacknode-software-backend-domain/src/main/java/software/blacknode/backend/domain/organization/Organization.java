@@ -18,13 +18,10 @@ import software.blacknode.backend.domain.organization.meta.create.OrganizationIn
 import software.blacknode.backend.domain.organization.settings.OrganizationSettings;
 
 public class Organization implements Creatable, Modifiable, Deletable {
+	public static final HUID DEFAULT_ORGANIZATION_ID = HUID.fromString("00000000-0000-0000-0000-000000000000");
 
 	@Getter private HUID id;
 	@Getter private String name;
-	
-	@Getter private List<HUID> members;
-	@Getter private List<HUID> projects;
-	@Getter private List<HUID> roles;
 	
 	@Getter private OrganizationSettings settings;
 	@Getter private OrganizationMeta meta;
@@ -34,25 +31,20 @@ public class Organization implements Creatable, Modifiable, Deletable {
 	@Getter private Timestamp deletationTimestamp;
 	
 	@Override
-	public void create(Optional<CreationMeta> creationMeta0) {
-		if(creationMeta0.isEmpty()) BlacknodeException.throwWith("Creation meta must be provided when creating an organization.");
+	public void create(Optional<CreationMeta> meta0) {
+		if(meta0.isEmpty()) BlacknodeException.throwWith("Creation meta must be provided when creating an organization.");
 		
-		CreationMeta meta1 = creationMeta0.get();
+		this.id = HUID.random();
+		this.name = "Unnamed Organization";
 		
-		id = HUID.random();
-		name = "Unnamed Organization";
+		this.settings = new OrganizationSettings();
+		this.meta = new OrganizationMeta();
 		
-		members = List.of();
-		projects = List.of();
-		roles = List.of();
+		var meta = meta0.get();
 		
-		settings = new OrganizationSettings();
-		meta = new OrganizationMeta();
-		
-		if(meta1 instanceof OrganizationInitialCreationMeta) {
-			OrganizationInitialCreationMeta _meta = (OrganizationInitialCreationMeta) meta1;
-			
-			name = _meta.getName();
+		if(meta instanceof OrganizationInitialCreationMeta initOrgMeta) {
+			this.id = DEFAULT_ORGANIZATION_ID;
+			this.name = initOrgMeta.getName();
 		}
 		
 		creationTimestamp = Timestamp.now();

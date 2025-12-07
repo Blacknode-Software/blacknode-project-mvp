@@ -17,6 +17,14 @@ public class OrganizationService {
 		this.repository = repository;
 	}
 	
+	public Optional<Organization> getDefaultOrganization() {
+		return repository.findById(Organization.DEFAULT_ORGANIZATION_ID);
+	}
+	
+	public boolean isDefaultOrganizationPresent() {
+		return getDefaultOrganization().isPresent();
+	}
+	
 	public Organization create(CreationMeta meta) {
 		var organization = new Organization();
 		

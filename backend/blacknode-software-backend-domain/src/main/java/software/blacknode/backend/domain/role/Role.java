@@ -37,11 +37,11 @@ public class Role implements Creatable, Modifiable, Deletable {
 		
 		var meta = meta0.get();
 		
-		if(meta instanceof RoleInitialOrganizationScopeCreationMeta orgMeta) {
-			var name = orgMeta.getName();
-			var description = orgMeta.getDescription();
-			var color = orgMeta.getColor();
-			var byDefaultAssigned = orgMeta.isByDefaultAssigned();
+		if(meta instanceof RoleInitialOrganizationScopeCreationMeta initOrgMeta) {
+			var name = initOrgMeta.getName();
+			var description = initOrgMeta.getDescription();
+			var color = initOrgMeta.getColor();
+			var byDefaultAssigned = initOrgMeta.isByDefaultAssigned();
 			
 			this.meta.withName(name)
 					.withDescription(description)
@@ -50,13 +50,13 @@ public class Role implements Creatable, Modifiable, Deletable {
 				 	.withScope(RoleMeta.Scope.ORGANIZATION)
 				 	.withSystemDefault(true);
 			
-			this.organizationId = orgMeta.getOrganizationId();
+			this.organizationId = initOrgMeta.getOrganizationId();
 		} 
-		else if (meta instanceof RoleInitialProjectScopeCreationMeta projMeta) {
-			var name = projMeta.getName();
-			var description = projMeta.getDescription();
-			var color = projMeta.getColor();
-			var byDefaultAssigned = projMeta.isByDefaultAssigned();
+		else if (meta instanceof RoleInitialProjectScopeCreationMeta initProjMeta) {
+			var name = initProjMeta.getName();
+			var description = initProjMeta.getDescription();
+			var color = initProjMeta.getColor();
+			var byDefaultAssigned = initProjMeta.isByDefaultAssigned();
 			
 			this.meta.withName(name)
 					.withDescription(description)
@@ -65,13 +65,13 @@ public class Role implements Creatable, Modifiable, Deletable {
 				 	.withScope(RoleMeta.Scope.PROJECT)
 				 	.withSystemDefault(true);
 			
-			this.organizationId = projMeta.getOrganizationId();
+			this.organizationId = initProjMeta.getOrganizationId();
 		}
-		else if (meta instanceof RoleInitialChannelScopeCreationMeta chnlMeta) {
-			var name = chnlMeta.getName();
-			var description = chnlMeta.getDescription();
-			var color = chnlMeta.getColor();
-			var byDefaultAssigned = chnlMeta.isByDefaultAssigned();
+		else if (meta instanceof RoleInitialChannelScopeCreationMeta initChnlMeta) {
+			var name = initChnlMeta.getName();
+			var description = initChnlMeta.getDescription();
+			var color = initChnlMeta.getColor();
+			var byDefaultAssigned = initChnlMeta.isByDefaultAssigned();
 			
 			this.meta.withName(name)
 					.withDescription(description)
@@ -80,7 +80,7 @@ public class Role implements Creatable, Modifiable, Deletable {
 				 	.withScope(RoleMeta.Scope.CHANNEL)
 				 	.withSystemDefault(true);
 			
-			this.organizationId = chnlMeta.getOrganizationId();
+			this.organizationId = initChnlMeta.getOrganizationId();
 		}
 		else {
 			BlacknodeException.throwWith("Unsupported CreationMeta type for Role creation");
