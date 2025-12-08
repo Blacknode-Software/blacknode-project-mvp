@@ -4,8 +4,10 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.projects.hinz.common.huid.HUID;
+import software.blacknode.backend.application.channel.ChannelService;
 import software.blacknode.backend.application.member.MemberService;
 import software.blacknode.backend.application.organization.OrganizationService;
+import software.blacknode.backend.application.project.ProjectService;
 import software.blacknode.backend.application.role.RoleService;
 import software.blacknode.backend.domain.member.role.MemberRoleAssociation;
 import software.blacknode.backend.domain.member.role.meta.create.MemberRoleAssociationCreationMeta;
@@ -18,13 +20,14 @@ import software.blacknode.backend.domain.role.Role;
 public class MemberRoleService {
 
 	private final OrganizationService organizationService;
+	private final ProjectService projectService;
+	private final ChannelService channelService;
 	private final MemberService memberService;
 	private final RoleService roleService;
 	
 	private final MemberRoleRepository memberRoleRepository;
 	
 	public void setOrganizationRoleToMember(HUID memberId, HUID roleId, HUID organizationId) {
-		
 		var organization = organizationService.getOrganizationOrThrow(organizationId);
 		
 		var member = memberService.getMemberOrThrow(memberId);
@@ -73,5 +76,4 @@ public class MemberRoleService {
 		// TODO Auto-generated method stub
 		
 	}
-	
 }
