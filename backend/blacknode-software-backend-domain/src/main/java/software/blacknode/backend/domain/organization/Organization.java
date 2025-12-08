@@ -52,7 +52,7 @@ public class Organization implements Creatable, Modifiable, Deletable {
 	
 	@Override
 	public void modify(Optional<ModificationMeta> meta0) {
-		// TODO Auto-generated method stub
+		
 		
 		modificationTimestamp = Timestamp.now();
 	}

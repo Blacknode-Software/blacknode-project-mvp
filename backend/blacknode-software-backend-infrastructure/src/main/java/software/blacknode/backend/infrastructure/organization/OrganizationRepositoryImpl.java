@@ -1,5 +1,6 @@
 package software.blacknode.backend.infrastructure.organization;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
@@ -19,6 +20,12 @@ public class OrganizationRepositoryImpl implements OrganizationRepository {
 	@Override
 	public void save(Organization organization) {
 		
+	}
+
+	@Override
+	public List<Organization> findAll() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

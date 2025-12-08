@@ -64,5 +64,15 @@ public class Member implements Creatable, Modifiable, Deletable {
 		deletationTimestamp = Timestamp.now();
 	}
 	
+	public boolean belongsToOrganization(HUID organizationId) {
+        if (organizationId == null) return false;
+        return organizationId.equals(this.organizationId);
+    }
+
+    public void ensureBelongsToOrganization(HUID organizationId) {
+        if (!belongsToOrganization(organizationId)) {
+            BlacknodeException.throwWith("Member with ID " + id + " does not belong to Organization with ID " + organizationId + ".");
+        }
+    }
 	
 }

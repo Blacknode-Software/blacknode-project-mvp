@@ -14,9 +14,6 @@ import lombok.With;
 public class RoleMeta {
 	
 	@Builder.Default
-	private Scope scope = Scope.UNKNOWN;
-	
-	@Builder.Default
 	private String name = "Unknown";
 	
 	@Builder.Default
@@ -30,13 +27,5 @@ public class RoleMeta {
 	
 	@Builder.Default
 	private boolean byDefaultAssigned = false;
-	
-	public static enum Scope {
-		GLOBAL,
-		ORGANIZATION,
-		PROJECT,
-		CHANNEL,
-		UNKNOWN
-	}
 	
 }

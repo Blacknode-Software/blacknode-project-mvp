@@ -22,6 +22,8 @@ public class Role implements Creatable, Modifiable, Deletable {
 	@Getter private HUID id;
 	@Getter private RoleMeta meta;
 	
+	@Getter private Scope scope;
+	
 	@Getter private Timestamp creationTimestamp;
 	@Getter private Timestamp modificationTimestamp;
 	@Getter private Timestamp deletationTimestamp;
@@ -43,11 +45,12 @@ public class Role implements Creatable, Modifiable, Deletable {
 			var color = initOrgMeta.getColor();
 			var byDefaultAssigned = initOrgMeta.isByDefaultAssigned();
 			
+			this.scope = Scope.ORGANIZATION;
+			
 			this.meta.withName(name)
 					.withDescription(description)
 				 	.withColor(color)
 				 	.withByDefaultAssigned(byDefaultAssigned)
-				 	.withScope(RoleMeta.Scope.ORGANIZATION)
 				 	.withSystemDefault(true);
 			
 			this.organizationId = initOrgMeta.getOrganizationId();
@@ -58,11 +61,12 @@ public class Role implements Creatable, Modifiable, Deletable {
 			var color = initProjMeta.getColor();
 			var byDefaultAssigned = initProjMeta.isByDefaultAssigned();
 			
+			this.scope = Scope.PROJECT;
+			
 			this.meta.withName(name)
 					.withDescription(description)
 				 	.withColor(color)
 				 	.withByDefaultAssigned(byDefaultAssigned)
-				 	.withScope(RoleMeta.Scope.PROJECT)
 				 	.withSystemDefault(true);
 			
 			this.organizationId = initProjMeta.getOrganizationId();
@@ -73,11 +77,12 @@ public class Role implements Creatable, Modifiable, Deletable {
 			var color = initChnlMeta.getColor();
 			var byDefaultAssigned = initChnlMeta.isByDefaultAssigned();
 			
+			this.scope = Scope.CHANNEL;
+			
 			this.meta.withName(name)
 					.withDescription(description)
 				 	.withColor(color)
 				 	.withByDefaultAssigned(byDefaultAssigned)
-				 	.withScope(RoleMeta.Scope.CHANNEL)
 				 	.withSystemDefault(true);
 			
 			this.organizationId = initChnlMeta.getOrganizationId();
@@ -101,5 +106,34 @@ public class Role implements Creatable, Modifiable, Deletable {
 		// TODO Auto-generated method stub
 		
 		deletationTimestamp = Timestamp.now();
+	}
+	
+	public boolean belongsToOrganization(HUID organizationId) {
+        if (organizationId == null) return false;
+        return organizationId.equals(this.organizationId);
+    }
+
+    public void ensureBelongsToOrganization(HUID organizationId) {
+        if (!belongsToOrganization(organizationId)) {
+            BlacknodeException.throwWith("Role with ID " + id + " does not belong to Organization with ID " + organizationId + ".");
+        }
+    }
+    
+    public boolean hasScope(Scope scope) {
+		return this.scope == scope;
+	}
+    
+    public void ensureHasScope(Scope scope) {
+		if (!hasScope(scope)) {
+			BlacknodeException.throwWith("Role with ID " + id + " does not have scope " + scope + ".");
+		}
+    }
+    
+    public static enum Scope {
+		GLOBAL,
+		ORGANIZATION,
+		PROJECT,
+		CHANNEL,
+		UNKNOWN
 	}
 }

@@ -4,6 +4,8 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import me.hinsinger.projects.hinz.common.huid.HUID;
+import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.modifier.create.meta.CreationMeta;
 import software.blacknode.backend.domain.organization.Organization;
 import software.blacknode.backend.domain.organization.repository.OrganizationRepository;
@@ -15,6 +17,15 @@ public class OrganizationService {
 	
 	public OrganizationService(OrganizationRepository repository) {
 		this.repository = repository;
+	}
+	
+	public Organization getOrganizationOrThrow(HUID organizationId) {
+		return repository.findById(organizationId)
+				.orElseThrow(() -> new BlacknodeException("Organization with ID " + organizationId + " not found."));
+	}
+	
+	public Optional<Organization> getOrganization(HUID organizationId) {
+		return repository.findById(organizationId);
 	}
 	
 	public Optional<Organization> getDefaultOrganization() {
