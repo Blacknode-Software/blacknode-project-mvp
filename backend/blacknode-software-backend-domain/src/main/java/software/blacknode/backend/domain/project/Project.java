@@ -6,6 +6,7 @@ import java.util.Optional;
 import lombok.Getter;
 import me.hinsinger.projects.hinz.common.huid.HUID;
 import me.hinsinger.projects.hinz.common.time.timestamp.Timestamp;
+import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.modifier.create.Creatable;
 import software.blacknode.backend.domain.modifier.create.meta.CreationMeta;
 import software.blacknode.backend.domain.modifier.delete.Deletable;
@@ -40,5 +41,15 @@ public class Project implements Creatable, Modifiable, Deletable {
 	public void create(Optional<CreationMeta> meta) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public boolean belongsToOrganization(HUID organizationId) {
+		return this.organizationId.equals(organizationId);
+	}
+	
+	public void ensureBelongsToOrganization(HUID organizationId) {
+		if(!belongsToOrganization(organizationId)) {
+			throw new BlacknodeException("Project does not belong to organization with ID: " + organizationId);
+		}
 	}
 }

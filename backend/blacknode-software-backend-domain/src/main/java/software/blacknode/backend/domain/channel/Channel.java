@@ -7,6 +7,7 @@ import lombok.Getter;
 import me.hinsinger.projects.hinz.common.huid.HUID;
 import me.hinsinger.projects.hinz.common.time.timestamp.Timestamp;
 import software.blacknode.backend.domain.channel.meta.ChannelMeta;
+import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.modifier.create.Creatable;
 import software.blacknode.backend.domain.modifier.create.meta.CreationMeta;
 import software.blacknode.backend.domain.modifier.delete.Deletable;
@@ -48,5 +49,25 @@ public class Channel implements Creatable, Modifiable, Deletable {
 	public void delete(Optional<DeletionMeta> meta) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public boolean belongsToProject(HUID projectId) {
+		return this.projectId.equals(projectId);
+	}
+	
+	public void ensureBelongsToProject(HUID projectId) {
+		if(!this.projectId.equals(projectId)) {
+			throw new BlacknodeException("Channel does not belong to the specified project.");
+		}
+	}
+	
+	public boolean belongsToOrganization(HUID organizationId) {
+		return this.organizationId.equals(organizationId);
+	}
+	
+	public void ensureBelongsToOrganization(HUID organizationId) {
+		if(!this.organizationId.equals(organizationId)) {
+			throw new BlacknodeException("Channel does not belong to the specified organization.");
+		}
 	}
 }

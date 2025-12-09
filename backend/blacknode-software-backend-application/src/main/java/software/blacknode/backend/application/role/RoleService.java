@@ -1,5 +1,8 @@
 package software.blacknode.backend.application.role;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -14,9 +17,17 @@ public class RoleService {
 
 	private final RoleRepository repository;
 	
-	public Role getRoleOrThrow(HUID roleId) {
+	public Role getByIdOrThrow(HUID roleId) {
 		return repository.findById(roleId)
 				.orElseThrow(() -> new RuntimeException("Role with ID " + roleId + " not found."));
+	}
+	
+	public Optional<Role> getById(HUID roleId) {
+		return repository.findById(roleId);
+	}
+	
+	public List<Role> getRolesByIds(List<HUID> roleIds) {
+		return repository.findAllById(roleIds);
 	}
 	
 	public Role create(CreationMeta meta) {

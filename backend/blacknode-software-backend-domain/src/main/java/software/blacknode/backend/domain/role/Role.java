@@ -47,7 +47,7 @@ public class Role implements Creatable, Modifiable, Deletable {
 			
 			this.scope = Scope.ORGANIZATION;
 			
-			this.meta.withName(name)
+			this.meta = this.meta.withName(name)
 					.withDescription(description)
 				 	.withColor(color)
 				 	.withByDefaultAssigned(byDefaultAssigned)
@@ -63,7 +63,7 @@ public class Role implements Creatable, Modifiable, Deletable {
 			
 			this.scope = Scope.PROJECT;
 			
-			this.meta.withName(name)
+			this.meta = this.meta.withName(name)
 					.withDescription(description)
 				 	.withColor(color)
 				 	.withByDefaultAssigned(byDefaultAssigned)
@@ -79,7 +79,7 @@ public class Role implements Creatable, Modifiable, Deletable {
 			
 			this.scope = Scope.CHANNEL;
 			
-			this.meta.withName(name)
+			this.meta = this.meta.withName(name)
 					.withDescription(description)
 				 	.withColor(color)
 				 	.withByDefaultAssigned(byDefaultAssigned)

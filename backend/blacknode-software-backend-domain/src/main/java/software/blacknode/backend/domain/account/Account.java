@@ -44,10 +44,10 @@ public class Account implements Creatable, Modifiable, Deletable {
 		
 		var meta = meta0.get();
 		
-		if(meta instanceof AccountInitialAdminCreationMeta initialAdminMeta) {
-			this.firstName = initialAdminMeta.getFirstName();
-			this.lastName = initialAdminMeta.getLastName();
-			this.email = initialAdminMeta.getEmail();
+		if(meta instanceof AccountInitialAdminCreationMeta initAdminCreMeta) {
+			this.firstName = initAdminCreMeta.getFirstName();
+			this.lastName = initAdminCreMeta.getLastName();
+			this.email = initAdminCreMeta.getEmail();
 		} else {
 			BlacknodeException.throwWith("Unsupported CreationMeta type for Account creation");
 		}
