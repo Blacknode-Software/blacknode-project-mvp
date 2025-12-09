@@ -1,3 +1,7 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { MainHeader } from '@/layout';
+</script>
 
-<template>Hello world!</template>
+<template>
+    <MainHeader :sections="['DEPARTMENT OF SECURITY', 'SECTION II']" />
+</template>
