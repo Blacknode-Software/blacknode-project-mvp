@@ -45,7 +45,7 @@ public class MemberRoleService {
 		
 		if(currentAssociation.isPresent()) {
 			var assoc = currentAssociation.get();
-			
+		
 			var assocDeletionMeta = MemberRoleAssociationDeletionMeta.builder()
 					.build();
 			

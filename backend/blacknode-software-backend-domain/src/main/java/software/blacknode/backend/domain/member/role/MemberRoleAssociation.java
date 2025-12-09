@@ -7,7 +7,7 @@ import me.hinsinger.projects.hinz.common.huid.HUID;
 import me.hinsinger.projects.hinz.common.time.timestamp.Timestamp;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.member.role.meta.MemberRoleAssociationMeta;
-import software.blacknode.backend.domain.member.role.meta.create.MemberRoleAssociationCreationMeta;
+import software.blacknode.backend.domain.member.role.meta.create.MemberRoleOrganizationAssociationCreationMeta;
 import software.blacknode.backend.domain.member.role.meta.delete.MemberRoleAssociationDeletionMeta;
 import software.blacknode.backend.domain.modifier.create.Creatable;
 import software.blacknode.backend.domain.modifier.create.meta.CreationMeta;
@@ -33,14 +33,16 @@ public class MemberRoleAssociation implements Creatable, Deletable {
 		if(meta0.isEmpty()) BlacknodeException.throwWith("Creation meta must be provided when creating an member-role association.");
 		
 		this.id = HUID.random();
-		this.meta = new MemberRoleAssociationMeta();
+		this.meta = MemberRoleAssociationMeta.builder().build();
 		
 		var meta = meta0.get();
 		
-		if(meta instanceof MemberRoleAssociationCreationMeta creationMeta) {
-			this.memberId = creationMeta.getMemberId();
-			this.roleId = creationMeta.getRoleId();
-			this.scopeId = creationMeta.getScopeId();
+		if(meta instanceof MemberRoleOrganizationAssociationCreationMeta orgCreMeta) {
+			this.memberId = orgCreMeta.getMemberId();
+			this.roleId = orgCreMeta.getRoleId();
+			this.scopeId = orgCreMeta.getOrganizationId();
+			
+			this.meta = this.meta.withScope(MemberRoleAssociationMeta.Scope.ORGANIZATION);
 		}
 		
 		creationTimestamp = Timestamp.now();

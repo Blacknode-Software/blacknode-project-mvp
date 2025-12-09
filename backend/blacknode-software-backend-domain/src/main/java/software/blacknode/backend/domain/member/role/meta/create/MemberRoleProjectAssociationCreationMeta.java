@@ -7,10 +7,10 @@ import software.blacknode.backend.domain.modifier.create.meta.CreationMeta;
 
 @Getter
 @Builder
-public class MemberRoleAssociationCreationMeta implements CreationMeta {
+public class MemberRoleProjectAssociationCreationMeta implements CreationMeta {
 
 	private HUID memberId;
 	private HUID roleId;
-	private HUID scopeId;
+	private HUID projectId;
 	
 }
