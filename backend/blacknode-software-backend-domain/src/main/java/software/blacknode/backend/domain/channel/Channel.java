@@ -1,12 +1,12 @@
 package software.blacknode.backend.domain.channel;
 
-import java.util.List;
 import java.util.Optional;
 
 import lombok.Getter;
 import me.hinsinger.projects.hinz.common.huid.HUID;
 import me.hinsinger.projects.hinz.common.time.timestamp.Timestamp;
 import software.blacknode.backend.domain.channel.meta.ChannelMeta;
+import software.blacknode.backend.domain.channel.meta.create.ChannelInitialCreationMeta;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.modifier.create.Creatable;
 import software.blacknode.backend.domain.modifier.create.meta.CreationMeta;
@@ -18,11 +18,6 @@ import software.blacknode.backend.domain.modifier.modify.meta.ModificationMeta;
 public class Channel implements Creatable, Modifiable, Deletable {
 
 	@Getter private HUID id;
-	@Getter private String name;
-	
-	@Getter private List<HUID> members;
-	@Getter private List<HUID> views;
-	@Getter private List<HUID> resources;
 	
 	@Getter private ChannelMeta meta;
 	
@@ -34,19 +29,42 @@ public class Channel implements Creatable, Modifiable, Deletable {
 	@Getter private HUID organizationId;
 
 	@Override
-	public void create(Optional<CreationMeta> meta) {
-		// TODO Auto-generated method stub
+	public void create(Optional<CreationMeta> meta0) {
+		if(meta0.isEmpty()) BlacknodeException.throwWith("CreationMeta is required to create a Project");
 		
+		this.id = HUID.random();
+		
+		this.meta = ChannelMeta.builder().build();
+		
+		var meta = meta0.get();
+		
+		if(meta instanceof ChannelInitialCreationMeta initCreMeta) {
+			var organizationId = initCreMeta.getOrganizationId();
+			var projectId = initCreMeta.getProjectId();
+			
+			var name = initCreMeta.getName();
+			var description = initCreMeta.getDescription();
+			var color = initCreMeta.getColor();			
+			
+			this.meta = this.meta.withName(name)
+					.withDescription(description)
+					.withColor(color);
+			
+			this.organizationId = organizationId;
+			this.projectId = projectId;
+		} else {
+			BlacknodeException.throwWith("Unsupported CreationMeta type for Project creation: " + meta.getClass().getName());
+		}
 	}
 	
 	@Override
-	public void modify(Optional<ModificationMeta> meta) {
+	public void modify(Optional<ModificationMeta> meta0) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void delete(Optional<DeletionMeta> meta) {
+	public void delete(Optional<DeletionMeta> meta0) {
 		// TODO Auto-generated method stub
 		
 	}

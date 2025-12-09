@@ -1,6 +1,5 @@
 package software.blacknode.backend.domain.project;
 
-import java.util.List;
 import java.util.Optional;
 
 import lombok.Getter;
@@ -13,13 +12,14 @@ import software.blacknode.backend.domain.modifier.delete.Deletable;
 import software.blacknode.backend.domain.modifier.delete.meta.DeletionMeta;
 import software.blacknode.backend.domain.modifier.modify.Modifiable;
 import software.blacknode.backend.domain.modifier.modify.meta.ModificationMeta;
+import software.blacknode.backend.domain.project.meta.ProjectMeta;
+import software.blacknode.backend.domain.project.meta.create.ProjectInitialCreationMeta;
 
 public class Project implements Creatable, Modifiable, Deletable {
 
 	@Getter private HUID id;
-	@Getter private String name;
-	@Getter private List<HUID> channels;
-	@Getter private List<HUID> members;
+	
+	@Getter private ProjectMeta meta;
 	
 	@Getter private Timestamp creationTimestamp;
 	@Getter private Timestamp modificationTimestamp;
@@ -28,17 +28,40 @@ public class Project implements Creatable, Modifiable, Deletable {
 	@Getter private HUID organizationId;
 
 	@Override
-	public void delete(Optional<DeletionMeta> meta) {
+	public void create(Optional<CreationMeta> meta0) {
+		if(meta0.isEmpty()) BlacknodeException.throwWith("CreationMeta is required to create a Project");
+		
+		this.id = HUID.random();
+		
+		this.meta = ProjectMeta.builder().build();
+		
+		var meta = meta0.get();
+		
+		if(meta instanceof ProjectInitialCreationMeta initCreMeta) {
+			var organizationId = initCreMeta.getOrganizationId();
+			
+			var name = initCreMeta.getName();
+			var description = initCreMeta.getDescription();
+			var color = initCreMeta.getColor();
+			
+			this.meta = this.meta.withName(name)
+					.withDescription(description)
+					.withColor(color);
+			
+			this.organizationId = organizationId;
+		} else {
+			BlacknodeException.throwWith("Unsupported CreationMeta type for Project creation: " + meta.getClass().getName());
+		}
+	}
+	
+	@Override
+	public void modify(Optional<ModificationMeta> meta0) {
 		// TODO Auto-generated method stub
 		
 	}
+	
 	@Override
-	public void modify(Optional<ModificationMeta> meta) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	public void create(Optional<CreationMeta> meta) {
+	public void delete(Optional<DeletionMeta> meta0) {
 		// TODO Auto-generated method stub
 		
 	}

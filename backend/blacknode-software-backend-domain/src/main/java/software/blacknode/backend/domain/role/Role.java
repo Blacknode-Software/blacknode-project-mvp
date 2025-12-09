@@ -20,6 +20,7 @@ import software.blacknode.backend.domain.role.meta.create.RoleInitialProjectScop
 public class Role implements Creatable, Modifiable, Deletable {
 
 	@Getter private HUID id;
+	
 	@Getter private RoleMeta meta;
 	
 	@Getter private Scope scope;
