@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { MainHeader, UniSidebar } from '@/layout';
+import { MainHeader, UniSidebar, MainView } from '@/layout';
 </script>
 
 <template>
     <MainHeader :sections="['DEPARTMENT OF SECURITY', 'SECTION II']" />
     <div class="view-sections-container">
         <UniSidebar></UniSidebar>
+        <MainView></MainView>
     </div>
 </template>
 
