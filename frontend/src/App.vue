@@ -1,7 +1,17 @@
 <script setup lang="ts"></script>
 
 <template>
-    <RouterView />
+    <div class="view-container">
+        <RouterView />
+    </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.view-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+</style>
