@@ -24,7 +24,7 @@
             "prettier --write",
             "eslint"
         ],
-        "!(*.vue|*.ts)": "prettier --write"
+        "json": "prettier --write"
     },
     "dependencies": {
         "pinia": "^3.0.3",
