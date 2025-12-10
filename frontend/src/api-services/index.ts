@@ -1,7 +1,7 @@
-import { useChannelsApiService } from './_channels';
-import { useMembersApiService } from './_members';
-import { useOrganizationsApiService } from './_organizations';
-import { useProjectsApiService } from './_projects';
+import { useChannelsApiService } from './channels';
+import { useMembersApiService } from './members';
+import { useOrganizationsApiService } from './organizations';
+import { useProjectsApiService } from './projects';
 
 export {
     useChannelsApiService,
