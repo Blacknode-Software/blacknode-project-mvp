@@ -6,7 +6,7 @@ interface Member {
     any: number; // todo
 }
 
-export const useChannelsApiService = defineApiService('dummy url', {
+export const useMembersApiService = defineApiService('dummy url', {
     async createNewMember(baseUrl, payload: { organizationId: string }) {
         return passResult(
             fetch(`${baseUrl}/organization/${payload.organizationId}/members`, {
