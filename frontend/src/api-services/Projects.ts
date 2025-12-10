@@ -1,6 +1,6 @@
 import { type Result } from '@/utils';
-import { defineApiService } from '../utils/DefineApiService';
-import { parseResponse, passResult, type ApiError } from '../utils';
+import { defineApiService } from './utils/DefineApiService';
+import { parseResponse, passResult, type ApiError } from './utils';
 
 interface Project {
     any: number; // todo
