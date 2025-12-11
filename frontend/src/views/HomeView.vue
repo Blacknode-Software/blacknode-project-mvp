@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import { FixedBackground } from '@/components';
 import { MainHeader, UniSidebar, MainView } from '@/layout';
 </script>
 
 <template>
+    <FixedBackground />
     <MainHeader :sections="['DEPARTMENT OF SECURITY', 'SECTION II']" />
     <div class="view-sections-container">
         <UniSidebar></UniSidebar>
