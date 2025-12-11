@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import me.hinsinger.projects.hinz.common.huid.HUID;
 import software.blacknode.backend.application.account.AccountService;
 import software.blacknode.backend.application.auth.AuthService;
+import software.blacknode.backend.application.channel.ChannelService;
 import software.blacknode.backend.application.member.MemberService;
 import software.blacknode.backend.application.member.association.MemberAssociationService;
 import software.blacknode.backend.application.organization.OrganizationService;
@@ -33,6 +34,7 @@ public class InitialSetupUseCase implements ResultExecutionUseCase<InitialSetupC
 	private final MemberAssociationService memberAssociationService;
 	private final OrganizationService organizationService;
 	private final ProjectService projectService;
+	private final ChannelService channelService;
 	private final AccountService accountService;
 	private final RoleService roleService;
 	private final MemberService memberService;
@@ -159,7 +161,7 @@ public class InitialSetupUseCase implements ResultExecutionUseCase<InitialSetupC
 					.organizationId(organization.getId())
 					.build();
 			
-			var channel_0 = projectService.create(channelMeta_0);
+			var channel_0 = channelService.create(channelMeta_0);
 			
 			var channelMeta_1 = ChannelInitialCreationMeta.builder()
 					.name("Development")
@@ -169,7 +171,7 @@ public class InitialSetupUseCase implements ResultExecutionUseCase<InitialSetupC
 					.color("#DDEFFA")
 					.build();
 			
-			var channel_1 = projectService.create(channelMeta_1);
+			var channel_1 = channelService.create(channelMeta_1);
 			
 			var channelMeta_2 = ChannelInitialCreationMeta.builder()
 					.name("Design")
@@ -179,7 +181,7 @@ public class InitialSetupUseCase implements ResultExecutionUseCase<InitialSetupC
 					.color("#FFF0DD")
 					.build();
 			
-			var channel_2 = projectService.create(channelMeta_2);
+			var channel_2 = channelService.create(channelMeta_2);
 			
 			memberAssociationService.setChannelRoleToMember(
 					member.getId(),

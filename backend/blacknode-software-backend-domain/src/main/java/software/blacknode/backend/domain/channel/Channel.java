@@ -53,7 +53,7 @@ public class Channel implements Creatable, Modifiable, Deletable {
 			this.organizationId = organizationId;
 			this.projectId = projectId;
 		} else {
-			BlacknodeException.throwWith("Unsupported CreationMeta type for Project creation: " + meta.getClass().getName());
+			BlacknodeException.throwWith("Unsupported CreationMeta type for Channel creation: " + meta.getClass().getName());
 		}
 	}
 	

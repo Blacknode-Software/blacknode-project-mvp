@@ -16,19 +16,18 @@ import software.blacknode.backend.domain.modifier.create.meta.CreationMeta;
 import software.blacknode.backend.domain.modifier.delete.Deletable;
 import software.blacknode.backend.domain.modifier.delete.meta.DeletionMeta;
 
-@Getter
 public class MemberAssociation implements Creatable, Deletable {
 
-	private HUID id;
+	@Getter private HUID id;
 	
-	private MemberAssociationMeta meta;
+	@Getter private MemberAssociationMeta meta;
 	
-	private Timestamp creationTimestamp;
-	private Timestamp deletationTimestamp;
+	@Getter private Timestamp creationTimestamp;
+	@Getter private Timestamp deletationTimestamp;
 	
-	private HUID memberId;
-	private HUID scopeId;
-	private HUID roleId;
+	@Getter private HUID memberId;
+	@Getter private HUID scopeId;
+	@Getter private HUID roleId;
 	
 	@Override
 	public void create(Optional<CreationMeta> meta0) {

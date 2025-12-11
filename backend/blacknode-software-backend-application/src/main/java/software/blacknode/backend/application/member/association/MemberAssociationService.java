@@ -1,5 +1,6 @@
 package software.blacknode.backend.application.member.association;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import software.blacknode.backend.application.member.MemberService;
 import software.blacknode.backend.application.organization.OrganizationService;
 import software.blacknode.backend.application.project.ProjectService;
 import software.blacknode.backend.application.role.RoleService;
+import software.blacknode.backend.domain.channel.Channel;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.member.Member;
 import software.blacknode.backend.domain.member.association.MemberAssociation;
@@ -20,6 +22,7 @@ import software.blacknode.backend.domain.member.association.meta.create.MemberOr
 import software.blacknode.backend.domain.member.association.meta.create.MemberProjectAssociationCreationMeta;
 import software.blacknode.backend.domain.member.association.meta.delete.MemberAssociationDeletionMeta;
 import software.blacknode.backend.domain.member.association.repository.MemberAssociationRepository;
+import software.blacknode.backend.domain.project.Project;
 import software.blacknode.backend.domain.role.Role;
 import software.blacknode.backend.domain.role.meta.RoleMeta;
 
@@ -67,7 +70,7 @@ public class MemberAssociationService {
 	private Optional<Role> getMemberRoleInProject(HUID memberId, HUID projectId, Member member) {
 		if(member == null) member =  memberService.getMemberOrThrow(memberId);
 		
-		var project = projectService.getProjectOrThrow(projectId);
+		var project = projectService.getOrThrow(projectId);
 		project.ensureBelongsToOrganization(member.getOrganizationId());
 		
 		/* check if superior role (organization) is a privileged role */
@@ -91,7 +94,7 @@ public class MemberAssociationService {
 	public Optional<Role> getMemberRoleInChannel(HUID memberId, HUID channelId) {
 		var member = memberService.getMemberOrThrow(memberId);
 		
-		var channel = channelService.getChannelOrThrow(channelId);
+		var channel = channelService.getOrThrow(channelId);
 		channel.ensureBelongsToOrganization(member.getOrganizationId());
 		
 		/* check if superior role (project/organization) is a privileged role */
@@ -107,7 +110,7 @@ public class MemberAssociationService {
 	}
 	
 	public void setOrganizationRoleToMember(HUID memberId, HUID roleId, HUID organizationId) {
-		var organization = organizationService.getOrganizationOrThrow(organizationId);
+		var organization = organizationService.getOrThrow(organizationId);
 		
 		var member = memberService.getMemberOrThrow(memberId);
 		member.ensureBelongsToOrganization(organizationId);
@@ -140,7 +143,7 @@ public class MemberAssociationService {
 		role.ensureBelongsToOrganization(organizationId);
 		role.ensureHasScope(Role.Scope.PROJECT);
 		
-		var project = projectService.getProjectOrThrow(projectId);
+		var project = projectService.getOrThrow(projectId);
 		project.ensureBelongsToOrganization(organizationId);
 		
 		removeAssociationIfExists(memberId, projectId, MemberAssociationMeta.Scope.PROJECT);
@@ -168,7 +171,7 @@ public class MemberAssociationService {
 		role.ensureBelongsToOrganization(organizationId);
 		role.ensureHasScope(Role.Scope.CHANNEL);
 		
-		var channel = channelService.getChannelOrThrow(channelId);
+		var channel = channelService.getOrThrow(channelId);
 		channel.ensureBelongsToOrganization(organizationId);
 		
 		removeAssociationIfExists(memberId, channelId, MemberAssociationMeta.Scope.CHANNEL);
@@ -187,18 +190,48 @@ public class MemberAssociationService {
 		
 	}
 	
-	public Optional<MemberAssociation> findAssociation(HUID memberId, HUID scopeId, MemberAssociationMeta.Scope scope) {
-		var associations = repository.getByMemberId(memberId);
+	public List<MemberAssociation> findAssociations(HUID memberId, MemberAssociationMeta.Scope scope) {
+		var associations = repository.findByMemberId(memberId);
 		
 		return associations.stream()
+			.filter(assoc -> memberId.equals(assoc.getMemberId()))
+			.filter(assoc -> assoc.getMeta().getScope() == scope)
+			.toList();
+	}
+	
+	public Optional<MemberAssociation> findAssociation(HUID memberId, HUID scopeId, MemberAssociationMeta.Scope scope) {
+		var associations = repository.findByMemberId(memberId);
+		
+		return associations.stream()
+			.filter(assoc -> memberId.equals(assoc.getMemberId()))
 			.filter(assoc -> assoc.getMeta().getScope() == scope)
 			.filter(assoc -> assoc.getScopeId().equals(scopeId))
 			.findFirst();
 	}
 	
+	public List<MemberAssociation> findAssociationsWithIds(HUID memberId, List<HUID> scopeIds, MemberAssociationMeta.Scope scope) {
+		var associations = repository.findByMemberId(memberId);
+		
+		return associations.stream()
+			.filter(assoc -> memberId.equals(assoc.getMemberId()))
+			.filter(assoc -> assoc.getMeta().getScope() == scope)
+			.filter(assoc -> scopeIds.contains(assoc.getScopeId()))
+			.toList();
+	}
+	
 	public MemberAssociation findAssociationOrThrow(HUID memberId, HUID scopeId, MemberAssociationMeta.Scope scope) {
 		return findAssociation(memberId, scopeId, scope)
 				.orElseThrow(() -> new BlacknodeException("Member with ID " + memberId + " has no role association in scope " + scope));
+	}
+	
+	public List<MemberAssociation> findAssociationsOrThrow(HUID memberId, List<HUID> scopeIds, MemberAssociationMeta.Scope scope) {
+		var associations = findAssociationsWithIds(memberId, scopeIds, scope);
+		
+		if(associations.size() != scopeIds.size()) {
+			throw new BlacknodeException("Member with ID " + memberId + " has no role association in all specified scopes " + scope);
+		}
+		
+		return associations;
 	}
 	
 		
@@ -215,6 +248,156 @@ public class MemberAssociationService {
 			
 			repository.save(assoc);
 		}
+	}
+	
+	public List<HUID> filterAssociatedProjectIds(HUID memberId, List<HUID> projectIds) {
+		var associations = findAssociationsWithIds(memberId, projectIds, MemberAssociationMeta.Scope.PROJECT);
+		
+		var associatedProjectIds = associations.stream()
+				.map(assoc -> assoc.getScopeId())
+				.toList();
+		
+		return associatedProjectIds;
+	}
+	
+	public List<Project> filterAccessibleProjects(HUID memberId, List<Project> projects) {
+		var associations = filterAssociatedProjects(memberId, projects);
+		
+		// access logic can be added here in the future
+		
+		return associations;
+	}
+	
+	public List<Channel> filterAccessibleChannels(HUID memberId, List<Channel> channels) {
+		var associations = filterAssociatedChannels(memberId, channels);
+		
+		// access logic can be added here in the future
+		
+		return associations;
+	}
+	
+	public List<HUID> filterAccessibleProjectIds(HUID memberId, List<HUID> projectIds) {
+		var associations = filterAssociatedProjectIds(memberId, projectIds);
+		
+		// access logic can be added here in the future
+		
+		return associations;
+	}
+	
+	public List<HUID> filterAccessibleChannelIds(HUID memberId, List<HUID> channelIds) {
+		var associations = filterAssociatedChannelIds(memberId, channelIds);
+		
+		// access logic can be added here in the future
+		
+		return associations;
+	}
+	
+	public List<Project> filterAssociatedProjects(HUID memberId, List<Project> projects) {
+		var associations = findAssociations(memberId, MemberAssociationMeta.Scope.PROJECT);
+		
+		var associatedProjectIds = associations.stream()
+				.map(assoc -> assoc.getScopeId())
+				.toList();
+		
+		return projects.stream()
+				.filter(project -> associatedProjectIds.contains(project.getId()))
+				.toList();
+	}
+	
+	public List<HUID> filterAssociatedChannelIds(HUID memberId, List<HUID> projectIds) {
+		var associations = findAssociationsWithIds(memberId, projectIds, MemberAssociationMeta.Scope.PROJECT);
+		
+		var associatedProjectIds = associations.stream()
+				.map(assoc -> assoc.getScopeId())
+				.toList();
+		
+		return associatedProjectIds;
+	}
+	
+	public List<Channel> filterAssociatedChannels(HUID memberId, List<Channel> channels) {	
+		var associations = findAssociations(memberId, MemberAssociationMeta.Scope.CHANNEL);
+		
+		var associatedChannelIds = associations.stream()
+				.map(assoc -> assoc.getScopeId())
+				.toList();
+		
+		return channels.stream()
+				.filter(channel -> associatedChannelIds.contains(channel.getId()))
+				.toList();
+	}
+	
+	public void ensureMemberCanAccessProject(HUID memberId, HUID projectId) {
+		if(!isMemberInProject(memberId, projectId)) {
+			throw new BlacknodeException("Member with ID " + memberId + " has no access to project with ID " + projectId);
+		}
+	}
+	
+	public void ensureMemberCanAccessChannel(HUID memberId, HUID channelId) {
+		if(!isMemberInChannel(memberId, channelId)) {
+			throw new BlacknodeException("Member with ID " + memberId + " has no access to channel with ID " + channelId);
+		}
+	}
+	
+	public void ensureMemberCanAccessOrganization(HUID memberId, HUID organizationId) {
+		if(!isMemberInOrganization(memberId, organizationId)) {
+			throw new BlacknodeException("Member with ID " + memberId + " has no access to organization with ID " + organizationId);
+		}
+	}
+	
+	public void ensureMemberCanAccessProjects(HUID memberId, List<HUID> projectIds) {
+		var associations = findAssociationsWithIds(memberId, projectIds, MemberAssociationMeta.Scope.PROJECT);
+		
+		if(associations.size() != projectIds.size()) {
+			throw new BlacknodeException("Member with ID " + memberId + " has no access to all specified projects.");
+		}
+	}
+	
+	public void ensureMemberCanAccessChannels(HUID memberId, List<HUID> channelIds) {
+		var associations = findAssociationsWithIds(memberId, channelIds, MemberAssociationMeta.Scope.CHANNEL);
+	
+		if(associations.size() != channelIds.size()) {
+			throw new BlacknodeException("Member with ID " + memberId + " has no access to all specified channels.");
+		}
+	}
+	
+	public void ensureMemberHavingSuperRoleInOrganization(HUID memberId, HUID organizationId) {
+		if(!isMemberHavingSuperRoleInOrganization(memberId, organizationId)) {
+			throw new BlacknodeException("Member with ID " + memberId + " does not have a super privileged role in organization with ID " + organizationId);
+		}
+	}
+	
+	public void ensureMemberHavingSuperRoleInProject(HUID memberId, HUID projectId) {
+		if(!isMemberHavingSuperRoleInProject(memberId, projectId)) {
+			throw new BlacknodeException("Member with ID " + memberId + " does not have a super privileged role in project with ID " + projectId);
+		}
+	}
+	
+	public void ensureMemberHavingSuperRoleInChannel(HUID memberId, HUID channelId) {
+		if(!isMemberHavingSuperRoleInChannel(memberId, channelId)) {
+			throw new BlacknodeException("Member with ID " + memberId + " does not have a super privileged role in channel with ID " + channelId);
+		}
+	}
+	
+	public boolean isMemberHavingSuperRoleInOrganization(HUID memberId, HUID organizationId) {
+		var role = getMemberRoleInOrganization(memberId, organizationId, null);
+		
+		return role.map(Role::getMeta).map(RoleMeta::isSuperPrivileged).orElse(false);
+	}
+	
+	public boolean isMemberHavingSuperRoleInProject(HUID memberId, HUID projectId) {
+		var role = getMemberRoleInProject(memberId, projectId, null);
+		
+		return role.map(Role::getMeta).map(RoleMeta::isSuperPrivileged).orElse(false);
+	}
+	
+	public boolean isMemberHavingSuperRoleInChannel(HUID memberId, HUID channelId) {
+		var role = getMemberRoleInChannel(memberId, channelId);
+		
+		return role.map(Role::getMeta).map(RoleMeta::isSuperPrivileged).orElse(false);
+	}
+	
+	public boolean isMemberInOrganization(HUID memberId, HUID organizationId) {
+		return getMemberRoleInOrganization(memberId, organizationId, null).isPresent();
 	}
 	
 	public boolean isMemberInProject(HUID memberId, HUID projectId) {
