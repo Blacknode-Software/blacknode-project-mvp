@@ -30,6 +30,10 @@ public class RoleService {
 		return repository.findAllById(roleIds);
 	}
 	
+	public List<Role> getAllRoles() {
+		return repository.findAll();
+	}
+	
 	public Role create(CreationMeta meta) {
 		var role = new Role();
 		

@@ -11,6 +11,8 @@ public interface RoleRepository {
 	Optional<Role> findById(HUID id);
 	
 	List<Role> findAllById(List<HUID> ids);
+	
+	List<Role> findAll();
 
 	void save(Role role);
 }
