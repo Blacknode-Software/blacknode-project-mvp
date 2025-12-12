@@ -7,7 +7,7 @@
 		<artifactId>blacknode-software-backend</artifactId>
 		<version>0.0.1-DEV</version>
 	</parent>
-	<artifactId>blacknode-software-backend-domain</artifactId>
+	<artifactId>blacknode-software-backend-shared</artifactId>
 
 	<dependencies>
 		<dependency>
@@ -19,6 +19,7 @@
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
@@ -26,10 +27,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>software.blacknode.backend</groupId>
-			<artifactId>blacknode-software-backend-shared</artifactId>
 		</dependency>
 	</dependencies>
 </project>

@@ -14,6 +14,10 @@
 			<artifactId>blacknode-software-backend-domain</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>software.blacknode.backend</groupId>
+			<artifactId>blacknode-software-backend-shared</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>me.hinsinger.projects</groupId>
 			<artifactId>hinz-common</artifactId>
 		</dependency>

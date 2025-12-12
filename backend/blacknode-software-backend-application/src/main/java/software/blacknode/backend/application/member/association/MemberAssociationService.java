@@ -41,7 +41,7 @@ public class MemberAssociationService {
 	private final MemberAssociationRepository repository;
 	
 	public MemberAssociation create(HUID organizationId, CreationMeta meta) {
-		var association = new MemberAssociation();
+		var association = new MemberAssociation(organizationId);
 		
 		association.create(meta);
 		
@@ -84,7 +84,7 @@ public class MemberAssociationService {
 		return associations;
 	}
 	
-	public Optional<MemberAssociation> getMemberOrganizationAssociation(HUID organizationId, HUID memberId, HUID organizationId) {
+	public Optional<MemberAssociation> getMemberOrganizationAssociation(HUID organizationId, HUID memberId) {
 		return get(organizationId, memberId, organizationId, MemberAssociationMeta.Scope.ORGANIZATION);
 	}
 	

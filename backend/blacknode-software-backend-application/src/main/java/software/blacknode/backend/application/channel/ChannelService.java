@@ -17,6 +17,16 @@ public class ChannelService {
 
 	private final ChannelRepository repository;
 	
+	public Channel create(HUID organizationId, CreationMeta meta) {
+		var channel = new Channel(organizationId);
+		
+		channel.create(meta);
+		
+		repository.save(channel);
+		
+		return channel;
+	}
+	
 	public Channel getOrThrow(HUID organizationId, HUID channelId) {
 		return repository.findById(channelId).
 				orElseThrow(() -> new BlacknodeException("Channel with ID " + channelId + " not found."));
@@ -26,13 +36,4 @@ public class ChannelService {
 		return repository.findAllById(channelIds);
 	}
 	
-	public Channel create(HUID organizationId, CreationMeta meta) {
-		var channel = new Channel();
-		
-		channel.create(meta);
-		
-		repository.save(channel);
-		
-		return channel;
-	}
 }

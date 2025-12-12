@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import me.hinsinger.projects.hinz.common.huid.HUID;
 import software.blacknode.backend.api.service.JWTService;
 import software.blacknode.backend.application.member.MemberService;
-import software.blacknode.backend.domain.SessionContext;
+import software.blacknode.backend.domain.context.SessionContext;
 
 @Component
 public class SessionContextInterceptor implements HandlerInterceptor {

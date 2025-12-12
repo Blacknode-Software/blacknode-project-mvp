@@ -65,6 +65,11 @@
 				<artifactId>blacknode-software-backend-infrastructure</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>software.blacknode.backend</groupId>
+				<artifactId>blacknode-software-backend-shared</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -73,5 +78,6 @@
 		<module>blacknode-software-backend-application</module>
 		<module>blacknode-software-backend-domain</module>
 		<module>blacknode-software-backend-infrastructure</module>
+		<module>blacknode-software-backend-shared</module>
 	</modules>
 </project>

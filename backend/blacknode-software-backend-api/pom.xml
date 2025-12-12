@@ -28,6 +28,10 @@
 			<artifactId>blacknode-software-backend-application</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>software.blacknode.backend</groupId>
+			<artifactId>blacknode-software-backend-shared</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-api</artifactId>
 			<version>0.11.5</version>
