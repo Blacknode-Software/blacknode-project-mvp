@@ -15,6 +15,4 @@ public class RoleInitialProjectScopeCreationMeta implements CreationMeta {
 	
 	@Builder.Default
 	private boolean byDefaultAssigned = false;
-	
-	private HUID organizationId;
 }

@@ -10,7 +10,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.projects.hinz.common.huid.HUID;
-import software.blacknode.backend.application.member.association.MemberAssociationService;
+import software.blacknode.backend.application.access.AccessControlService;
 import software.blacknode.backend.application.project.ProjectService;
 import software.blacknode.backend.application.project.command.ProjectsInOrganizationFetchCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
@@ -20,7 +20,7 @@ import software.blacknode.backend.domain.context.SessionContext;
 @RequiredArgsConstructor
 public class ProjectsInOrganizationFetchUseCase implements ResultExecutionUseCase<ProjectsInOrganizationFetchCommand, ProjectsInOrganizationFetchUseCase.Result> {
 	
-	private final MemberAssociationService memberAssociationService;
+	private final AccessControlService accessControlService;
 	private final ProjectService projectService;
 	
 	@Autowired
@@ -30,10 +30,12 @@ public class ProjectsInOrganizationFetchUseCase implements ResultExecutionUseCas
 	@Override
 	public Result execute(ProjectsInOrganizationFetchCommand command) {
 		var memberId = context.getMemberId();
+		var organizationId = context.getOrganizationId();
 		
-		var projects = memberAssociationService.filterAccessibleProjects(memberId, projectService.getAllInOrganization());
+		var projects = projectService.getAll(organizationId);
 		
 		var projectIds = projects.stream()
+				.filter(project -> accessControlService.hasAccessToProject(memberId, project, AccessControlService.AccessLevel.READ))
 				.map(project -> project.getId())
 				.toList();
 		

@@ -35,26 +35,28 @@ public class Auth implements Creatable, Deletable, Modifiable {
 
 	@Override
 	public void create(Optional<CreationMeta> meta0) {
-		if(meta0.isEmpty()) BlacknodeException.throwWith("CreationMeta is required to create an Account");
-		
-		if(creationTimestamp != null) BlacknodeException.throwWith("This Auth has already been created");
+		ensureNotCreated(meta0);
+		if(meta0.isEmpty()) throw new BlacknodeException("CreationMeta is required to create an Account");
 		
 		this.id = HUID.random();
 		this.meta = new AuthMeta();
 		
 		var meta = meta0.get();
 		
-		if(meta instanceof AuthByPasswordCreationMeta passwordMeta) {
+		if(meta instanceof AuthByPasswordCreationMeta _meta) {
+			var password = _meta.getPassword();
+			var accountId = _meta.getAccountId();
+			
 			var properties = new AuthByPasswordProperties();
 			
-			properties.changePassword(passwordMeta.getPassword());
+			properties.changePassword(password);
 			
 			this.type = AuthType.PASSWORD_AUTHENTICATION;
 			this.properties = properties;
 			
-			this.accountId = passwordMeta.getAccountId();
+			this.accountId = accountId;
 		} else {
-			BlacknodeException.throwWith("Unsupported CreationMeta type for Auth creation");
+			throw new BlacknodeException("Unsupported CreationMeta type for Auth creation");
 		}
 		
 	}

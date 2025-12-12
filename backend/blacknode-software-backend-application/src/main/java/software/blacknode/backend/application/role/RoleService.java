@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.projects.hinz.common.huid.HUID;
+import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.modifier.create.meta.CreationMeta;
 import software.blacknode.backend.domain.role.Role;
 import software.blacknode.backend.domain.role.repository.RoleRepository;
@@ -17,29 +18,49 @@ public class RoleService {
 
 	private final RoleRepository repository;
 	
-	public Role getByIdOrThrow(HUID roleId) {
-		return repository.findById(roleId)
-				.orElseThrow(() -> new RuntimeException("Role with ID " + roleId + " not found."));
+	public Role getOrThrow(HUID organizationId, HUID roleId) {
+		return repository.findById(organizationId, roleId)
+				.orElseThrow(() -> new BlacknodeException("Role with ID " + roleId + " not found."));
 	}
 	
-	public Optional<Role> getById(HUID roleId) {
-		return repository.findById(roleId);
+	public Optional<Role> get(HUID organizationId, HUID roleId) {
+		return repository.findById(organizationId, roleId);
 	}
 	
-	public List<Role> getRolesByIds(List<HUID> roleIds) {
-		return repository.findAllById(roleIds);
+	public List<Role> getByIds(HUID organizationId, List<HUID> roleIds) {
+		return repository.findAllById(organizationId, roleIds);
 	}
 	
-	public List<Role> getAllRoles() {
-		return repository.findAll();
+	public List<Role> getAll(HUID organizationId) {
+		return repository.findAll(organizationId);
 	}
 	
-	public Role create(CreationMeta meta) {
-		var role = new Role();
+	public List<Role> getOrganizationRoles(HUID organizationId) {
+		return getRolesOfScope(organizationId, Role.Scope.ORGANIZATION);
+	}
+	
+	public List<Role> getProjectRoles(HUID organizationId) {
+		return getRolesOfScope(organizationId, Role.Scope.PROJECT);
+	}
+	
+	public List<Role> getChannelRoles(HUID organizationId) {
+		return getRolesOfScope(organizationId, Role.Scope.CHANNEL);
+	}
+	
+	public List<Role> getRolesOfScope(HUID organizationId, Role.Scope scope) {
+		var roles = repository.findAll(organizationId).stream()
+				.filter(role -> role.getScope() == scope)
+				.toList();
+		
+		return roles;
+	}
+	
+	public Role create(HUID organizationId, CreationMeta meta) {
+		var role = new Role(organizationId);
 		
 		role.create(meta);
 		
-		repository.save(role);
+		repository.save(organizationId, role);
 		
 		return role;
 	}

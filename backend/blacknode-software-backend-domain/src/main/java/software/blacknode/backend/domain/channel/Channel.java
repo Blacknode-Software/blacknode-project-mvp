@@ -26,11 +26,16 @@ public class Channel implements Creatable, Modifiable, Deletable {
 	@Getter private Timestamp deletationTimestamp;
 	
 	@Getter private HUID projectId;
-	@Getter private HUID organizationId;
+	
+	@Getter private final HUID organizationId;
+	
+	public Channel(HUID organizationId) {
+		this.organizationId = organizationId;
+	}
 
 	@Override
 	public void create(Optional<CreationMeta> meta0) {
-		if(meta0.isEmpty()) BlacknodeException.throwWith("CreationMeta is required to create a Project");
+		if(meta0.isEmpty()) throw new BlacknodeException("CreationMeta is required to create a Project");
 		
 		this.id = HUID.random();
 		
@@ -38,22 +43,20 @@ public class Channel implements Creatable, Modifiable, Deletable {
 		
 		var meta = meta0.get();
 		
-		if(meta instanceof ChannelInitialCreationMeta initCreMeta) {
-			var organizationId = initCreMeta.getOrganizationId();
-			var projectId = initCreMeta.getProjectId();
+		if(meta instanceof ChannelInitialCreationMeta _meta) {
+			var projectId = _meta.getProjectId();
 			
-			var name = initCreMeta.getName();
-			var description = initCreMeta.getDescription();
-			var color = initCreMeta.getColor();			
+			var name = _meta.getName();
+			var description = _meta.getDescription();
+			var color = _meta.getColor();			
 			
 			this.meta = this.meta.withName(name)
 					.withDescription(description)
 					.withColor(color);
 			
-			this.organizationId = organizationId;
 			this.projectId = projectId;
 		} else {
-			BlacknodeException.throwWith("Unsupported CreationMeta type for Channel creation: " + meta.getClass().getName());
+			throw new BlacknodeException("Unsupported CreationMeta type for Channel creation: " + meta.getClass().getName());
 		}
 	}
 	

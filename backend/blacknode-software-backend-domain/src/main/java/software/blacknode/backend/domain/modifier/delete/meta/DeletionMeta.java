@@ -1,5 +1,7 @@
 package software.blacknode.backend.domain.modifier.delete.meta;
 
-public interface DeletionMeta {
+import software.blacknode.backend.domain.modifier.meta.EntityModifierMeta;
+
+public interface DeletionMeta extends EntityModifierMeta {
 
 }

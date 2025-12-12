@@ -1,19 +1,25 @@
 package software.blacknode.backend.domain.member.association.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import me.hinsinger.projects.hinz.common.huid.HUID;
 import software.blacknode.backend.domain.member.association.MemberAssociation;
+import software.blacknode.backend.domain.member.association.meta.MemberAssociationMeta;
 
 public interface MemberAssociationRepository {
 
+	public Optional<MemberAssociation> findById(HUID id);
+	
 	public List<MemberAssociation> findAll();
 	
 	public List<MemberAssociation> findByMemberIds(List<HUID> memberIds);
 	
 	public List<MemberAssociation> findByMemberId(HUID memberId);
 	
-	public MemberAssociation findByMemberIdAndScopeId(HUID memberId, HUID scopeId);
+	public List<MemberAssociation> findByMemberIdAndScope(HUID memberId, MemberAssociationMeta.Scope scope);
+	
+	public Optional<MemberAssociation> findByMemberIdAndScopeIdAndScope(HUID memberId, HUID scopeId, MemberAssociationMeta.Scope scope);
 	
 	public void save(MemberAssociation association);
 }

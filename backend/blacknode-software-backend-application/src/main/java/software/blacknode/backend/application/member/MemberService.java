@@ -14,18 +14,18 @@ public class MemberService {
 
 	private final MemberRepository repository;
 	
-	public Member getMemberOrThrow(HUID memberId) {
+	public Member getOrThrow(HUID organizationId, HUID memberId) {
 		return repository.findById(memberId)
 				.orElseThrow(() -> new RuntimeException("Member with ID " + memberId + " not found."));
 	}
 	
-	public Member getMemberByAccountId(HUID accountId, HUID organizationId) {
+	public Member getByAccountId(HUID accountId, HUID organizationId) {
 		return repository.findByAccountId(accountId)
 				.orElseThrow(() -> new RuntimeException("Member with Account ID " + accountId + " not found."));
 	}
 	
-	public Member create(CreationMeta meta) {
-		var member = new Member();
+	public Member create(HUID organizationId, CreationMeta meta) {
+		var member = new Member(organizationId);
 		
 		member.create(meta);
 		

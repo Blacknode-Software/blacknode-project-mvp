@@ -15,6 +15,4 @@ public class ProjectInitialCreationMeta implements CreationMeta {
 	@Builder.Default
 	private String color = "#FAFAFA";
 	
-	private HUID organizationId;
-	
 }

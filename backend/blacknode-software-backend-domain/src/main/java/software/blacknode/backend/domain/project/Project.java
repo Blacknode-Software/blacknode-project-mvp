@@ -25,11 +25,15 @@ public class Project implements Creatable, Modifiable, Deletable {
 	@Getter private Timestamp modificationTimestamp;
 	@Getter private Timestamp deletationTimestamp;
 	
-	@Getter private HUID organizationId;
+	@Getter private final HUID organizationId;
+	
+	public Project(HUID organizationId) {
+		this.organizationId = organizationId;
+	}
 
 	@Override
 	public void create(Optional<CreationMeta> meta0) {
-		if(meta0.isEmpty()) BlacknodeException.throwWith("CreationMeta is required to create a Project");
+		if(meta0.isEmpty()) new BlacknodeException("CreationMeta is required to create a Project");
 		
 		this.id = HUID.random();
 		
@@ -37,20 +41,17 @@ public class Project implements Creatable, Modifiable, Deletable {
 		
 		var meta = meta0.get();
 		
-		if(meta instanceof ProjectInitialCreationMeta initCreMeta) {
-			var organizationId = initCreMeta.getOrganizationId();
-			
-			var name = initCreMeta.getName();
-			var description = initCreMeta.getDescription();
-			var color = initCreMeta.getColor();
+		if(meta instanceof ProjectInitialCreationMeta _meta) {
+			var name = _meta.getName();
+			var description = _meta.getDescription();
+			var color = _meta.getColor();
 			
 			this.meta = this.meta.withName(name)
 					.withDescription(description)
 					.withColor(color);
 			
-			this.organizationId = organizationId;
 		} else {
-			BlacknodeException.throwWith("Unsupported CreationMeta type for Project creation: " + meta.getClass().getName());
+			new BlacknodeException("Unsupported CreationMeta type for Project creation: " + meta.getClass().getName());
 		}
 	}
 	

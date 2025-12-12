@@ -67,7 +67,7 @@ public class SessionContextInterceptor implements HandlerInterceptor {
             return;
         }
         HUID organizationId = HUID.fromString(organizationHeader);
-        var member = memberService.getMemberByAccountId(accountId, organizationId);
+        var member = memberService.getByAccountId(accountId, organizationId);
         if (member != null) {
             sessionContext.setOrganizationId(organizationId);
             sessionContext.setMemberId(member.getId());

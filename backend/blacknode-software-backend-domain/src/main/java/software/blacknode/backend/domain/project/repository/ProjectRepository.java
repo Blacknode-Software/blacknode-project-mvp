@@ -12,7 +12,7 @@ public interface ProjectRepository {
 
 	List<Project> findAllById(List<HUID> ids);
 	
-	List<Project> findProjectInOrganization();
+	List<Project> findProjectInOrganization(HUID organizationId);
 	
 	void save(Project project);
 }

@@ -29,22 +29,26 @@ public class Role implements Creatable, Modifiable, Deletable {
 	@Getter private Timestamp modificationTimestamp;
 	@Getter private Timestamp deletationTimestamp;
 	
-	@Getter private HUID organizationId;
+	@Getter private final HUID organizationId;
+	
+	public Role(HUID organizationId) {
+		this.organizationId = organizationId;
+	}
 	
 	@Override
 	public void create(Optional<CreationMeta> meta0) {
-		if(meta0.isEmpty()) BlacknodeException.throwWith("CreationMeta is required to create a Role");
+		if(meta0.isEmpty()) new BlacknodeException("CreationMeta is required to create a Role");
 		
 		this.id = HUID.random();
 		this.meta = RoleMeta.builder().build();
 		
 		var meta = meta0.get();
 		
-		if(meta instanceof RoleInitialOrganizationScopeCreationMeta initOrgMeta) {
-			var name = initOrgMeta.getName();
-			var description = initOrgMeta.getDescription();
-			var color = initOrgMeta.getColor();
-			var byDefaultAssigned = initOrgMeta.isByDefaultAssigned();
+		if(meta instanceof RoleInitialOrganizationScopeCreationMeta _meta) {
+			var name = _meta.getName();
+			var description = _meta.getDescription();
+			var color = _meta.getColor();
+			var byDefaultAssigned = _meta.isByDefaultAssigned();
 			
 			this.scope = Scope.ORGANIZATION;
 			
@@ -53,14 +57,12 @@ public class Role implements Creatable, Modifiable, Deletable {
 				 	.withColor(color)
 				 	.withByDefaultAssigned(byDefaultAssigned)
 				 	.withSystemDefault(true);
-			
-			this.organizationId = initOrgMeta.getOrganizationId();
 		} 
-		else if (meta instanceof RoleInitialProjectScopeCreationMeta initProjMeta) {
-			var name = initProjMeta.getName();
-			var description = initProjMeta.getDescription();
-			var color = initProjMeta.getColor();
-			var byDefaultAssigned = initProjMeta.isByDefaultAssigned();
+		else if (meta instanceof RoleInitialProjectScopeCreationMeta _meta) {
+			var name = _meta.getName();
+			var description = _meta.getDescription();
+			var color = _meta.getColor();
+			var byDefaultAssigned = _meta.isByDefaultAssigned();
 			
 			this.scope = Scope.PROJECT;
 			
@@ -69,14 +71,12 @@ public class Role implements Creatable, Modifiable, Deletable {
 				 	.withColor(color)
 				 	.withByDefaultAssigned(byDefaultAssigned)
 				 	.withSystemDefault(true);
-			
-			this.organizationId = initProjMeta.getOrganizationId();
 		}
-		else if (meta instanceof RoleInitialChannelScopeCreationMeta initChnlMeta) {
-			var name = initChnlMeta.getName();
-			var description = initChnlMeta.getDescription();
-			var color = initChnlMeta.getColor();
-			var byDefaultAssigned = initChnlMeta.isByDefaultAssigned();
+		else if (meta instanceof RoleInitialChannelScopeCreationMeta _meta) {
+			var name = _meta.getName();
+			var description = _meta.getDescription();
+			var color = _meta.getColor();
+			var byDefaultAssigned = _meta.isByDefaultAssigned();
 			
 			this.scope = Scope.CHANNEL;
 			
@@ -85,11 +85,9 @@ public class Role implements Creatable, Modifiable, Deletable {
 				 	.withColor(color)
 				 	.withByDefaultAssigned(byDefaultAssigned)
 				 	.withSystemDefault(true);
-			
-			this.organizationId = initChnlMeta.getOrganizationId();
 		}
 		else {
-			BlacknodeException.throwWith("Unsupported CreationMeta type for Role creation");
+			new BlacknodeException("Unsupported CreationMeta type for Role creation");
 		}
 		
 		creationTimestamp = Timestamp.now();
@@ -116,7 +114,7 @@ public class Role implements Creatable, Modifiable, Deletable {
 
     public void ensureBelongsToOrganization(HUID organizationId) {
         if (!belongsToOrganization(organizationId)) {
-            BlacknodeException.throwWith("Role with ID " + id + " does not belong to Organization with ID " + organizationId + ".");
+            new BlacknodeException("Role with ID " + id + " does not belong to Organization with ID " + organizationId + ".");
         }
     }
     
@@ -126,7 +124,7 @@ public class Role implements Creatable, Modifiable, Deletable {
     
     public void ensureHasScope(Scope scope) {
 		if (!hasScope(scope)) {
-			BlacknodeException.throwWith("Role with ID " + id + " does not have scope " + scope + ".");
+			new BlacknodeException("Role with ID " + id + " does not have scope " + scope + ".");
 		}
     }
     
@@ -135,6 +133,24 @@ public class Role implements Creatable, Modifiable, Deletable {
 		ORGANIZATION,
 		PROJECT,
 		CHANNEL,
-		UNKNOWN
+		UNKNOWN,
+		
+		;
+		
+		public boolean isGlobal() {
+			return this == GLOBAL;
+		}
+		
+		public boolean isOrganization() {
+			return this == ORGANIZATION;
+		}
+		
+		public boolean isProject() {
+			return this == PROJECT;
+		}
+		
+		public boolean isChannel() {
+			return this == CHANNEL;
+		}
 	}
 }

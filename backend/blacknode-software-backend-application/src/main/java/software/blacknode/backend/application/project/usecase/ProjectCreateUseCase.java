@@ -3,8 +3,11 @@ package software.blacknode.backend.application.project.usecase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lombok.Builder;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import software.blacknode.backend.application.member.association.MemberAssociationService;
+import me.hinsinger.projects.hinz.common.huid.HUID;
+import software.blacknode.backend.application.access.AccessControlService;
 import software.blacknode.backend.application.project.ProjectService;
 import software.blacknode.backend.application.project.command.ProjectCreateCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
@@ -15,7 +18,7 @@ import software.blacknode.backend.domain.project.meta.create.ProjectDefaultCreat
 @RequiredArgsConstructor
 public class ProjectCreateUseCase implements ResultExecutionUseCase<ProjectCreateCommand, ProjectCreateUseCase.Result> {
 	
-	private final MemberAssociationService memberAssociationService;
+	private final AccessControlService accessControlService;
 	private final ProjectService projectService;
 	
 	@Autowired
@@ -23,10 +26,10 @@ public class ProjectCreateUseCase implements ResultExecutionUseCase<ProjectCreat
 	
 	@Override
 	public Result execute(ProjectCreateCommand command) {
-		var memberId = context.getMemberId();
 		var organizationId = context.getOrganizationId();
+		var memberId = context.getMemberId();
 		
-		memberAssociationService.ensureMemberHavingSuperRoleInOrganization(memberId, organizationId);
+		accessControlService.ensureMemberHasOrganizationAccess(memberId, organizationId, AccessControlService.AccessLevel.MANAGE);
 		
 		var projectName = command.getName();
 		var projectDescription = command.getDescription();
@@ -38,15 +41,16 @@ public class ProjectCreateUseCase implements ResultExecutionUseCase<ProjectCreat
 				.color(projectColor)
 				.build();
 		
-		projectService.create(meta);
+		var project = projectService.create(organizationId, meta);
 		
-		// TODO maybe assign the member to the project
-		
-		return null;
+		return Result.builder().projectId(project.getId()).build();
 	}
 
+	@Builder
 	public static class Result {
 		
+		@NonNull
+		private HUID projectId;
 	}
 
 }

@@ -18,8 +18,8 @@ public class ProjectService {
 
 	private final ProjectRepository repository;
 	
-	public Project create(CreationMeta meta) {
-		var project = new Project();
+	public Project create(HUID organizationId, CreationMeta meta) {
+		var project = new Project(organizationId);
 		
 		project.create(meta);
 		
@@ -30,27 +30,27 @@ public class ProjectService {
 		return project;
 	}
 	
-	public void delete(HUID projectId, DeletionMeta meta) {
-		var project = getOrThrow(projectId);
+	public void delete(HUID organizationId, HUID projectId, DeletionMeta meta) {
+		var project = getOrThrow(organizationId, projectId);
 		
 		project.delete(meta);
 		
 		repository.save(project);
 	}
 	
-	public Project getOrThrow(HUID projectId) {
+	public Project getOrThrow(HUID organizationId, HUID projectId) {
 		return repository.findById(projectId)
 				.orElseThrow(() -> new BlacknodeException("Project with ID " + projectId + " not found."));
 	}
 	
-	public List<Project> getByIds(List<HUID> projectIds) {
+	public List<Project> getByIds(HUID organizationId, List<HUID> projectIds) {
 		var projects = repository.findAllById(projectIds);
 		
 		return projects;
 	}
 	
-	public List<Project> getAllInOrganization() {
-		var projects = repository.findProjectInOrganization();
+	public List<Project> getAll(HUID organizationId) {
+		var projects = repository.findProjectInOrganization(organizationId);
 		
 		return projects;
 	}

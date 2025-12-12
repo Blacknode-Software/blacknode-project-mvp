@@ -17,6 +17,4 @@ public class ChannelInitialCreationMeta implements CreationMeta {
 	private String color = "#FAFAFA";
 	
 	private HUID projectId;
-	
-	private HUID organizationId;
 }

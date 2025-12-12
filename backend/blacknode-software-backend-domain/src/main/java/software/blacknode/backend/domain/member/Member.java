@@ -30,9 +30,13 @@ public class Member implements Creatable, Modifiable, Deletable {
 	@Getter private HUID accountId;
 	@Getter private HUID organizationId;
 	
+	public Member(HUID organizationId) {
+		this.organizationId = organizationId;
+	}
+	
 	@Override
 	public void create(Optional<CreationMeta> meta0) {
-		if(meta0.isEmpty()) BlacknodeException.throwWith("CreationMeta is required to create an Member");
+		if(meta0.isEmpty()) throw new BlacknodeException("CreationMeta is required to create an Member");
 		
 		var meta = meta0.get();
 		
@@ -42,9 +46,8 @@ public class Member implements Creatable, Modifiable, Deletable {
 		
 		if(meta instanceof MemberAdminCreationMeta adminMeta) {
 			this.accountId = adminMeta.getAccountId();
-			this.organizationId = adminMeta.getOrganizationId();
 		} else {
-			BlacknodeException.throwWith("Unsupported CreationMeta type for Member creation");
+			throw new BlacknodeException("Unsupported CreationMeta type for Member creation");
 		}
 		
 		creationTimestamp = Timestamp.now();
@@ -71,7 +74,7 @@ public class Member implements Creatable, Modifiable, Deletable {
 
     public void ensureBelongsToOrganization(HUID organizationId) {
         if (!belongsToOrganization(organizationId)) {
-            BlacknodeException.throwWith("Member with ID " + id + " does not belong to Organization with ID " + organizationId + ".");
+			throw new BlacknodeException("Member with ID " + id + " does not belong to Organization with ID " + organizationId + ".");
         }
     }
 	
