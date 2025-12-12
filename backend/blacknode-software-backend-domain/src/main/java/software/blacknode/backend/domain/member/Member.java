@@ -36,7 +36,9 @@ public class Member implements Creatable, Modifiable, Deletable {
 	
 	@Override
 	public void create(Optional<CreationMeta> meta0) {
-		if(meta0.isEmpty()) throw new BlacknodeException("CreationMeta is required to create an Member");
+		ensureNotCreated(meta0);
+		ensureNotDeleted(meta0);
+		ensureCreationMetaProvided(meta0);
 		
 		var meta = meta0.get();
 		
@@ -47,7 +49,7 @@ public class Member implements Creatable, Modifiable, Deletable {
 		if(meta instanceof MemberAdminCreationMeta adminMeta) {
 			this.accountId = adminMeta.getAccountId();
 		} else {
-			throw new BlacknodeException("Unsupported CreationMeta type for Member creation");
+			throwUnsupportedCreationMeta(meta);
 		}
 		
 		creationTimestamp = Timestamp.now();
@@ -55,14 +57,18 @@ public class Member implements Creatable, Modifiable, Deletable {
 	
 	@Override
 	public void modify(Optional<ModificationMeta> meta0) {
-		// TODO Auto-generated method stub
+		ensureCreated(meta0);
+		ensureNotDeleted(meta0);
+		ensureModificationMetaProvided(meta0);
 		
 		modificationTimestamp = Timestamp.now();
 	}
 	
 	@Override
 	public void delete(Optional<DeletionMeta> meta0) {
-		// TODO Auto-generated method stub
+		ensureCreated(meta0);
+		ensureNotDeleted(meta0);
+		ensureDeletionMetaProvided(meta0);
 		
 		deletationTimestamp = Timestamp.now();
 	}

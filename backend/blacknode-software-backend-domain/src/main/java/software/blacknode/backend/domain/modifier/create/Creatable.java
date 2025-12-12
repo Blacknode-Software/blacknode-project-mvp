@@ -27,8 +27,8 @@ public interface Creatable extends EntityModifier {
 		return getCreationTimestamp() != null;
 	}
     
-    default void ensureCreated(Optional<EntityModifierMeta> meta) {
-    	ensureCreated(meta.orElse(new EmptyModifierMeta()));
+    default void ensureCreated(Optional<? extends EntityModifierMeta> meta) {
+    	ensureCreated(meta.map(m -> (EntityModifierMeta) m).orElse(new EmptyModifierMeta()));
     }
     
     default void ensureCreated(EntityModifierMeta meta) {
@@ -37,8 +37,8 @@ public interface Creatable extends EntityModifier {
 		}
 	}
     
-    default void ensureNotCreated(Optional<EntityModifierMeta> meta) {
-		ensureNotCreated(meta.orElse(new EmptyModifierMeta()));
+    default void ensureNotCreated(Optional<? extends EntityModifierMeta> meta) {
+		ensureNotCreated(meta.map(m -> (EntityModifierMeta) m).orElse(new EmptyModifierMeta()));
 	}
     
     default void ensureNotCreated(EntityModifierMeta meta) {
@@ -47,17 +47,17 @@ public interface Creatable extends EntityModifier {
 		}
     }
     
-    default void ensureCreationMetaProvided(Optional<CreationMeta> meta) {
+    default void ensureCreationMetaProvided(Optional<? extends CreationMeta> meta) {
 		if(meta.isEmpty()) {
 			throw new BlacknodeException("Creation meta must be provided when creating a " + this.getClass().getSimpleName() + ".");
 		}
     }
     
-    default void throwUnspportedCreationMetaType(Optional<CreationMeta> meta) {
-    	throwUnsupportedCreationMetaType(meta.orElse(new EmptyModifierMeta()));
+    default void throwUnspportedCreationMeta(Optional<? extends CreationMeta> meta) {
+    	throwUnsupportedCreationMeta(meta.map(m -> (EntityModifierMeta) m).orElse(new EmptyModifierMeta()));
     }
     
-    default void throwUnsupportedCreationMetaType(CreationMeta meta) {
+    default void throwUnsupportedCreationMeta(EntityModifierMeta meta) {
     	throw new BlacknodeException("Unsupported CreationMeta type for " + this.getClass().getSimpleName() + " creation: " + meta.getClass().getName());
     }
 

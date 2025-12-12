@@ -10,13 +10,12 @@ import software.blacknode.backend.domain.auth.meta.create.AuthByPasswordCreation
 import software.blacknode.backend.domain.auth.properties.AuthProperties;
 import software.blacknode.backend.domain.auth.properties.impl.AuthByPasswordProperties;
 import software.blacknode.backend.domain.auth.type.AuthType;
-import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.modifier.create.Creatable;
 import software.blacknode.backend.domain.modifier.create.meta.CreationMeta;
 import software.blacknode.backend.domain.modifier.delete.Deletable;
 import software.blacknode.backend.domain.modifier.delete.meta.DeletionMeta;
 import software.blacknode.backend.domain.modifier.modify.Modifiable;
-import software.blacknode.backend.domain.modifier.modify.meta.ModificationMeta;
+import software.blacknode.backend.domain.modifier.modify.meta.ModificationMeta;	
 
 public class Auth implements Creatable, Deletable, Modifiable {
 
@@ -36,7 +35,8 @@ public class Auth implements Creatable, Deletable, Modifiable {
 	@Override
 	public void create(Optional<CreationMeta> meta0) {
 		ensureNotCreated(meta0);
-		if(meta0.isEmpty()) throw new BlacknodeException("CreationMeta is required to create an Account");
+		ensureNotDeleted(meta0);
+		ensureCreationMetaProvided(meta0);
 		
 		this.id = HUID.random();
 		this.meta = new AuthMeta();
@@ -56,20 +56,27 @@ public class Auth implements Creatable, Deletable, Modifiable {
 			
 			this.accountId = accountId;
 		} else {
-			throw new BlacknodeException("Unsupported CreationMeta type for Auth creation");
+			throwUnsupportedCreationMeta(meta);
 		}
 		
+		creationTimestamp = Timestamp.now();
 	}
 	
 	@Override
 	public void modify(Optional<ModificationMeta> meta0) {
-		// TODO Auto-generated method stub
+		ensureCreated(meta0);
+		ensureNotDeleted(meta0);
+		ensureModificationMetaProvided(meta0);
 		
+		modificationTimestamp = Timestamp.now();
 	}
 	
 	@Override
 	public void delete(Optional<DeletionMeta> meta0) {
-		// TODO Auto-generated method stub
+		ensureCreated(meta0);
+		ensureNotDeleted(meta0);
+		ensureDeletionMetaProvided(meta0);
 		
+		deletationTimestamp = Timestamp.now();
 	}
 }

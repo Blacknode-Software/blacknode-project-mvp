@@ -6,6 +6,7 @@ import me.hinsinger.projects.hinz.common.time.timestamp.Timestamp;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.modifier.EntityModifier;
 import software.blacknode.backend.domain.modifier.meta.EntityModifierMeta;
+import software.blacknode.backend.domain.modifier.meta.impl.EmptyModifierMeta;
 import software.blacknode.backend.domain.modifier.modify.meta.ModificationMeta;
 
 public interface Modifiable extends EntityModifier {
@@ -26,8 +27,12 @@ public interface Modifiable extends EntityModifier {
 		return getModificationTimestamp() != null;
 	}
 	
-	default void ensureInNotModified(Optional<EntityModifierMeta> meta) {
-		ensureIsNotModified(meta.orElse(new EmptyModificationMeta()));
+	default void ensureInNotModified(Optional<? extends EntityModifierMeta> meta) {
+		ensureIsNotModified(meta.map(m -> (EntityModifierMeta) m).orElse(new EmptyModifierMeta()));
+	}
+	
+	default void ensureIsNotModifier(Optional<? extends EntityModifierMeta> meta) {
+		ensureIsModified(meta.map(m -> (EntityModifierMeta) m).orElse(new EmptyModifierMeta()));
 	}
 	
 	default void ensureIsNotModified(EntityModifierMeta meta) {
@@ -36,19 +41,27 @@ public interface Modifiable extends EntityModifier {
 		}
 	}
 	
+	default void ensureIsModified(Optional<? extends EntityModifierMeta> meta) {
+		ensureIsModified(meta.map(m -> (EntityModifierMeta) m).orElse(new EmptyModifierMeta()));
+	}
+	
 	default void ensureIsModified(EntityModifierMeta meta) {
 		if(!isModified()) {
 			throw new BlacknodeException(this.getClass().getSimpleName() + " is not modified. Cannot perform " + meta.getClass().getSimpleName() + " operation.");
 		}
 	}
 	
-	default void ensureModificationMetaProvided(Optional<ModificationMeta> meta) {
+	default void ensureModificationMetaProvided(Optional<? extends ModificationMeta> meta) {
 		if(meta.isEmpty()) {
 			throw new BlacknodeException("Modification meta must be provided when modifying a " + this.getClass().getSimpleName() + ".");
 		}
 	}
 	
-	default void throwUnsupportedModificationMeta(ModificationMeta meta) {
+	default void throwUnsupportedModificationMeta(Optional<? extends ModificationMeta> meta) {
+		throwUnsupportedModificationMeta(meta.map(m -> (EntityModifierMeta) m).orElse(new EmptyModifierMeta()));
+	}
+	
+	default void throwUnsupportedModificationMeta(EntityModifierMeta meta) {
 		throw new BlacknodeException("Unsupported ModificationMeta type for " + this.getClass().getSimpleName() + " modification: " + meta.getClass().getName());
 	}
 

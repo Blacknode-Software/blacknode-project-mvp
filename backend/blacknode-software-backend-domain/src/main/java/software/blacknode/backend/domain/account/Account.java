@@ -30,6 +30,8 @@ public class Account implements Creatable, Modifiable, Deletable {
 	
 	@Override
 	public void create(Optional<CreationMeta> meta0) {
+		ensureNotCreated(meta0);
+		ensureNotDeleted(meta0);
 		ensureCreationMetaProvided(meta0);
 		
 		this.id = HUID.random();
@@ -50,7 +52,7 @@ public class Account implements Creatable, Modifiable, Deletable {
 			this.meta.withFirstName(firstName)
 				.withLastName(lastName);
 		} else {
-			throw new BlacknodeException("Unsupported CreationMeta type for Account creation");
+			throwUnsupportedCreationMeta(meta);
 		}
 		
 		creationTimestamp = Timestamp.now();
@@ -58,14 +60,18 @@ public class Account implements Creatable, Modifiable, Deletable {
 	
 	@Override
 	public void modify(Optional<ModificationMeta> meta0) {
-		// TODO Auto-generated method stub
+		ensureCreated(meta0);
+		ensureNotDeleted(meta0);
+		ensureModificationMetaProvided(meta0);
 		
 		modificationTimestamp = Timestamp.now();
 	}
 	
 	@Override
 	public void delete(Optional<DeletionMeta> meta0) {
-		// TODO Auto-generated method stub
+		ensureCreated(meta0);
+		ensureNotDeleted(meta0);
+		ensureDeletionMetaProvided(meta0);
 		
 		deletationTimestamp = Timestamp.now();
 	}

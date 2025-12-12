@@ -32,8 +32,10 @@ public class Organization implements Creatable, Modifiable, Deletable {
 	
 	@Override
 	public void create(Optional<CreationMeta> meta0) {
-		if(meta0.isEmpty()) BlacknodeException.throwWith("Creation meta must be provided when creating an organization.");
-		
+		ensureNotCreated(meta0);
+		ensureNotDeleted(meta0);
+		ensureCreationMetaProvided(meta0);
+
 		this.id = HUID.random();
 		this.name = "Unnamed Organization";
 		
@@ -46,20 +48,27 @@ public class Organization implements Creatable, Modifiable, Deletable {
 			this.id = DEFAULT_ORGANIZATION_ID;
 			this.name = initOrgMeta.getName();
 		}
+		else {
+			throwUnsupportedCreationMeta(meta);
+		}
 		
 		creationTimestamp = Timestamp.now();
 	}
 	
 	@Override
 	public void modify(Optional<ModificationMeta> meta0) {
-		
+		ensureCreated(meta0);
+		ensureNotDeleted(meta0);
+		ensureModificationMetaProvided(meta0);
 		
 		modificationTimestamp = Timestamp.now();
 	}
 
 	@Override
 	public void delete(Optional<DeletionMeta> meta0) {
-		// TODO Auto-generated method stub
+		ensureCreated(meta0);
+		ensureNotDeleted(meta0);
+		ensureDeletionMetaProvided(meta0);
 		
 		deletationTimestamp = Timestamp.now();
 	}

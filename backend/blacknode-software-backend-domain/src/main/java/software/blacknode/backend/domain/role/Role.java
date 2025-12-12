@@ -37,7 +37,9 @@ public class Role implements Creatable, Modifiable, Deletable {
 	
 	@Override
 	public void create(Optional<CreationMeta> meta0) {
-		if(meta0.isEmpty()) new BlacknodeException("CreationMeta is required to create a Role");
+		ensureNotCreated(meta0);
+		ensureNotDeleted(meta0);
+		ensureCreationMetaProvided(meta0);
 		
 		this.id = HUID.random();
 		this.meta = RoleMeta.builder().build();
@@ -87,7 +89,7 @@ public class Role implements Creatable, Modifiable, Deletable {
 				 	.withSystemDefault(true);
 		}
 		else {
-			new BlacknodeException("Unsupported CreationMeta type for Role creation");
+			throwUnsupportedCreationMeta(meta);
 		}
 		
 		creationTimestamp = Timestamp.now();
@@ -95,14 +97,18 @@ public class Role implements Creatable, Modifiable, Deletable {
 	
 	@Override
 	public void modify(Optional<ModificationMeta> meta0) {
-		// TODO Auto-generated method stub
+		ensureCreated(meta0);
+		ensureNotDeleted(meta0);
+		ensureModificationMetaProvided(meta0);
 		
 		modificationTimestamp = Timestamp.now();
 	}
 	
 	@Override
 	public void delete(Optional<DeletionMeta> meta0) {
-		// TODO Auto-generated method stub
+		ensureCreated(meta0);
+		ensureNotDeleted(meta0);
+		ensureDeletionMetaProvided(meta0);
 		
 		deletationTimestamp = Timestamp.now();
 	}
@@ -114,7 +120,7 @@ public class Role implements Creatable, Modifiable, Deletable {
 
     public void ensureBelongsToOrganization(HUID organizationId) {
         if (!belongsToOrganization(organizationId)) {
-            new BlacknodeException("Role with ID " + id + " does not belong to Organization with ID " + organizationId + ".");
+            throw new BlacknodeException("Role with ID " + id + " does not belong to Organization with ID " + organizationId + ".");
         }
     }
     
@@ -124,7 +130,7 @@ public class Role implements Creatable, Modifiable, Deletable {
     
     public void ensureHasScope(Scope scope) {
 		if (!hasScope(scope)) {
-			new BlacknodeException("Role with ID " + id + " does not have scope " + scope + ".");
+			throw new BlacknodeException("Role with ID " + id + " does not have scope " + scope + ".");
 		}
     }
     

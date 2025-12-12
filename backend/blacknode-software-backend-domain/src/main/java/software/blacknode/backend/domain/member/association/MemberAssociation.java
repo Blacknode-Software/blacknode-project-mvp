@@ -37,7 +37,8 @@ public class MemberAssociation implements Creatable, Deletable {
 	
 	@Override
 	public void create(Optional<CreationMeta> meta0) {
-		if(meta0.isEmpty()) throw new BlacknodeException("Creation meta must be provided when creating an member association.");
+		ensureNotCreated(meta0);
+		ensureCreationMetaProvided(meta0);
 		
 		this.id = HUID.random();
 		this.meta = MemberAssociationMeta.builder().build();
@@ -68,7 +69,7 @@ public class MemberAssociation implements Creatable, Deletable {
 			this.meta = this.meta.withScope(MemberAssociationMeta.Scope.CHANNEL);
 		}
 		else {
-			throw new BlacknodeException("Unsupported CreationMeta type for MemberAssociation creation");
+			throwUnsupportedCreationMeta(meta);
 		}
 		
 		creationTimestamp = Timestamp.now();

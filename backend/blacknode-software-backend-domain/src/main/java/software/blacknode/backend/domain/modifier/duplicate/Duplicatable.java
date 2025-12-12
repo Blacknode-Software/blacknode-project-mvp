@@ -5,6 +5,8 @@ import java.util.Optional;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.modifier.EntityModifier;
 import software.blacknode.backend.domain.modifier.duplicate.meta.DuplicationMeta;
+import software.blacknode.backend.domain.modifier.meta.EntityModifierMeta;
+import software.blacknode.backend.domain.modifier.meta.impl.EmptyModifierMeta;
 
 public interface Duplicatable extends EntityModifier {
 
@@ -14,13 +16,17 @@ public interface Duplicatable extends EntityModifier {
 
     void duplicate();
     
-    public default void ensureDuplicationMetaProvided(Optional<DuplicationMeta> meta) {
+    default void ensureDuplicationMetaProvided(Optional<? extends DuplicationMeta> meta) {
 		if(meta.isEmpty()) {
 			throw new BlacknodeException("Duplication meta must be provided when deleting " + this.getClass().getSimpleName() + ".");
 		}
 	}
 
-    public default void throwUnsupportedDuplicationMetaType(DuplicationMeta meta) {
+    default void throwUnsupportedDuplicationMetaType(Optional<? extends DuplicationMeta> meta0) {
+		throwUnsupportedDuplicationMetaType(meta0.map(m -> (EntityModifierMeta) m).orElse(new EmptyModifierMeta()));
+    }
+    
+    default void throwUnsupportedDuplicationMetaType(EntityModifierMeta meta) {
     	throw new BlacknodeException("Unsupported DuplicationMeta type for " + this.getClass().getSimpleName() + " duplication: " + meta.getClass().getName());
     }
 }
