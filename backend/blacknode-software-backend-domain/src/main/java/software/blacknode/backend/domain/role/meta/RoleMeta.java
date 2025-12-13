@@ -27,5 +27,8 @@ public class RoleMeta {
 	
 	@Builder.Default
 	private boolean byDefaultAssigned = false;
+
+	@Builder.Default
+	private boolean superPrivileged = false;
 	
 }

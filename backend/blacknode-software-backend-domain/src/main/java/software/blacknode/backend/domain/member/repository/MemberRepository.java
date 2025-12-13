@@ -9,5 +9,7 @@ public interface MemberRepository {
 
 	Optional<Member> findById(HUID id);
 
+	Optional<Member> findByAccountId(HUID accountId);
+	
 	void save(Member member);
 }

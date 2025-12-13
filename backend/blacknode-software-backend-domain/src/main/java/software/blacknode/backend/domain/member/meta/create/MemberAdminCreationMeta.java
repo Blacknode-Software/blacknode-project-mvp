@@ -10,6 +10,5 @@ import software.blacknode.backend.domain.modifier.create.meta.CreationMeta;
 public class MemberAdminCreationMeta implements CreationMeta {
 
 	private HUID accountId;
-	private HUID organizationId;
 	
 }

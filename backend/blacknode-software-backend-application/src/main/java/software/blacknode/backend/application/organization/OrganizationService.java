@@ -19,7 +19,7 @@ public class OrganizationService {
 		this.repository = repository;
 	}
 	
-	public Organization getOrganizationOrThrow(HUID organizationId) {
+	public Organization getOrThrow(HUID organizationId) {
 		return repository.findById(organizationId)
 				.orElseThrow(() -> new BlacknodeException("Organization with ID " + organizationId + " not found."));
 	}

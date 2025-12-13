@@ -20,6 +20,7 @@ import software.blacknode.backend.domain.role.meta.create.RoleInitialProjectScop
 public class Role implements Creatable, Modifiable, Deletable {
 
 	@Getter private HUID id;
+	
 	@Getter private RoleMeta meta;
 	
 	@Getter private Scope scope;
@@ -28,67 +29,67 @@ public class Role implements Creatable, Modifiable, Deletable {
 	@Getter private Timestamp modificationTimestamp;
 	@Getter private Timestamp deletationTimestamp;
 	
-	@Getter private HUID organizationId;
+	@Getter private final HUID organizationId;
+	
+	public Role(HUID organizationId) {
+		this.organizationId = organizationId;
+	}
 	
 	@Override
 	public void create(Optional<CreationMeta> meta0) {
-		if(meta0.isEmpty()) BlacknodeException.throwWith("CreationMeta is required to create a Role");
+		ensureNotCreated(meta0);
+		ensureNotDeleted(meta0);
+		ensureCreationMetaProvided(meta0);
 		
 		this.id = HUID.random();
 		this.meta = RoleMeta.builder().build();
 		
 		var meta = meta0.get();
 		
-		if(meta instanceof RoleInitialOrganizationScopeCreationMeta initOrgMeta) {
-			var name = initOrgMeta.getName();
-			var description = initOrgMeta.getDescription();
-			var color = initOrgMeta.getColor();
-			var byDefaultAssigned = initOrgMeta.isByDefaultAssigned();
+		if(meta instanceof RoleInitialOrganizationScopeCreationMeta _meta) {
+			var name = _meta.getName();
+			var description = _meta.getDescription();
+			var color = _meta.getColor();
+			var byDefaultAssigned = _meta.isByDefaultAssigned();
 			
 			this.scope = Scope.ORGANIZATION;
 			
-			this.meta.withName(name)
+			this.meta = this.meta.withName(name)
 					.withDescription(description)
 				 	.withColor(color)
 				 	.withByDefaultAssigned(byDefaultAssigned)
 				 	.withSystemDefault(true);
-			
-			this.organizationId = initOrgMeta.getOrganizationId();
 		} 
-		else if (meta instanceof RoleInitialProjectScopeCreationMeta initProjMeta) {
-			var name = initProjMeta.getName();
-			var description = initProjMeta.getDescription();
-			var color = initProjMeta.getColor();
-			var byDefaultAssigned = initProjMeta.isByDefaultAssigned();
+		else if (meta instanceof RoleInitialProjectScopeCreationMeta _meta) {
+			var name = _meta.getName();
+			var description = _meta.getDescription();
+			var color = _meta.getColor();
+			var byDefaultAssigned = _meta.isByDefaultAssigned();
 			
 			this.scope = Scope.PROJECT;
 			
-			this.meta.withName(name)
+			this.meta = this.meta.withName(name)
 					.withDescription(description)
 				 	.withColor(color)
 				 	.withByDefaultAssigned(byDefaultAssigned)
 				 	.withSystemDefault(true);
-			
-			this.organizationId = initProjMeta.getOrganizationId();
 		}
-		else if (meta instanceof RoleInitialChannelScopeCreationMeta initChnlMeta) {
-			var name = initChnlMeta.getName();
-			var description = initChnlMeta.getDescription();
-			var color = initChnlMeta.getColor();
-			var byDefaultAssigned = initChnlMeta.isByDefaultAssigned();
+		else if (meta instanceof RoleInitialChannelScopeCreationMeta _meta) {
+			var name = _meta.getName();
+			var description = _meta.getDescription();
+			var color = _meta.getColor();
+			var byDefaultAssigned = _meta.isByDefaultAssigned();
 			
 			this.scope = Scope.CHANNEL;
 			
-			this.meta.withName(name)
+			this.meta = this.meta.withName(name)
 					.withDescription(description)
 				 	.withColor(color)
 				 	.withByDefaultAssigned(byDefaultAssigned)
 				 	.withSystemDefault(true);
-			
-			this.organizationId = initChnlMeta.getOrganizationId();
 		}
 		else {
-			BlacknodeException.throwWith("Unsupported CreationMeta type for Role creation");
+			throwUnsupportedCreationMeta(meta);
 		}
 		
 		creationTimestamp = Timestamp.now();
@@ -96,14 +97,18 @@ public class Role implements Creatable, Modifiable, Deletable {
 	
 	@Override
 	public void modify(Optional<ModificationMeta> meta0) {
-		// TODO Auto-generated method stub
+		ensureCreated(meta0);
+		ensureNotDeleted(meta0);
+		ensureModificationMetaProvided(meta0);
 		
 		modificationTimestamp = Timestamp.now();
 	}
 	
 	@Override
 	public void delete(Optional<DeletionMeta> meta0) {
-		// TODO Auto-generated method stub
+		ensureCreated(meta0);
+		ensureNotDeleted(meta0);
+		ensureDeletionMetaProvided(meta0);
 		
 		deletationTimestamp = Timestamp.now();
 	}
@@ -115,7 +120,7 @@ public class Role implements Creatable, Modifiable, Deletable {
 
     public void ensureBelongsToOrganization(HUID organizationId) {
         if (!belongsToOrganization(organizationId)) {
-            BlacknodeException.throwWith("Role with ID " + id + " does not belong to Organization with ID " + organizationId + ".");
+            throw new BlacknodeException("Role with ID " + id + " does not belong to Organization with ID " + organizationId + ".");
         }
     }
     
@@ -125,7 +130,7 @@ public class Role implements Creatable, Modifiable, Deletable {
     
     public void ensureHasScope(Scope scope) {
 		if (!hasScope(scope)) {
-			BlacknodeException.throwWith("Role with ID " + id + " does not have scope " + scope + ".");
+			throw new BlacknodeException("Role with ID " + id + " does not have scope " + scope + ".");
 		}
     }
     
@@ -134,6 +139,24 @@ public class Role implements Creatable, Modifiable, Deletable {
 		ORGANIZATION,
 		PROJECT,
 		CHANNEL,
-		UNKNOWN
+		UNKNOWN,
+		
+		;
+		
+		public boolean isGlobal() {
+			return this == GLOBAL;
+		}
+		
+		public boolean isOrganization() {
+			return this == ORGANIZATION;
+		}
+		
+		public boolean isProject() {
+			return this == PROJECT;
+		}
+		
+		public boolean isChannel() {
+			return this == CHANNEL;
+		}
 	}
 }

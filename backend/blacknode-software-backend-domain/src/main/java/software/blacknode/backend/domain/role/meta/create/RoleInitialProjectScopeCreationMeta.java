@@ -4,7 +4,6 @@ import lombok.Builder;
 import lombok.Getter;
 import me.hinsinger.projects.hinz.common.huid.HUID;
 import software.blacknode.backend.domain.modifier.create.meta.CreationMeta;
-import software.blacknode.backend.domain.role.meta.RoleMeta.Scope;
 
 @Getter
 @Builder
@@ -16,6 +15,4 @@ public class RoleInitialProjectScopeCreationMeta implements CreationMeta {
 	
 	@Builder.Default
 	private boolean byDefaultAssigned = false;
-	
-	private HUID organizationId;
 }
