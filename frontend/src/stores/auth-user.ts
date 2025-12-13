@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 
-export const useCurrentChannelTasksStore = defineStore('currentChannelTasks', () => {
+export const useAuthUserStore = defineStore('authUser', () => {
     async function refreshTasks(/* channelId: string */) {
         // example:
         //

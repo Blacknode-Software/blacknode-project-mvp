@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { FixedBackground } from '@/components';
+import { FixedBackground, MainSidebar } from '@/components';
 import { MainHeader, UniSidebar, MainView } from '@/layout';
 </script>
 
@@ -7,7 +7,9 @@ import { MainHeader, UniSidebar, MainView } from '@/layout';
     <FixedBackground />
     <MainHeader :sections="['DEPARTMENT OF SECURITY', 'SECTION II']" />
     <div class="view-sections-container">
-        <UniSidebar></UniSidebar>
+        <UniSidebar>
+            <MainSidebar />
+        </UniSidebar>
         <MainView></MainView>
     </div>
 </template>

@@ -6,6 +6,7 @@
 
 <style lang="css" scoped>
 .sidebar-container {
+    position: relative;
     width: 300px;
     background-color: transparent;
     overflow: hidden;
