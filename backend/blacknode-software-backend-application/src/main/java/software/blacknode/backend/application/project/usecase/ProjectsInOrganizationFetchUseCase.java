@@ -11,6 +11,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.projects.hinz.common.huid.HUID;
 import software.blacknode.backend.application.access.AccessControlService;
+import software.blacknode.backend.application.access.AccessControlService.AccessLevel;
 import software.blacknode.backend.application.project.ProjectService;
 import software.blacknode.backend.application.project.command.ProjectsInOrganizationFetchCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
@@ -35,7 +36,7 @@ public class ProjectsInOrganizationFetchUseCase implements ResultExecutionUseCas
 		var projects = projectService.getAll(organizationId);
 		
 		var projectIds = projects.stream()
-				.filter(project -> accessControlService.hasAccessToProject(memberId, project, AccessControlService.AccessLevel.READ))
+				.filter(project -> accessControlService.hasAccessToProject(memberId, project, AccessLevel.READ))
 				.map(project -> project.getId())
 				.toList();
 		
