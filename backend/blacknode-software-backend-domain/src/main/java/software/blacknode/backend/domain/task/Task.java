@@ -39,21 +39,32 @@ public class Task implements Creatable, Modifiable, Deletable {
 	@Getter private HUID organizationId;
 	
 	@Override
-	public void create(Optional<CreationMeta> meta) {
+	public void create(Optional<CreationMeta> meta0) {
+		ensureNotCreated(meta0);
+		ensureNotDeleted(meta0);
+		ensureCreationMetaProvided(meta0);
+		
 		// TODO Auto-generated method stub
 		
+		creationTimestamp = Timestamp.now();
 	}
 	
 	@Override
-	public void modify(Optional<ModificationMeta> meta) {
-		// TODO Auto-generated method stub
+	public void modify(Optional<ModificationMeta> meta0) {
+		ensureCreated(meta0);
+		ensureNotDeleted(meta0);
+		ensureModificationMetaProvided(meta0);
 		
+		modificationTimestamp = Timestamp.now();
 	}
 	
 	@Override
-	public void delete(Optional<DeletionMeta> meta) {
-		// TODO Auto-generated method stub
+	public void delete(Optional<DeletionMeta> meta0) {
+		ensureCreated(meta0);
+		ensureNotDeleted(meta0);
+		ensureDeletionMetaProvided(meta0);
 		
+		deletationTimestamp = Timestamp.now();
 	}
 
 }

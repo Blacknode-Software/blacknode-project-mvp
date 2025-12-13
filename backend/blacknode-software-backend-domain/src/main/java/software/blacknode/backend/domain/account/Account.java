@@ -19,8 +19,6 @@ import software.blacknode.backend.domain.modifier.modify.meta.ModificationMeta;
 public class Account implements Creatable, Modifiable, Deletable {
 
 	@Getter private HUID id;
-	@Getter private String firstName;
-	@Getter private String lastName;
 	@Getter private String email;
 	
 	@Getter private AccountSettings settings;
@@ -32,24 +30,29 @@ public class Account implements Creatable, Modifiable, Deletable {
 	
 	@Override
 	public void create(Optional<CreationMeta> meta0) {
-		if(meta0.isEmpty()) BlacknodeException.throwWith("CreationMeta is required to create an Account");
+		ensureNotCreated(meta0);
+		ensureNotDeleted(meta0);
+		ensureCreationMetaProvided(meta0);
 		
 		this.id = HUID.random();
-		this.firstName = "Unknown";
-		this.lastName = "Unknown";
 		this.email = "unknown@unknown.com";
 		
 		this.settings = new AccountSettings();
-		this.meta = new AccountMeta();
+		this.meta = AccountMeta.builder().build();
 		
 		var meta = meta0.get();
 		
-		if(meta instanceof AccountInitialAdminCreationMeta initAdminCreMeta) {
-			this.firstName = initAdminCreMeta.getFirstName();
-			this.lastName = initAdminCreMeta.getLastName();
-			this.email = initAdminCreMeta.getEmail();
+		if(meta instanceof AccountInitialAdminCreationMeta _meta) {
+			var email = _meta.getEmail();
+			var firstName = _meta.getFirstName();
+			var lastName = _meta.getLastName();
+			
+			this.email = email;
+			
+			this.meta.withFirstName(firstName)
+				.withLastName(lastName);
 		} else {
-			BlacknodeException.throwWith("Unsupported CreationMeta type for Account creation");
+			throwUnsupportedCreationMeta(meta);
 		}
 		
 		creationTimestamp = Timestamp.now();
@@ -57,14 +60,18 @@ public class Account implements Creatable, Modifiable, Deletable {
 	
 	@Override
 	public void modify(Optional<ModificationMeta> meta0) {
-		// TODO Auto-generated method stub
+		ensureCreated(meta0);
+		ensureNotDeleted(meta0);
+		ensureModificationMetaProvided(meta0);
 		
 		modificationTimestamp = Timestamp.now();
 	}
 	
 	@Override
 	public void delete(Optional<DeletionMeta> meta0) {
-		// TODO Auto-generated method stub
+		ensureCreated(meta0);
+		ensureNotDeleted(meta0);
+		ensureDeletionMetaProvided(meta0);
 		
 		deletationTimestamp = Timestamp.now();
 	}

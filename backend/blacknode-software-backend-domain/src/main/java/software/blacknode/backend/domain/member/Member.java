@@ -30,9 +30,15 @@ public class Member implements Creatable, Modifiable, Deletable {
 	@Getter private HUID accountId;
 	@Getter private HUID organizationId;
 	
+	public Member(HUID organizationId) {
+		this.organizationId = organizationId;
+	}
+	
 	@Override
 	public void create(Optional<CreationMeta> meta0) {
-		if(meta0.isEmpty()) BlacknodeException.throwWith("CreationMeta is required to create an Member");
+		ensureNotCreated(meta0);
+		ensureNotDeleted(meta0);
+		ensureCreationMetaProvided(meta0);
 		
 		var meta = meta0.get();
 		
@@ -42,9 +48,8 @@ public class Member implements Creatable, Modifiable, Deletable {
 		
 		if(meta instanceof MemberAdminCreationMeta adminMeta) {
 			this.accountId = adminMeta.getAccountId();
-			this.organizationId = adminMeta.getOrganizationId();
 		} else {
-			BlacknodeException.throwWith("Unsupported CreationMeta type for Member creation");
+			throwUnsupportedCreationMeta(meta);
 		}
 		
 		creationTimestamp = Timestamp.now();
@@ -52,14 +57,18 @@ public class Member implements Creatable, Modifiable, Deletable {
 	
 	@Override
 	public void modify(Optional<ModificationMeta> meta0) {
-		// TODO Auto-generated method stub
+		ensureCreated(meta0);
+		ensureNotDeleted(meta0);
+		ensureModificationMetaProvided(meta0);
 		
 		modificationTimestamp = Timestamp.now();
 	}
 	
 	@Override
 	public void delete(Optional<DeletionMeta> meta0) {
-		// TODO Auto-generated method stub
+		ensureCreated(meta0);
+		ensureNotDeleted(meta0);
+		ensureDeletionMetaProvided(meta0);
 		
 		deletationTimestamp = Timestamp.now();
 	}
@@ -71,7 +80,7 @@ public class Member implements Creatable, Modifiable, Deletable {
 
     public void ensureBelongsToOrganization(HUID organizationId) {
         if (!belongsToOrganization(organizationId)) {
-            BlacknodeException.throwWith("Member with ID " + id + " does not belong to Organization with ID " + organizationId + ".");
+			throw new BlacknodeException("Member with ID " + id + " does not belong to Organization with ID " + organizationId + ".");
         }
     }
 	
