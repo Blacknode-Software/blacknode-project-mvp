@@ -8,9 +8,11 @@ import software.blacknode.backend.domain.role.Role;
 
 public interface RoleRepository {
 
-	Optional<Role> findById(HUID id);
+	Optional<Role> findById(HUID organizationId, HUID id);
 	
-	List<Role> findAllById(List<HUID> ids);
+	List<Role> findAllById(HUID organizationId, List<HUID> ids);
+	
+	List<Role> findAll(HUID organizationId);
 
-	void save(Role role);
+	void save(HUID organizationId, Role role);
 }

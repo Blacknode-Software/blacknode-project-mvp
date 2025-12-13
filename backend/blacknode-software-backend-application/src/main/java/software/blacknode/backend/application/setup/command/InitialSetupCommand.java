@@ -16,4 +16,7 @@ public class InitialSetupCommand implements ExecutionCommand {
 	private String adminLastName;
 	private String adminEmail;
 	private String adminPassword;
+	
+	@Builder.Default
+	private boolean initialProjectConfiguration = true;
 }

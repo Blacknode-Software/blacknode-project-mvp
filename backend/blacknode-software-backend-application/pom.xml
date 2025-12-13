@@ -31,5 +31,9 @@
 			<groupId>software.blacknode.backend</groupId>
 			<artifactId>blacknode-software-backend-infrastructure</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>software.blacknode.backend</groupId>
+			<artifactId>blacknode-software-backend-shared</artifactId>
+		</dependency>
 	</dependencies>
 </project>
