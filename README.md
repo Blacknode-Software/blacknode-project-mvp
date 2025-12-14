@@ -35,8 +35,9 @@ Blacknode is built using a client–server architecture:
 
 ## Repository Structure (high level)
 
-- `frontend/` – user interface, state management, UI components  
-- `backend/` – domain logic, application services, REST controllers  
+- `frontend/` – user interface, state management, UI components
+- `backend/` – domain logic, application services, REST controllers
+- `docs/` – projects documentation site
 - `docker-compose.yml` – local and deployment setup  
 
 ## Setup (overview)
