@@ -14,20 +14,53 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import software.blacknode.backend.api.controller.BaseController;
+import software.blacknode.backend.api.controller.project.converter.ProjectCreateRequestConverter;
+import software.blacknode.backend.api.controller.project.converter.ProjectCreateResponseConverter;
 import software.blacknode.backend.api.controller.project.request.ProjectCreateRequest;
 import software.blacknode.backend.api.controller.project.request.ProjectPatchRequest;
 import software.blacknode.backend.api.controller.project.response.ProjectCreateResponse;
 import software.blacknode.backend.api.controller.project.response.ProjectDeleteResponse;
 import software.blacknode.backend.api.controller.project.response.ProjectPatchResponse;
 import software.blacknode.backend.api.controller.project.response.ProjectResponse;
+import software.blacknode.backend.application.project.usecase.ProjectCreateUseCase;
 
-@RestController
 @Tag(name = "Projects", description = "Project management APIs")
+@RestController
+@RequiredArgsConstructor
 public class ProjectController extends BaseController {
+	
+	private final ProjectCreateRequestConverter projectCreateRequestConverter;
+	private final ProjectCreateResponseConverter projectCreateResponseConverter;
+	private final ProjectCreateUseCase projectCreateUseCase;
+	
+	@Operation(summary = "Create a new project", 
+			parameters = { @Parameter(in = ParameterIn.HEADER, 
+					name = "X-Organization-Id", 
+					description = "Identifier for the organization", 
+					required = true)
+	})
+	@ApiResponses(value = { 
+			@ApiResponse(responseCode = "201", description = "Project created"),
+			@ApiResponse(responseCode = "400", description = "Invalid input") })
+	@PostMapping("/projects")
+	public ResponseEntity<ProjectCreateResponse> createProject(@PathVariable UUID organizationId,
+			@RequestBody ProjectCreateRequest request) {
+		
+		var command = projectCreateRequestConverter.convert(request);
+		
+		var result = projectCreateUseCase.execute(command);
+		
+		var response = projectCreateResponseConverter.convert(result);
+		
+		return response.toSuccessResponse(HttpStatus.CREATED);
+	}
 
 	@Operation(summary = "Get a project by ID")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Found the project"),
@@ -42,15 +75,6 @@ public class ProjectController extends BaseController {
 	@GetMapping("/organizations/{organizationId}/projects")
 	public ResponseEntity<List<ProjectResponse>> getProjects(@PathVariable UUID organizationId) {
 		return ResponseEntity.ok(null);
-	}
-
-	@Operation(summary = "Create a new project")
-	@ApiResponses(value = { @ApiResponse(responseCode = "201", description = "Project created"),
-			@ApiResponse(responseCode = "400", description = "Invalid input") })
-	@PostMapping("/organizations/{organizationId}/projects")
-	public ResponseEntity<ProjectCreateResponse> createProject(@PathVariable UUID organizationId,
-			@RequestBody ProjectCreateRequest request) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(null);
 	}
 
 	@Operation(summary = "Update an existing project")

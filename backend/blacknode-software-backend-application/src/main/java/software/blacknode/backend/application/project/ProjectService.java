@@ -25,7 +25,7 @@ public class ProjectService {
 		
 		// TODO validate if other projects with the same name exist in the organization?
 		
-		repository.save(project);
+		repository.save(organizationId, project);
 		
 		return project;
 	}
@@ -35,16 +35,16 @@ public class ProjectService {
 		
 		project.delete(meta);
 		
-		repository.save(project);
+		repository.save(organizationId, project);
 	}
 	
 	public Project getOrThrow(HUID organizationId, HUID projectId) {
-		return repository.findById(projectId)
+		return repository.findById(organizationId, projectId)
 				.orElseThrow(() -> new BlacknodeException("Project with ID " + projectId + " not found."));
 	}
 	
 	public List<Project> getByIds(HUID organizationId, List<HUID> projectIds) {
-		var projects = repository.findAllById(projectIds);
+		var projects = repository.findAllById(organizationId, projectIds);
 		
 		return projects;
 	}
@@ -54,5 +54,4 @@ public class ProjectService {
 		
 		return projects;
 	}
-	
 }

@@ -2,6 +2,7 @@ package software.blacknode.backend.application.project.command;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.With;
 import software.blacknode.backend.application.command.ExecutionCommand;
 
 
@@ -9,8 +10,8 @@ import software.blacknode.backend.application.command.ExecutionCommand;
 @Getter
 public class ProjectCreateCommand implements ExecutionCommand {
 
-	private String name;
-	private String description;
-	private String color;
+	private final String name;
+	private final String description;
+	private final String color;
 	
 }
