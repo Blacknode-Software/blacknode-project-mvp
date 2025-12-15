@@ -11,15 +11,19 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 @Getter
 public abstract class BaseResponse<T extends BaseResponse<T>> {
-	private static final String DEFAULT_SUCCESS_MESSAGE = "Operation completed successfully.";
-	private static final String DEFAULT_FAILURE_MESSAGE = "Operation failed.";
+	protected static final String DEFAULT_SUCCESS_MESSAGE = "Operation completed successfully.";
+	protected static final String DEFAULT_FAILURE_MESSAGE = "Operation failed.";
 	
-	private Optional<String> message = Optional.of(DEFAULT_SUCCESS_MESSAGE);
-	private Status status = Status.SUCCESS;
+	@Schema(example = DEFAULT_SUCCESS_MESSAGE)
+	protected Optional<String> message = Optional.of(DEFAULT_SUCCESS_MESSAGE);
+	
+	@Schema(example = "success")
+	protected Status status = Status.SUCCESS;
 	
 	private void success(String message) {
 		this.status = Status.SUCCESS;
@@ -91,7 +95,7 @@ public abstract class BaseResponse<T extends BaseResponse<T>> {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public ResponseEntity<T> toResponse(HttpStatusCode statusCode, Consumer<ResponseEntity.BodyBuilder> configurer) {
+	private ResponseEntity<T> toResponse(HttpStatusCode statusCode, Consumer<ResponseEntity.BodyBuilder> configurer) {
 		var builder = ResponseEntity.status(statusCode);
 		
 		configurer.accept(builder);

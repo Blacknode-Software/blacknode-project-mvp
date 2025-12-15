@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,6 +31,7 @@ import software.blacknode.backend.api.controller.project.response.ProjectCreateR
 import software.blacknode.backend.api.controller.project.response.ProjectDeleteResponse;
 import software.blacknode.backend.api.controller.project.response.ProjectPatchResponse;
 import software.blacknode.backend.api.controller.project.response.ProjectResponse;
+import software.blacknode.backend.api.controller.response.ErrorResponse;
 import software.blacknode.backend.application.project.usecase.ProjectCreateUseCase;
 
 @Tag(name = "Projects", description = "Project management APIs")
@@ -47,8 +50,8 @@ public class ProjectController extends BaseController {
 					required = true)
 	})
 	@ApiResponses(value = { 
-			@ApiResponse(responseCode = "201", description = "Project created"),
-			@ApiResponse(responseCode = "400", description = "Invalid input") })
+			@ApiResponse(responseCode = "201", description = "Project created", content = @Content(schema = @Schema(implementation = ProjectCreateResponse.class))),
+			@ApiResponse(responseCode = "400", description = "Invalid input", content = @Content(schema = @Schema(implementation = ErrorResponse.class))) })
 	@PostMapping("/projects")
 	public ResponseEntity<ProjectCreateResponse> createProject(@PathVariable UUID organizationId,
 			@RequestBody ProjectCreateRequest request) {

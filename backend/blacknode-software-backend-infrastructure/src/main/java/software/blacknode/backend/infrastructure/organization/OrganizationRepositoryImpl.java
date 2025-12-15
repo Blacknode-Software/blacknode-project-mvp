@@ -14,6 +14,7 @@ public class OrganizationRepositoryImpl implements OrganizationRepository {
 
 	@Override
 	public Optional<Organization> findById(HUID id) {
+		
 		return Optional.empty();
 	}
 

@@ -23,8 +23,9 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<lombok.version>1.18.30</lombok.version>
 		<spring-boot.version>3.2.0</spring-boot.version>
+		<spring-swagger-docs.version>2.3.0</spring-swagger-docs.version>
 	</properties>
-	
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -39,6 +40,11 @@
 				<artifactId>lombok</artifactId>
 				<version>${lombok.version}</version>
 				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springdoc</groupId>
+				<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+				<version>${spring-swagger-docs.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>me.hinsinger.projects</groupId>
