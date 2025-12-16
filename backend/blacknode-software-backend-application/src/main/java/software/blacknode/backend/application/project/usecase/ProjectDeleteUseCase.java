@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import software.blacknode.backend.application.access.AccessControlService;
+import software.blacknode.backend.application.access.AccessControlService.AccessLevel;
 import software.blacknode.backend.application.project.ProjectService;
 import software.blacknode.backend.application.project.command.ProjectDeleteCommand;
 import software.blacknode.backend.application.usecase.ExecutionUseCase;
@@ -28,7 +29,7 @@ public class ProjectDeleteUseCase implements ExecutionUseCase<ProjectDeleteComma
 		
 		var projectId = command.getProjectId();
 		
-		accessControlService.ensureMemberHasOrganizationAccess(memberId, organizationId, AccessControlService.AccessLevel.MANAGE);
+		accessControlService.ensureMemberHasOrganizationAccess(memberId, organizationId, AccessLevel.MANAGE);
 		
 		var meta = ProjectDefaultDeletionMeta.builder()
 				.build();

@@ -1,9 +1,9 @@
 package software.blacknode.backend.api.controller.project.response;
 
-import lombok.Builder;
-import software.blacknode.backend.api.controller.response.ListResponse;
+import lombok.experimental.SuperBuilder;
+import software.blacknode.backend.api.controller.response.impl.ListResponse;
 
-@Builder
+@SuperBuilder
 public class ProjectListResponse extends ListResponse<ProjectListResponse> {
 	
 }

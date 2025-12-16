@@ -9,6 +9,7 @@ import me.hinsinger.projects.hinz.common.huid.HUID;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.modifier.create.meta.CreationMeta;
 import software.blacknode.backend.domain.modifier.delete.meta.DeletionMeta;
+import software.blacknode.backend.domain.modifier.modify.meta.ModificationMeta;
 import software.blacknode.backend.domain.project.Project;
 import software.blacknode.backend.domain.project.repository.ProjectRepository;
 
@@ -24,6 +25,28 @@ public class ProjectService {
 		project.create(meta);
 		
 		// TODO validate if other projects with the same name exist in the organization?
+		
+		repository.save(organizationId, project);
+		
+		return project;
+	}
+	
+	public Project modify(HUID organizationId, HUID projectId, ModificationMeta meta) {
+		var project = getOrThrow(organizationId, projectId);
+		
+		project.modify(meta);
+		
+		repository.save(organizationId, project);
+		
+		return project;
+	}
+	
+	public Project modify(HUID organizationId, HUID projectId, List<ModificationMeta> metas) {
+		var project = getOrThrow(organizationId, projectId);
+		
+		for (var meta : metas) {
+			project.modify(meta);
+		}
 		
 		repository.save(organizationId, project);
 		

@@ -25,18 +25,23 @@ import software.blacknode.backend.api.controller.organization.annotation.Organiz
 import software.blacknode.backend.api.controller.project.converter.ProjectCreateRequestConverter;
 import software.blacknode.backend.api.controller.project.converter.ProjectCreateResponseConverter;
 import software.blacknode.backend.api.controller.project.converter.ProjectListResponseConverter;
+import software.blacknode.backend.api.controller.project.converter.ProjectPatchRequestConverter;
+import software.blacknode.backend.api.controller.project.converter.ProjectPatchResponseConverter;
 import software.blacknode.backend.api.controller.project.converter.ProjectResponseConverter;
 import software.blacknode.backend.api.controller.project.request.ProjectCreateRequest;
 import software.blacknode.backend.api.controller.project.request.ProjectPatchRequest;
 import software.blacknode.backend.api.controller.project.response.ProjectCreateResponse;
-import software.blacknode.backend.api.controller.project.response.ProjectDeleteResponse;
 import software.blacknode.backend.api.controller.project.response.ProjectListResponse;
 import software.blacknode.backend.api.controller.project.response.ProjectPatchResponse;
 import software.blacknode.backend.api.controller.project.response.ProjectResponse;
+import software.blacknode.backend.api.controller.response.impl.SuccessResponse;
+import software.blacknode.backend.application.project.command.ProjectDeleteCommand;
 import software.blacknode.backend.application.project.command.ProjectFetchCommand;
 import software.blacknode.backend.application.project.command.ProjectsInOrganizationFetchCommand;
 import software.blacknode.backend.application.project.usecase.ProjectCreateUseCase;
+import software.blacknode.backend.application.project.usecase.ProjectDeleteUseCase;
 import software.blacknode.backend.application.project.usecase.ProjectFetchUseCase;
+import software.blacknode.backend.application.project.usecase.ProjectPatchUseCase;
 import software.blacknode.backend.application.project.usecase.ProjectsInOrganizationFetchUseCase;
 
 @Tag(name = "Projects", description = "Project management APIs")
@@ -53,6 +58,12 @@ public class ProjectController extends BaseController {
 	
 	private final ProjectListResponseConverter projectListResponseConverter;
 	private final ProjectsInOrganizationFetchUseCase projectsInOrganizationFetchUseCase;
+	
+	private final ProjectPatchRequestConverter projectPatchRequestConverter;
+	private final ProjectPatchResponseConverter projectPatchResponseConverter;
+	private final ProjectPatchUseCase projectPatchUseCase;
+	
+	private final ProjectDeleteUseCase projectDeleteUseCase;
 	
 	@OrganizationHeader
 	@Operation(summary = "Create a new project", description = "Creates a new project within the specified organization.")
@@ -113,15 +124,29 @@ public class ProjectController extends BaseController {
 	@PatchMapping("/projects/{id}")
 	public ResponseEntity<ProjectPatchResponse> patchProject(@PathVariable UUID id,
 			@RequestBody ProjectPatchRequest request) {
-		return ResponseEntity.ok(null);
+		
+		var command = projectPatchRequestConverter.convert(request);
+		
+		var result = projectPatchUseCase.execute(command);
+		
+		var response = projectPatchResponseConverter.convert(result);
+		
+		return response.toOkResponse("Project updated successfully.");
 	}
 
+	@OrganizationHeader
 	@Operation(summary = "Delete a project")
-	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Project deleted"),
-			@ApiResponse(responseCode = "404", description = "Project not found") })
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Project deleted")})
+	@NotFoundResponse
 	@DeleteMapping("/projects/{id}")
-	public ResponseEntity<ProjectDeleteResponse> deleteProject(@PathVariable UUID id) {
-		return ResponseEntity.ok(null);
+	public ResponseEntity<SuccessResponse> deleteProject(@PathVariable UUID id) {
+		var command = ProjectDeleteCommand.builder()
+				.projectId(HUID.fromUUID(id))
+				.build();
+		
+		projectDeleteUseCase.execute(command);
+
+		return SuccessResponse.with("Project deleted successfully.");
 	}
 
 }

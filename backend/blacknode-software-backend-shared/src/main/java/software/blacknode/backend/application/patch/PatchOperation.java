@@ -14,7 +14,7 @@ public interface PatchOperation {
 		return this.getName().equalsIgnoreCase(type);
 	}
 	
-	public default boolean isPresentIn(List<String> types) {
+	public default boolean isIn(List<String> types) {
 		for (String type : types) {
 			if (is(type)) {
 				return true;
@@ -23,7 +23,7 @@ public interface PatchOperation {
 		return false;
 	}
 	
-	public default boolean isPresentIn(String... types) {
+	public default boolean isIn(String... types) {
 		for (String type : types) {
 			if (is(type)) {
 				return true;

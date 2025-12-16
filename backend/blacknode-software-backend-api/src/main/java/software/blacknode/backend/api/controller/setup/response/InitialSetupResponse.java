@@ -2,14 +2,12 @@ package software.blacknode.backend.api.controller.setup.response;
 
 import java.util.UUID;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import software.blacknode.backend.api.controller.response.BaseResponse;
+import lombok.experimental.SuperBuilder;
+import software.blacknode.backend.api.controller.response.impl.BaseResponse;
 
-@Builder
 @Getter
-@AllArgsConstructor
+@SuperBuilder
 public class InitialSetupResponse extends BaseResponse<InitialSetupResponse>{
 
 	private UUID organizationId;

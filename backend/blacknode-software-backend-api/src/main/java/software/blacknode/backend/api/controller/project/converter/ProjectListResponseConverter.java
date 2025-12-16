@@ -14,13 +14,10 @@ public class ProjectListResponseConverter implements BaseResponseConverter<List<
 	@Override
 	public ProjectListResponse convert(List<HUID> source) {
 		var response = ProjectListResponse.builder()
+				.ids(source.stream()
+						.map(HUID::toUUID)
+						.toList())
 				.build();
-		
-		var ids = source.stream()
-				.map(HUID::toUUID)
-				.toList();
-		
-		response.add(ids);
 		
 		return response;
 	}

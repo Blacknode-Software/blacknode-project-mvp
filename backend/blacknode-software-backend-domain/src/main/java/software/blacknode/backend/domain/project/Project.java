@@ -14,6 +14,9 @@ import software.blacknode.backend.domain.modifier.modify.Modifiable;
 import software.blacknode.backend.domain.modifier.modify.meta.ModificationMeta;
 import software.blacknode.backend.domain.project.meta.ProjectMeta;
 import software.blacknode.backend.domain.project.meta.create.ProjectInitialCreationMeta;
+import software.blacknode.backend.domain.project.meta.modify.ProjectColorModificationMeta;
+import software.blacknode.backend.domain.project.meta.modify.ProjectDescriptionModificationMeta;
+import software.blacknode.backend.domain.project.meta.modify.ProjectNameModificationMeta;
 
 public class Project implements Creatable, Modifiable, Deletable {
 
@@ -65,6 +68,26 @@ public class Project implements Creatable, Modifiable, Deletable {
 		ensureNotDeleted(meta0);
 		ensureModificationMetaProvided(meta0);
 		
+		var meta = meta0.get();
+		
+		if(meta instanceof ProjectNameModificationMeta _meta) {
+			var name = _meta.getName();
+			
+			this.meta = this.meta.withName(name);
+		}
+		else if(meta instanceof ProjectDescriptionModificationMeta _meta) {
+			var description = _meta.getDescription();
+			
+			this.meta = this.meta.withDescription(description);
+		}
+		else if(meta instanceof ProjectColorModificationMeta _meta) {
+			var color = _meta.getColor();
+			
+			this.meta = this.meta.withColor(color);
+		}
+		else {
+			throwUnsupportedModificationMeta(meta);
+		}
 		
 		modificationTimestamp = Timestamp.now();
 	}

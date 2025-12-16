@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import software.blacknode.backend.api.controller.response.ErrorResponse;
+import software.blacknode.backend.api.controller.response.impl.ErrorResponse;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

@@ -8,8 +8,8 @@ import software.blacknode.backend.domain.modifier.create.meta.CreationMeta;
 @Builder
 public class ProjectDefaultCreationMeta implements CreationMeta {
 	
-	private String name;
-	private String description;
-	private String color;
+	private final String name;
+	private final String description;
+	private final String color;
 	
 }

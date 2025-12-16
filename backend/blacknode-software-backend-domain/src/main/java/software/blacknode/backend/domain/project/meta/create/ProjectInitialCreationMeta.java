@@ -9,10 +9,10 @@ import software.blacknode.backend.domain.modifier.create.meta.CreationMeta;
 @Builder
 public class ProjectInitialCreationMeta implements CreationMeta {
 
-	private String name;
-	private String description;
+	private final String name;
+	private final String description;
 	
 	@Builder.Default
-	private String color = "#FAFAFA";
+	private final String color = "#FAFAFA";
 	
 }

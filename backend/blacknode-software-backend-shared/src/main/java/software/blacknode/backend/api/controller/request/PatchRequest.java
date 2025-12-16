@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 public abstract class PatchRequest extends BaseRequest {
-	public List<String> properties = new ArrayList<>();
+	private List<String> operations = new ArrayList<>();
 	
 //	public List<PatchProperty> properties = new ArrayList<>();
 //	

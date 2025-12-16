@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import software.blacknode.backend.application.access.AccessControlService;
+import software.blacknode.backend.application.access.AccessControlService.AccessLevel;
 import software.blacknode.backend.application.project.ProjectService;
 import software.blacknode.backend.application.project.command.ProjectsBatchFetchCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
@@ -36,7 +37,7 @@ public class ProjectsBatchFetchUseCase implements ResultExecutionUseCase<Project
 		var projects = projectService.getByIds(organizationId, projectIds);
 				
 		projects = projects.stream()
-				.filter(project -> accessControlService.hasAccessToProject(memberId, project, AccessControlService.AccessLevel.READ))
+				.filter(project -> accessControlService.hasAccessToProject(memberId, project, AccessLevel.READ))
 				.toList();
 		
 		return Result.builder().projects(projects).build();
