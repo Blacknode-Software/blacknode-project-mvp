@@ -11,11 +11,12 @@ services:
       - SPRING_PROFILES_ACTIVE=local
 
   nginx:
-    image: nginx:stable
+    build:
+      context: ./proxy
+      dockerfile: Dockerfile
+    image: blacknode-nginx:latest
     depends_on:
       - backend
     ports:
       - "80:80"
-    volumes:
-      - ./proxy/nginx.conf:/etc/nginx/conf.d/default.conf:ro
     restart: unless-stopped
