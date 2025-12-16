@@ -2,9 +2,11 @@ package software.blacknode.backend.api.controller.project.response.content;
 
 import java.util.UUID;
 
+import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 import software.blacknode.backend.domain.project.Project;
 
+@Getter
 @SuperBuilder
 public class ProjectResponseContent {
 	

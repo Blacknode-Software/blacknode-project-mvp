@@ -10,7 +10,7 @@ import software.blacknode.backend.api.controller.project.response.ProjectsBatchR
 import software.blacknode.backend.application.project.usecase.ProjectsBatchFetchUseCase;
 
 @Component
-public class ProjectsBatchResponseConverter implements BaseResponseConverter<ProjectsBatchFetchUseCase.Result, ProjectsBatchResponse> {
+public class ProjectsBatchFetchResponseConverter implements BaseResponseConverter<ProjectsBatchFetchUseCase.Result, ProjectsBatchResponse> {
 
 	@Override
 	public ProjectsBatchResponse convert(ProjectsBatchFetchUseCase.Result result) {

@@ -28,12 +28,16 @@ import software.blacknode.backend.api.controller.project.converter.ProjectListRe
 import software.blacknode.backend.api.controller.project.converter.ProjectPatchRequestConverter;
 import software.blacknode.backend.api.controller.project.converter.ProjectPatchResponseConverter;
 import software.blacknode.backend.api.controller.project.converter.ProjectResponseConverter;
+import software.blacknode.backend.api.controller.project.converter.ProjectsBatchFetchRequestConverter;
+import software.blacknode.backend.api.controller.project.converter.ProjectsBatchFetchResponseConverter;
 import software.blacknode.backend.api.controller.project.request.ProjectCreateRequest;
 import software.blacknode.backend.api.controller.project.request.ProjectPatchRequest;
+import software.blacknode.backend.api.controller.project.request.ProjectsBatchFetchRequest;
 import software.blacknode.backend.api.controller.project.response.ProjectCreateResponse;
-import software.blacknode.backend.api.controller.project.response.ProjectListResponse;
 import software.blacknode.backend.api.controller.project.response.ProjectPatchResponse;
 import software.blacknode.backend.api.controller.project.response.ProjectResponse;
+import software.blacknode.backend.api.controller.project.response.ProjectsBatchResponse;
+import software.blacknode.backend.api.controller.project.response.ProjectsListResponse;
 import software.blacknode.backend.api.controller.response.impl.SuccessResponse;
 import software.blacknode.backend.application.project.command.ProjectDeleteCommand;
 import software.blacknode.backend.application.project.command.ProjectFetchCommand;
@@ -42,6 +46,7 @@ import software.blacknode.backend.application.project.usecase.ProjectCreateUseCa
 import software.blacknode.backend.application.project.usecase.ProjectDeleteUseCase;
 import software.blacknode.backend.application.project.usecase.ProjectFetchUseCase;
 import software.blacknode.backend.application.project.usecase.ProjectPatchUseCase;
+import software.blacknode.backend.application.project.usecase.ProjectsBatchFetchUseCase;
 import software.blacknode.backend.application.project.usecase.ProjectsInOrganizationFetchUseCase;
 
 @Tag(name = "Projects", description = "Project management APIs")
@@ -62,6 +67,11 @@ public class ProjectController extends BaseController {
 	private final ProjectPatchRequestConverter projectPatchRequestConverter;
 	private final ProjectPatchResponseConverter projectPatchResponseConverter;
 	private final ProjectPatchUseCase projectPatchUseCase;
+	
+	private final ProjectsBatchFetchRequestConverter projectsBatchRequestConverter;
+	private final ProjectsBatchFetchResponseConverter projectsBatchResponseConverter;
+	private final ProjectsBatchFetchUseCase projectsBatchUseCase;
+	
 	
 	private final ProjectDeleteUseCase projectDeleteUseCase;
 	
@@ -101,17 +111,32 @@ public class ProjectController extends BaseController {
 	}
 
 	@OrganizationHeader
-	@Operation(summary = "Get all projects for an organization")
+	@Operation(summary = "Get all project ids for an organization")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Found projects") })
 	@InvalidInputResponse
 	@GetMapping("/projects")
-	public ResponseEntity<ProjectListResponse> getProjects() {
+	public ResponseEntity<ProjectsListResponse> getProjects() {
 		var command = ProjectsInOrganizationFetchCommand.builder()
 				.build();
 		
 		var result = projectsInOrganizationFetchUseCase.execute(command);
 		
 		var response = projectListResponseConverter.convert(result.getProjectsIds());
+		
+		return response.toOkResponse("Successfully fetched projects.");
+	}
+	
+	@OrganizationHeader
+	@Operation(summary = "Get all projects in batch for an organization")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Found projects") })
+	@InvalidInputResponse
+	@PostMapping("/projects/batch-fetch")
+	public ResponseEntity<ProjectsBatchResponse> getProjectsBatch(@RequestBody ProjectsBatchFetchRequest request) {
+		var command = projectsBatchRequestConverter.convert(request);
+		
+		var result = projectsBatchUseCase.execute(command);
+		
+		var response = projectsBatchResponseConverter.convert(result);
 		
 		return response.toOkResponse("Successfully fetched projects.");
 	}

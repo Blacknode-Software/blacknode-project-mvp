@@ -4,6 +4,6 @@ import lombok.experimental.SuperBuilder;
 import software.blacknode.backend.api.controller.response.impl.ListResponse;
 
 @SuperBuilder
-public class ProjectListResponse extends ListResponse<ProjectListResponse> {
+public class ProjectsListResponse extends ListResponse<ProjectsListResponse> {
 	
 }
