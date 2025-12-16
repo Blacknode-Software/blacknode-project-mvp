@@ -11,12 +11,9 @@ COPY blacknode-software-backend-api/pom.xml \
 	blacknode-software-backend-infrastructure/pom.xml \
 	blacknode-software-backend-shared/pom.xml ./
 
-# Fetch dependencies (offline) to speed up subsequent builds
-RUN mvn -B -DskipTests dependency:go-offline
-
 # Copy all sources and build only the API module (and modules it depends on)
 COPY . .
-RUN mvn -B -DskipTests -pl blacknode-software-backend-api -am package -T 1C
+RUN mvn -B -DskipTests -pl blacknode-software-backend -am package -T 1C
 
 
 FROM eclipse-temurin:17-jre AS runtime
