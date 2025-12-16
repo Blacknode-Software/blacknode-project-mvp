@@ -7,6 +7,7 @@
 		<artifactId>blacknode-software-backend</artifactId>
 		<version>0.0.1-DEV</version>
 	</parent>
+	
 	<artifactId>blacknode-software-backend-application</artifactId>
 
 	<dependencies>
@@ -16,7 +17,7 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>me.hinsinger.projects</groupId>
+			<groupId>${hinz-common.groupId}</groupId>
 			<artifactId>hinz-common</artifactId>
 		</dependency>
 		<dependency>

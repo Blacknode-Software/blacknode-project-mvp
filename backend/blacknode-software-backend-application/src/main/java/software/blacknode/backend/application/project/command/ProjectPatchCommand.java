@@ -2,7 +2,7 @@ package software.blacknode.backend.application.project.command;
 
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
-import me.hinsinger.projects.hinz.common.huid.HUID;
+import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.application.command.impl.PatchExecutionCommand;
 
 @Getter

@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
-import me.hinsinger.projects.hinz.common.huid.HUID;
+import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.domain.member.association.MemberAssociation;
 import software.blacknode.backend.domain.member.association.meta.MemberAssociationMeta.Scope;
 import software.blacknode.backend.domain.member.association.repository.MemberAssociationRepository;

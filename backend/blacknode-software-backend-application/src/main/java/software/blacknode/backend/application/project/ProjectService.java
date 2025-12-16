@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import me.hinsinger.projects.hinz.common.huid.HUID;
+import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.modifier.create.meta.CreationMeta;
 import software.blacknode.backend.domain.modifier.delete.meta.DeletionMeta;

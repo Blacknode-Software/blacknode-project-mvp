@@ -3,8 +3,8 @@ package software.blacknode.backend.domain.member.association;
 import java.util.Optional;
 
 import lombok.Getter;
-import me.hinsinger.projects.hinz.common.huid.HUID;
-import me.hinsinger.projects.hinz.common.time.timestamp.Timestamp;
+import me.hinsinger.hinz.common.huid.HUID;
+import me.hinsinger.hinz.common.time.timestamp.Timestamp;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.member.association.meta.MemberAssociationMeta;
 import software.blacknode.backend.domain.member.association.meta.create.MemberChannelAssociationCreationMeta;

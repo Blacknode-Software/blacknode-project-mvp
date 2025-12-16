@@ -24,7 +24,16 @@
 		<lombok.version>1.18.30</lombok.version>
 		<spring-boot.version>3.2.0</spring-boot.version>
 		<spring-swagger-docs.version>2.3.0</spring-swagger-docs.version>
+		<hinz-common.groupId>com.github.scraft-official</hinz-common.groupId>	
+		<hinz-common.version>bb50242b63</hinz-common.version>	
 	</properties>
+	
+	<repositories>
+		<repository>
+		    <id>jitpack.io</id>
+		    <url>https://jitpack.io</url>
+		</repository>
+	</repositories>
 
 	<dependencyManagement>
 		<dependencies>
@@ -47,9 +56,9 @@
 				<version>${spring-swagger-docs.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>me.hinsinger.projects</groupId>
+				<groupId>${hinz-common.groupId}</groupId>
 				<artifactId>hinz-common</artifactId>
-				<version>[0.0.1,]</version>
+				<version>${hinz-common.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>software.blacknode.backend</groupId>

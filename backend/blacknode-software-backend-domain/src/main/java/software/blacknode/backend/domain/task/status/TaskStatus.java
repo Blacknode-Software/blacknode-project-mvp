@@ -1,6 +1,6 @@
 package software.blacknode.backend.domain.task.status;
 
-import me.hinsinger.projects.hinz.common.huid.HUID;
+import me.hinsinger.hinz.common.huid.HUID;
 
 public interface TaskStatus {
 	

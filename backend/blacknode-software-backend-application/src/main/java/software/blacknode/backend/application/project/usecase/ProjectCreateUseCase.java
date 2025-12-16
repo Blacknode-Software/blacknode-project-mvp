@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import me.hinsinger.projects.hinz.common.huid.HUID;
+import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.application.access.AccessControlService;
 import software.blacknode.backend.application.project.ProjectService;
 import software.blacknode.backend.application.project.command.ProjectCreateCommand;

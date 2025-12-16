@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import me.hinsinger.projects.hinz.common.huid.HUID;
+import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.modifier.create.meta.CreationMeta;
 import software.blacknode.backend.domain.organization.Organization;

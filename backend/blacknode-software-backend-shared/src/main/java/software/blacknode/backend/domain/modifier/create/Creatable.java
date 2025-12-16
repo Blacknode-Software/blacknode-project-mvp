@@ -2,7 +2,7 @@ package software.blacknode.backend.domain.modifier.create;
 
 import java.util.Optional;
 
-import me.hinsinger.projects.hinz.common.time.timestamp.Timestamp;
+import me.hinsinger.hinz.common.time.timestamp.Timestamp;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.modifier.EntityModifier;
 import software.blacknode.backend.domain.modifier.create.meta.CreationMeta;

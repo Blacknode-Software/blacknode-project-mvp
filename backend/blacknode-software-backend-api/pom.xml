@@ -7,7 +7,9 @@
 		<artifactId>blacknode-software-backend</artifactId>
 		<version>0.0.1-DEV</version>
 	</parent>
+	
 	<artifactId>blacknode-software-backend-api</artifactId>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -21,6 +23,10 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>${hinz-common.groupId}</groupId>
+			<artifactId>hinz-common</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>software.blacknode.backend</groupId>
@@ -58,6 +64,18 @@
 						<arg>-parameters</arg>
 					</compilerArgs>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<!-- version can be omitted if managed by parent -->
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

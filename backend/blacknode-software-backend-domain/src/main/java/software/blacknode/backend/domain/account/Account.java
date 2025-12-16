@@ -3,8 +3,8 @@ package software.blacknode.backend.domain.account;
 import java.util.Optional;
 
 import lombok.Getter;
-import me.hinsinger.projects.hinz.common.huid.HUID;
-import me.hinsinger.projects.hinz.common.time.timestamp.Timestamp;
+import me.hinsinger.hinz.common.huid.HUID;
+import me.hinsinger.hinz.common.time.timestamp.Timestamp;
 import software.blacknode.backend.domain.account.meta.AccountMeta;
 import software.blacknode.backend.domain.account.meta.create.AccountInitialAdminCreationMeta;
 import software.blacknode.backend.domain.account.settings.AccountSettings;

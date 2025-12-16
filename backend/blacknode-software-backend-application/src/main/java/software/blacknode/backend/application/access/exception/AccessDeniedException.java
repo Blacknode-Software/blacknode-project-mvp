@@ -1,6 +1,6 @@
 package software.blacknode.backend.application.access.exception;
 
-import me.hinsinger.projects.hinz.common.huid.HUID;
+import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.application.access.AccessControlService.AccessLevel;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 

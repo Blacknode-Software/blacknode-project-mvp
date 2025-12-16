@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import me.hinsinger.projects.hinz.common.huid.HUID;
+import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.api.controller.converter.BaseResponseConverter;
 import software.blacknode.backend.api.controller.project.response.ProjectsListResponse;
 

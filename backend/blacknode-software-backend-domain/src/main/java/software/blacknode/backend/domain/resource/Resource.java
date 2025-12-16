@@ -3,8 +3,8 @@ package software.blacknode.backend.domain.resource;
 import java.util.Optional;
 
 import lombok.Getter;
-import me.hinsinger.projects.hinz.common.huid.HUID;
-import me.hinsinger.projects.hinz.common.time.timestamp.Timestamp;
+import me.hinsinger.hinz.common.huid.HUID;
+import me.hinsinger.hinz.common.time.timestamp.Timestamp;
 import software.blacknode.backend.domain.modifier.create.Creatable;
 import software.blacknode.backend.domain.modifier.create.meta.CreationMeta;
 import software.blacknode.backend.domain.modifier.delete.Deletable;
