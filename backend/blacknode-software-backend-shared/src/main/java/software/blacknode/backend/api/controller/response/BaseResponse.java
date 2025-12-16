@@ -13,8 +13,10 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 
 @Getter
+@SuperBuilder
 public abstract class BaseResponse<T extends BaseResponse<T>> {
 	protected static final String DEFAULT_SUCCESS_MESSAGE = "Operation completed successfully.";
 	protected static final String DEFAULT_FAILURE_MESSAGE = "Operation failed.";
@@ -47,11 +49,11 @@ public abstract class BaseResponse<T extends BaseResponse<T>> {
 	
 	/* ResponseEntity Default Implementations  */
 	
-	public ResponseEntity<T> toOKResponse() {
+	public ResponseEntity<T> toOkResponse() {
 		return toSuccessResponse(HttpStatus.OK);
 	}
 	
-	public ResponseEntity<T> toOKResponse(String message) {
+	public ResponseEntity<T> toOkResponse(String message) {
 		return toSuccessResponse(message, HttpStatus.OK);
 	}
 	

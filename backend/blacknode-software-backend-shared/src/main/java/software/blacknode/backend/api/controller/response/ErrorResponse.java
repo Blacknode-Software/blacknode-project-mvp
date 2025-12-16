@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 public class ErrorResponse extends BaseResponse<ErrorResponse> {
 	
-	@Schema(example = DEFAULT_SUCCESS_MESSAGE)
+	@Schema(example = DEFAULT_FAILURE_MESSAGE)
 	protected String message = BaseResponse.DEFAULT_FAILURE_MESSAGE;
 	
 	@Schema(example = "failure")

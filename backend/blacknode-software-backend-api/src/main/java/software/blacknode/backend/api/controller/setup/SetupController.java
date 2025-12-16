@@ -45,7 +45,7 @@ public class SetupController {
 		
 		var response = initialSetupResponseConverter.convert(result);
 		
-		return response.toOKResponse("Setup completed successfully");
+		return response.toOkResponse("Setup completed successfully");
 	}
 	
 
