@@ -31,7 +31,6 @@ public class SetupController {
 	private final InitialSetupResponseConverter initialSetupResponseConverter;
 
 	
-	@OrganizationHeader
 	@Operation(summary = "Initial setup of the application", description = "Performs the initial setup process for the application using the provided setup request.")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Setup completed successfully") })
 	@InvalidInputResponse
