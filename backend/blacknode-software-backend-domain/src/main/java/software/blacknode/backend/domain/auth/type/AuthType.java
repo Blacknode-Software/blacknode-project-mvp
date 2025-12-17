@@ -5,7 +5,7 @@ import me.hinsinger.hinz.common.huid.HUID;
 public interface AuthType {
 
 	public static final AuthType PASSWORD_AUTHENTICATION = AuthType.of(
-			HUID.fromString("00000000-0000-0000-0000-000000000001"),
+			HUID.fromString("b6c5c6de-ae43-4d61-8cd1-000000000001"),
 			"Password Authentication",
 			"Authentication using a password."
 	);
