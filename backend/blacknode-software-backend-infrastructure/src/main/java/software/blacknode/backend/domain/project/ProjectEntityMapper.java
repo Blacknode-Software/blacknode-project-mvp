@@ -39,7 +39,7 @@ public class ProjectEntityMapper implements EntityMapper<Project, ProjectEntity>
 				.organizationId(organizationId)
 				.creationTimestamp(creationTimestamp)
 				.modificationTimestamp(modificationTimestamp)
-				.deletationTimestamp(deletionTimestamp)
+				.deletionTimestamp(deletionTimestamp)
 				.build();
 	}
 
@@ -62,9 +62,9 @@ public class ProjectEntityMapper implements EntityMapper<Project, ProjectEntity>
 		
 		var createdAt = timestampToInstant(domainEntity.getCreationTimestamp());
 		var modifiedAt = timestampToInstant(domainEntity.getModificationTimestamp());
-		var deletedAt = timestampToInstant(domainEntity.getDeletationTimestamp());
+		var deletedAt = timestampToInstant(domainEntity.getDeletionTimestamp());
 		
-		var state = 
+		var state = getEntityState(domainEntity);
 		
 		return ProjectEntity.builder()
 				.id(id)
@@ -73,6 +73,7 @@ public class ProjectEntityMapper implements EntityMapper<Project, ProjectEntity>
 				.createdAt(createdAt)
 				.modifiedAt(modifiedAt)
 				.deletedAt(deletedAt)
+				.state(state)
 				.build();
 	}
 

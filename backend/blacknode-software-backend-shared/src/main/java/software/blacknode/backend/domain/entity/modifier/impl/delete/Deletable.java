@@ -1,17 +1,17 @@
-package software.blacknode.backend.domain.entity.modifier.delete;
+package software.blacknode.backend.domain.entity.modifier.impl.delete;
 
 import java.util.Optional;
 
 import me.hinsinger.hinz.common.time.timestamp.Timestamp;
 import software.blacknode.backend.domain.entity.modifier.DomainEntityModifier;
-import software.blacknode.backend.domain.entity.modifier.delete.meta.DeletionMeta;
+import software.blacknode.backend.domain.entity.modifier.impl.delete.meta.DeletionMeta;
 import software.blacknode.backend.domain.entity.modifier.meta.DomainEntityModifierMeta;
 import software.blacknode.backend.domain.entity.modifier.meta.impl.EmptyModifierMeta;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 
 public interface Deletable extends DomainEntityModifier {
 
-	Timestamp getDeletationTimestamp();
+	Timestamp getDeletionTimestamp();
 
 	void delete(Optional<DeletionMeta> meta);
 
@@ -24,7 +24,7 @@ public interface Deletable extends DomainEntityModifier {
 	}
 	
 	default boolean isDeleted() {
-		return getDeletationTimestamp() != null;
+		return getDeletionTimestamp() != null;
 	}
 	
 	default void ensureNotDeleted(Optional<? extends DomainEntityModifierMeta> meta) {

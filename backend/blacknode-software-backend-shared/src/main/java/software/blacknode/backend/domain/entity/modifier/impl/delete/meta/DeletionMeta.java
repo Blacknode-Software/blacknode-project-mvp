@@ -1,4 +1,4 @@
-package software.blacknode.backend.domain.entity.modifier.delete.meta;
+package software.blacknode.backend.domain.entity.modifier.impl.delete.meta;
 
 import software.blacknode.backend.domain.entity.modifier.meta.DomainEntityModifierMeta;
 

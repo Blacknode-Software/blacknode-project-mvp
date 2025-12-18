@@ -10,13 +10,13 @@ import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.domain.project.Project;
 import software.blacknode.backend.domain.project.ProjectEntityMapper;
 import software.blacknode.backend.domain.project.repository.ProjectRepository;
+import software.blacknode.backend.infrastructure.organization.related.repository.OrganizationRelatedEntityRepository;
 import software.blacknode.backend.infrastructure.project.entity.ProjectEntity;
-import software.blacknode.backend.infrastructure.project.entity.ProjectEntityRepository;
-import software.blacknode.backend.infrastructure.repository.InfrastructureRepository;
+import software.blacknode.backend.infrastructure.project.entity.repository.ProjectEntityRepository;
 
 @Repository
 @RequiredArgsConstructor
-public class ProjectRepositoryImpl implements ProjectRepository, InfrastructureRepository<Project, ProjectEntity> {
+public class ProjectRepositoryImpl implements ProjectRepository, OrganizationRelatedEntityRepository<Project, ProjectEntity> {
 
 	private final ProjectEntityMapper projectEntityMapper;
 	private final ProjectEntityRepository projectEntityRepository;
@@ -25,17 +25,13 @@ public class ProjectRepositoryImpl implements ProjectRepository, InfrastructureR
 	public Optional<Project> findById(HUID organizationId, HUID id) {
 		var projectEntityOpt = projectEntityRepository.findById(id);
 		
+		projectEntityOpt = validateBelongsToOrganization(projectEntityOpt, organizationId);
+		
 		if(projectEntityOpt.isEmpty()) {
 			return Optional.empty();
 		}
 		
-		var projectEntity = projectEntityOpt.get();
-		if(!projectEntity.getOrganizationId().equals(organizationId.toUUID())) {
-			return Optional.empty();
-		}
-		
-		var project = toDomainEntity(projectEntity);
-		return Optional.of(project);
+		return projectEntityOpt.map(this::toDomainEntity);
 	}
 
 	@Override
