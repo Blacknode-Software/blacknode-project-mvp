@@ -12,8 +12,10 @@ public class InitialSetupResponseConverter implements BaseResponseConverter<Init
 
 	@Override
 	public InitialSetupResponse convert(Result source) {
+		var organizationId = source.getOrganizationId();
+		
 		return InitialSetupResponse.builder()
-			.organizationId(source.getOrganizationId().toUUID())
+			.organizationId(organizationId.toUUID())
 			.build();
 	}
 

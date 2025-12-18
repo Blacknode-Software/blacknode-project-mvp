@@ -1,7 +1,12 @@
 package software.blacknode.backend.api.controller.task.response;
 
-import software.blacknode.backend.api.controller.response.ListResponse;
+import lombok.Getter;
+import lombok.experimental.SuperBuilder;
+import software.blacknode.backend.api.controller.response.impl.BatchResponse;
+import software.blacknode.backend.api.controller.response.impl.ListResponse;
 
+@Getter
+@SuperBuilder
 public class TaskListResponse extends ListResponse<TaskListResponse> {
 
 	

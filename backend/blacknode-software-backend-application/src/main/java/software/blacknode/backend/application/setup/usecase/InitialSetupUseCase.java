@@ -1,12 +1,13 @@
 package software.blacknode.backend.application.setup.usecase;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import me.hinsinger.projects.hinz.common.huid.HUID;
+import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.application.account.AccountService;
 import software.blacknode.backend.application.auth.AuthService;
 import software.blacknode.backend.application.channel.ChannelService;
@@ -42,6 +43,7 @@ public class InitialSetupUseCase implements ResultExecutionUseCase<InitialSetupC
 	private final AuthService authService;
 	
 	@Override
+	@Transactional
 	public InitialSetupUseCase.Result execute(InitialSetupCommand command) {
 		if(organizationService.isDefaultOrganizationPresent()) {
 			throw new BlacknodeException("Initial setup has already been completed.");

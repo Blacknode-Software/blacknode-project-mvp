@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import software.blacknode.backend.domain.auth.Auth;
 import software.blacknode.backend.domain.auth.repository.AuthRepository;
-import software.blacknode.backend.domain.modifier.create.meta.CreationMeta;
+import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
 
 @Service
 @RequiredArgsConstructor

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -21,6 +22,7 @@ import software.blacknode.backend.api.controller.BaseController;
 import software.blacknode.backend.api.controller.channel.response.ChannelDeleteResponse;
 import software.blacknode.backend.api.controller.channel.response.ChannelResponse;
 
+@Hidden
 @RestController
 @Tag(name = "Channels", description = "Channel management APIs")
 public class ChannelController extends BaseController {

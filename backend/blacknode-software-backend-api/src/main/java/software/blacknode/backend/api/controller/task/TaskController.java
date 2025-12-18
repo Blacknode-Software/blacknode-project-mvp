@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import software.blacknode.backend.api.controller.task.request.TaskBatchRequest;
 import software.blacknode.backend.api.controller.task.request.TaskCreateRequest;
 import software.blacknode.backend.api.controller.task.request.TaskPatchRequest;
@@ -19,6 +20,7 @@ import software.blacknode.backend.api.controller.task.response.TaskListResponse;
 import software.blacknode.backend.api.controller.task.response.TaskPatchResponse;
 import software.blacknode.backend.api.controller.task.response.TaskResponse;
 
+@Hidden
 @RestController
 public class TaskController {
 	

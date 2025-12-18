@@ -3,7 +3,7 @@ package software.blacknode.backend.application.access;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import me.hinsinger.projects.hinz.common.huid.HUID;
+import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.application.access.exception.AccessDeniedException;
 import software.blacknode.backend.application.channel.ChannelService;
 import software.blacknode.backend.application.member.MemberService;

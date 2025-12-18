@@ -2,20 +2,28 @@ package software.blacknode.backend.domain.project;
 
 import java.util.Optional;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import me.hinsinger.projects.hinz.common.huid.HUID;
-import me.hinsinger.projects.hinz.common.time.timestamp.Timestamp;
+import me.hinsinger.hinz.common.huid.HUID;
+import me.hinsinger.hinz.common.time.timestamp.Timestamp;
+import software.blacknode.backend.domain.entity.DomainEntity;
+import software.blacknode.backend.domain.entity.modifier.delete.Deletable;
+import software.blacknode.backend.domain.entity.modifier.delete.meta.DeletionMeta;
+import software.blacknode.backend.domain.entity.modifier.impl.create.Creatable;
+import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
+import software.blacknode.backend.domain.entity.modifier.impl.modify.Modifiable;
+import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
 import software.blacknode.backend.domain.exception.BlacknodeException;
-import software.blacknode.backend.domain.modifier.create.Creatable;
-import software.blacknode.backend.domain.modifier.create.meta.CreationMeta;
-import software.blacknode.backend.domain.modifier.delete.Deletable;
-import software.blacknode.backend.domain.modifier.delete.meta.DeletionMeta;
-import software.blacknode.backend.domain.modifier.modify.Modifiable;
-import software.blacknode.backend.domain.modifier.modify.meta.ModificationMeta;
 import software.blacknode.backend.domain.project.meta.ProjectMeta;
 import software.blacknode.backend.domain.project.meta.create.ProjectInitialCreationMeta;
+import software.blacknode.backend.domain.project.meta.modify.ProjectColorModificationMeta;
+import software.blacknode.backend.domain.project.meta.modify.ProjectDescriptionModificationMeta;
+import software.blacknode.backend.domain.project.meta.modify.ProjectNameModificationMeta;
 
-public class Project implements Creatable, Modifiable, Deletable {
+@Builder(access = lombok.AccessLevel.PACKAGE)
+@AllArgsConstructor(access = lombok.AccessLevel.PACKAGE)
+public class Project implements DomainEntity, Creatable, Modifiable, Deletable {
 
 	@Getter private HUID id;
 	
@@ -65,6 +73,26 @@ public class Project implements Creatable, Modifiable, Deletable {
 		ensureNotDeleted(meta0);
 		ensureModificationMetaProvided(meta0);
 		
+		var meta = meta0.get();
+		
+		if(meta instanceof ProjectNameModificationMeta _meta) {
+			var name = _meta.getName();
+			
+			this.meta = this.meta.withName(name);
+		}
+		else if(meta instanceof ProjectDescriptionModificationMeta _meta) {
+			var description = _meta.getDescription();
+			
+			this.meta = this.meta.withDescription(description);
+		}
+		else if(meta instanceof ProjectColorModificationMeta _meta) {
+			var color = _meta.getColor();
+			
+			this.meta = this.meta.withColor(color);
+		}
+		else {
+			throwUnsupportedModificationMeta(meta);
+		}
 		
 		modificationTimestamp = Timestamp.now();
 	}

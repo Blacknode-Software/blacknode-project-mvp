@@ -7,7 +7,9 @@
 		<artifactId>blacknode-software-backend</artifactId>
 		<version>0.0.1-DEV</version>
 	</parent>
+
 	<artifactId>blacknode-software-backend-infrastructure</artifactId>
+
 	<dependencies>
 		<dependency>
 			<groupId>software.blacknode.backend</groupId>
@@ -18,7 +20,7 @@
 			<artifactId>blacknode-software-backend-shared</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>me.hinsinger.projects</groupId>
+			<groupId>${hinz-common.groupId}</groupId>
 			<artifactId>hinz-common</artifactId>
 		</dependency>
 		<dependency>
@@ -33,6 +35,19 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
 		</dependency>
 
 	</dependencies>

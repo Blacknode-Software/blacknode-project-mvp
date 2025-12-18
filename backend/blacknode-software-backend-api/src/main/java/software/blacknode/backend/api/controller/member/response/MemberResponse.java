@@ -1,7 +1,12 @@
 package software.blacknode.backend.api.controller.member.response;
 
-import software.blacknode.backend.api.controller.response.BaseResponse;
+import lombok.Getter;
+import lombok.experimental.SuperBuilder;
+import software.blacknode.backend.api.controller.response.impl.BaseResponse;
 
-public class MemberResponse extends BaseResponse {
+@Getter
+@SuperBuilder
+public class MemberResponse extends BaseResponse<MemberResponse> {
+	
 
 }

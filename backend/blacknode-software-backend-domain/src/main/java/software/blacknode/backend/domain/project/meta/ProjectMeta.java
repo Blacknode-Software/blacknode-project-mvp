@@ -10,11 +10,11 @@ import lombok.With;
 public class ProjectMeta {
 
 	@Builder.Default
-	private String name = "Unknown Project";
+	private final String name = "Unknown Project";
 	
 	@Builder.Default
-	private String description = "Unknown description";
+	private final String description = "Unknown description";
 	
 	@Builder.Default
-	private String color = "#FAFAFA";
+	private final String color = "#FAFAFA";
 }
