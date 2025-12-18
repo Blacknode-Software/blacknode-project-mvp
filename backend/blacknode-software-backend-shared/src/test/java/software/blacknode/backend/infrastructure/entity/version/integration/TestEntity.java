@@ -7,7 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
-import software.blacknode.backend.infrastructure.entity.version.annotation.Versioned;
+import software.blacknode.backend.infrastructure.entity.version.annotation.VersionedEntity;
 
 @Entity
 @Table(name = "test_entity")
@@ -17,6 +17,6 @@ public class TestEntity {
     @GeneratedValue
     private UUID id;
 
-    @Versioned
+    @VersionedEntity
     private MyVersionedObject versionedData;
 }

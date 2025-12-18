@@ -13,6 +13,23 @@ import jakarta.persistence.Convert;
 import software.blacknode.backend.infrastructure.entity.version.hibernate.VersionedEntityJavaType;
 import software.blacknode.backend.infrastructure.entity.version.json.converter.VersionedEntityJsonConverter;
 
+/**
+ * Annotation to mark a field as a versioned entity field.
+ * This annotation automatically applies the versioned entity type handling
+ * to convert the field to/from JSON with version information.
+ * 
+ * Usage:
+ * <pre>
+ * {@code
+ * @Entity
+ * public class MyEntity {
+ *     @VersionedEntity
+ *     private MyVersionedObject data;
+ * }
+ * }
+ * </pre>
+ */
+
 @Target(value = { ElementType.TYPE, ElementType.FIELD })
 @Retention(RetentionPolicy.RUNTIME)
 @JavaType(VersionedEntityJavaType.class)

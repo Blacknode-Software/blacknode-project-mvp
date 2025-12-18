@@ -1,19 +1,21 @@
 package software.blacknode.backend.infrastructure.entity.version.migrator;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.junit.jupiter.api.Test;
 import software.blacknode.backend.infrastructure.entity.version.VersionableEntity;
 import software.blacknode.backend.infrastructure.entity.version.annotation.VersionedEntity;
 import software.blacknode.backend.infrastructure.entity.version.json.VersionedEntityJson;
 import software.blacknode.backend.infrastructure.entity.version.migration.MigrationEntity;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class VersionedEntityMigratorTest {
 
