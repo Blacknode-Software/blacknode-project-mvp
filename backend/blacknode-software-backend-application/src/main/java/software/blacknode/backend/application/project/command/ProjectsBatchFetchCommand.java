@@ -5,7 +5,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
-import me.hinsinger.projects.hinz.common.huid.HUID;
+import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.application.command.ExecutionCommand;
 
 @Getter

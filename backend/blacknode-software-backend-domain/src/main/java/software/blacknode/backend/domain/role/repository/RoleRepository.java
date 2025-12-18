@@ -3,7 +3,7 @@ package software.blacknode.backend.domain.role.repository;
 import java.util.List;
 import java.util.Optional;
 
-import me.hinsinger.projects.hinz.common.huid.HUID;
+import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.domain.role.Role;
 
 public interface RoleRepository {

@@ -8,7 +8,7 @@ import org.springframework.web.context.WebApplicationContext;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import me.hinsinger.projects.hinz.common.huid.HUID;
+import me.hinsinger.hinz.common.huid.HUID;
 
 @Getter
 @Setter

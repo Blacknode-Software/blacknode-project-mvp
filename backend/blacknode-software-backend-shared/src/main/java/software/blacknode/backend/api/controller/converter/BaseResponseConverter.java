@@ -1,9 +1,9 @@
 package software.blacknode.backend.api.controller.converter;
 
-import software.blacknode.backend.api.controller.response.BaseResponse;
+import software.blacknode.backend.api.controller.response.Response;
 
-public interface BaseResponseConverter<T, R extends BaseResponse<R>>{
+public interface BaseResponseConverter<INPUT, OUTPUT extends Response<OUTPUT>>{
 	
-	R convert(T source);
+	OUTPUT convert(INPUT source);
 
 }

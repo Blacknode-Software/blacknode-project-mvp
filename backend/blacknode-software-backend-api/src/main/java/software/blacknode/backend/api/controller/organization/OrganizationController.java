@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -19,6 +20,7 @@ import software.blacknode.backend.api.controller.organization.request.Organizati
 import software.blacknode.backend.api.controller.organization.response.OrganizationResponse;
 import software.blacknode.backend.api.controller.organization.response.OrganizationSettingsResponse;
 
+@Hidden
 @RestController
 @Tag(name = "Organizations", description = "Organization management APIs")
 public class OrganizationController extends BaseController {

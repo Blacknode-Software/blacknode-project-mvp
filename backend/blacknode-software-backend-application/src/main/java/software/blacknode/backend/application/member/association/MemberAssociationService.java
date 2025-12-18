@@ -6,18 +6,18 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import me.hinsinger.projects.hinz.common.huid.HUID;
+import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.application.channel.ChannelService;
 import software.blacknode.backend.application.member.MemberService;
 import software.blacknode.backend.application.organization.OrganizationService;
 import software.blacknode.backend.application.project.ProjectService;
 import software.blacknode.backend.application.role.RoleService;
+import software.blacknode.backend.domain.entity.modifier.delete.meta.DeletionMeta;
+import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.member.association.MemberAssociation;
 import software.blacknode.backend.domain.member.association.meta.MemberAssociationMeta;
 import software.blacknode.backend.domain.member.association.repository.MemberAssociationRepository;
-import software.blacknode.backend.domain.modifier.create.meta.CreationMeta;
-import software.blacknode.backend.domain.modifier.delete.meta.DeletionMeta;
 
 /*
  * Current behavior:

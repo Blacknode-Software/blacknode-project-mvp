@@ -4,21 +4,21 @@ import java.util.List;
 import java.util.Optional;
 
 import lombok.Getter;
-import me.hinsinger.projects.hinz.common.huid.HUID;
-import me.hinsinger.projects.hinz.common.time.timestamp.Timestamp;
+import me.hinsinger.hinz.common.huid.HUID;
+import me.hinsinger.hinz.common.time.timestamp.Timestamp;
+import software.blacknode.backend.domain.entity.modifier.delete.Deletable;
+import software.blacknode.backend.domain.entity.modifier.delete.meta.DeletionMeta;
+import software.blacknode.backend.domain.entity.modifier.impl.create.Creatable;
+import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
+import software.blacknode.backend.domain.entity.modifier.impl.modify.Modifiable;
+import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
 import software.blacknode.backend.domain.exception.BlacknodeException;
-import software.blacknode.backend.domain.modifier.create.Creatable;
-import software.blacknode.backend.domain.modifier.create.meta.CreationMeta;
-import software.blacknode.backend.domain.modifier.delete.Deletable;
-import software.blacknode.backend.domain.modifier.delete.meta.DeletionMeta;
-import software.blacknode.backend.domain.modifier.modify.Modifiable;
-import software.blacknode.backend.domain.modifier.modify.meta.ModificationMeta;
 import software.blacknode.backend.domain.organization.meta.OrganizationMeta;
 import software.blacknode.backend.domain.organization.meta.create.OrganizationInitialCreationMeta;
 import software.blacknode.backend.domain.organization.settings.OrganizationSettings;
 
 public class Organization implements Creatable, Modifiable, Deletable {
-	public static final HUID DEFAULT_ORGANIZATION_ID = HUID.fromString("00000000-0000-0000-0000-000000000000");
+	public static final HUID DEFAULT_ORGANIZATION_ID = HUID.fromString("e63c7895-6d65-41cb-9400-000000000001");
 
 	@Getter private HUID id;
 	@Getter private String name;

@@ -2,8 +2,8 @@ package software.blacknode.backend.domain.auth.meta.create;
 
 import lombok.Builder;
 import lombok.Getter;
-import me.hinsinger.projects.hinz.common.huid.HUID;
-import software.blacknode.backend.domain.modifier.create.meta.CreationMeta;
+import me.hinsinger.hinz.common.huid.HUID;
+import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
 
 @Getter
 @Builder

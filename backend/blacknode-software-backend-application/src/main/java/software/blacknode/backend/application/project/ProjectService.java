@@ -5,10 +5,11 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import me.hinsinger.projects.hinz.common.huid.HUID;
+import me.hinsinger.hinz.common.huid.HUID;
+import software.blacknode.backend.domain.entity.modifier.delete.meta.DeletionMeta;
+import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
+import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
 import software.blacknode.backend.domain.exception.BlacknodeException;
-import software.blacknode.backend.domain.modifier.create.meta.CreationMeta;
-import software.blacknode.backend.domain.modifier.delete.meta.DeletionMeta;
 import software.blacknode.backend.domain.project.Project;
 import software.blacknode.backend.domain.project.repository.ProjectRepository;
 
@@ -25,7 +26,29 @@ public class ProjectService {
 		
 		// TODO validate if other projects with the same name exist in the organization?
 		
-		repository.save(project);
+		repository.save(organizationId, project);
+		
+		return project;
+	}
+	
+	public Project modify(HUID organizationId, HUID projectId, ModificationMeta meta) {
+		var project = getOrThrow(organizationId, projectId);
+		
+		project.modify(meta);
+		
+		repository.save(organizationId, project);
+		
+		return project;
+	}
+	
+	public Project modify(HUID organizationId, HUID projectId, List<ModificationMeta> metas) {
+		var project = getOrThrow(organizationId, projectId);
+		
+		for (var meta : metas) {
+			project.modify(meta);
+		}
+		
+		repository.save(organizationId, project);
 		
 		return project;
 	}
@@ -35,16 +58,16 @@ public class ProjectService {
 		
 		project.delete(meta);
 		
-		repository.save(project);
+		repository.save(organizationId, project);
 	}
 	
 	public Project getOrThrow(HUID organizationId, HUID projectId) {
-		return repository.findById(projectId)
+		return repository.findById(organizationId, projectId)
 				.orElseThrow(() -> new BlacknodeException("Project with ID " + projectId + " not found."));
 	}
 	
 	public List<Project> getByIds(HUID organizationId, List<HUID> projectIds) {
-		var projects = repository.findAllById(projectIds);
+		var projects = repository.findAllById(organizationId, projectIds);
 		
 		return projects;
 	}
@@ -54,5 +77,4 @@ public class ProjectService {
 		
 		return projects;
 	}
-	
 }
