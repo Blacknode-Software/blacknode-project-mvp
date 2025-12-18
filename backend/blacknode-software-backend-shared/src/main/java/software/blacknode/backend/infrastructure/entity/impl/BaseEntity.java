@@ -2,6 +2,8 @@ package software.blacknode.backend.infrastructure.entity.impl;
 
 import java.util.UUID;
 
+import jakarta.persistence.Access;
+import jakarta.persistence.AccessType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
@@ -14,14 +16,15 @@ import software.blacknode.backend.infrastructure.entity.state.EntityState;
 @SuperBuilder
 @Getter
 @MappedSuperclass
+@Access(AccessType.FIELD)
 public class BaseEntity implements InfrastructureEntity {
 	
 	@Id
 	@Column(name = "id")
-    private UUID id;
+	protected UUID id;
 	
 	@Column(name = "state")
 	@Builder.Default
-	private EntityState state = EntityState.NOT_DEFINED;
+	protected EntityState state = EntityState.NOT_DEFINED;
 
 }

@@ -2,8 +2,6 @@ package software.blacknode.backend.domain.project;
 
 import org.springframework.stereotype.Component;
 
-import me.hinsinger.hinz.common.huid.HUID;
-import me.hinsinger.hinz.common.time.timestamp.Timestamp;
 import software.blacknode.backend.domain.project.meta.ProjectMeta;
 import software.blacknode.backend.infrastructure.entity.mapper.EntityMapper;
 import software.blacknode.backend.infrastructure.project.entity.ProjectEntity;
