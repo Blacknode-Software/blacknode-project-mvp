@@ -7,8 +7,8 @@ import jakarta.persistence.AccessType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
 import software.blacknode.backend.infrastructure.entity.version.annotation.VersionedEntity;
@@ -20,6 +20,7 @@ import software.blacknode.backend.infrastructure.project.entity.meta.ProjectMeta
 @SuperBuilder
 @Table(name = "projects")
 @Access(AccessType.FIELD)
+@NoArgsConstructor
 public class ProjectEntity extends OrganizationRelatedEntity {
 
 	@NonNull

@@ -7,6 +7,7 @@ import jakarta.persistence.AccessType;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import software.blacknode.backend.infrastructure.entity.impl.BaseEntity;
 
@@ -14,6 +15,7 @@ import software.blacknode.backend.infrastructure.entity.impl.BaseEntity;
 @Getter
 @MappedSuperclass
 @Access(AccessType.FIELD)
+@NoArgsConstructor
 public class OrganizationRelatedEntity extends BaseEntity {
 
 	@Column(name = "organization_id")

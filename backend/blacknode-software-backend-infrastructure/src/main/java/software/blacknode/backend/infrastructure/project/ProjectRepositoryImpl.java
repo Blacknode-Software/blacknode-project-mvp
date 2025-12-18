@@ -24,7 +24,7 @@ public class ProjectRepositoryImpl implements ProjectRepository, OrganizationRel
 	
 	@Override
 	public Optional<Project> findById(HUID organizationId, HUID id) {
-		var projectEntityOpt = projectEntityRepository.findByIdAndOrganizationIdAndState(id.toUUID(), 
+		var projectEntityOpt = projectEntityRepository.queryByIdAndOrganizationIdAndState(id.toUUID(), 
 				organizationId.toUUID(), EntityState.ACTIVE);
 		
 		return projectEntityOpt.map(this::toDomainEntity);
@@ -34,7 +34,7 @@ public class ProjectRepositoryImpl implements ProjectRepository, OrganizationRel
 	public List<Project> findAllById(HUID organizationId, List<HUID> ids) {
 		var uuidIds = ids.stream().map(HUID::toUUID).toList();
 		
-		var projectEntities = projectEntityRepository.findAllByIdInAndOrganizationIdAndState(uuidIds, 
+		var projectEntities = projectEntityRepository.queryAllByIdInAndOrganizationIdAndState(uuidIds, 
 				organizationId.toUUID(), EntityState.ACTIVE);
 		
 		return projectEntities.stream()
@@ -44,7 +44,7 @@ public class ProjectRepositoryImpl implements ProjectRepository, OrganizationRel
 
 	@Override
 	public List<Project> findProjectInOrganization(HUID organizationId) {
-		var projectEntities = projectEntityRepository.findAllByOrganizationIdAndState(organizationId.toUUID(), 
+		var projectEntities = projectEntityRepository.queryAllByOrganizationIdAndState(organizationId.toUUID(), 
 				EntityState.ACTIVE);
 		
 		return projectEntities.stream()

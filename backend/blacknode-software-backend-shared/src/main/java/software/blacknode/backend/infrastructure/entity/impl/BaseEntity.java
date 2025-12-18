@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import software.blacknode.backend.infrastructure.entity.InfrastructureEntity;
 import software.blacknode.backend.infrastructure.entity.state.EntityState;
@@ -17,6 +18,7 @@ import software.blacknode.backend.infrastructure.entity.state.EntityState;
 @Getter
 @MappedSuperclass
 @Access(AccessType.FIELD)
+@NoArgsConstructor
 public class BaseEntity implements InfrastructureEntity {
 	
 	@Id
