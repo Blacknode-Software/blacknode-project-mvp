@@ -23,15 +23,15 @@ public class ProjectEntityMapper implements EntityMapper<Project, ProjectEntity>
 		var description = meta.getDescription();
 		var color = meta.getColor();
 	
-		var creationTimestamp = instantToTimestamp(infrastructureEntity.getCreatedAt());
-		var modificationTimestamp = instantToTimestamp(infrastructureEntity.getModifiedAt());
-		var deletionTimestamp = instantToTimestamp(infrastructureEntity.getDeletedAt());
-		
 		var domainMeta = ProjectMeta.builder()
 				.name(name)
 				.description(description)
 				.color(color)
 				.build();
+		
+		var creationTimestamp = instantToTimestamp(infrastructureEntity.getCreatedAt());
+		var modificationTimestamp = instantToTimestamp(infrastructureEntity.getModifiedAt());
+		var deletionTimestamp = instantToTimestamp(infrastructureEntity.getDeletedAt());
 		
 		return Project.builder()
 				.id(id)
@@ -60,10 +60,17 @@ public class ProjectEntityMapper implements EntityMapper<Project, ProjectEntity>
 				.color(color)
 				.build();
 		
+		var createdAt = timestampToInstant(domainEntity.getCreationTimestamp());
+		var modifiedAt = timestampToInstant(domainEntity.getModificationTimestamp());
+		var deletedAt = timestampToInstant(domainEntity.getDeletationTimestamp());
+		
 		return ProjectEntity.builder()
-				.id(id.toUUID())
-				.organizationId(organizationId.toUUID())
+				.id(id)
+				.organizationId(organizationId)
 				.meta(infrastructureMeta)
+				.createdAt(createdAt)
+				.modifiedAt(modifiedAt)
+				.deletedAt(deletedAt)
 				.build();
 	}
 
