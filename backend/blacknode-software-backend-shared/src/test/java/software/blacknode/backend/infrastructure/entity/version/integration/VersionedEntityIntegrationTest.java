@@ -34,6 +34,9 @@ class VersionedEntityIntegrationTest {
     private TestEntityRepository repository;
 
     @Autowired
+    private ObjectMapper mapper;
+
+    @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Test
@@ -93,6 +96,10 @@ class VersionedEntityIntegrationTest {
     @SpringBootConfiguration
     @EnableAutoConfiguration
     static class Config {
+        @Bean
+        public ObjectMapper objectMapper() {
+            return new ObjectMapper();
+        }
         
         @Bean
         public VersionedEntityJsonConverter versionedEntityJsonConverter(ObjectMapper mapper) {
