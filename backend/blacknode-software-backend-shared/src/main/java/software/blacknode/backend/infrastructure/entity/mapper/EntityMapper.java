@@ -6,7 +6,11 @@ import java.util.UUID;
 import me.hinsinger.hinz.common.huid.HUID;
 import me.hinsinger.hinz.common.time.timestamp.Timestamp;
 import software.blacknode.backend.domain.entity.DomainEntity;
+import software.blacknode.backend.domain.entity.modifier.delete.Deletable;
+import software.blacknode.backend.domain.entity.modifier.impl.create.Creatable;
+import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.infrastructure.entity.InfrastructureEntity;
+import software.blacknode.backend.infrastructure.entity.state.EntityState;
 
 public interface EntityMapper<D extends DomainEntity, E extends InfrastructureEntity> {
 	
@@ -40,5 +44,18 @@ public interface EntityMapper<D extends DomainEntity, E extends InfrastructureEn
 			return null;
 		}
 		return huid.toUUID();
+	}
+	
+	public default EntityState getEntityState(D domainEntity) {
+		EntityState state = EntityState.ACTIVE;
+		
+		if(domainEntity instanceof Creatable _entity) {
+			if(_entity.getCreationTimestamp() == null) {
+				throw new BlacknodeException("Creation timestamp is null for entity: " + domainEntity.getClass().getSimpleName());
+			}
+		}
+		if(domainEntity instanceof Deletable _entity) {
+			return EntityState.ACTIVE;
+		}
 	}
 }

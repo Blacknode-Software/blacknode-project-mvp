@@ -64,6 +64,8 @@ public class ProjectEntityMapper implements EntityMapper<Project, ProjectEntity>
 		var modifiedAt = timestampToInstant(domainEntity.getModificationTimestamp());
 		var deletedAt = timestampToInstant(domainEntity.getDeletationTimestamp());
 		
+		var state = 
+		
 		return ProjectEntity.builder()
 				.id(id)
 				.organizationId(organizationId)
