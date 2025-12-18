@@ -1,6 +1,6 @@
 package software.blacknode.backend.infrastructure.project.entity;
 
-import java.time.LocalDate;
+import java.time.Instant;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,11 +22,11 @@ public class ProjectEntity extends OrganizationRelatedEntity {
 	private ProjectMetaEntity meta;
 	
 	@Column(name = "created_at", nullable = false, updatable = false)
-	private LocalDate createdAt;
+	private Instant createdAt;
 	
 	@Column(name = "modified_at")
-	private LocalDate modifiedAt;
+	private Instant modifiedAt;
 	
 	@Column(name = "deleted_at")
-	private LocalDate deletedAt;
+	private Instant deletedAt;
 }

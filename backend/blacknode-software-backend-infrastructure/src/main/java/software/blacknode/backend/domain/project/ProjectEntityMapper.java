@@ -14,8 +14,8 @@ public class ProjectEntityMapper implements EntityMapper<Project, ProjectEntity>
 
 	@Override
 	public Project toDomainEntity(ProjectEntity infrastructureEntity) {
-		var id = infrastructureEntity.getId();
-		var organizationId = infrastructureEntity.getOrganizationId();
+		var id = uuidToHUID(infrastructureEntity.getId());
+		var organizationId = uuidToHUID(infrastructureEntity.getOrganizationId());
 		
 		var meta = infrastructureEntity.getMeta();
 
@@ -23,9 +23,9 @@ public class ProjectEntityMapper implements EntityMapper<Project, ProjectEntity>
 		var description = meta.getDescription();
 		var color = meta.getColor();
 	
-		var createdAt = infrastructureEntity.getCreatedAt();
-		var modfiedAt = infrastructureEntity.getModifiedAt();
-		var deletedAt = infrastructureEntity.getDeletedAt();
+		var creationTimestamp = instantToTimestamp(infrastructureEntity.getCreatedAt());
+		var modificationTimestamp = instantToTimestamp(infrastructureEntity.getModifiedAt());
+		var deletionTimestamp = instantToTimestamp(infrastructureEntity.getDeletedAt());
 		
 		var domainMeta = ProjectMeta.builder()
 				.name(name)
@@ -34,17 +34,19 @@ public class ProjectEntityMapper implements EntityMapper<Project, ProjectEntity>
 				.build();
 		
 		return Project.builder()
-				.id(HUID.fromUUID(id))
+				.id(id)
 				.meta(domainMeta)
-				.organizationId(HUID.fromUUID(organizationId))
-				.modificationTimestamp(Timestamp.fromDate(modfiedAt))
+				.organizationId(organizationId)
+				.creationTimestamp(creationTimestamp)
+				.modificationTimestamp(modificationTimestamp)
+				.deletationTimestamp(deletionTimestamp)
 				.build();
 	}
 
 	@Override
 	public ProjectEntity toInfrastructureEntity(Project domainEntity) {
-		var id = domainEntity.getId();
-		var organizationId = domainEntity.getOrganizationId();
+		var id = huidToUUID(domainEntity.getId());
+		var organizationId = huidToUUID(domainEntity.getOrganizationId());
 		
 		var meta = domainEntity.getMeta();
 
