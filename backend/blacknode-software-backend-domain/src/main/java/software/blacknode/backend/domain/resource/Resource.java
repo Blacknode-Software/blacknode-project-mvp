@@ -5,12 +5,12 @@ import java.util.Optional;
 import lombok.Getter;
 import me.hinsinger.hinz.common.huid.HUID;
 import me.hinsinger.hinz.common.time.timestamp.Timestamp;
-import software.blacknode.backend.domain.modifier.create.Creatable;
-import software.blacknode.backend.domain.modifier.create.meta.CreationMeta;
-import software.blacknode.backend.domain.modifier.delete.Deletable;
-import software.blacknode.backend.domain.modifier.delete.meta.DeletionMeta;
-import software.blacknode.backend.domain.modifier.modify.Modifiable;
-import software.blacknode.backend.domain.modifier.modify.meta.ModificationMeta;
+import software.blacknode.backend.domain.entity.modifier.delete.Deletable;
+import software.blacknode.backend.domain.entity.modifier.delete.meta.DeletionMeta;
+import software.blacknode.backend.domain.entity.modifier.impl.create.Creatable;
+import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
+import software.blacknode.backend.domain.entity.modifier.impl.modify.Modifiable;
+import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
 import software.blacknode.backend.domain.resource.meta.ResourceMeta;
 
 public class Resource implements Creatable, Modifiable, Deletable {

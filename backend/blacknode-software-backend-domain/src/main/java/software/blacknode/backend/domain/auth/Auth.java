@@ -10,12 +10,12 @@ import software.blacknode.backend.domain.auth.meta.create.AuthByPasswordCreation
 import software.blacknode.backend.domain.auth.properties.AuthProperties;
 import software.blacknode.backend.domain.auth.properties.impl.AuthByPasswordProperties;
 import software.blacknode.backend.domain.auth.type.AuthType;
-import software.blacknode.backend.domain.modifier.create.Creatable;
-import software.blacknode.backend.domain.modifier.create.meta.CreationMeta;
-import software.blacknode.backend.domain.modifier.delete.Deletable;
-import software.blacknode.backend.domain.modifier.delete.meta.DeletionMeta;
-import software.blacknode.backend.domain.modifier.modify.Modifiable;
-import software.blacknode.backend.domain.modifier.modify.meta.ModificationMeta;	
+import software.blacknode.backend.domain.entity.modifier.delete.Deletable;
+import software.blacknode.backend.domain.entity.modifier.delete.meta.DeletionMeta;
+import software.blacknode.backend.domain.entity.modifier.impl.create.Creatable;
+import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
+import software.blacknode.backend.domain.entity.modifier.impl.modify.Modifiable;
+import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;	
 
 public class Auth implements Creatable, Deletable, Modifiable {
 

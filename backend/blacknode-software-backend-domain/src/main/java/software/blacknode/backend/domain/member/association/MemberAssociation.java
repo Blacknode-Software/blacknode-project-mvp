@@ -5,16 +5,16 @@ import java.util.Optional;
 import lombok.Getter;
 import me.hinsinger.hinz.common.huid.HUID;
 import me.hinsinger.hinz.common.time.timestamp.Timestamp;
+import software.blacknode.backend.domain.entity.modifier.delete.Deletable;
+import software.blacknode.backend.domain.entity.modifier.delete.meta.DeletionMeta;
+import software.blacknode.backend.domain.entity.modifier.impl.create.Creatable;
+import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.member.association.meta.MemberAssociationMeta;
 import software.blacknode.backend.domain.member.association.meta.create.MemberChannelAssociationCreationMeta;
 import software.blacknode.backend.domain.member.association.meta.create.MemberOrganizationAssociationCreationMeta;
 import software.blacknode.backend.domain.member.association.meta.create.MemberProjectAssociationCreationMeta;
 import software.blacknode.backend.domain.member.association.meta.delete.MemberAssociationDeletionMeta;
-import software.blacknode.backend.domain.modifier.create.Creatable;
-import software.blacknode.backend.domain.modifier.create.meta.CreationMeta;
-import software.blacknode.backend.domain.modifier.delete.Deletable;
-import software.blacknode.backend.domain.modifier.delete.meta.DeletionMeta;
 
 public class MemberAssociation implements Creatable, Deletable {
 

@@ -2,7 +2,7 @@ package software.blacknode.backend.domain.project.meta.create;
 
 import lombok.Builder;
 import lombok.Getter;
-import software.blacknode.backend.domain.modifier.create.meta.CreationMeta;
+import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
 
 @Getter
 @Builder

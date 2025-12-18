@@ -1,13 +1,32 @@
 package software.blacknode.backend.infrastructure.project.entity;
 
-import java.util.UUID;
+import java.time.LocalDate;
 
-public class ProjectEntity {
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.experimental.SuperBuilder;
+import software.blacknode.backend.infrastructure.organization.related.OrganizationRelatedEntity;
+import software.blacknode.backend.infrastructure.project.entity.meta.ProjectMetaEntity;
 
-	private UUID id;
+@Getter
+@Entity
+@SuperBuilder
+@Table(name = "projects")
+public class ProjectEntity extends OrganizationRelatedEntity {
+
+	@NonNull
+	@Column(name = "meta")
+	private ProjectMetaEntity meta;
 	
-	private String meta;
+	@Column(name = "created_at", nullable = false, updatable = false)
+	private LocalDate createdAt;
 	
-	private UUID organizationId;
+	@Column(name = "modified_at")
+	private LocalDate modifiedAt;
 	
+	@Column(name = "deleted_at")
+	private LocalDate deletedAt;
 }

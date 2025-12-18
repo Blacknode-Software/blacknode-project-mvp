@@ -8,8 +8,8 @@ import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.domain.channel.Channel;
 import software.blacknode.backend.domain.channel.repository.ChannelRepository;
+import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
 import software.blacknode.backend.domain.exception.BlacknodeException;
-import software.blacknode.backend.domain.modifier.create.meta.CreationMeta;
 
 @Service
 @RequiredArgsConstructor
