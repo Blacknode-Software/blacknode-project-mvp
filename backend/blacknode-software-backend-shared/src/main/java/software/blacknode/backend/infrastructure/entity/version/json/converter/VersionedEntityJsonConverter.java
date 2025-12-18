@@ -39,6 +39,7 @@ public class VersionedEntityJsonConverter
 
             VersionedEntityJson json = new VersionedEntityJson(
                     version,
+                    type.getName(),
                     mapper.valueToTree(attribute)
             );
 
@@ -56,16 +57,14 @@ public class VersionedEntityJsonConverter
             JsonNode root = mapper.readTree(dbData);
 
             // fast path: not versioned JSON
-            if (!root.has("version") || !root.has("content"))
+            if (!root.has("version") || !root.has("content") || !root.has("type"))
                 return mapper.treeToValue(root, Object.class);
 
             VersionedEntityJson json =
                     mapper.treeToValue(root, VersionedEntityJson.class);
 
-            // Hibernate gives us no target type here
-            throw new IllegalStateException(
-                    "Versioned entities resolved in interceptor"
-            );
+            Class<?> targetType = Class.forName(json.type());
+            return migrator.migrate(json, targetType);
 
         } catch (Exception e) {
             throw new IllegalStateException(e);

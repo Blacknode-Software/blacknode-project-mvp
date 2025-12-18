@@ -28,7 +28,7 @@ class VersionedEntityMigratorTest {
         content.put("description", "Description");
 
         // Version 1 corresponds to MyTestEntity_V001
-        VersionedEntityJson json = new VersionedEntityJson(1, content);
+        VersionedEntityJson json = new VersionedEntityJson(1, MyTestEntity.class.getName(), content);
 
         // Migrate
         Object result = migrator.migrate(json, MyTestEntity.class);

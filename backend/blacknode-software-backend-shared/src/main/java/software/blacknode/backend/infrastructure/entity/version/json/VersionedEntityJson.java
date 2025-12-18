@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public record VersionedEntityJson(
         int version,
+        String type,
         JsonNode content
 ) {}
 
