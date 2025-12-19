@@ -1,6 +1,7 @@
 package software.blacknode.backend.application.organization.usecase;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -13,6 +14,7 @@ import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
 import software.blacknode.backend.domain.context.SessionContext;
 import software.blacknode.backend.domain.organization.Organization;
 
+@Service
 @RequiredArgsConstructor
 public class OrganizationFetchUseCase implements ResultExecutionUseCase<OrganizationFetchCommand, OrganizationFetchUseCase.Result>{
 
