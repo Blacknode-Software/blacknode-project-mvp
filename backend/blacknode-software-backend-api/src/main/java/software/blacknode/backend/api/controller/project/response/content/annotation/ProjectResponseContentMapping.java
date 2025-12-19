@@ -6,13 +6,16 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.mapstruct.Mapping;
+import org.mapstruct.Mappings;
 
 @Target({ ElementType.METHOD, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.CLASS)
-@Mapping(target = "id", source = "project.id", qualifiedByName = "huid2UUID")
-@Mapping(target = "name", source = "project.name")
-@Mapping(target = "description", source = "project.description")
-@Mapping(target = "color", source = "project.color")
+@Mappings({
+	@Mapping(target = "id", source = "project.id", qualifiedByName = "huid2UUID"),
+	@Mapping(target = "name", source = "project.meta.name"),
+	@Mapping(target = "description", source = "project.meta.description"),
+	@Mapping(target = "color", source = "project.meta.color"),
+})
 public @interface ProjectResponseContentMapping {
 
 }
