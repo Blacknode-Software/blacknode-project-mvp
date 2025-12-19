@@ -3,6 +3,8 @@ package software.blacknode.backend.infrastructure.entity.mapper;
 import java.time.Instant;
 import java.util.UUID;
 
+import org.mapstruct.Named;
+
 import me.hinsinger.hinz.common.huid.HUID;
 import me.hinsinger.hinz.common.time.timestamp.Timestamp;
 import software.blacknode.backend.domain.entity.DomainEntity;
@@ -12,12 +14,13 @@ import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.infrastructure.entity.InfrastructureEntity;
 import software.blacknode.backend.infrastructure.entity.state.EntityState;
 
-public interface EntityMapper<D extends DomainEntity, E extends InfrastructureEntity> {
+public interface InfrastructureMapper<D extends DomainEntity, E extends InfrastructureEntity> {
 	
 	D toDomainEntity(E infrastructureEntity);
 
 	E toInfrastructureEntity(D domainEntity);
 	
+	@Named("instant2Timestamp")
 	public default Timestamp instantToTimestamp(Instant instant) {
 		if (instant == null) {
 			return null;
@@ -25,6 +28,7 @@ public interface EntityMapper<D extends DomainEntity, E extends InfrastructureEn
 		return Timestamp.fromInstant(instant);
 	}
 	
+	@Named("timestamp2Instant")
 	public default Instant timestampToInstant(Timestamp timestamp) {
 		if (timestamp == null) {
 			return null;
@@ -32,6 +36,7 @@ public interface EntityMapper<D extends DomainEntity, E extends InfrastructureEn
 		return timestamp.toInstant();
 	}
 	
+	@Named("uuid2HUID")
 	public default HUID uuidToHUID(UUID uuid) {
 		if (uuid == null) {
 			return null;
@@ -39,6 +44,7 @@ public interface EntityMapper<D extends DomainEntity, E extends InfrastructureEn
 		return HUID.fromUUID(uuid);
 	}
 	
+	@Named("huid2UUID")
 	public default UUID huidToUUID(HUID huid) {
 		if (huid == null) {
 			return null;
@@ -46,6 +52,7 @@ public interface EntityMapper<D extends DomainEntity, E extends InfrastructureEn
 		return huid.toUUID();
 	}
 	
+	@Named("getEntityState")
 	public default EntityState getEntityState(D domainEntity) {
 		EntityState state = EntityState.NOT_DEFINED;
 		

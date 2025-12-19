@@ -1,78 +1,51 @@
 package software.blacknode.backend.domain.project;
 
-import org.springframework.stereotype.Component;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-import software.blacknode.backend.domain.project.meta.ProjectMeta;
-import software.blacknode.backend.infrastructure.entity.mapper.EntityMapper;
+import software.blacknode.backend.infrastructure.entity.mapper.InfrastructureMapper;
+import software.blacknode.backend.infrastructure.entity.mapper.annotation.domain.CreationMappingDomain;
+import software.blacknode.backend.infrastructure.entity.mapper.annotation.domain.DeletionMappingDomain;
+import software.blacknode.backend.infrastructure.entity.mapper.annotation.domain.IdMappingDomain;
+import software.blacknode.backend.infrastructure.entity.mapper.annotation.domain.ModificationMappingDomain;
+import software.blacknode.backend.infrastructure.entity.mapper.annotation.domain.OrganizationIdMappingDomain;
+import software.blacknode.backend.infrastructure.entity.mapper.annotation.infrastructure.CreationMappingInfrastructure;
+import software.blacknode.backend.infrastructure.entity.mapper.annotation.infrastructure.DeletionMappingInfrastructure;
+import software.blacknode.backend.infrastructure.entity.mapper.annotation.infrastructure.IdMappingInfrastructure;
+import software.blacknode.backend.infrastructure.entity.mapper.annotation.infrastructure.ModificationMappingInfrastructure;
+import software.blacknode.backend.infrastructure.entity.mapper.annotation.infrastructure.OrganizationIdMappingInfrastructure;
+import software.blacknode.backend.infrastructure.entity.mapper.annotation.infrastructure.StateMappingInfrastructure;
 import software.blacknode.backend.infrastructure.project.entity.ProjectEntity;
-import software.blacknode.backend.infrastructure.project.entity.meta.ProjectMetaEntity;
 
-@Component
-public class ProjectEntityMapper implements EntityMapper<Project, ProjectEntity>{
-
-	@Override
-	public Project toDomainEntity(ProjectEntity infrastructureEntity) {
-		var id = uuidToHUID(infrastructureEntity.getId());
-		var organizationId = uuidToHUID(infrastructureEntity.getOrganizationId());
-		
-		var meta = infrastructureEntity.getMeta();
-
-		var name = meta.getName();
-		var description = meta.getDescription();
-		var color = meta.getColor();
+@Mapper(componentModel = "spring")
+public interface ProjectEntityMapper extends InfrastructureMapper<Project, ProjectEntity> {
 	
-		var domainMeta = ProjectMeta.builder()
-				.name(name)
-				.description(description)
-				.color(color)
-				.build();
-		
-		var creationTimestamp = instantToTimestamp(infrastructureEntity.getCreatedAt());
-		var modificationTimestamp = instantToTimestamp(infrastructureEntity.getModifiedAt());
-		var deletionTimestamp = instantToTimestamp(infrastructureEntity.getDeletedAt());
-		
-		return Project.builder()
-				.id(id)
-				.meta(domainMeta)
-				.organizationId(organizationId)
-				.creationTimestamp(creationTimestamp)
-				.modificationTimestamp(modificationTimestamp)
-				.deletionTimestamp(deletionTimestamp)
-				.build();
-	}
+	@Override
+	@IdMappingDomain
+	@OrganizationIdMappingDomain
+	
+    @Mapping(target = "meta.name", source = "meta.name")
+    @Mapping(target = "meta.description", source = "meta.description")
+    @Mapping(target = "meta.color", source = "meta.color")
+	
+	@CreationMappingDomain
+	@ModificationMappingDomain
+	@DeletionMappingDomain
+	Project toDomainEntity(ProjectEntity entity);
 
 	@Override
-	public ProjectEntity toInfrastructureEntity(Project domainEntity) {
-		var id = huidToUUID(domainEntity.getId());
-		var organizationId = huidToUUID(domainEntity.getOrganizationId());
-		
-		var meta = domainEntity.getMeta();
-
-		var name = meta.getName();
-		var description = meta.getDescription();
-		var color = meta.getColor();
-		
-		var infrastructureMeta = ProjectMetaEntity.builder()
-				.name(name)
-				.description(description)
-				.color(color)
-				.build();
-		
-		var createdAt = timestampToInstant(domainEntity.getCreationTimestamp());
-		var modifiedAt = timestampToInstant(domainEntity.getModificationTimestamp());
-		var deletedAt = timestampToInstant(domainEntity.getDeletionTimestamp());
-		
-		var state = getEntityState(domainEntity);
-		
-		return ProjectEntity.builder()
-				.id(id)
-				.organizationId(organizationId)
-				.meta(infrastructureMeta)
-				.createdAt(createdAt)
-				.modifiedAt(modifiedAt)
-				.deletedAt(deletedAt)
-				.state(state)
-				.build();
-	}
+	@IdMappingInfrastructure
+	@OrganizationIdMappingInfrastructure
+	
+	@Mapping(target = "meta.name", source = "meta.name")
+	@Mapping(target = "meta.description", source = "meta.description")
+	@Mapping(target = "meta.color", source = "meta.color")
+	
+	@CreationMappingInfrastructure
+	@ModificationMappingInfrastructure
+	@DeletionMappingInfrastructure
+	
+	@StateMappingInfrastructure
+	ProjectEntity toInfrastructureEntity(Project domain);
 
 }
