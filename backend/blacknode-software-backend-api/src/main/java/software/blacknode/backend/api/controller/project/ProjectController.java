@@ -36,7 +36,7 @@ import software.blacknode.backend.api.controller.project.request.ProjectsBatchFe
 import software.blacknode.backend.api.controller.project.response.ProjectCreateResponse;
 import software.blacknode.backend.api.controller.project.response.ProjectPatchResponse;
 import software.blacknode.backend.api.controller.project.response.ProjectResponse;
-import software.blacknode.backend.api.controller.project.response.ProjectsBatchResponse;
+import software.blacknode.backend.api.controller.project.response.ProjectsBatchFetchResponse;
 import software.blacknode.backend.api.controller.project.response.ProjectsListResponse;
 import software.blacknode.backend.api.controller.response.impl.SuccessResponse;
 import software.blacknode.backend.application.project.command.ProjectDeleteCommand;
@@ -131,7 +131,7 @@ public class ProjectController extends BaseController {
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Found projects") })
 	@InvalidInputResponse
 	@PostMapping("/projects/batch-fetch")
-	public ResponseEntity<ProjectsBatchResponse> getProjectsBatch(@RequestBody ProjectsBatchFetchRequest request) {
+	public ResponseEntity<ProjectsBatchFetchResponse> getProjectsBatch(@RequestBody ProjectsBatchFetchRequest request) {
 		var command = projectsBatchRequestConverter.convert(request);
 		
 		var result = projectsBatchUseCase.execute(command);

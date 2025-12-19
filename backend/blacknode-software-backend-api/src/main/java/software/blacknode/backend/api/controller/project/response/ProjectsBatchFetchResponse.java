@@ -5,6 +5,6 @@ import software.blacknode.backend.api.controller.project.response.content.Projec
 import software.blacknode.backend.api.controller.response.impl.BatchResponse;
 
 @SuperBuilder
-public class ProjectsBatchResponse extends BatchResponse<ProjectsBatchResponse, ProjectResponseContent> {
+public class ProjectsBatchFetchResponse extends BatchResponse<ProjectsBatchFetchResponse, ProjectResponseContent> {
 
 }
