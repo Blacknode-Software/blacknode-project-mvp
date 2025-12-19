@@ -22,14 +22,11 @@ import software.blacknode.backend.api.controller.BaseController;
 import software.blacknode.backend.api.controller.annotation.InvalidInputResponse;
 import software.blacknode.backend.api.controller.annotation.NotFoundResponse;
 import software.blacknode.backend.api.controller.organization.annotation.OrganizationHeader;
-import software.blacknode.backend.api.controller.project.converter.ProjectCreateRequestConverter;
-import software.blacknode.backend.api.controller.project.converter.ProjectCreateResponseConverter;
-import software.blacknode.backend.api.controller.project.converter.ProjectListResponseConverter;
-import software.blacknode.backend.api.controller.project.converter.ProjectPatchRequestConverter;
-import software.blacknode.backend.api.controller.project.converter.ProjectPatchResponseConverter;
-import software.blacknode.backend.api.controller.project.converter.ProjectResponseConverter;
-import software.blacknode.backend.api.controller.project.converter.ProjectsBatchFetchRequestConverter;
-import software.blacknode.backend.api.controller.project.converter.ProjectsBatchFetchResponseConverter;
+import software.blacknode.backend.api.controller.project.mapper.impl.ProjectCreateMapper;
+import software.blacknode.backend.api.controller.project.mapper.impl.ProjectFetchMapper;
+import software.blacknode.backend.api.controller.project.mapper.impl.ProjectPatchMapper;
+import software.blacknode.backend.api.controller.project.mapper.impl.ProjectsBatchMapper;
+import software.blacknode.backend.api.controller.project.mapper.impl.ProjectsListMapper;
 import software.blacknode.backend.api.controller.project.request.ProjectCreateRequest;
 import software.blacknode.backend.api.controller.project.request.ProjectPatchRequest;
 import software.blacknode.backend.api.controller.project.request.ProjectsBatchFetchRequest;
@@ -54,22 +51,19 @@ import software.blacknode.backend.application.project.usecase.ProjectsInOrganiza
 @RequiredArgsConstructor
 public class ProjectController extends BaseController {
 	
-	private final ProjectCreateRequestConverter projectCreateRequestConverter;
-	private final ProjectCreateResponseConverter projectCreateResponseConverter;
+	private final ProjectCreateMapper projectCreateMapper;
 	private final ProjectCreateUseCase projectCreateUseCase;
 	
-	private final ProjectResponseConverter projectResponseConverter;
+	private final ProjectFetchMapper projectFetchMapper;
 	private final ProjectFetchUseCase projectFetchUseCase;
 	
-	private final ProjectListResponseConverter projectListResponseConverter;
+	private final ProjectsListMapper projectsListMapper;
 	private final ProjectsInOrganizationFetchUseCase projectsInOrganizationFetchUseCase;
 	
-	private final ProjectPatchRequestConverter projectPatchRequestConverter;
-	private final ProjectPatchResponseConverter projectPatchResponseConverter;
+	private final ProjectPatchMapper projectPatchMapper;
 	private final ProjectPatchUseCase projectPatchUseCase;
 	
-	private final ProjectsBatchFetchRequestConverter projectsBatchRequestConverter;
-	private final ProjectsBatchFetchResponseConverter projectsBatchResponseConverter;
+	private final ProjectsBatchMapper projectsBatchMapper;
 	private final ProjectsBatchFetchUseCase projectsBatchUseCase;
 	
 	
@@ -83,11 +77,11 @@ public class ProjectController extends BaseController {
 	public ResponseEntity<ProjectCreateResponse> createProject(@PathVariable UUID organizationId,
 			@RequestBody ProjectCreateRequest request) {
 		
-		var command = projectCreateRequestConverter.convert(request);
+		var command = projectCreateMapper.toCommand(request);
 		
 		var result = projectCreateUseCase.execute(command);
 		
-		var response = projectCreateResponseConverter.convert(result);
+		var response = projectCreateMapper.toResponse(result);
 		
 		return response.toSuccessResponse(HttpStatus.CREATED);
 	}
@@ -105,7 +99,7 @@ public class ProjectController extends BaseController {
 		
 		var result = projectFetchUseCase.execute(command);
 		
-		var response = projectResponseConverter.convert(result);
+		var response = projectFetchMapper.toResponse(result);
 
 		return response.toOkResponse("Successfully fetched projects.");
 	}
@@ -121,7 +115,7 @@ public class ProjectController extends BaseController {
 		
 		var result = projectsInOrganizationFetchUseCase.execute(command);
 		
-		var response = projectListResponseConverter.convert(result.getProjectsIds());
+		var response = projectsListMapper.toResponse(result.getProjectsIds());
 		
 		return response.toOkResponse("Successfully fetched projects.");
 	}
@@ -132,11 +126,11 @@ public class ProjectController extends BaseController {
 	@InvalidInputResponse
 	@PostMapping("/projects/batch-fetch")
 	public ResponseEntity<ProjectsBatchFetchResponse> getProjectsBatch(@RequestBody ProjectsBatchFetchRequest request) {
-		var command = projectsBatchRequestConverter.convert(request);
+		var command = projectsBatchMapper.toCommand(request);
 		
 		var result = projectsBatchUseCase.execute(command);
 		
-		var response = projectsBatchResponseConverter.convert(result);
+		var response = projectsBatchMapper.toResponse(result);
 		
 		return response.toOkResponse("Successfully fetched projects.");
 	}
@@ -150,11 +144,11 @@ public class ProjectController extends BaseController {
 	public ResponseEntity<ProjectPatchResponse> patchProject(@PathVariable UUID id,
 			@RequestBody ProjectPatchRequest request) {
 		
-		var command = projectPatchRequestConverter.convert(request);
+		var command = projectPatchMapper.toCommand(request);
 		
 		var result = projectPatchUseCase.execute(command);
 		
-		var response = projectPatchResponseConverter.convert(result);
+		var response = projectPatchMapper.toResponse(result);
 		
 		return response.toOkResponse("Project updated successfully.");
 	}

@@ -9,7 +9,7 @@ import org.mapstruct.Mapping;
 
 @Target({ ElementType.METHOD, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.CLASS)
-@Mapping(target = "id", source = "project.id")
+@Mapping(target = "id", source = "project.id", qualifiedByName = "huid2UUID")
 @Mapping(target = "name", source = "project.name")
 @Mapping(target = "description", source = "project.description")
 @Mapping(target = "color", source = "project.color")

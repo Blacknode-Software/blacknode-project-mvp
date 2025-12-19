@@ -1,0 +1,27 @@
+package software.blacknode.backend.api.controller.project.mapper.impl;
+
+import org.mapstruct.Mapping;
+
+import software.blacknode.backend.api.controller.mapper.annotation.PatchOperationsMappingRequest;
+import software.blacknode.backend.api.controller.mapper.impl.RequestMapper;
+import software.blacknode.backend.api.controller.mapper.impl.ResponseMapper;
+import software.blacknode.backend.api.controller.project.request.ProjectPatchRequest;
+import software.blacknode.backend.api.controller.project.response.ProjectPatchResponse;
+import software.blacknode.backend.api.controller.project.response.content.annotation.ProjectResponseContentMapping;
+import software.blacknode.backend.application.project.command.ProjectPatchCommand;
+import software.blacknode.backend.application.project.usecase.ProjectPatchUseCase;
+
+public interface ProjectPatchMapper extends RequestMapper<ProjectPatchRequest, ProjectPatchCommand>, ResponseMapper<ProjectPatchUseCase.Result, ProjectPatchResponse> {
+
+	@Override
+	@Mapping(target = "name", source = "name")
+	@Mapping(target = "description", source = "description")
+	@Mapping(target = "color", source = "color")
+	@PatchOperationsMappingRequest
+	ProjectPatchCommand toCommand(ProjectPatchRequest request);
+	
+	@Override
+	@ProjectResponseContentMapping
+	ProjectPatchResponse toResponse(ProjectPatchUseCase.Result result);
+	
+}

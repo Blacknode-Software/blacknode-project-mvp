@@ -36,7 +36,7 @@ public interface ControllerMapper {
 				.toList();
 	}
 	
-	@Named("huid2UUID")
+	@Named("huids2UUIDs")
 	public default List<UUID> huidToUUID(List<HUID> huids) {
 		if (huids == null) {
 			return null;
