@@ -2,8 +2,6 @@ package software.blacknode.backend.domain.project;
 
 import org.springframework.stereotype.Component;
 
-import me.hinsinger.hinz.common.huid.HUID;
-import me.hinsinger.hinz.common.time.timestamp.Timestamp;
 import software.blacknode.backend.domain.project.meta.ProjectMeta;
 import software.blacknode.backend.infrastructure.entity.mapper.EntityMapper;
 import software.blacknode.backend.infrastructure.project.entity.ProjectEntity;
@@ -39,7 +37,7 @@ public class ProjectEntityMapper implements EntityMapper<Project, ProjectEntity>
 				.organizationId(organizationId)
 				.creationTimestamp(creationTimestamp)
 				.modificationTimestamp(modificationTimestamp)
-				.deletationTimestamp(deletionTimestamp)
+				.deletionTimestamp(deletionTimestamp)
 				.build();
 	}
 
@@ -62,9 +60,9 @@ public class ProjectEntityMapper implements EntityMapper<Project, ProjectEntity>
 		
 		var createdAt = timestampToInstant(domainEntity.getCreationTimestamp());
 		var modifiedAt = timestampToInstant(domainEntity.getModificationTimestamp());
-		var deletedAt = timestampToInstant(domainEntity.getDeletationTimestamp());
+		var deletedAt = timestampToInstant(domainEntity.getDeletionTimestamp());
 		
-		var state = 
+		var state = getEntityState(domainEntity);
 		
 		return ProjectEntity.builder()
 				.id(id)
@@ -73,6 +71,7 @@ public class ProjectEntityMapper implements EntityMapper<Project, ProjectEntity>
 				.createdAt(createdAt)
 				.modifiedAt(modifiedAt)
 				.deletedAt(deletedAt)
+				.state(state)
 				.build();
 	}
 

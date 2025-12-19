@@ -8,10 +8,10 @@ import lombok.Getter;
 import me.hinsinger.hinz.common.huid.HUID;
 import me.hinsinger.hinz.common.time.timestamp.Timestamp;
 import software.blacknode.backend.domain.entity.DomainEntity;
-import software.blacknode.backend.domain.entity.modifier.delete.Deletable;
-import software.blacknode.backend.domain.entity.modifier.delete.meta.DeletionMeta;
 import software.blacknode.backend.domain.entity.modifier.impl.create.Creatable;
 import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
+import software.blacknode.backend.domain.entity.modifier.impl.delete.Deletable;
+import software.blacknode.backend.domain.entity.modifier.impl.delete.meta.DeletionMeta;
 import software.blacknode.backend.domain.entity.modifier.impl.modify.Modifiable;
 import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
 import software.blacknode.backend.domain.exception.BlacknodeException;
@@ -31,7 +31,7 @@ public class Project implements DomainEntity, Creatable, Modifiable, Deletable {
 	
 	@Getter private Timestamp creationTimestamp;
 	@Getter private Timestamp modificationTimestamp;
-	@Getter private Timestamp deletationTimestamp;
+	@Getter private Timestamp deletionTimestamp;
 	
 	@Getter private final HUID organizationId;
 	
@@ -103,7 +103,7 @@ public class Project implements DomainEntity, Creatable, Modifiable, Deletable {
 		ensureNotDeleted(meta0);
 		ensureDeletionMetaProvided(meta0);
 		
-		deletationTimestamp = Timestamp.now();
+		deletionTimestamp = Timestamp.now();
 	}
 	
 	public boolean belongsToOrganization(HUID organizationId) {

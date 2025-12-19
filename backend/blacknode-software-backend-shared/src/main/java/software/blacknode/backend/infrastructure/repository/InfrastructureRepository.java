@@ -1,5 +1,6 @@
 package software.blacknode.backend.infrastructure.repository;
 
+import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.domain.entity.DomainEntity;
 import software.blacknode.backend.infrastructure.entity.InfrastructureEntity;
 
@@ -8,5 +9,4 @@ public interface InfrastructureRepository<D extends DomainEntity, E extends Infr
 	public E toInfrastructureEntity(D domainEntity);
 	
 	public D toDomainEntity(E infrastructureEntity);
-	
 }

@@ -5,10 +5,10 @@ import java.util.Optional;
 import lombok.Getter;
 import me.hinsinger.hinz.common.huid.HUID;
 import me.hinsinger.hinz.common.time.timestamp.Timestamp;
-import software.blacknode.backend.domain.entity.modifier.delete.Deletable;
-import software.blacknode.backend.domain.entity.modifier.delete.meta.DeletionMeta;
 import software.blacknode.backend.domain.entity.modifier.impl.create.Creatable;
 import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
+import software.blacknode.backend.domain.entity.modifier.impl.delete.Deletable;
+import software.blacknode.backend.domain.entity.modifier.impl.delete.meta.DeletionMeta;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.member.association.meta.MemberAssociationMeta;
 import software.blacknode.backend.domain.member.association.meta.create.MemberChannelAssociationCreationMeta;
@@ -23,7 +23,7 @@ public class MemberAssociation implements Creatable, Deletable {
 	@Getter private MemberAssociationMeta meta;
 	
 	@Getter private Timestamp creationTimestamp;
-	@Getter private Timestamp deletationTimestamp;
+	@Getter private Timestamp deletionTimestamp;
 	
 	@Getter private HUID memberId;
 	@Getter private HUID scopeId;
@@ -88,7 +88,7 @@ public class MemberAssociation implements Creatable, Deletable {
 			throw new BlacknodeException("Unsupported DeletionMeta type for MemberAssociation deletion");
 		}
 		
-		deletationTimestamp = Timestamp.now();
+		deletionTimestamp = Timestamp.now();
 		
 	}
 }

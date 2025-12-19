@@ -10,10 +10,10 @@ import software.blacknode.backend.domain.auth.meta.create.AuthByPasswordCreation
 import software.blacknode.backend.domain.auth.properties.AuthProperties;
 import software.blacknode.backend.domain.auth.properties.impl.AuthByPasswordProperties;
 import software.blacknode.backend.domain.auth.type.AuthType;
-import software.blacknode.backend.domain.entity.modifier.delete.Deletable;
-import software.blacknode.backend.domain.entity.modifier.delete.meta.DeletionMeta;
 import software.blacknode.backend.domain.entity.modifier.impl.create.Creatable;
 import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
+import software.blacknode.backend.domain.entity.modifier.impl.delete.Deletable;
+import software.blacknode.backend.domain.entity.modifier.impl.delete.meta.DeletionMeta;
 import software.blacknode.backend.domain.entity.modifier.impl.modify.Modifiable;
 import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;	
 
@@ -28,7 +28,7 @@ public class Auth implements Creatable, Deletable, Modifiable {
 	
 	@Getter private Timestamp creationTimestamp;
 	@Getter private Timestamp modificationTimestamp;
-	@Getter private Timestamp deletationTimestamp;
+	@Getter private Timestamp deletionTimestamp;
 	
 	@Getter private HUID accountId;
 
@@ -77,6 +77,6 @@ public class Auth implements Creatable, Deletable, Modifiable {
 		ensureNotDeleted(meta0);
 		ensureDeletionMetaProvided(meta0);
 		
-		deletationTimestamp = Timestamp.now();
+		deletionTimestamp = Timestamp.now();
 	}
 }

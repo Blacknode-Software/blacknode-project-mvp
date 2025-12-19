@@ -6,8 +6,8 @@ import java.util.UUID;
 import me.hinsinger.hinz.common.huid.HUID;
 import me.hinsinger.hinz.common.time.timestamp.Timestamp;
 import software.blacknode.backend.domain.entity.DomainEntity;
-import software.blacknode.backend.domain.entity.modifier.delete.Deletable;
 import software.blacknode.backend.domain.entity.modifier.impl.create.Creatable;
+import software.blacknode.backend.domain.entity.modifier.impl.delete.Deletable;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.infrastructure.entity.InfrastructureEntity;
 import software.blacknode.backend.infrastructure.entity.state.EntityState;
@@ -47,15 +47,22 @@ public interface EntityMapper<D extends DomainEntity, E extends InfrastructureEn
 	}
 	
 	public default EntityState getEntityState(D domainEntity) {
-		EntityState state = EntityState.ACTIVE;
+		EntityState state = EntityState.NOT_DEFINED;
+		
+		// TODO add logging if state is NOT_DEFINED
 		
 		if(domainEntity instanceof Creatable _entity) {
-			if(_entity.getCreationTimestamp() == null) {
-				throw new BlacknodeException("Creation timestamp is null for entity: " + domainEntity.getClass().getSimpleName());
+			if(_entity.getCreationTimestamp() != null) {
+				state = EntityState.ACTIVE;
 			}
 		}
+		
 		if(domainEntity instanceof Deletable _entity) {
-			return EntityState.ACTIVE;
+			if(_entity.getDeletionTimestamp() != null) {
+				state = EntityState.DELETED;
+			}
 		}
+		
+		return state;
 	}
 }
