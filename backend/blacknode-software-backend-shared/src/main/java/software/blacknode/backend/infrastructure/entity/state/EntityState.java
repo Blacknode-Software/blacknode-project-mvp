@@ -1,7 +1,7 @@
 package software.blacknode.backend.infrastructure.entity.state;
 
 public enum EntityState {
-
+	NOT_DEFINED,
 	ACTIVE,
 	DELETED,
 	;
