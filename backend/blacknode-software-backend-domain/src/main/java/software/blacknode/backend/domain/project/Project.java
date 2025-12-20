@@ -3,8 +3,8 @@ package software.blacknode.backend.domain.project;
 import java.util.Optional;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
 import me.hinsinger.hinz.common.time.timestamp.Timestamp;
 import software.blacknode.backend.domain.entity.DomainEntity;
@@ -15,14 +15,13 @@ import software.blacknode.backend.domain.entity.modifier.impl.delete.meta.Deleti
 import software.blacknode.backend.domain.entity.modifier.impl.modify.Modifiable;
 import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
 import software.blacknode.backend.domain.exception.BlacknodeException;
-import software.blacknode.backend.domain.organization.meta.OrganizationMeta;
-import software.blacknode.backend.domain.organization.settings.OrganizationSettings;
 import software.blacknode.backend.domain.project.meta.ProjectMeta;
 import software.blacknode.backend.domain.project.meta.create.ProjectInitialCreationMeta;
 import software.blacknode.backend.domain.project.meta.modify.ProjectColorModificationMeta;
 import software.blacknode.backend.domain.project.meta.modify.ProjectDescriptionModificationMeta;
 import software.blacknode.backend.domain.project.meta.modify.ProjectNameModificationMeta;
 
+@Builder
 @AllArgsConstructor(onConstructor = @__({ @Deprecated }))
 public class Project implements DomainEntity, Creatable, Modifiable, Deletable {
 

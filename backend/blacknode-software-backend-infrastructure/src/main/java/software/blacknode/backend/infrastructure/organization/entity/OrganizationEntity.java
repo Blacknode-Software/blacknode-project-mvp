@@ -27,10 +27,10 @@ public class OrganizationEntity extends BaseEntity {
 	@VersionedEntity
 	private OrganizationEntityMeta meta;
 	
-	@NonNull
-	@Column(name = "settings")
-	@VersionedEntity
-	private OrganizationEntitySettings settings;
+//	@NonNull
+//	@Column(name = "settings")
+//	@VersionedEntity
+//	private OrganizationEntitySettings settings;
 	
 	@Column(name = "created_at", nullable = false, updatable = false)
 	private Instant createdAt;
