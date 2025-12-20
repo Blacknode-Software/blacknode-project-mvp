@@ -20,6 +20,9 @@ import software.blacknode.backend.domain.organization.settings.OrganizationSetti
 public class Organization implements Creatable, Modifiable, Deletable {
 	public static final HUID DEFAULT_ORGANIZATION_ID = HUID.fromString("e63c7895-6d65-41cb-9400-000000000001");
 
+	// TODO move name to OrganizationMeta
+	// TODO add modification meta for changing name
+	
 	@Getter private HUID id;
 	@Getter private String name;
 	

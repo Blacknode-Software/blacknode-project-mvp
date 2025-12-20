@@ -8,5 +8,5 @@ import lombok.Getter;
 
 @Getter
 public abstract class BatchRequest extends BaseRequest {
-	private List<UUID> identifiers = new ArrayList<>();
+	private List<UUID> ids = new ArrayList<>();
 }

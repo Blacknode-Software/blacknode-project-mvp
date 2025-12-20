@@ -26,7 +26,7 @@ import software.blacknode.backend.api.controller.project.mapper.impl.ProjectCrea
 import software.blacknode.backend.api.controller.project.mapper.impl.ProjectFetchMapper;
 import software.blacknode.backend.api.controller.project.mapper.impl.ProjectPatchMapper;
 import software.blacknode.backend.api.controller.project.mapper.impl.ProjectsBatchMapper;
-import software.blacknode.backend.api.controller.project.mapper.impl.ProjectsListMapper;
+import software.blacknode.backend.api.controller.project.mapper.impl.ProjectsInOrganizationFetchMapper;
 import software.blacknode.backend.api.controller.project.request.ProjectCreateRequest;
 import software.blacknode.backend.api.controller.project.request.ProjectPatchRequest;
 import software.blacknode.backend.api.controller.project.request.ProjectsBatchFetchRequest;
@@ -57,7 +57,7 @@ public class ProjectController extends BaseController {
 	private final ProjectFetchMapper projectFetchMapper;
 	private final ProjectFetchUseCase projectFetchUseCase;
 	
-	private final ProjectsListMapper projectsListMapper;
+	private final ProjectsInOrganizationFetchMapper projectsInOganizationFetchMapper;
 	private final ProjectsInOrganizationFetchUseCase projectsInOrganizationFetchUseCase;
 	
 	private final ProjectPatchMapper projectPatchMapper;
@@ -115,7 +115,7 @@ public class ProjectController extends BaseController {
 		
 		var result = projectsInOrganizationFetchUseCase.execute(command);
 		
-		var response = projectsListMapper.toResponse(result.getProjectsIds());
+		var response = projectsInOganizationFetchMapper.toResponse(result);
 		
 		return response.toOkResponse("Successfully fetched projects.");
 	}
