@@ -3,13 +3,11 @@ import { computed } from 'vue';
 import { UnixTimestamp } from '@/utils';
 
 const props = defineProps<{
-    timestmap: number;
+    timestmap: UnixTimestamp;
     formatter: Intl.DateTimeFormat;
 }>();
 
-const date = computed(() =>
-    props.formatter.format(new UnixTimestamp(props.timestmap ?? 0).getDate()),
-);
+const date = computed(() => props.formatter.format(props.timestmap.getDate()));
 </script>
 
 <template>{{ date }}</template>
