@@ -18,7 +18,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import software.blacknode.backend.api.controller.BaseController;
 import software.blacknode.backend.api.controller.organization.request.OrganizationPatchRequest;
 import software.blacknode.backend.api.controller.organization.response.OrganizationResponse;
-import software.blacknode.backend.api.controller.organization.response.OrganizationSettingsResponse;
 
 @Hidden
 @RestController
@@ -37,15 +36,6 @@ public class OrganizationController extends BaseController {
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Found organizations") })
 	@GetMapping("/organizations")
 	public ResponseEntity<List<OrganizationResponse>> getOrganizations() {
-		return ResponseEntity.ok(null);
-	}
-	
-	
-	@Operation(summary = "Get organization settings")
-	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Found organization settings"),
-			@ApiResponse(responseCode = "404", description = "Organization not found") })
-	@GetMapping("/organizations/{organizationId}/settings")
-	public ResponseEntity<OrganizationSettingsResponse> getOrganizationSettings(@PathVariable UUID id) {
 		return ResponseEntity.ok(null);
 	}
 	

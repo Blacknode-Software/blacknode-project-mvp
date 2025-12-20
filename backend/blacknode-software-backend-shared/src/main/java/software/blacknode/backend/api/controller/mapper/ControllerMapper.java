@@ -6,8 +6,9 @@ import java.util.UUID;
 import org.mapstruct.Named;
 
 import me.hinsinger.hinz.common.huid.HUID;
+import software.blacknode.backend.shared.mapper.BaseMapper;
 
-public interface ControllerMapper {
+public interface ControllerMapper extends BaseMapper {
 
 	@Named("uuid2HUID")
 	public default HUID uuidToHUID(UUID uuid) {

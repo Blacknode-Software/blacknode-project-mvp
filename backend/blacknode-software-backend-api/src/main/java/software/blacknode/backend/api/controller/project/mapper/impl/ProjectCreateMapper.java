@@ -20,6 +20,6 @@ public interface ProjectCreateMapper extends RequestMapper<ProjectCreateRequest,
 	ProjectCreateCommand toCommand(ProjectCreateRequest request);
 	
 	@Override
-	@Mapping(target = "projectId", source = "projectId", qualifiedByName = "huid2UUID")
+	@Mapping(target = "projectId", source = "projectId")
 	ProjectCreateResponse toResponse(ProjectCreateUseCase.Result result);
 }

@@ -10,11 +10,11 @@ import me.hinsinger.hinz.common.time.timestamp.Timestamp;
 import software.blacknode.backend.domain.entity.DomainEntity;
 import software.blacknode.backend.domain.entity.modifier.impl.create.Creatable;
 import software.blacknode.backend.domain.entity.modifier.impl.delete.Deletable;
-import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.infrastructure.entity.InfrastructureEntity;
 import software.blacknode.backend.infrastructure.entity.state.EntityState;
+import software.blacknode.backend.shared.mapper.BaseMapper;
 
-public interface InfrastructureMapper<D extends DomainEntity, E extends InfrastructureEntity> {
+public interface InfrastructureMapper<D extends DomainEntity, E extends InfrastructureEntity> extends BaseMapper {
 	
 	D toDomainEntity(E infrastructureEntity);
 

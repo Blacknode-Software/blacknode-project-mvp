@@ -13,20 +13,14 @@ import software.blacknode.backend.application.project.command.ProjectsBatchFetch
 import software.blacknode.backend.application.project.usecase.ProjectsBatchFetchUseCase;
 
 @Mapper(componentModel = "spring")
-public abstract class ProjectsBatchMapper implements RequestMapper<ProjectsBatchFetchRequest, ProjectsBatchFetchCommand>, ResponseMapper<ProjectsBatchFetchUseCase.Result, ProjectsBatchFetchResponse> {
+public interface ProjectsBatchMapper extends RequestMapper<ProjectsBatchFetchRequest, ProjectsBatchFetchCommand>, ResponseMapper<ProjectsBatchFetchUseCase.Result, ProjectsBatchFetchResponse> {
 	
 	@Override
 	@Mapping(target = "projectIds", source = "ids", qualifiedByName = "uuids2HUIDs")
 	public abstract ProjectsBatchFetchCommand toCommand(ProjectsBatchFetchRequest request);
 	
-	@Autowired
-	protected ProjectMapper projectMapper;
-	
 	@Override
-	public ProjectsBatchFetchResponse toResponse(ProjectsBatchFetchUseCase.Result result) {
-	    return ProjectsBatchFetchResponse.builder()
-	        .items(projectMapper.toResponseContentMap(result.getProjects()))
-	        .build();
-	}
+	@Mapping(target = "items", source = "projects")
+	public ProjectsBatchFetchResponse toResponse(ProjectsBatchFetchUseCase.Result result);
 	
 }
