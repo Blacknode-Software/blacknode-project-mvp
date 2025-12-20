@@ -1,6 +1,5 @@
 package software.blacknode.backend.domain.organization;
 
-import java.util.List;
 import java.util.Optional;
 
 import lombok.Getter;
@@ -12,19 +11,15 @@ import software.blacknode.backend.domain.entity.modifier.impl.delete.Deletable;
 import software.blacknode.backend.domain.entity.modifier.impl.delete.meta.DeletionMeta;
 import software.blacknode.backend.domain.entity.modifier.impl.modify.Modifiable;
 import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
-import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.organization.meta.OrganizationMeta;
 import software.blacknode.backend.domain.organization.meta.create.OrganizationInitialCreationMeta;
+import software.blacknode.backend.domain.organization.meta.modify.OrganizationNameModificationMeta;
 import software.blacknode.backend.domain.organization.settings.OrganizationSettings;
 
 public class Organization implements Creatable, Modifiable, Deletable {
 	public static final HUID DEFAULT_ORGANIZATION_ID = HUID.fromString("e63c7895-6d65-41cb-9400-000000000001");
-
-	// TODO move name to OrganizationMeta
-	// TODO add modification meta for changing name
 	
 	@Getter private HUID id;
-	@Getter private String name;
 	
 	@Getter private OrganizationSettings settings;
 	@Getter private OrganizationMeta meta;
@@ -40,16 +35,19 @@ public class Organization implements Creatable, Modifiable, Deletable {
 		ensureCreationMetaProvided(meta0);
 
 		this.id = HUID.random();
-		this.name = "Unnamed Organization";
 		
 		this.settings = new OrganizationSettings();
-		this.meta = new OrganizationMeta();
+		this.meta = OrganizationMeta.builder().build();
 		
 		var meta = meta0.get();
 		
 		if(meta instanceof OrganizationInitialCreationMeta initOrgMeta) {
-			this.id = DEFAULT_ORGANIZATION_ID;
-			this.name = initOrgMeta.getName();
+			var id = DEFAULT_ORGANIZATION_ID;
+			
+			var name = initOrgMeta.getName();
+			
+			this.id = id;
+			this.meta = this.meta.withName(name);
 		}
 		else {
 			throwUnsupportedCreationMeta(meta);
@@ -63,6 +61,17 @@ public class Organization implements Creatable, Modifiable, Deletable {
 		ensureCreated(meta0);
 		ensureNotDeleted(meta0);
 		ensureModificationMetaProvided(meta0);
+		
+		var meta = meta0.get();
+		
+		if(meta instanceof OrganizationNameModificationMeta nameMeta) {
+			var name = nameMeta.getName();
+			
+			this.meta = this.meta.withName(name);
+		} 
+		else {
+			throwUnsupportedModificationMeta(meta);
+		}
 		
 		modificationTimestamp = Timestamp.now();
 	}
