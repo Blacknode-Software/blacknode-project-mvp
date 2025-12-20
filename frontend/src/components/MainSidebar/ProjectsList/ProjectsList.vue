@@ -23,11 +23,11 @@ const projects = [
         name: 'asdasd22',
         channels: [
             {
-                name: 'asdasdasasdasd',
-                uuid: 'asddsad',
+                name: 'asdasdasasdasd22',
+                uuid: 'asddsad22',
             },
             {
-                name: 'dfgdfgdfgdf',
+                name: 'dfgdfgdfgd22f',
                 uuid: 'adfgdfgdfgdfgdf',
             },
         ],
@@ -49,7 +49,7 @@ const projects = [
 .projects-list-container {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 13px;
 }
 
 .projects-list-divide {
