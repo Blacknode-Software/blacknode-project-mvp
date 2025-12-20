@@ -26,7 +26,7 @@ public interface ControllerMapper {
 	}
 	
 	@Named("uuids2HUIDs")
-	public default List<HUID> uuidToHUID(List<UUID> uuids) {
+	public default List<HUID> uuidsToHUIDs(List<UUID> uuids) {
 		if (uuids == null) {
 			return null;
 		}
@@ -37,7 +37,7 @@ public interface ControllerMapper {
 	}
 	
 	@Named("huids2UUIDs")
-	public default List<UUID> huidToUUID(List<HUID> huids) {
+	public default List<UUID> huidsToUUIDs(List<HUID> huids) {
 		if (huids == null) {
 			return null;
 		}

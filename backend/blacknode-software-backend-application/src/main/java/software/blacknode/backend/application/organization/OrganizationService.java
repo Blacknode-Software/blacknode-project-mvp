@@ -1,14 +1,17 @@
 package software.blacknode.backend.application.organization;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
+import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.organization.Organization;
 import software.blacknode.backend.domain.organization.repository.OrganizationRepository;
+import software.blacknode.backend.domain.project.Project;
 
 @Service
 public class OrganizationService {
@@ -40,6 +43,28 @@ public class OrganizationService {
 		var organization = new Organization();
 		
 		organization.create(Optional.of(meta));
+		
+		repository.save(organization);
+		
+		return organization;
+	}
+	
+	public Organization modify(HUID organizationId, ModificationMeta meta) {
+		var organization = getOrThrow(organizationId);
+		
+		organization.modify(meta);
+		
+		repository.save(organization);
+		
+		return organization;
+	}
+	
+	public Organization modify(HUID organizationId, List<ModificationMeta> metas) {
+		var organization = getOrThrow(organizationId);
+		
+		for (var meta : metas) {
+			organization.modify(meta);
+		}
 		
 		repository.save(organization);
 		
