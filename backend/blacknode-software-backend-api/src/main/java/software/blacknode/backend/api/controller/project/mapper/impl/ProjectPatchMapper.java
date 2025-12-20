@@ -1,7 +1,6 @@
 package software.blacknode.backend.api.controller.project.mapper.impl;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 import software.blacknode.backend.api.controller.mapper.annotation.PatchOperationsMappingRequest;
 import software.blacknode.backend.api.controller.mapper.impl.RequestMapper;
@@ -16,9 +15,6 @@ import software.blacknode.backend.application.project.usecase.ProjectPatchUseCas
 public interface ProjectPatchMapper extends RequestMapper<ProjectPatchRequest, ProjectPatchCommand>, ResponseMapper<ProjectPatchUseCase.Result, ProjectPatchResponse> {
 
 	@Override
-	@Mapping(target = "name", source = "name")
-	@Mapping(target = "description", source = "description")
-	@Mapping(target = "color", source = "color")
 	@PatchOperationsMappingRequest
 	ProjectPatchCommand toCommand(ProjectPatchRequest request);
 	
