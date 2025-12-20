@@ -7,5 +7,8 @@
     color: var(--color-second-gray);
     padding: 0 8px;
     font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 </style>
