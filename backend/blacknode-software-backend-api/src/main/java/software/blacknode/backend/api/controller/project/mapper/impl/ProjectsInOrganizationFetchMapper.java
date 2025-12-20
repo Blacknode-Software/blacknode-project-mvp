@@ -11,7 +11,7 @@ import software.blacknode.backend.application.project.usecase.ProjectsInOrganiza
 public interface ProjectsInOrganizationFetchMapper extends ResponseMapper<ProjectsInOrganizationFetchUseCase.Result, ProjectsListResponse> {
 
 	@Override
-	@Mapping(target = "ids", source = "projectsIds", qualifiedByName = "huids2UUIDs")
+	@Mapping(target = "ids", source = "projectsIds")
 	ProjectsListResponse toResponse(ProjectsInOrganizationFetchUseCase.Result result);
 	
 }
