@@ -16,7 +16,7 @@ import software.blacknode.backend.application.project.usecase.ProjectsBatchFetch
 public interface ProjectsBatchMapper extends RequestMapper<ProjectsBatchFetchRequest, ProjectsBatchFetchCommand>, ResponseMapper<ProjectsBatchFetchUseCase.Result, ProjectsBatchFetchResponse> {
 	
 	@Override
-	@Mapping(target = "projectIds", source = "ids", qualifiedByName = "uuids2HUIDs")
+	@Mapping(target = "projectIds", source = "ids")
 	public abstract ProjectsBatchFetchCommand toCommand(ProjectsBatchFetchRequest request);
 	
 	@Override

@@ -8,7 +8,7 @@ import software.blacknode.backend.api.controller.response.impl.ResponseBySetter;
 
 @Getter
 @SuperBuilder
-public class OrganizationPatchResponse extends OrganizationResponseContent implements ResponseBySetter<OrganizationResponse> {
+public class OrganizationPatchResponse extends OrganizationResponseContent implements ResponseBySetter<OrganizationPatchResponse> {
 
 	@Getter @Setter private Status status;
 	@Getter @Setter private String message; 
