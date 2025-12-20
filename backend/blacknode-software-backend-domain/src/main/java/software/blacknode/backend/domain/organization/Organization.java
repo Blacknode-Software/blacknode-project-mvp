@@ -2,9 +2,13 @@ package software.blacknode.backend.domain.organization;
 
 import java.util.Optional;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
 import me.hinsinger.hinz.common.time.timestamp.Timestamp;
+import software.blacknode.backend.domain.entity.DomainEntity;
 import software.blacknode.backend.domain.entity.modifier.impl.create.Creatable;
 import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
 import software.blacknode.backend.domain.entity.modifier.impl.delete.Deletable;
@@ -14,14 +18,16 @@ import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.Modifi
 import software.blacknode.backend.domain.organization.meta.OrganizationMeta;
 import software.blacknode.backend.domain.organization.meta.create.OrganizationInitialCreationMeta;
 import software.blacknode.backend.domain.organization.meta.modify.OrganizationNameModificationMeta;
-import software.blacknode.backend.domain.organization.settings.OrganizationSettings;
 
-public class Organization implements Creatable, Modifiable, Deletable {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class Organization implements DomainEntity, Creatable, Modifiable, Deletable {
 	public static final HUID DEFAULT_ORGANIZATION_ID = HUID.fromString("e63c7895-6d65-41cb-9400-000000000001");
 	
 	@Getter private HUID id;
 	
-	@Getter private OrganizationSettings settings;
+	//@Getter private OrganizationSettings settings;
 	@Getter private OrganizationMeta meta;
 	
 	@Getter private Timestamp creationTimestamp;
@@ -36,7 +42,7 @@ public class Organization implements Creatable, Modifiable, Deletable {
 
 		this.id = HUID.random();
 		
-		this.settings = new OrganizationSettings();
+		//this.settings = new OrganizationSettings();
 		this.meta = OrganizationMeta.builder().build();
 		
 		var meta = meta0.get();

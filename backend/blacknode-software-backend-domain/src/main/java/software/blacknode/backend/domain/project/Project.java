@@ -21,8 +21,8 @@ import software.blacknode.backend.domain.project.meta.modify.ProjectColorModific
 import software.blacknode.backend.domain.project.meta.modify.ProjectDescriptionModificationMeta;
 import software.blacknode.backend.domain.project.meta.modify.ProjectNameModificationMeta;
 
-@Builder //(access = lombok.AccessLevel.PACKAGE)
-@AllArgsConstructor(access = lombok.AccessLevel.PACKAGE)
+@Builder
+@AllArgsConstructor(onConstructor = @__({ @Deprecated }))
 public class Project implements DomainEntity, Creatable, Modifiable, Deletable {
 
 	@Getter private HUID id;

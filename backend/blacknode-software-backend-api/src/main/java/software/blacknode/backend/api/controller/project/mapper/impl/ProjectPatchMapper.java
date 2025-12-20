@@ -1,5 +1,6 @@
 package software.blacknode.backend.api.controller.project.mapper.impl;
 
+import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import software.blacknode.backend.api.controller.mapper.annotation.PatchOperationsMappingRequest;
@@ -11,6 +12,7 @@ import software.blacknode.backend.api.controller.project.response.content.annota
 import software.blacknode.backend.application.project.command.ProjectPatchCommand;
 import software.blacknode.backend.application.project.usecase.ProjectPatchUseCase;
 
+@Mapper(componentModel = "spring")
 public interface ProjectPatchMapper extends RequestMapper<ProjectPatchRequest, ProjectPatchCommand>, ResponseMapper<ProjectPatchUseCase.Result, ProjectPatchResponse> {
 
 	@Override
