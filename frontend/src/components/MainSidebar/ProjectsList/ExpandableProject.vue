@@ -8,7 +8,6 @@ const isExpanded = ref(props.forceExpand);
 
 const handleExpand = () => {
     isExpanded.value = !isExpanded.value;
-    console.log(isExpanded.value);
 };
 </script>
 
