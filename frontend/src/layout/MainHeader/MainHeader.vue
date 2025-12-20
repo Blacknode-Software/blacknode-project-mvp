@@ -20,7 +20,7 @@ defineProps<{
     display: flex;
     gap: 17px;
     letter-spacing: 16%;
-    background-color: transparent;
+    background-color: #00000059;
 }
 
 .text {

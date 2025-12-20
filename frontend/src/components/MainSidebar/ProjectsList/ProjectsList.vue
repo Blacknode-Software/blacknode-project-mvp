@@ -49,7 +49,7 @@ const projects = [
 .projects-list-container {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 13px;
 }
 
 .projects-list-divide {
