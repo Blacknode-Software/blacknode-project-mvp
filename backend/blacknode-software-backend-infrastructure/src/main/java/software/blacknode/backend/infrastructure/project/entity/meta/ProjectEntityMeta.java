@@ -12,7 +12,7 @@ import software.blacknode.backend.infrastructure.entity.version.migration.Migrat
 @Builder
 @Getter
 @VersionedEntity
-public class ProjectMetaEntity implements VersionableEntity {
+public class ProjectEntityMeta implements VersionableEntity {
 	
 	@NonNull private String name;
 	@NonNull private String description;
@@ -21,18 +21,18 @@ public class ProjectMetaEntity implements VersionableEntity {
 	@Builder
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class ProjectMetaEntity_V001 implements MigrationEntity<ProjectMetaEntity> {
+	public static class ProjectMetaEntity_V001 implements MigrationEntity<ProjectEntityMeta> {
 
 		@NonNull private String name;
 		@NonNull private String description;
 		
 		@Override
-		public ProjectMetaEntity upgrade() {
+		public ProjectEntityMeta upgrade() {
 			var name = this.name;
 			var description = this.description;
 			var color = "#FFFFFF"; // Default color
 			
-			return ProjectMetaEntity.builder()
+			return ProjectEntityMeta.builder()
 					.name(name)
 					.description(description)
 					.color(color)

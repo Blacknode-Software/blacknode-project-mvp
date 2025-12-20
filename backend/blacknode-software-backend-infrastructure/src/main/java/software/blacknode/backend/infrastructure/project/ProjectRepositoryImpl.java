@@ -8,11 +8,11 @@ import org.springframework.stereotype.Repository;
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.domain.project.Project;
-import software.blacknode.backend.domain.project.ProjectEntityMapper;
 import software.blacknode.backend.domain.project.repository.ProjectRepository;
 import software.blacknode.backend.infrastructure.entity.state.EntityState;
 import software.blacknode.backend.infrastructure.organization.related.repository.OrganizationRelatedEntityRepository;
 import software.blacknode.backend.infrastructure.project.entity.ProjectEntity;
+import software.blacknode.backend.infrastructure.project.entity.mapper.ProjectEntityMapper;
 import software.blacknode.backend.infrastructure.project.entity.repository.ProjectEntityRepository;
 
 @Repository
@@ -24,30 +24,30 @@ public class ProjectRepositoryImpl implements ProjectRepository, OrganizationRel
 	
 	@Override
 	public Optional<Project> findById(HUID organizationId, HUID id) {
-		var projectEntityOpt = projectEntityRepository.queryByIdAndOrganizationIdAndState(id.toUUID(), 
+		var project = projectEntityRepository.queryByIdAndOrganizationIdAndState(id.toUUID(), 
 				organizationId.toUUID(), EntityState.ACTIVE);
 		
-		return projectEntityOpt.map(this::toDomainEntity);
+		return project.map(this::toDomainEntity);
 	}
 
 	@Override
 	public List<Project> findAllById(HUID organizationId, List<HUID> ids) {
 		var uuidIds = ids.stream().map(HUID::toUUID).toList();
 		
-		var projectEntities = projectEntityRepository.queryAllByIdInAndOrganizationIdAndState(uuidIds, 
+		var projects = projectEntityRepository.queryAllByIdInAndOrganizationIdAndState(uuidIds, 
 				organizationId.toUUID(), EntityState.ACTIVE);
 		
-		return projectEntities.stream()
+		return projects.stream()
 				.map(this::toDomainEntity)
 				.toList();
 	}
 
 	@Override
 	public List<Project> findProjectInOrganization(HUID organizationId) {
-		var projectEntities = projectEntityRepository.queryAllByOrganizationIdAndState(organizationId.toUUID(), 
+		var projects = projectEntityRepository.queryAllByOrganizationIdAndState(organizationId.toUUID(), 
 				EntityState.ACTIVE);
 		
-		return projectEntities.stream()
+		return projects.stream()
 				.map(this::toDomainEntity)
 				.toList();
 	}
