@@ -4,6 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import software.blacknode.backend.domain.organization.Organization;
+import software.blacknode.backend.domain.organization.meta.OrganizationMeta;
 import software.blacknode.backend.infrastructure.entity.mapper.InfrastructureMapper;
 import software.blacknode.backend.infrastructure.entity.mapper.annotation.domain.CreationMappingDomain;
 import software.blacknode.backend.infrastructure.entity.mapper.annotation.domain.DeletionMappingDomain;
@@ -15,6 +16,7 @@ import software.blacknode.backend.infrastructure.entity.mapper.annotation.infras
 import software.blacknode.backend.infrastructure.entity.mapper.annotation.infrastructure.ModificationMappingInfrastructure;
 import software.blacknode.backend.infrastructure.entity.mapper.annotation.infrastructure.StateMappingInfrastructure;
 import software.blacknode.backend.infrastructure.organization.entity.OrganizationEntity;
+import software.blacknode.backend.infrastructure.organization.entity.meta.OrganizationEntityMeta;
 
 @Mapper(componentModel = "spring")
 public interface OrganizationEntityMapper extends InfrastructureMapper<Organization, OrganizationEntity> {
@@ -41,4 +43,7 @@ public interface OrganizationEntityMapper extends InfrastructureMapper<Organizat
 	@DeletionMappingDomain
 	Organization toDomainEntity(OrganizationEntity infrastructureEntity);
 	
+	OrganizationEntityMeta map(OrganizationMeta meta);
+	
+	OrganizationMeta map(OrganizationEntityMeta meta);
 }
