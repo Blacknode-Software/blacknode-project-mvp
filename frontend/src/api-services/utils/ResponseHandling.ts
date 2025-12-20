@@ -5,8 +5,8 @@ export interface ApiError {
     code: number;
 }
 
-export interface ApiSuccess {
-    status: 'success';
+export interface ApiStatus {
+    status: 'success' | 'failure';
     message: string;
 }
 
@@ -27,7 +27,7 @@ export async function parseResponse<T>(
 
 export async function passResult(
     fetchPromise: ReturnType<typeof fetch>,
-): Promise<Result<ApiSuccess, ApiError>> {
+): Promise<Result<ApiStatus, ApiError>> {
     const res = await fetchPromise;
 
     if (res.ok) {
