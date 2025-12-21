@@ -18,3 +18,12 @@ services:
     expose:
       - "80"
     restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: blacknode-frontend:latest
+    expose:
+      - "80"
+    restart: unless-stopped
