@@ -19,26 +19,28 @@ const dateFormatter = computed(
 
 <template>
     <table class="group-table">
-        <tr class="group-header">
-            <th>Task name</th>
-            <th>Description</th>
-            <th>Priority</th>
-            <th>Timeline date</th>
-            <th>Progress</th>
-        </tr>
-        <tr v-for="task in tasks" :key="task.id">
-            <td>{{ task.title }}</td>
-            <td>{{ task.description }}</td>
-            <td><PriorityText :value="task.priority" /></td>
-            <td>
-                <TimestampDate :formatter="dateFormatter" :timestmap="task.timestamp" />
-            </td>
-            <td>
-                <ProgressBar :value="40" :max-value="100">
-                    <template #left>40%</template>
-                </ProgressBar>
-            </td>
-        </tr>
+        <tbody>
+            <tr class="group-header">
+                <th>Task name</th>
+                <th>Description</th>
+                <th>Priority</th>
+                <th>Timeline date</th>
+                <th>Progress</th>
+            </tr>
+            <tr v-for="task in tasks" :key="task.id">
+                <td>{{ task.title }}</td>
+                <td>{{ task.description }}</td>
+                <td><PriorityText :value="task.priority" /></td>
+                <td>
+                    <TimestampDate :formatter="dateFormatter" :timestmap="task.timestamp" />
+                </td>
+                <td>
+                    <ProgressBar :value="task.progress" :max-value="100">
+                        <template #left>{{ task.progress }}%</template>
+                    </ProgressBar>
+                </td>
+            </tr>
+        </tbody>
     </table>
 </template>
 
@@ -56,12 +58,12 @@ const dateFormatter = computed(
 }
 
 .group-table th {
-    padding: 10px 0;
+    padding: 10px 12px;
     text-align: left;
 }
 
 .group-table td {
-    padding: 14px 0;
+    padding: 14px 12px;
 }
 
 .group-table tr {
