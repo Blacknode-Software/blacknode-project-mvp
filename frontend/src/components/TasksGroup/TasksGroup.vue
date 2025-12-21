@@ -27,7 +27,7 @@ const dateFormatter = computed(
                 <th>Timeline date</th>
                 <th>Progress</th>
             </tr>
-            <tr v-for="task in tasks" :key="task.id">
+            <tr v-for="task in tasks" :key="task.id" class="task-row">
                 <td>{{ task.title }}</td>
                 <td>{{ task.description }}</td>
                 <td><PriorityText :value="task.priority" /></td>
@@ -68,5 +68,13 @@ const dateFormatter = computed(
 
 .group-table tr {
     border-bottom: 1px solid #7a7a9075;
+}
+
+.task-row {
+    cursor: pointer;
+}
+
+.task-row:hover {
+    background-color: #00000021;
 }
 </style>
