@@ -6,28 +6,44 @@ import ExpandableProject from './ExpandableProject.vue';
 const projects = [
     {
         uuid: 'asdasdsa',
-        name: 'asdasd',
+        name: 'Projekt 1',
         channels: [
             {
-                name: 'asdasdasasdasd',
+                name: 'Kanał 1',
                 uuid: 'asddsad',
             },
             {
-                name: 'dfgdfgdfgdf',
+                name: 'Kanał 2',
                 uuid: 'adfgdfgdfgdfgdf',
             },
         ],
     },
     {
         uuid: 'asdasdsa22',
-        name: 'asdasd22',
+        name: 'Projekt 2',
         channels: [
             {
-                name: 'asdasdasasdasd22',
+                name: 'Kanał 1',
                 uuid: 'asddsad22',
             },
             {
-                name: 'dfgdfgdfgd22f',
+                name: 'Kanał 2',
+                uuid: 'adfgdfgdfgdfgdf',
+            },
+            {
+                name: 'Kanał 3',
+                uuid: 'adfgdfgdfgdfgdf',
+            },
+            {
+                name: 'Kanał 4',
+                uuid: 'adfgdfgdfgdfgdf',
+            },
+            {
+                name: 'Kanał 5',
+                uuid: 'adfgdfgdfgdfgdf',
+            },
+            {
+                name: 'Kanał 6',
                 uuid: 'adfgdfgdfgdfgdf',
             },
         ],
