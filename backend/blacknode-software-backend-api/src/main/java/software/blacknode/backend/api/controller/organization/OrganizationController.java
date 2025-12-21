@@ -38,7 +38,7 @@ public class OrganizationController extends BaseController {
 	@ApiResponses(value = { 
 			@ApiResponse(responseCode = "200", description = "Organization details"),
 			@ApiResponse(responseCode = "404", description = "Organization not found") })
-	@GetMapping("/organization}")
+	@GetMapping("/organization")
 	public ResponseEntity<OrganizationResponse> getOrganization() {
 		var command = OrganizationFetchCommand.builder().build();
 		
