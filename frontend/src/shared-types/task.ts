@@ -6,4 +6,5 @@ export interface Task {
     description: string;
     timestamp: UnixTimestamp;
     priority: number;
+    progress: number;
 }

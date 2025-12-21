@@ -8,5 +8,6 @@
 .main-view-container {
     background-color: transparent;
     flex-grow: 1;
+    overflow-y: hidden;
 }
 </style>
