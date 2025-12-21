@@ -13,7 +13,7 @@ COPY blacknode-software-backend-api/pom.xml \
 
 # Copy all sources and build only the API module (and modules it depends on)
 COPY . .
-RUN mvn -B -DskipTests -pl blacknode-software-backend-api -am package -T 1C
+RUN mvn -B -pl blacknode-software-backend-api -am package -T 1C
 
 
 FROM eclipse-temurin:17-jre AS runtime
