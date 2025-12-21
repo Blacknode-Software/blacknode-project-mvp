@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { FixedBackground, MainSidebar, TasksGroup } from '@/components';
+import { FixedBackground, MainSidebar } from '@/components';
 import { MainHeader, UniSidebar, MainView } from '@/layout';
 </script>
 
@@ -11,7 +11,7 @@ import { MainHeader, UniSidebar, MainView } from '@/layout';
             <MainSidebar />
         </UniSidebar>
         <MainView>
-            <TasksGroup title="test" />
+            <!-- <TasksGroup title="test" /> -->
         </MainView>
     </div>
 </template>
