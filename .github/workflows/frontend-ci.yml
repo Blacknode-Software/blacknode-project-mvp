@@ -1,0 +1,22 @@
+name: Frontend CI
+
+on:
+    push:
+        branches: ["release*"]
+    pull_request:
+        branches: ["main", "release*"]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v4
+            - name: Setup node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "24.x"
+            - run: npm ci
+            - run: npm lint
+            - run: npm run build
+            - run: npm test:unit
