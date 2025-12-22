@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import me.hinsinger.hinz.common.huid.HUID;
 import me.hinsinger.hinz.common.time.timestamp.Timestamp;
 import software.blacknode.backend.domain.entity.DomainEntity;
@@ -24,6 +25,7 @@ import software.blacknode.backend.domain.organization.meta.modify.OrganizationMo
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Organization implements DomainEntity, Creatable, Modifiable, Deletable {
 	public static final HUID DEFAULT_ORGANIZATION_ID = HUID.fromString("e63c7895-6d65-41cb-9400-000000000001");
 	
