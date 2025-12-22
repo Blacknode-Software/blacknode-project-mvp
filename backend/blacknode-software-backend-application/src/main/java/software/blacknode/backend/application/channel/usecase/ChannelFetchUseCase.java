@@ -7,52 +7,40 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.application.access.AccessControlService;
 import software.blacknode.backend.application.access.AccessControlService.AccessLevel;
 import software.blacknode.backend.application.channel.ChannelService;
-import software.blacknode.backend.application.channel.command.ChannelCreationCommand;
+import software.blacknode.backend.application.channel.command.ChannelFetchCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
-import software.blacknode.backend.domain.channel.meta.create.impl.ChannelDefaultCreationMeta;
+import software.blacknode.backend.domain.channel.Channel;
 import software.blacknode.backend.domain.context.SessionContext;
+
 
 @Service
 @RequiredArgsConstructor
-public class ChannelCreationUseCase implements ResultExecutionUseCase<ChannelCreationCommand, ChannelCreationUseCase.Result> {
+public class ChannelFetchUseCase implements ResultExecutionUseCase<ChannelFetchCommand, ChannelFetchUseCase.Result> {
 
 	private final AccessControlService accessControlService;
-	
+
 	private final ChannelService channelService;
-	
+
 	@Autowired
 	private SessionContext sessionContext;
 	
 	@Override
-	public Result execute(ChannelCreationCommand command) {
+	public Result execute(ChannelFetchCommand command) {
 		var organizationId = sessionContext.getOrganizationId();
 		var memberId = sessionContext.getMemberId();
 		
-		var projectId = command.getProjectId();
+		var channelId = command.getChannelId();
 		
+		accessControlService.ensureMemberHasChannelAccess(organizationId, memberId, 
+				channelId, AccessLevel.READ);
 		
-		accessControlService.ensureMemberHasProjectAccess(organizationId, memberId, 
-				projectId, AccessLevel.MANAGE);
-
-		var name = command.getName();
-		var description = command.getDescription();
-		var color = command.getColor();
-		
-		var meta = ChannelDefaultCreationMeta.builder()
-				.name(name)
-				.description(description)
-				.color(color)
-				.projectId(projectId)
-				.build();
-		
-		var channel = channelService.create(organizationId, meta);
+		var channel = channelService.getOrThrow(organizationId, channelId);
 	
 		return Result.builder()
-				.channelId(channel.getId())
+				.channel(channel)
 				.build();
 	}
 
@@ -60,8 +48,9 @@ public class ChannelCreationUseCase implements ResultExecutionUseCase<ChannelCre
 	@Builder
 	@NonNull
 	public static class Result {
-		
-		private final HUID channelId;
-		
+
+		private final Channel channel;
+
 	}
+
 }

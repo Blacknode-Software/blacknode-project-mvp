@@ -8,12 +8,9 @@ import software.blacknode.backend.application.command.ExecutionCommand;
 
 @Getter
 @Builder
-public class ChannelCreationCommand implements ExecutionCommand {
-
-	private final String name;
-	private final String description;
-	private final String color;
+public class ChannelFetchCommand implements ExecutionCommand {
 	
 	@NonNull
-	private final HUID projectId;
+	private final HUID channelId;
+
 }
