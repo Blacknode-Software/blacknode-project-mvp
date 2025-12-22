@@ -19,12 +19,12 @@ import software.blacknode.backend.infrastructure.project.entity.repository.Proje
 @RequiredArgsConstructor
 public class ProjectRepositoryImpl implements ProjectRepository, OrganizationRelatedEntityRepository<Project, ProjectEntity> {
 
-	private final ProjectEntityMapper projectEntityMapper;
-	private final ProjectEntityRepository projectEntityRepository;
+	private final ProjectEntityRepository repository;
+	private final ProjectEntityMapper mapper;
 	
 	@Override
 	public Optional<Project> findById(HUID organizationId, HUID id) {
-		var project = projectEntityRepository.queryByIdAndOrganizationIdAndState(id.toUUID(), 
+		var project = repository.queryByIdAndOrganizationIdAndState(id.toUUID(), 
 				organizationId.toUUID(), EntityState.ACTIVE);
 		
 		return project.map(this::toDomainEntity);
@@ -34,7 +34,7 @@ public class ProjectRepositoryImpl implements ProjectRepository, OrganizationRel
 	public List<Project> findAllById(HUID organizationId, List<HUID> ids) {
 		var uuidIds = ids.stream().map(HUID::toUUID).toList();
 		
-		var projects = projectEntityRepository.queryAllByIdInAndOrganizationIdAndState(uuidIds, 
+		var projects = repository.queryAllByIdInAndOrganizationIdAndState(uuidIds, 
 				organizationId.toUUID(), EntityState.ACTIVE);
 		
 		return projects.stream()
@@ -44,7 +44,7 @@ public class ProjectRepositoryImpl implements ProjectRepository, OrganizationRel
 
 	@Override
 	public List<Project> findProjectInOrganization(HUID organizationId) {
-		var projects = projectEntityRepository.queryAllByOrganizationIdAndState(organizationId.toUUID(), 
+		var projects = repository.queryAllByOrganizationIdAndState(organizationId.toUUID(), 
 				EntityState.ACTIVE);
 		
 		return projects.stream()
@@ -58,17 +58,17 @@ public class ProjectRepositoryImpl implements ProjectRepository, OrganizationRel
 		
 		var projectEntity = toInfrastructureEntity(project);
 		
-		projectEntityRepository.save(projectEntity);
+		repository.save(projectEntity);
 	}
 	
 	@Override
 	public ProjectEntity toInfrastructureEntity(Project project) {
-		return projectEntityMapper.toInfrastructureEntity(project);
+		return mapper.toInfrastructureEntity(project);
 	}
 	
 	@Override
 	public Project toDomainEntity(ProjectEntity projectEntity) {
-		return projectEntityMapper.toDomainEntity(projectEntity);
+		return mapper.toDomainEntity(projectEntity);
 	}
 
 }

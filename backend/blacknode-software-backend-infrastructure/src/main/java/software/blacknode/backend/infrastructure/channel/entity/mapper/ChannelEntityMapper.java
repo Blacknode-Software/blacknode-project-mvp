@@ -1,43 +1,47 @@
-package software.blacknode.backend.infrastructure.organization.entity.mapper;
+package software.blacknode.backend.infrastructure.channel.entity.mapper;
 
 import org.mapstruct.Mapper;
 
-import software.blacknode.backend.domain.organization.Organization;
-import software.blacknode.backend.domain.organization.meta.OrganizationMeta;
+import software.blacknode.backend.domain.channel.Channel;
+import software.blacknode.backend.domain.channel.meta.ChannelMeta;
+import software.blacknode.backend.infrastructure.channel.entity.ChannelEntity;
+import software.blacknode.backend.infrastructure.channel.entity.meta.ChannelEntityMeta;
 import software.blacknode.backend.infrastructure.entity.mapper.InfrastructureMapper;
 import software.blacknode.backend.infrastructure.entity.mapper.annotation.domain.CreationMappingDomain;
 import software.blacknode.backend.infrastructure.entity.mapper.annotation.domain.DeletionMappingDomain;
 import software.blacknode.backend.infrastructure.entity.mapper.annotation.domain.IdMappingDomain;
 import software.blacknode.backend.infrastructure.entity.mapper.annotation.domain.ModificationMappingDomain;
+import software.blacknode.backend.infrastructure.entity.mapper.annotation.domain.OrganizationIdMappingDomain;
 import software.blacknode.backend.infrastructure.entity.mapper.annotation.infrastructure.CreationMappingInfrastructure;
 import software.blacknode.backend.infrastructure.entity.mapper.annotation.infrastructure.DeletionMappingInfrastructure;
 import software.blacknode.backend.infrastructure.entity.mapper.annotation.infrastructure.IdMappingInfrastructure;
 import software.blacknode.backend.infrastructure.entity.mapper.annotation.infrastructure.ModificationMappingInfrastructure;
+import software.blacknode.backend.infrastructure.entity.mapper.annotation.infrastructure.OrganizationIdMappingInfrastructure;
 import software.blacknode.backend.infrastructure.entity.mapper.annotation.infrastructure.StateMappingInfrastructure;
-import software.blacknode.backend.infrastructure.organization.entity.OrganizationEntity;
-import software.blacknode.backend.infrastructure.organization.entity.meta.OrganizationEntityMeta;
 
 @Mapper(componentModel = "spring")
-public interface OrganizationEntityMapper extends InfrastructureMapper<Organization, OrganizationEntity> {
+public interface ChannelEntityMapper extends InfrastructureMapper<Channel, ChannelEntity> {
 
 	@IdMappingInfrastructure
+	@OrganizationIdMappingInfrastructure
 	
 	@CreationMappingInfrastructure
 	@ModificationMappingInfrastructure
 	@DeletionMappingInfrastructure
 	
 	@StateMappingInfrastructure
-	OrganizationEntity toInfrastructureEntity(Organization domainEntity);
-	
-	
+	public ChannelEntity toInfrastructureEntity(Channel domainEntity);
+
 	@IdMappingDomain
+	@OrganizationIdMappingDomain
 	
 	@CreationMappingDomain
 	@ModificationMappingDomain
 	@DeletionMappingDomain
-	Organization toDomainEntity(OrganizationEntity infrastructureEntity);
+	public Channel toDomainEntity(ChannelEntity infrastructureEntity);
+
+	public ChannelEntityMeta map(ChannelMeta meta);
 	
-	OrganizationEntityMeta map(OrganizationMeta meta);
+	public ChannelMeta map(ChannelEntityMeta meta);
 	
-	OrganizationMeta map(OrganizationEntityMeta meta);
 }

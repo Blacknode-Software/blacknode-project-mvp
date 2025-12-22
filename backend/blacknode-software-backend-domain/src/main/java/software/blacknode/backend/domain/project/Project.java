@@ -21,7 +21,7 @@ import software.blacknode.backend.domain.project.meta.create.ProjectCreationMeta
 import software.blacknode.backend.domain.project.meta.delete.ProjectDeletionMeta;
 import software.blacknode.backend.domain.project.meta.modify.ProjectModificationMeta;
 
-@Builder()
+@Builder
 @AllArgsConstructor(onConstructor = @__({ @Deprecated }))
 @ToString
 public class Project implements DomainEntity, Creatable, Modifiable, Deletable {

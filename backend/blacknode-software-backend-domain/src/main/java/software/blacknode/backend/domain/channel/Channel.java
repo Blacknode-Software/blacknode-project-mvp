@@ -3,6 +3,7 @@ package software.blacknode.backend.domain.channel;
 import java.util.Optional;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 import me.hinsinger.hinz.common.huid.HUID;
@@ -11,6 +12,7 @@ import software.blacknode.backend.domain.channel.meta.ChannelMeta;
 import software.blacknode.backend.domain.channel.meta.create.ChannelCreationMeta;
 import software.blacknode.backend.domain.channel.meta.delete.ChannelDeletionMeta;
 import software.blacknode.backend.domain.channel.meta.modify.ChannelModificationMeta;
+import software.blacknode.backend.domain.entity.DomainEntity;
 import software.blacknode.backend.domain.entity.modifier.impl.create.Creatable;
 import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
 import software.blacknode.backend.domain.entity.modifier.impl.delete.Deletable;
@@ -19,9 +21,10 @@ import software.blacknode.backend.domain.entity.modifier.impl.modify.Modifiable;
 import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 
+@Builder
 @AllArgsConstructor(onConstructor = @__({ @Deprecated }))
 @ToString
-public class Channel implements Creatable, Modifiable, Deletable {
+public class Channel implements DomainEntity, Creatable, Modifiable, Deletable {
 
 	@Getter private HUID id;
 	
