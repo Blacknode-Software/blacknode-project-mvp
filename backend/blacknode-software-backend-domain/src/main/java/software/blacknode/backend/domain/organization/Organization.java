@@ -47,7 +47,7 @@ public class Organization implements DomainEntity, Creatable, Modifiable, Deleta
 		var meta = meta0.get();
 		
 		if(meta instanceof OrganizationInitialCreationMeta _meta) {
-			var id = DEFAULT_ORGANIZATION_ID;
+			this.id = DEFAULT_ORGANIZATION_ID;
 		}
 		
 		if(meta instanceof OrganizationCreationMeta _meta) {

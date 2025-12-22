@@ -6,6 +6,6 @@ import software.blacknode.backend.application.command.ExecutionCommand;
 
 @Builder
 @Getter
-public class ProjectsInOrganizationFetchCommand implements ExecutionCommand {
+public class ProjectsInOrganizationCommand implements ExecutionCommand {
 
 }

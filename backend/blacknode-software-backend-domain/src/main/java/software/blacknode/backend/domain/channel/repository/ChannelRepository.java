@@ -8,9 +8,11 @@ import software.blacknode.backend.domain.channel.Channel;
 
 public interface ChannelRepository {
 
-	Optional<Channel> findById(HUID id);
+	Optional<Channel> findById(HUID organizationId, HUID id);
 	
-	List<Channel> findAllById(Iterable<HUID> ids);
+	List<Channel> findAllById(HUID organizationId, Iterable<HUID> ids);
+	
+	List<Channel> findByProjectId(HUID organizationId, HUID projectId);
 
-	void save(Channel channel);
+	void save(HUID organizationId, Channel channel);
 }

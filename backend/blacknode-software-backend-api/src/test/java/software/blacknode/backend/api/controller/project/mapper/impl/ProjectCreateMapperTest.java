@@ -11,7 +11,6 @@ import org.mapstruct.factory.Mappers;
 
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.api.controller.project.response.ProjectCreateResponse;
-import software.blacknode.backend.api.controller.response.Response.Status;
 import software.blacknode.backend.application.project.usecase.ProjectCreateUseCase;
 
 /**

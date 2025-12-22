@@ -13,19 +13,25 @@ import software.blacknode.backend.domain.channel.repository.ChannelRepository;
 public class ChannelRepositoryImpl implements ChannelRepository {
 
 	@Override
-	public Optional<Channel> findById(HUID id) {
+	public Optional<Channel> findById(HUID organizationId, HUID id) {
 		// TODO Auto-generated method stub
 		return Optional.empty();
 	}
 
 	@Override
-	public List<Channel> findAllById(Iterable<HUID> ids) {
+	public List<Channel> findAllById(HUID organizationId, Iterable<HUID> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void save(Channel channel) {
+	public List<Channel> findByProjectId(HUID organizationId, HUID projectId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void save(HUID organizationId, Channel channel) {
 		// TODO Auto-generated method stub
 		
 	}
