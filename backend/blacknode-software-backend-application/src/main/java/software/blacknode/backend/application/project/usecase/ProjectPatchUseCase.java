@@ -58,7 +58,7 @@ public class ProjectPatchUseCase implements ResultExecutionUseCase<ProjectPatchC
 			modifications.add(meta);
 		}
 		
-		else if(ProjectPatchOperation.NAME.isIn(operations)) {
+		if(ProjectPatchOperation.NAME.isIn(operations)) {
 			var description = command.getDescription();
 			
 			var meta = ProjectDescriptionModificationMeta.builder()
@@ -68,7 +68,7 @@ public class ProjectPatchUseCase implements ResultExecutionUseCase<ProjectPatchC
 			modifications.add(meta);
 		}
 		
-		else if(ProjectPatchOperation.COLOR.isIn(operations)) {
+		if(ProjectPatchOperation.COLOR.isIn(operations)) {
 			var color = command.getColor();
 			
 			var meta = ProjectColorModificationMeta.builder()
