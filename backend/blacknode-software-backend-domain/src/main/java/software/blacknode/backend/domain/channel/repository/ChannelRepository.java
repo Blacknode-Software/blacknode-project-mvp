@@ -10,7 +10,7 @@ public interface ChannelRepository {
 
 	Optional<Channel> findById(HUID organizationId, HUID id);
 	
-	List<Channel> findAllById(HUID organizationId, Iterable<HUID> ids);
+	List<Channel> findAllById(HUID organizationId, List<HUID> ids);
 	
 	List<Channel> findByProjectId(HUID organizationId, HUID projectId);
 

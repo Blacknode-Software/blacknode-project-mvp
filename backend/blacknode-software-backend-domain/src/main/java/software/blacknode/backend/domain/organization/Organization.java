@@ -24,7 +24,7 @@ import software.blacknode.backend.domain.organization.meta.modify.OrganizationMo
 
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor(onConstructor = @__({ @Deprecated }))
 @ToString
 public class Organization implements DomainEntity, Creatable, Modifiable, Deletable {
 	public static final HUID DEFAULT_ORGANIZATION_ID = HUID.fromString("e63c7895-6d65-41cb-9400-000000000001");

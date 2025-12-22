@@ -14,11 +14,9 @@ import software.blacknode.backend.application.project.usecase.ProjectPatchUseCas
 @Mapper(componentModel = "spring")
 public interface ProjectPatchMapper extends RequestMapper<ProjectPatchRequest, ProjectPatchCommand>, ResponseMapper<ProjectPatchUseCase.Result, ProjectPatchResponse> {
 
-	@Override
 	@PatchOperationsMappingRequest
 	ProjectPatchCommand toCommand(ProjectPatchRequest request);
 	
-	@Override
 	@ProjectResponseContentMapping
 	ProjectPatchResponse toResponse(ProjectPatchUseCase.Result result);
 	
