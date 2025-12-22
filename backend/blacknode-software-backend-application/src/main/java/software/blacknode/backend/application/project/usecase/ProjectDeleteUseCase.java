@@ -10,7 +10,6 @@ import software.blacknode.backend.application.project.ProjectService;
 import software.blacknode.backend.application.project.command.ProjectDeleteCommand;
 import software.blacknode.backend.application.usecase.ExecutionUseCase;
 import software.blacknode.backend.domain.context.SessionContext;
-import software.blacknode.backend.domain.project.meta.delete.impl.ProjectDefaultDeletionMeta;
 
 @Service
 @RequiredArgsConstructor
@@ -31,10 +30,7 @@ public class ProjectDeleteUseCase implements ExecutionUseCase<ProjectDeleteComma
 		
 		accessControlService.ensureMemberHasOrganizationAccess(memberId, organizationId, AccessLevel.MANAGE);
 		
-		var meta = ProjectDefaultDeletionMeta.builder()
-				.build();
-		
-		projectService.delete(organizationId, projectId, meta);		
+		projectService.delete(organizationId, projectId);		
 	}
 
 }

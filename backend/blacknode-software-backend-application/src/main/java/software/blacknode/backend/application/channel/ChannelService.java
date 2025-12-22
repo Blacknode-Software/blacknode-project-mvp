@@ -7,8 +7,10 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.domain.channel.Channel;
+import software.blacknode.backend.domain.channel.meta.delete.impl.ChannelDefaultDeletionMeta;
 import software.blacknode.backend.domain.channel.repository.ChannelRepository;
 import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
+import software.blacknode.backend.domain.entity.modifier.impl.delete.meta.DeletionMeta;
 import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 
@@ -42,6 +44,20 @@ public class ChannelService {
 		repository.save(channel);
 		
 		return channel;
+	}
+	
+	public void delete(HUID organizationId, HUID channelId) {
+		var meta = ChannelDefaultDeletionMeta.builder().build();
+		
+		delete(organizationId, channelId, meta);
+	}
+	
+	public void delete(HUID organizationId, HUID channelId, DeletionMeta meta) {
+		var channel = getOrThrow(organizationId, channelId);
+		
+		channel.delete(meta);
+		
+		repository.save(channel);
 	}
 	
 	public Channel getOrThrow(HUID organizationId, HUID channelId) {

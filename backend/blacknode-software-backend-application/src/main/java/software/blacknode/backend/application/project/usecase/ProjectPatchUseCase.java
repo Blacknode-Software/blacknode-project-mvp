@@ -18,7 +18,6 @@ import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
 import software.blacknode.backend.domain.context.SessionContext;
 import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
 import software.blacknode.backend.domain.project.Project;
-import software.blacknode.backend.domain.project.meta.modify.ProjectModificationMeta;
 import software.blacknode.backend.domain.project.meta.modify.impl.ProjectColorModificationMeta;
 import software.blacknode.backend.domain.project.meta.modify.impl.ProjectDescriptionModificationMeta;
 import software.blacknode.backend.domain.project.meta.modify.impl.ProjectNameModificationMeta;
