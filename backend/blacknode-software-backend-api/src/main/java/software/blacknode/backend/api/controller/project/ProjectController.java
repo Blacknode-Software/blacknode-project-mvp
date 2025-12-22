@@ -38,13 +38,13 @@ import software.blacknode.backend.api.controller.project.response.ProjectsListRe
 import software.blacknode.backend.api.controller.response.impl.SuccessResponse;
 import software.blacknode.backend.application.project.command.ProjectDeleteCommand;
 import software.blacknode.backend.application.project.command.ProjectFetchCommand;
-import software.blacknode.backend.application.project.command.ProjectsInOrganizationFetchCommand;
+import software.blacknode.backend.application.project.command.ProjectsInOrganizationCommand;
 import software.blacknode.backend.application.project.usecase.ProjectCreateUseCase;
 import software.blacknode.backend.application.project.usecase.ProjectDeleteUseCase;
 import software.blacknode.backend.application.project.usecase.ProjectFetchUseCase;
 import software.blacknode.backend.application.project.usecase.ProjectPatchUseCase;
 import software.blacknode.backend.application.project.usecase.ProjectsBatchFetchUseCase;
-import software.blacknode.backend.application.project.usecase.ProjectsInOrganizationFetchUseCase;
+import software.blacknode.backend.application.project.usecase.ProjectsInOrganizationUseCase;
 
 @Tag(name = "Projects", description = "Project management APIs")
 @RestController
@@ -58,7 +58,7 @@ public class ProjectController extends BaseController {
 	private final ProjectFetchUseCase projectFetchUseCase;
 	
 	private final ProjectsInOrganizationFetchMapper projectsInOganizationFetchMapper;
-	private final ProjectsInOrganizationFetchUseCase projectsInOrganizationFetchUseCase;
+	private final ProjectsInOrganizationUseCase projectsInOrganizationFetchUseCase;
 	
 	private final ProjectPatchMapper projectPatchMapper;
 	private final ProjectPatchUseCase projectPatchUseCase;
@@ -110,7 +110,7 @@ public class ProjectController extends BaseController {
 	@InvalidInputResponse
 	@GetMapping("/projects")
 	public ResponseEntity<ProjectsListResponse> getProjects() {
-		var command = ProjectsInOrganizationFetchCommand.builder()
+		var command = ProjectsInOrganizationCommand.builder()
 				.build();
 		
 		var result = projectsInOrganizationFetchUseCase.execute(command);
