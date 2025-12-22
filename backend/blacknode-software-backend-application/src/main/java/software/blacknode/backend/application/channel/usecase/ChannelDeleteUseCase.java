@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import software.blacknode.backend.application.access.AccessControlService;
 import software.blacknode.backend.application.channel.ChannelService;
 import software.blacknode.backend.application.channel.command.ChannelDeleteCommand;
+import software.blacknode.backend.application.shared.SharedDeletionService;
 import software.blacknode.backend.application.usecase.ExecutionUseCase;
 import software.blacknode.backend.domain.context.SessionContext;
 
@@ -14,7 +15,9 @@ import software.blacknode.backend.domain.context.SessionContext;
 @RequiredArgsConstructor
 public class ChannelDeleteUseCase implements ExecutionUseCase<ChannelDeleteCommand> {
 
-	private final AccessControlService accessControlService;
+	private final SharedDeletionService sharedDeletionService;
+	
+	private final AccessControlService accessControlService;	
 
 	private final ChannelService channelService;
 
@@ -35,7 +38,7 @@ public class ChannelDeleteUseCase implements ExecutionUseCase<ChannelDeleteComma
 		accessControlService.ensureMemberHasProjectAccess(organizationId, memberId, 
 				projectId, AccessControlService.AccessLevel.MANAGE);
 		
-		channelService.delete(organizationId, channelId);
+		sharedDeletionService.deleteChannelCascade(organizationId, channelId);
 	}
 
 }

@@ -6,8 +6,10 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import software.blacknode.backend.application.access.AccessControlService;
 import software.blacknode.backend.application.access.AccessControlService.AccessLevel;
+import software.blacknode.backend.application.channel.ChannelService;
 import software.blacknode.backend.application.project.ProjectService;
 import software.blacknode.backend.application.project.command.ProjectDeleteCommand;
+import software.blacknode.backend.application.shared.SharedDeletionService;
 import software.blacknode.backend.application.usecase.ExecutionUseCase;
 import software.blacknode.backend.domain.context.SessionContext;
 
@@ -15,8 +17,8 @@ import software.blacknode.backend.domain.context.SessionContext;
 @RequiredArgsConstructor
 public class ProjectDeleteUseCase implements ExecutionUseCase<ProjectDeleteCommand> {
 
+	private final SharedDeletionService sharedDeletionService;
 	private final AccessControlService accessControlService;
-	private final ProjectService projectService;
 	
 	@Autowired
 	private SessionContext context;
@@ -30,7 +32,7 @@ public class ProjectDeleteUseCase implements ExecutionUseCase<ProjectDeleteComma
 		
 		accessControlService.ensureMemberHasOrganizationAccess(memberId, organizationId, AccessLevel.MANAGE);
 		
-		projectService.delete(organizationId, projectId);		
+		sharedDeletionService.deleteProjectCascade(organizationId, projectId);
 	}
 
 }

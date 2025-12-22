@@ -25,7 +25,7 @@ public class ChannelService {
 		
 		channel.create(meta);
 		
-		repository.save(channel);
+		repository.save(organizationId, channel);
 		
 		return channel;
 	}
@@ -41,10 +41,11 @@ public class ChannelService {
 			channel.modify(meta);
 		}
 		
-		repository.save(channel);
+		repository.save(organizationId, channel);
 		
 		return channel;
 	}
+	
 	
 	public void delete(HUID organizationId, HUID channelId) {
 		var meta = ChannelDefaultDeletionMeta.builder().build();
@@ -57,16 +58,20 @@ public class ChannelService {
 		
 		channel.delete(meta);
 		
-		repository.save(channel);
+		repository.save(organizationId, channel);
+	}
+	
+	public List<Channel> getByProjectId(HUID organizationId, HUID projectId) {
+		return repository.findByProjectId(organizationId, projectId);
 	}
 	
 	public Channel getOrThrow(HUID organizationId, HUID channelId) {
-		return repository.findById(channelId).
+		return repository.findById(organizationId, channelId).
 				orElseThrow(() -> new BlacknodeException("Channel with ID " + channelId + " not found."));
 	}
 	
 	public List<Channel> getByIds(HUID organizationId, List<HUID> channelIds) {
-		return repository.findAllById(channelIds);
+		return repository.findAllById(organizationId, channelIds);
 	}
 	
 }
