@@ -15,7 +15,7 @@ import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.api.controller.project.response.content.ProjectResponseContent;
 import software.blacknode.backend.domain.project.Project;
 import software.blacknode.backend.domain.project.meta.ProjectMeta;
-import software.blacknode.backend.domain.project.meta.create.ProjectInitialCreationMeta;
+import software.blacknode.backend.domain.project.meta.create.impl.ProjectInitialCreationMeta;
 
 /**
  * Test class for {@link ProjectMapper} to verify that all fields are correctly

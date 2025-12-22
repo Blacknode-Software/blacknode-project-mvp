@@ -14,7 +14,7 @@ import software.blacknode.backend.api.controller.organization.response.Organizat
 import software.blacknode.backend.api.controller.response.Response;
 import software.blacknode.backend.application.organization.usecase.OrganizationFetchUseCase;
 import software.blacknode.backend.domain.organization.Organization;
-import software.blacknode.backend.domain.organization.meta.create.OrganizationInitialCreationMeta;
+import software.blacknode.backend.domain.organization.meta.create.impl.OrganizationInitialCreationMeta;
 
 /**
  * Test class for {@link OrganizationFetchMapper} to verify that all fields are correctly

@@ -14,7 +14,7 @@ import org.mapstruct.factory.Mappers;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.api.controller.organization.response.content.OrganizationResponseContent;
 import software.blacknode.backend.domain.organization.Organization;
-import software.blacknode.backend.domain.organization.meta.create.OrganizationInitialCreationMeta;
+import software.blacknode.backend.domain.organization.meta.create.impl.OrganizationInitialCreationMeta;
 
 /**
  * Test class for {@link OrganizationMapper} to verify that all fields are correctly

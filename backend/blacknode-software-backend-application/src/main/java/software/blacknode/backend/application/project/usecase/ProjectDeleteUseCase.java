@@ -10,7 +10,7 @@ import software.blacknode.backend.application.project.ProjectService;
 import software.blacknode.backend.application.project.command.ProjectDeleteCommand;
 import software.blacknode.backend.application.usecase.ExecutionUseCase;
 import software.blacknode.backend.domain.context.SessionContext;
-import software.blacknode.backend.domain.project.meta.delete.ProjectDefaultDeletionMeta;
+import software.blacknode.backend.domain.project.meta.delete.impl.ProjectDefaultDeletionMeta;
 
 @Service
 @RequiredArgsConstructor
