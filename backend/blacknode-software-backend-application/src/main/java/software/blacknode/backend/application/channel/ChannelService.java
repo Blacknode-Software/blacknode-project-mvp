@@ -74,4 +74,8 @@ public class ChannelService {
 		return repository.findAllById(organizationId, channelIds);
 	}
 	
+	public List<Channel> getAllInProject(HUID organizationId, HUID projectId) {
+		return repository.findByProjectId(organizationId, projectId);
+	}
+	
 }

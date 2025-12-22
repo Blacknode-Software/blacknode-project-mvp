@@ -21,8 +21,8 @@ import software.blacknode.backend.domain.project.Project;
 @RequiredArgsConstructor
 public class ProjectsBatchFetchUseCase implements ResultExecutionUseCase<ProjectsBatchFetchCommand, ProjectsBatchFetchUseCase.Result> {
 	
-	private final ProjectService projectService;
 	private final AccessControlService accessControlService;
+	private final ProjectService projectService;
 	
 	@Autowired
 	private SessionContext context;
@@ -46,6 +46,7 @@ public class ProjectsBatchFetchUseCase implements ResultExecutionUseCase<Project
 	@Getter
 	@Builder
 	public static class Result {
+		
 		@NonNull
 		private List<Project> projects;
 		

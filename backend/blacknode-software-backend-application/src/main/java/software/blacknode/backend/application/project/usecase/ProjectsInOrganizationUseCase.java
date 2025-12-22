@@ -13,13 +13,13 @@ import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.application.access.AccessControlService;
 import software.blacknode.backend.application.access.AccessControlService.AccessLevel;
 import software.blacknode.backend.application.project.ProjectService;
-import software.blacknode.backend.application.project.command.ProjectsInOrganizationFetchCommand;
+import software.blacknode.backend.application.project.command.ProjectsInOrganizationCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
 import software.blacknode.backend.domain.context.SessionContext;
 
 @Service
 @RequiredArgsConstructor
-public class ProjectsInOrganizationFetchUseCase implements ResultExecutionUseCase<ProjectsInOrganizationFetchCommand, ProjectsInOrganizationFetchUseCase.Result> {
+public class ProjectsInOrganizationUseCase implements ResultExecutionUseCase<ProjectsInOrganizationCommand, ProjectsInOrganizationUseCase.Result> {
 	
 	private final AccessControlService accessControlService;
 	private final ProjectService projectService;
@@ -29,7 +29,7 @@ public class ProjectsInOrganizationFetchUseCase implements ResultExecutionUseCas
 	
 	
 	@Override
-	public Result execute(ProjectsInOrganizationFetchCommand command) {
+	public Result execute(ProjectsInOrganizationCommand command) {
 		var memberId = context.getMemberId();
 		var organizationId = context.getOrganizationId();
 		

@@ -26,14 +26,15 @@ import software.blacknode.backend.domain.project.meta.modify.impl.ProjectNameMod
 @RequiredArgsConstructor
 public class ProjectPatchUseCase implements ResultExecutionUseCase<ProjectPatchCommand, ProjectPatchUseCase.Result> {
 
-	private final ProjectService projectService;
 	private final AccessControlService accessControlService;
+	private final ProjectService projectService;
 	
 	@Autowired
 	private SessionContext context;
 	
 	@Override
 	public Result execute(ProjectPatchCommand command) {
+		
 		var organizationId = context.getOrganizationId();
 		var memberId = context.getMemberId();
 		
