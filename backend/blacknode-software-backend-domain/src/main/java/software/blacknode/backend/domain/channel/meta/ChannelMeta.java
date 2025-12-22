@@ -6,11 +6,13 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 import lombok.With;
 
 @Getter
 @With
 @Builder
+@ToString
 public class ChannelMeta {
 
 	@NotBlank

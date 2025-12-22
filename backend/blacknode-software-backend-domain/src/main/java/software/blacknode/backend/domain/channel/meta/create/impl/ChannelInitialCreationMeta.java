@@ -9,6 +9,7 @@ import software.blacknode.backend.domain.channel.meta.create.ChannelCreationMeta
 
 @Getter
 @Builder
+@ToString
 public class ChannelInitialCreationMeta implements ChannelCreationMeta {
 
 	private final String name;
