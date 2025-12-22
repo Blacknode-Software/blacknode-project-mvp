@@ -13,7 +13,7 @@ import software.blacknode.backend.application.project.ProjectService;
 import software.blacknode.backend.application.project.command.ProjectCreateCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
 import software.blacknode.backend.domain.context.SessionContext;
-import software.blacknode.backend.domain.project.meta.create.ProjectDefaultCreationMeta;
+import software.blacknode.backend.domain.project.meta.create.impl.ProjectDefaultCreationMeta;
 
 @Service
 @RequiredArgsConstructor

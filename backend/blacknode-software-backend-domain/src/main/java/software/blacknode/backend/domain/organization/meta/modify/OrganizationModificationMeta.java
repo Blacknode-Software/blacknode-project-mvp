@@ -1,13 +1,11 @@
 package software.blacknode.backend.domain.organization.meta.modify;
 
-import lombok.Builder;
-import lombok.Getter;
+import java.util.Optional;
+
 import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
 
-@Getter
-@Builder
-public class OrganizationNameModificationMeta implements ModificationMeta {
+public interface OrganizationModificationMeta extends ModificationMeta {
 
-	private final String name;
+	default Optional<String> getName() { return Optional.empty(); }
 	
 }

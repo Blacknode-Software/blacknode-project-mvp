@@ -11,6 +11,7 @@ import software.blacknode.backend.domain.entity.modifier.impl.delete.meta.Deleti
 import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.project.Project;
+import software.blacknode.backend.domain.project.meta.delete.impl.ProjectDefaultDeletionMeta;
 import software.blacknode.backend.domain.project.repository.ProjectRepository;
 
 @Service
@@ -32,17 +33,13 @@ public class ProjectService {
 	}
 	
 	public Project modify(HUID organizationId, HUID projectId, ModificationMeta meta) {
-		var project = getOrThrow(organizationId, projectId);
-		
-		project.modify(meta);
-		
-		repository.save(organizationId, project);
-		
-		return project;
+		return modify(organizationId, projectId, List.of(meta));
 	}
 	
 	public Project modify(HUID organizationId, HUID projectId, List<ModificationMeta> metas) {
 		var project = getOrThrow(organizationId, projectId);
+		
+		// add validation if needed
 		
 		for (var meta : metas) {
 			project.modify(meta);
@@ -51,6 +48,12 @@ public class ProjectService {
 		repository.save(organizationId, project);
 		
 		return project;
+	}
+	
+	public void delete(HUID organizationId, HUID projectId) {
+		var meta = ProjectDefaultDeletionMeta.builder().build();
+		
+		delete(organizationId, projectId, meta);
 	}
 	
 	public void delete(HUID organizationId, HUID projectId, DeletionMeta meta) {

@@ -14,7 +14,6 @@ public class OrganizationMeta {
 	
 	@NotBlank
 	@Size(min = 3)
-	@Builder.Default
-	private final String name = "Unnamed Organization";
+	private final String name;
 
 }

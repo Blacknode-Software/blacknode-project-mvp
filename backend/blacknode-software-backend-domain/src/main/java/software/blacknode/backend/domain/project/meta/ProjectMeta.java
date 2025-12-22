@@ -1,5 +1,9 @@
 package software.blacknode.backend.domain.project.meta;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.With;
@@ -9,12 +13,15 @@ import lombok.With;
 @Builder
 public class ProjectMeta {
 
-	@Builder.Default
-	private final String name = "Unknown Project";
+	@NotBlank
+	@Size(min = 3)
+	private final String name;
 	
-	@Builder.Default
-	private final String description = "Unknown description";
+	@NotNull
+	private final String description;
 	
-	@Builder.Default
-	private final String color = "#FAFAFA";
+	@NotBlank
+	@Pattern(regexp = "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$")
+	private final String color;
+	
 }

@@ -1,5 +1,8 @@
 package software.blacknode.backend.application.organization.usecase;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import lombok.Builder;
@@ -12,9 +15,9 @@ import software.blacknode.backend.application.organization.command.OrganizationP
 import software.blacknode.backend.application.patch.impl.PatchOperationEnum;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
 import software.blacknode.backend.domain.context.SessionContext;
-import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.list.ModificationMetaList;
+import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
 import software.blacknode.backend.domain.organization.Organization;
-import software.blacknode.backend.domain.organization.meta.modify.OrganizationNameModificationMeta;
+import software.blacknode.backend.domain.organization.meta.modify.impl.OrganizationNameModificationMeta;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +37,7 @@ public class OrganizationPatchUseCase implements ResultExecutionUseCase<Organiza
 		
 		var operations = command.getOperations();
 		
-		var modifications = ModificationMetaList.empty();
+		List<ModificationMeta> modifications = new ArrayList<>();
 		
 		if(OrganizationPatchOperation.NAME.isIn(operations)) {
 			
