@@ -1,5 +1,8 @@
 package software.blacknode.backend.application.project.usecase;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +16,12 @@ import software.blacknode.backend.application.project.ProjectService;
 import software.blacknode.backend.application.project.command.ProjectPatchCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
 import software.blacknode.backend.domain.context.SessionContext;
-import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.list.ModificationMetaList;
+import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
 import software.blacknode.backend.domain.project.Project;
-import software.blacknode.backend.domain.project.meta.modify.ProjectColorModificationMeta;
-import software.blacknode.backend.domain.project.meta.modify.ProjectDescriptionModificationMeta;
-import software.blacknode.backend.domain.project.meta.modify.ProjectNameModificationMeta;
+import software.blacknode.backend.domain.project.meta.modify.ProjectModificationMeta;
+import software.blacknode.backend.domain.project.meta.modify.impl.ProjectColorModificationMeta;
+import software.blacknode.backend.domain.project.meta.modify.impl.ProjectDescriptionModificationMeta;
+import software.blacknode.backend.domain.project.meta.modify.impl.ProjectNameModificationMeta;
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +44,7 @@ public class ProjectPatchUseCase implements ResultExecutionUseCase<ProjectPatchC
 		
 		var operations = command.getOperations();
 		
-		var modifications = ModificationMetaList.empty();
+		List<ModificationMeta> modifications = new ArrayList<>();
 		
 		if(ProjectPatchOperation.DESCRIPTION.isIn(operations)) {
 			var name = command.getName();

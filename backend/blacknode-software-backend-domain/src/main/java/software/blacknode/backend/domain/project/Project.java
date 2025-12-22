@@ -16,12 +16,11 @@ import software.blacknode.backend.domain.entity.modifier.impl.modify.Modifiable;
 import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.project.meta.ProjectMeta;
-import software.blacknode.backend.domain.project.meta.create.ProjectInitialCreationMeta;
-import software.blacknode.backend.domain.project.meta.modify.ProjectColorModificationMeta;
-import software.blacknode.backend.domain.project.meta.modify.ProjectDescriptionModificationMeta;
-import software.blacknode.backend.domain.project.meta.modify.ProjectNameModificationMeta;
+import software.blacknode.backend.domain.project.meta.create.ProjectCreationMeta;
+import software.blacknode.backend.domain.project.meta.delete.ProjectDeletionMeta;
+import software.blacknode.backend.domain.project.meta.modify.ProjectModificationMeta;
 
-@Builder
+@Builder()
 @AllArgsConstructor(onConstructor = @__({ @Deprecated }))
 public class Project implements DomainEntity, Creatable, Modifiable, Deletable {
 
@@ -47,22 +46,21 @@ public class Project implements DomainEntity, Creatable, Modifiable, Deletable {
 		
 		this.id = HUID.random();
 		
-		this.meta = ProjectMeta.builder().build();
-		
 		var meta = meta0.get();
 		
-		if(meta instanceof ProjectInitialCreationMeta _meta) {
-			var name = _meta.getName();
-			var description = _meta.getDescription();
-			var color = _meta.getColor();
+		if(meta instanceof ProjectCreationMeta _meta) {
+			var name = _meta.getName().orElse("Unnamed Project");
+			var description = _meta.getDescription().orElse("No description provided.");
+			var color = _meta.getColor().orElse("#FAFAFA");
 			
-			this.meta = this.meta.withName(name)
-					.withDescription(description)
-					.withColor(color);
+			this.meta = ProjectMeta.builder()
+					.name(name)
+					.description(description)
+					.color(color)
+					.build();
 			
-		} else {
-			throwUnsupportedCreationMeta(meta);
-		}
+		} 
+		else throwUnsupportedCreationMeta(meta);
 		
 		creationTimestamp = Timestamp.now();
 	}
@@ -75,24 +73,17 @@ public class Project implements DomainEntity, Creatable, Modifiable, Deletable {
 		
 		var meta = meta0.get();
 		
-		if(meta instanceof ProjectNameModificationMeta _meta) {
-			var name = _meta.getName();
+		if(meta instanceof ProjectModificationMeta _meta) {
+			var updated = this.meta;
 			
-			this.meta = this.meta.withName(name);
+			updated = _meta.getName().map(updated::withName).orElse(updated);
+		    updated = _meta.getDescription().map(updated::withDescription).orElse(updated);
+		    updated = _meta.getColor().map(updated::withColor).orElse(updated);
+		    
+			this.meta = updated;
 		}
-		else if(meta instanceof ProjectDescriptionModificationMeta _meta) {
-			var description = _meta.getDescription();
-			
-			this.meta = this.meta.withDescription(description);
-		}
-		else if(meta instanceof ProjectColorModificationMeta _meta) {
-			var color = _meta.getColor();
-			
-			this.meta = this.meta.withColor(color);
-		}
-		else {
-			throwUnsupportedModificationMeta(meta);
-		}
+		else throwUnsupportedModificationMeta(meta);
+		
 		
 		modificationTimestamp = Timestamp.now();
 	}
@@ -102,6 +93,13 @@ public class Project implements DomainEntity, Creatable, Modifiable, Deletable {
 		ensureCreated(meta0);
 		ensureNotDeleted(meta0);
 		ensureDeletionMetaProvided(meta0);
+		
+		var meta = meta0.get();
+		
+		if(meta instanceof ProjectDeletionMeta _meta) {
+			// No specific deletion logic for now
+		}
+		else throwUnsupportedDeletionMeta(meta);
 		
 		deletionTimestamp = Timestamp.now();
 	}
