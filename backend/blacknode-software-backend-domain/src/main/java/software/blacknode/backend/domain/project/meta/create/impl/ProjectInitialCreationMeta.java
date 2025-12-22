@@ -4,10 +4,11 @@ import java.util.Optional;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 import software.blacknode.backend.domain.project.meta.create.ProjectCreationMeta;
 
-@Getter
 @Builder
+@ToString
 public class ProjectInitialCreationMeta implements ProjectCreationMeta {
 
 	private String name;

@@ -6,18 +6,21 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 import lombok.With;
 
 @Getter
 @With
 @Builder
+@ToString
 public class ProjectMeta {
 
 	@NotBlank
-	@Size(min = 3)
+	@Size(min = 3, max = 30)
 	private final String name;
 	
 	@NotNull
+	@Size(max = 255)
 	private final String description;
 	
 	@NotBlank
