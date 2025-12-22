@@ -14,10 +14,11 @@ import lombok.With;
 public class ProjectMeta {
 
 	@NotBlank
-	@Size(min = 3)
+	@Size(min = 3, max = 30)
 	private final String name;
 	
 	@NotNull
+	@Size(max = 255)
 	private final String description;
 	
 	@NotBlank

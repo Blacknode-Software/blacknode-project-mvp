@@ -1,5 +1,9 @@
 package software.blacknode.backend.domain.channel.meta;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.With;
@@ -9,12 +13,15 @@ import lombok.With;
 @Builder
 public class ChannelMeta {
 
-	@Builder.Default
-	private String name = "Unknown Channel";
+	@NotBlank
+	@Size(min = 3, max = 30)
+	private String name;
 	
-	@Builder.Default
-	private String description = "Unknown description";
+	@NotNull
+	@Size(max = 255)
+	private String description;
 	
-	@Builder.Default
-	private String color = "#FAFAFA";
+	@NotBlank
+	@Pattern(regexp = "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$")
+	private String color;
 }

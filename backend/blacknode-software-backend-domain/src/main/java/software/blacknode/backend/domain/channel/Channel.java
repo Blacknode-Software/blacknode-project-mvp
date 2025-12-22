@@ -6,7 +6,9 @@ import lombok.Getter;
 import me.hinsinger.hinz.common.huid.HUID;
 import me.hinsinger.hinz.common.time.timestamp.Timestamp;
 import software.blacknode.backend.domain.channel.meta.ChannelMeta;
-import software.blacknode.backend.domain.channel.meta.create.impl.ChannelInitialCreationMeta;
+import software.blacknode.backend.domain.channel.meta.create.ChannelCreationMeta;
+import software.blacknode.backend.domain.channel.meta.delete.ChannelDeletionMeta;
+import software.blacknode.backend.domain.channel.meta.modify.ChannelModificationMeta;
 import software.blacknode.backend.domain.entity.modifier.impl.create.Creatable;
 import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
 import software.blacknode.backend.domain.entity.modifier.impl.delete.Deletable;
@@ -45,22 +47,20 @@ public class Channel implements Creatable, Modifiable, Deletable {
 		
 		var meta = meta0.get();
 		
-		// REWORK THIS PART
-//		if(meta instanceof ChannelInitialCreationMeta _meta) {
-//			var projectId = _meta.getProjectId();
-//			
-//			var name = _meta.getName();
-//			var description = _meta.getDescription();
-//			var color = _meta.getColor();			
-//			
-//			this.meta = this.meta.withName(name)
-//					.withDescription(description)
-//					.withColor(color);
-//			
-//			this.projectId = projectId;
-//		} else 
-//			throwUnsupportedCreationMeta(meta);
-//		}
+		if(meta instanceof ChannelCreationMeta _meta) {
+			var projectId = _meta.getProjectId();
+
+			var name = _meta.getName().orElse("Unnamed Channel");
+			var description = _meta.getDescription().orElse("");
+			var color = _meta.getColor().orElse("#FFFFFF");
+			
+			this.meta = this.meta
+					.withName(name)
+					.withDescription(description)
+					.withColor(color);
+			
+			this.projectId = projectId;
+		} else throwUnsupportedCreationMeta(meta);
 		
 		creationTimestamp = Timestamp.now();
 	}
@@ -71,6 +71,18 @@ public class Channel implements Creatable, Modifiable, Deletable {
 		ensureNotDeleted(meta0);
 		ensureModificationMetaProvided(meta0);
 		
+		var meta = meta0.get();
+		
+		if(meta instanceof ChannelModificationMeta _meta) {
+			var updated = this.meta;
+			
+			updated = _meta.getName().map(updated::withName).orElse(updated);
+			updated = _meta.getDescription().map(updated::withDescription).orElse(updated);
+			updated = _meta.getColor().map(updated::withColor).orElse(updated);
+			
+			this.meta = updated;
+		} else throwUnsupportedModificationMeta(meta);
+		
 		modificationTimestamp = Timestamp.now();
 	}
 
@@ -79,6 +91,12 @@ public class Channel implements Creatable, Modifiable, Deletable {
 		ensureCreated(meta0);
 		ensureNotDeleted(meta0);
 		ensureDeletionMetaProvided(meta0);
+		
+		var meta = meta0.get();
+		
+		if(meta instanceof ChannelDeletionMeta _meta) {
+			// No specific deletion logic for now
+		} else throwUnsupportedDeletionMeta(meta);
 		
 		deletionTimestamp = Timestamp.now();
 	}
