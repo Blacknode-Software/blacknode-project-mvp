@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.domain.channel.meta.create.ChannelCreationMeta;
 
