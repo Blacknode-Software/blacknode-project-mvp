@@ -10,7 +10,7 @@ import software.blacknode.backend.api.controller.mapper.impl.ResponseMapper;
 import software.blacknode.backend.application.channel.command.ChannelsBatchFetchCommand;
 import software.blacknode.backend.application.channel.usecase.ChannelsBatchFetchUseCase;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface ChannelsBatchFetchMapper extends RequestMapper<ChannelsBatchFetchRequest, ChannelsBatchFetchCommand>, ResponseMapper<ChannelsBatchFetchUseCase.Result, ChannelsBatchFetchResponse> {
 
 	@Override

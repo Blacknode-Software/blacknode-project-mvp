@@ -69,7 +69,7 @@ public class ChannelController extends BaseController {
 	@OrganizationHeader
 	@Operation(summary = "Get a channel by ID")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Found the channel") })
-	@GetMapping("/channels/{channelId}")
+	@GetMapping("/channels/{id}")
 	public ResponseEntity<ChannelResponse> getChannel(@PathVariable UUID id) {
 		var command = ChannelFetchCommand.builder()
 				.channelId(HUID.fromUUID(id))
