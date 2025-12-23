@@ -25,7 +25,7 @@ import software.blacknode.backend.api.controller.organization.annotation.Organiz
 import software.blacknode.backend.api.controller.project.mapper.impl.ProjectCreateMapper;
 import software.blacknode.backend.api.controller.project.mapper.impl.ProjectFetchMapper;
 import software.blacknode.backend.api.controller.project.mapper.impl.ProjectPatchMapper;
-import software.blacknode.backend.api.controller.project.mapper.impl.ProjectsBatchMapper;
+import software.blacknode.backend.api.controller.project.mapper.impl.ProjectsBatchFetchMapper;
 import software.blacknode.backend.api.controller.project.mapper.impl.ProjectsInOrganizationFetchMapper;
 import software.blacknode.backend.api.controller.project.request.ProjectCreateRequest;
 import software.blacknode.backend.api.controller.project.request.ProjectPatchRequest;
@@ -63,29 +63,12 @@ public class ProjectController extends BaseController {
 	private final ProjectPatchMapper projectPatchMapper;
 	private final ProjectPatchUseCase projectPatchUseCase;
 	
-	private final ProjectsBatchMapper projectsBatchMapper;
+	private final ProjectsBatchFetchMapper projectsBatchMapper;
 	private final ProjectsBatchFetchUseCase projectsBatchUseCase;
 	
 	
 	private final ProjectDeleteUseCase projectDeleteUseCase;
 	
-	@OrganizationHeader
-	@Operation(summary = "Create a new project", description = "Creates a new project within the specified organization.")
-	@ApiResponses(value = { @ApiResponse(responseCode = "201", description = "Project created") })
-	@InvalidInputResponse
-	@PostMapping("/projects")
-	public ResponseEntity<ProjectCreateResponse> createProject(@PathVariable UUID organizationId,
-			@RequestBody ProjectCreateRequest request) {
-		
-		var command = projectCreateMapper.toCommand(request);
-		
-		var result = projectCreateUseCase.execute(command);
-		
-		var response = projectCreateMapper.toResponse(result);
-		
-		return response.toSuccessResponse(HttpStatus.CREATED);
-	}
-
 	@OrganizationHeader
 	@Operation(summary = "Get a project by ID", description = "Fetches a project by its unique identifier.")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Found the project")})
@@ -100,8 +83,8 @@ public class ProjectController extends BaseController {
 		var result = projectFetchUseCase.execute(command);
 		
 		var response = projectFetchMapper.toResponse(result);
-
-		return response.toOkResponse("Successfully fetched projects.");
+		
+		return response.toOkResponse("Project fetched successfully.");
 	}
 
 	@OrganizationHeader
@@ -134,6 +117,21 @@ public class ProjectController extends BaseController {
 		
 		return response.toOkResponse("Successfully fetched projects.");
 	}
+	
+	@OrganizationHeader
+	@Operation(summary = "Create a new project", description = "Creates a new project within the specified organization.")
+	@ApiResponses(value = { @ApiResponse(responseCode = "201", description = "Project created") })
+	@InvalidInputResponse
+	@PostMapping("/projects")
+	public ResponseEntity<ProjectCreateResponse> createProject(@RequestBody ProjectCreateRequest request) {
+		var command = projectCreateMapper.toCommand(request);
+		
+		var result = projectCreateUseCase.execute(command);
+		
+		var response = projectCreateMapper.toResponse(result);
+		
+		return response.toSuccessResponse(HttpStatus.CREATED);
+	}
 
 	@OrganizationHeader
 	@Operation(summary = "Update an existing project")
@@ -141,10 +139,8 @@ public class ProjectController extends BaseController {
 	@InvalidInputResponse
 	@NotFoundResponse
 	@PatchMapping("/projects/{id}")
-	public ResponseEntity<ProjectPatchResponse> patchProject(@PathVariable UUID id,
-			@RequestBody ProjectPatchRequest request) {
-		
-		var command = projectPatchMapper.toCommand(request);
+	public ResponseEntity<ProjectPatchResponse> patchProject(@PathVariable UUID id, @RequestBody ProjectPatchRequest request) {
+		var command = projectPatchMapper.toCommand(request, id);
 		
 		var result = projectPatchUseCase.execute(command);
 		

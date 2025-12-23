@@ -1,7 +1,6 @@
 package software.blacknode.backend.application.project.command;
 
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import me.hinsinger.hinz.common.huid.HUID;
@@ -16,6 +15,5 @@ public class ProjectPatchCommand extends PatchExecutionCommand {
 	private final String description;
 	private final String color;
 	
-	@NonNull
 	private final HUID id;
 }

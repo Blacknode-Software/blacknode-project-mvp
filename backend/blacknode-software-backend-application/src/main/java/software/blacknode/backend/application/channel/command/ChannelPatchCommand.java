@@ -17,6 +17,6 @@ public class ChannelPatchCommand extends PatchExecutionCommand {
 	private final String color;
 	
 	@NonNull
-	private final HUID channelId;
+	private final HUID id;
 	
 }
