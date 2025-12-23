@@ -38,7 +38,7 @@ public class ChannelPatchUseCase implements ResultExecutionUseCase<ChannelPatchC
 		var organizationId = sessionContext.getOrganizationId();
 		var memberId = sessionContext.getMemberId();
 		
-		var channelId = command.getChannelId();
+		var channelId = command.getId();
 		
 		accessControlService.ensureMemberHasChannelAccess(organizationId, memberId, 
 				channelId, AccessControlService.AccessLevel.MANAGE);
