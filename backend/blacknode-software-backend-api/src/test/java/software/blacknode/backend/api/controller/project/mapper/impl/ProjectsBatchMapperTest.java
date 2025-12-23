@@ -23,12 +23,12 @@ import software.blacknode.backend.domain.project.Project;
 import software.blacknode.backend.domain.project.meta.create.impl.ProjectInitialCreationMeta;
 
 /**
- * Test class for {@link ProjectsBatchMapper} to verify that all fields are correctly
+ * Test class for {@link ProjectsBatchFetchMapper} to verify that all fields are correctly
  * mapped from {@link ProjectsBatchFetchUseCase.Result} to {@link ProjectsBatchFetchResponse}.
  */
 class ProjectsBatchMapperTest {
 
-	private final ProjectsBatchMapper mapper = Mappers.getMapper(ProjectsBatchMapper.class);
+	private final ProjectsBatchFetchMapper mapper = Mappers.getMapper(ProjectsBatchFetchMapper.class);
 
 	/**
 	 * Helper method to create a Project instance for testing.

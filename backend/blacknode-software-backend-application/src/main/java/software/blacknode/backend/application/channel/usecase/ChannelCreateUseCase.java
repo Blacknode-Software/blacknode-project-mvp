@@ -11,14 +11,14 @@ import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.application.access.AccessControlService;
 import software.blacknode.backend.application.access.AccessControlService.AccessLevel;
 import software.blacknode.backend.application.channel.ChannelService;
-import software.blacknode.backend.application.channel.command.ChannelCreationCommand;
+import software.blacknode.backend.application.channel.command.ChannelCreateCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
 import software.blacknode.backend.domain.channel.meta.create.impl.ChannelDefaultCreationMeta;
 import software.blacknode.backend.domain.context.SessionContext;
 
 @Service
 @RequiredArgsConstructor
-public class ChannelCreationUseCase implements ResultExecutionUseCase<ChannelCreationCommand, ChannelCreationUseCase.Result> {
+public class ChannelCreateUseCase implements ResultExecutionUseCase<ChannelCreateCommand, ChannelCreateUseCase.Result> {
 
 	private final AccessControlService accessControlService;
 	
@@ -28,7 +28,7 @@ public class ChannelCreationUseCase implements ResultExecutionUseCase<ChannelCre
 	private SessionContext sessionContext;
 	
 	@Override
-	public Result execute(ChannelCreationCommand command) {
+	public Result execute(ChannelCreateCommand command) {
 		var organizationId = sessionContext.getOrganizationId();
 		var memberId = sessionContext.getMemberId();
 		
