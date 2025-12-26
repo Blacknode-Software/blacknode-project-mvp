@@ -134,7 +134,7 @@ public class ProjectController extends BaseController {
 	}
 
 	@OrganizationHeader
-	@Operation(summary = "Update an existing project")
+	@Operation(summary = "Update an existing project", description = "Update an existing project. Allowed patch operations: NAME, DESCRIPTION, COLOR")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Project updated")})
 	@InvalidInputResponse
 	@NotFoundResponse

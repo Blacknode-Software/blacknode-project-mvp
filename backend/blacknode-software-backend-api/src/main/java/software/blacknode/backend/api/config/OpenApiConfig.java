@@ -15,4 +15,3 @@ public class OpenApiConfig {
             .addServersItem(new Server().url("https://app.blacknode.software/api").description("Production (HTTPS)"));
     }
 }
-
