@@ -7,7 +7,8 @@ import software.blacknode.backend.domain.task.Task;
 
 public interface TaskRepository {
 
-	Optional<Task> findById(HUID id);
+	Optional<Task> findById(HUID organizationId, HUID id);
 
-	void save(Task task);
+	void save(HUID organizationId,Task task);
+	
 }

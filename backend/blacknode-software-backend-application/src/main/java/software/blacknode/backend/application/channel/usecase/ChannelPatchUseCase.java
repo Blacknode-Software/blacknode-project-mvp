@@ -45,7 +45,7 @@ public class ChannelPatchUseCase implements ResultExecutionUseCase<ChannelPatchC
 		
 		var operations = command.getOperations();
 		
-		List<ModificationMeta> modifications = new ArrayList<>();
+		var modifications = ModificationMeta.emptyList();
 		
 		if(ChannelPatchOperation.DESCRIPTION.isIn(operations)) {
 			var name = command.getName();
@@ -96,7 +96,7 @@ public class ChannelPatchUseCase implements ResultExecutionUseCase<ChannelPatchC
 	public static enum ChannelPatchOperation implements PatchOperationEnum {
 		NAME,
 		DESCRIPTION,
-		COLOR
+		COLOR,
 	}
 
 }

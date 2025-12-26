@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.application.access.AccessControlService;
 import software.blacknode.backend.application.access.AccessControlService.AccessLevel;
@@ -29,11 +31,13 @@ public class ChannelsInProjectUseCase implements ResultExecutionUseCase<Channels
 	
 	@Override
 	public Result execute(ChannelsInProjectCommand command) {
-		
 		var organizationId = sessionContext.getOrganizationId();
 		var memberId = sessionContext.getMemberId();
 		
 		var projectId = command.getProjectId();
+		
+		accessControlService.ensureMemberHasProjectAccess(organizationId, memberId, 
+				projectId, AccessLevel.READ);
 		
 		var channels = channelService.getAllInProject(organizationId, projectId);
 		
@@ -49,8 +53,10 @@ public class ChannelsInProjectUseCase implements ResultExecutionUseCase<Channels
 
 	@Getter
 	@Builder
+	@ToString
 	public static class Result {
 		
+		@NonNull
 		private List<HUID> channelsIds;
 		
 	}

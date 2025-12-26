@@ -37,7 +37,7 @@ public class OrganizationPatchUseCase implements ResultExecutionUseCase<Organiza
 		
 		var operations = command.getOperations();
 		
-		List<ModificationMeta> modifications = new ArrayList<>();
+		var modifications = ModificationMeta.emptyList();
 		
 		if(OrganizationPatchOperation.NAME.isIn(operations)) {
 			
