@@ -18,6 +18,7 @@ import software.blacknode.backend.domain.member.Member;
 import software.blacknode.backend.domain.organization.Organization;
 import software.blacknode.backend.domain.project.Project;
 import software.blacknode.backend.domain.role.Role;
+import software.blacknode.backend.domain.task.Task;
 
 @Service
 @RequiredArgsConstructor
@@ -118,6 +119,36 @@ public class AccessControlService {
 		
 		if(!hasAccess) {
 			throw new AccessDeniedException("Member with ID " + memberId + " does not have " + level + " access to channel with ID " + channelId + ".");		
+		}
+	}
+	
+	public void ensureMemberHasTaskAccess(HUID memberId, HUID taskId, HUID organizationId, AccessLevel level) {
+		var member = memberService.getOrThrow(organizationId, memberId);
+		var task = taskService.getOrThrow(organizationId, taskId);
+		
+		ensureMemberHasTaskAccess(member, task, level);
+	}
+	
+	public void ensureMemberHasTaskAccess(Member member, HUID taskId, AccessLevel level) {
+		var task = taskService.getOrThrow(member.getOrganizationId(), taskId);
+		
+		ensureMemberHasTaskAccess(member, task, level);
+	}
+	
+	public void ensureMemberHasTaskAccess(HUID memberId, Task task, AccessLevel level) {
+		var member = memberService.getOrThrow(task.getOrganizationId(), memberId);
+		
+		ensureMemberHasTaskAccess(member, task, level);
+	}
+	
+	public void ensureMemberHasTaskAccess(Member member, Task task, AccessLevel level) {
+		var hasAccess = hasAccessToTask(member, task, level);
+		
+		var memberId = member.getId();
+		var taskId = task.getId();
+		
+		if(!hasAccess) {
+			throw new AccessDeniedException("Member with ID " + memberId + " does not have " + level + " access to task with ID " + taskId + ".");		
 		}
 	}
 	
@@ -226,6 +257,39 @@ public class AccessControlService {
 		return getRoleAccess(organizationId, roleId);
 	}
 	
+	public AccessLevel getRoleAccessInTask(HUID memberId, HUID taskId, HUID organizationId) {
+		var task = taskService.getOrThrow(organizationId, taskId);
+		var member = memberService.getOrThrow(organizationId, memberId);
+		
+		return getRoleAccessInTask(member, task);
+	}
+	
+	public AccessLevel getRoleAccessInTask(Member member, HUID taskId) {
+		var task = taskService.getOrThrow(member.getOrganizationId(), taskId);
+		
+		return getRoleAccessInTask(member, task);
+	}
+	
+	public AccessLevel getRoleAccessInTask(HUID memberId, Task task) {
+		var member = memberService.getOrThrow(task.getOrganizationId(), memberId);
+		
+		return getRoleAccessInTask(member, task);
+	}
+	
+	public AccessLevel getRoleAccessInTask(Member member, Task task) {
+		var organizationId = member.getOrganizationId();
+		
+		task.ensureBelongsToOrganization(organizationId);
+		
+		var channelId = task.getChannelId();
+		
+		var access = getRoleAccessInChannel(member, channelId);
+		
+		//TODO later: implement task-specific roles and associations
+		
+		return access;
+	}
+	
 	private AccessLevel getRoleAccess(HUID organizationId, HUID roleId) {
 		var role = roleService.getOrThrow(organizationId, roleId);
 		
@@ -322,6 +386,31 @@ public class AccessControlService {
 
 	public boolean hasAccessToChannel(Member member, Channel channel, AccessLevel level) {
 		var access = getRoleAccessInChannel(member, channel);
+		
+		return access.atLeast(level);
+	}
+	
+	public boolean hasAccessToTask(HUID memberId, HUID taskId, HUID organizationId, AccessLevel level) {
+		var task = taskService.getOrThrow(organizationId, taskId);
+		var member = memberService.getOrThrow(organizationId, memberId);
+		
+		return hasAccessToTask(member, task, level);
+	}
+	
+	public boolean hasAccessToTask(Member member, HUID taskId, AccessLevel level) {
+		var task = taskService.getOrThrow(member.getOrganizationId(), taskId);
+		
+		return hasAccessToTask(member, task, level);
+	}
+	
+	public boolean hasAccessToTask(HUID memberId, Task task, AccessLevel level) {
+		var member = memberService.getOrThrow(task.getOrganizationId(), memberId);
+		
+		return hasAccessToTask(member, task, level);
+	}
+	
+	public boolean hasAccessToTask(Member member, Task task, AccessLevel level) {
+		var access = getRoleAccessInTask(member, task);
 		
 		return access.atLeast(level);
 	}

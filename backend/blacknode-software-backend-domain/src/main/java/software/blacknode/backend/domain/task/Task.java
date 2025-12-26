@@ -15,6 +15,7 @@ import software.blacknode.backend.domain.entity.modifier.impl.delete.Deletable;
 import software.blacknode.backend.domain.entity.modifier.impl.delete.meta.DeletionMeta;
 import software.blacknode.backend.domain.entity.modifier.impl.modify.Modifiable;
 import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
+import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.task.meta.TaskMeta;
 import software.blacknode.backend.domain.task.meta.create.TaskCreationMeta;
 import software.blacknode.backend.domain.task.meta.modify.TaskModificationMeta;
@@ -128,4 +129,13 @@ public class Task implements Creatable, Modifiable, Deletable {
 		deletionTimestamp = Timestamp.now();
 	}
 
+	public void ensureBelongsToOrganization(HUID organizationId) {
+		if(!belognsToOrganization(organizationId)) {
+			throw new BlacknodeException("Task does not belong to organization with ID: " + organizationId);
+		}
+	}
+	
+	public boolean belognsToOrganization(HUID organizationId) {
+		return this.organizationId.equals(organizationId);
+	}
 }

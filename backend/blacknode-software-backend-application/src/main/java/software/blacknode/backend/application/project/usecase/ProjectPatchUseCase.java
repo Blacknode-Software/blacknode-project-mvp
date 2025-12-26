@@ -44,7 +44,7 @@ public class ProjectPatchUseCase implements ResultExecutionUseCase<ProjectPatchC
 		
 		var operations = command.getOperations();
 		
-		List<ModificationMeta> modifications = new ArrayList<>();
+		var modifications = ModificationMeta.emptyList();
 		
 		if(ProjectPatchOperation.DESCRIPTION.isIn(operations)) {
 			var name = command.getName();
