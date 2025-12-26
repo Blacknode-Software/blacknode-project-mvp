@@ -1,9 +1,12 @@
 package software.blacknode.backend.domain.task;
 
-import java.util.List;
 import java.util.Optional;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.ToString;
 import me.hinsinger.hinz.common.huid.HUID;
 import me.hinsinger.hinz.common.time.timestamp.Timestamp;
 import software.blacknode.backend.domain.entity.modifier.impl.create.Creatable;
@@ -13,20 +16,15 @@ import software.blacknode.backend.domain.entity.modifier.impl.delete.meta.Deleti
 import software.blacknode.backend.domain.entity.modifier.impl.modify.Modifiable;
 import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
 import software.blacknode.backend.domain.task.meta.TaskMeta;
+import software.blacknode.backend.domain.task.meta.create.TaskCreationMeta;
+import software.blacknode.backend.domain.task.meta.modify.TaskModificationMeta;
 
+@Builder
+@AllArgsConstructor(onConstructor = @__({ @Deprecated }))
+@ToString
 public class Task implements Creatable, Modifiable, Deletable {
 
 	@Getter private HUID id;
-	@Getter private int priority;
-	
-	@Getter private HUID statusId;
-	@Getter private HUID ownerId;
-	
-	@Getter private List<HUID> assignees;
-	@Getter private List<HUID> attachments;
-	
-	@Getter private Timestamp beginAt;
-	@Getter private Timestamp endAt;
 	
 	@Getter private TaskMeta meta;
 	
@@ -34,9 +32,15 @@ public class Task implements Creatable, Modifiable, Deletable {
 	@Getter private Timestamp modificationTimestamp;
 	@Getter private Timestamp deletionTimestamp;
 	
+	@Getter private Optional<HUID> statusId;
+	
 	@Getter private HUID channelId;
-	@Getter private HUID projectId;
+	@Getter private HUID ownerMemberId;
 	@Getter private HUID organizationId;
+	
+	public Task(HUID organizationId) {
+		this.organizationId = organizationId;
+	}
 	
 	@Override
 	public void create(Optional<CreationMeta> meta0) {
@@ -44,7 +48,39 @@ public class Task implements Creatable, Modifiable, Deletable {
 		ensureNotDeleted(meta0);
 		ensureCreationMetaProvided(meta0);
 		
-		// TODO Auto-generated method stub
+		this.id = HUID.random();
+		
+		var meta = meta0.get();
+		
+		if(meta instanceof TaskCreationMeta _meta) {
+			@NonNull var channelId = _meta.getChannelId();
+			@NonNull var ownerMemberId = _meta.getOwnerMemberId();
+			
+			var status = _meta.getStatusId();
+			
+			var title = _meta.getTitle().orElse("Untitled Task");
+			var description = _meta.getDescription().orElse("");
+			
+			var priority = _meta.getPriority();
+			
+			// TODO validate timestamps (beginAt <= endAt)
+			var beginAt = _meta.getBeginAtTimestamp();
+			var endAt = _meta.getEndAtTimestamp();
+			
+			this.channelId = channelId;
+			this.ownerMemberId = ownerMemberId;
+			
+			this.statusId = status;
+			
+			this.meta = TaskMeta.builder()
+					.title(title)
+					.description(description)
+					.priority(priority)
+					.beginAt(beginAt)
+					.endAt(endAt)
+					.build();
+			
+		} else throwUnsupportedCreationMeta(meta);
 		
 		creationTimestamp = Timestamp.now();
 	}
@@ -55,6 +91,25 @@ public class Task implements Creatable, Modifiable, Deletable {
 		ensureNotDeleted(meta0);
 		ensureModificationMetaProvided(meta0);
 		
+		var meta = meta0.get();
+		
+		if(meta instanceof TaskModificationMeta _meta) {
+			var updated = this.meta;
+			
+			updated = _meta.getTitle().map(updated::withTitle).orElse(updated);
+		    updated = _meta.getDescription().map(updated::withDescription).orElse(updated);
+		    
+		    updated = updated.withPriority(_meta.getPriority());
+		    
+		    updated = updated.withBeginAt(_meta.getBeginAtTimestamp());
+		    updated = updated.withEndAt(_meta.getEndAtTimestamp());
+		    
+		    this.statusId = _meta.getStatusId().or(() -> this.statusId);
+		    
+		    this.meta = updated;
+		}
+		else throwUnsupportedModificationMeta(meta);
+		
 		modificationTimestamp = Timestamp.now();
 	}
 	
@@ -63,6 +118,12 @@ public class Task implements Creatable, Modifiable, Deletable {
 		ensureCreated(meta0);
 		ensureNotDeleted(meta0);
 		ensureDeletionMetaProvided(meta0);
+		
+		var meta = meta0.get();
+		
+		if(meta instanceof DeletionMeta) {
+			// No specific deletion meta for Task yet
+		} else throwUnsupportedDeletionMeta(meta);
 		
 		deletionTimestamp = Timestamp.now();
 	}
