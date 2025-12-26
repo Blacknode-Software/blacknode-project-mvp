@@ -31,7 +31,7 @@ public class ChannelRepositoryImpl implements ChannelRepository, OrganizationRel
 	}
 
 	@Override
-	public List<Channel> findAllById(HUID organizationId, List<HUID> ids) {
+	public List<Channel> findByIds(HUID organizationId, List<HUID> ids) {
 		var uuidList = ids.stream().map(HUID::toUUID).toList();
 		
 		var channels = repository.queryAllByIdInAndOrganizationIdAndState(uuidList, 
@@ -43,7 +43,7 @@ public class ChannelRepositoryImpl implements ChannelRepository, OrganizationRel
 	}
 
 	@Override
-	public List<Channel> findByProjectId(HUID organizationId, HUID projectId) {
+	public List<Channel> findAllByProjectId(HUID organizationId, HUID projectId) {
 		var channels = repository.queryAllByProjectIdAndOrganizationIdAndState(
 				projectId.toUUID(), organizationId.toUUID(), EntityState.ACTIVE);
 		
@@ -54,7 +54,7 @@ public class ChannelRepositoryImpl implements ChannelRepository, OrganizationRel
 
 	@Override
 	public void save(HUID organizationId, Channel channel) {
-		channel.belongsToOrganization(organizationId);
+		channel.ensureBelongsToOrganization(organizationId);
 		
 		var channelEntity = toInfrastructureEntity(channel);
 		
