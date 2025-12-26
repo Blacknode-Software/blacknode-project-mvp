@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.api.controller.BaseController;
+import software.blacknode.backend.api.controller.annotation.DisplayPatchOperations;
 import software.blacknode.backend.api.controller.annotation.InvalidInputResponse;
 import software.blacknode.backend.api.controller.annotation.NotFoundResponse;
 import software.blacknode.backend.api.controller.organization.annotation.OrganizationHeader;
@@ -43,6 +44,7 @@ import software.blacknode.backend.application.project.usecase.ProjectCreateUseCa
 import software.blacknode.backend.application.project.usecase.ProjectDeleteUseCase;
 import software.blacknode.backend.application.project.usecase.ProjectFetchUseCase;
 import software.blacknode.backend.application.project.usecase.ProjectPatchUseCase;
+import software.blacknode.backend.application.project.usecase.ProjectPatchUseCase.ProjectPatchOperation;
 import software.blacknode.backend.application.project.usecase.ProjectsBatchFetchUseCase;
 import software.blacknode.backend.application.project.usecase.ProjectsInOrganizationUseCase;
 
@@ -134,11 +136,12 @@ public class ProjectController extends BaseController {
 	}
 
 	@OrganizationHeader
-	@Operation(summary = "Update an existing project", description = "Update an existing project. Allowed patch operations: NAME, DESCRIPTION, COLOR")
+	@Operation(summary = "Update an existing project", description = "Update an existing project.")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Project updated")})
 	@InvalidInputResponse
 	@NotFoundResponse
 	@PatchMapping("/projects/{id}")
+	@DisplayPatchOperations(ProjectPatchOperation.class)
 	public ResponseEntity<ProjectPatchResponse> patchProject(@PathVariable UUID id, @RequestBody ProjectPatchRequest request) {
 		var command = projectPatchMapper.toCommand(request, id);
 		

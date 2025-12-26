@@ -93,6 +93,7 @@ public class ProjectPatchUseCase implements ResultExecutionUseCase<ProjectPatchC
 		NAME,
 		DESCRIPTION,
 		COLOR
+		;
 	}
 
 }
