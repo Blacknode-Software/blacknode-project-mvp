@@ -65,12 +65,10 @@ public class TaskService {
 	}
 	
 	public List<Task> getByIds(HUID organizationId, List<HUID> taskIds) {
-		// Implementation to list tasks by their IDs
-		return List.of(); // Placeholder
+		return repository.findByIds(organizationId, taskIds);
 	}
 	
 	public List<Task> getAllInChannel(HUID organizationId, HUID channelId) {
-		// Implementation to list tasks by channel ID
-		return List.of(); // Placeholder
+		return repository.findByChannelId(organizationId, channelId);
 	}
 }

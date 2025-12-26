@@ -54,7 +54,7 @@ public class ProjectRepositoryImpl implements ProjectRepository, OrganizationRel
 
 	@Override
 	public void save(HUID organizationId, Project project) {
-		project.belongsToOrganization(organizationId);
+		project.ensureBelongsToOrganization(organizationId);
 		
 		var projectEntity = toInfrastructureEntity(project);
 		

@@ -9,6 +9,7 @@ import lombok.NonNull;
 import lombok.ToString;
 import me.hinsinger.hinz.common.huid.HUID;
 import me.hinsinger.hinz.common.time.timestamp.Timestamp;
+import software.blacknode.backend.domain.entity.DomainEntity;
 import software.blacknode.backend.domain.entity.modifier.impl.create.Creatable;
 import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
 import software.blacknode.backend.domain.entity.modifier.impl.delete.Deletable;
@@ -23,7 +24,7 @@ import software.blacknode.backend.domain.task.meta.modify.TaskModificationMeta;
 @Builder
 @AllArgsConstructor(onConstructor = @__({ @Deprecated }))
 @ToString
-public class Task implements Creatable, Modifiable, Deletable {
+public class Task implements DomainEntity, Creatable, Modifiable, Deletable {
 
 	@Getter private HUID id;
 	
