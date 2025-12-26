@@ -36,7 +36,8 @@ public class ChannelsBatchFetchUseCase implements ResultExecutionUseCase<Channel
 		var channels = channelService.getByIds(organizationId, channelIds);
 		
 		channels = channels.stream()
-				.filter(channel -> accessControlService.hasAccessToChannel(organizationId, memberId, channel.getId(), AccessControlService.AccessLevel.READ))
+				.filter(channel -> accessControlService.hasAccessToChannel(organizationId, memberId, channel.getId(), 
+						AccessControlService.AccessLevel.READ))
 				.toList();
 		
 		return Result.builder()

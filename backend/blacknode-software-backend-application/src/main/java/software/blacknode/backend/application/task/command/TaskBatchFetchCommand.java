@@ -1,5 +1,7 @@
 package software.blacknode.backend.application.task.command;
 
+import java.util.List;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -10,9 +12,9 @@ import software.blacknode.backend.application.command.ExecutionCommand;
 @Getter
 @Builder
 @ToString
-public class TaskFetchCommand implements ExecutionCommand {
+public class TaskBatchFetchCommand implements ExecutionCommand {
 
 	@NonNull
-	private final HUID taskId;
+	private final List<HUID> taskIds;
 	
 }

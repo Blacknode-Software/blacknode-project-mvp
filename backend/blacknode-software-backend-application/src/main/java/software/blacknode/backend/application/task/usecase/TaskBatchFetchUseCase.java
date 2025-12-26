@@ -1,5 +1,7 @@
 package software.blacknode.backend.application.task.usecase;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,14 +12,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import software.blacknode.backend.application.access.AccessControlService;
 import software.blacknode.backend.application.task.TaskService;
-import software.blacknode.backend.application.task.command.TaskFetchCommand;
+import software.blacknode.backend.application.task.command.TaskBatchFetchCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
 import software.blacknode.backend.domain.context.SessionContext;
 import software.blacknode.backend.domain.task.Task;
 
 @Service
 @RequiredArgsConstructor
-public class TaskFetchUseCase implements ResultExecutionUseCase<TaskFetchCommand, TaskFetchUseCase.Result> {
+public class TaskBatchFetchUseCase implements ResultExecutionUseCase<TaskBatchFetchCommand, TaskBatchFetchUseCase.Result> {
 
 	private final AccessControlService accessControlService;
 	private final TaskService taskService;
@@ -26,29 +28,31 @@ public class TaskFetchUseCase implements ResultExecutionUseCase<TaskFetchCommand
 	private SessionContext sessionContext;
 	
 	@Override
-	public Result execute(TaskFetchCommand command) {
+	public Result execute(TaskBatchFetchCommand command) {
 		var organizationId = sessionContext.getOrganizationId();
 		var memberId = sessionContext.getMemberId();
 		
-		var taskId = command.getTaskId();
+		var taskIds = command.getTaskIds();
 		
-		accessControlService.ensureMemberHasTaskAccess(organizationId, memberId, 
-				taskId, AccessControlService.AccessLevel.READ);
+		var tasks = taskService.getByIds(organizationId, taskIds);
 		
-		var task = taskService.getOrThrow(organizationId, taskId);
+		tasks = tasks.stream()
+				.filter(task -> accessControlService.hasAccessToTask(organizationId, memberId, task.getId(), 
+						AccessControlService.AccessLevel.READ))
+				.toList();
 		
 		return Result.builder()
-				.task(task)
+				.tasks(tasks)
 				.build();
 	}
-
-	@Builder
+	
 	@Getter
+	@Builder
 	@ToString
 	public static class Result {
 		
 		@NonNull
-		private final Task task;
+		private List<Task> tasks;
 		
 	}
 
