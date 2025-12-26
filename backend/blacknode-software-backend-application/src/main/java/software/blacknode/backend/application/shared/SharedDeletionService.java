@@ -50,7 +50,7 @@ public class SharedDeletionService {
 		var tasks = taskService.getAllInChannel(organizationId, channelId);
 		
 		for(var task : tasks) {
-			deleteTask(organizationId, task.getId());
+			deleteTaskCascade(organizationId, task.getId());
 		}
 	
 		// TODO RESOURCE DELETION HANDLING
@@ -60,7 +60,7 @@ public class SharedDeletionService {
 		channelService.delete(organizationId, channelId, meta);
 	}
 	
-	public void deleteTask(HUID organizationId, HUID taskId) {
+	public void deleteTaskCascade(HUID organizationId, HUID taskId) {
 		var meta = TaskCascadeDeletionMeta.builder().build();
 		
 		taskService.delete(organizationId, taskId, meta);

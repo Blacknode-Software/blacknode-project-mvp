@@ -138,4 +138,14 @@ public class Task implements Creatable, Modifiable, Deletable {
 	public boolean belognsToOrganization(HUID organizationId) {
 		return this.organizationId.equals(organizationId);
 	}
+	
+	public void ensureOwnedByMember(HUID memberId) {
+		if(!isOwnedByMember(memberId)) {
+			throw new BlacknodeException("Task is not owned by member with ID: " + memberId);
+		}
+	}
+	
+	public boolean isOwnedByMember(HUID memberId) {
+		return this.ownerMemberId.equals(memberId);
+	}
 }

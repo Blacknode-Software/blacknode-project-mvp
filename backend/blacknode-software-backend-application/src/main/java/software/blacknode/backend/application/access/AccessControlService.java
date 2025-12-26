@@ -285,7 +285,10 @@ public class AccessControlService {
 		
 		var access = getRoleAccessInChannel(member, channelId);
 		
-		//TODO later: implement task-specific roles and associations
+		/* If the member is the owner of the task, grant MANAGE access regardless of their role access in the channel. */
+		if(!access.atLeast(AccessLevel.MANAGE) && task.isOwnedByMember(member.getId())) {
+			return AccessLevel.MANAGE;
+		}
 		
 		return access;
 	}
