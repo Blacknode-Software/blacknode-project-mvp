@@ -61,9 +61,6 @@ public class ChannelService {
 		repository.save(organizationId, channel);
 	}
 	
-	public List<Channel> getByProjectId(HUID organizationId, HUID projectId) {
-		return repository.findByProjectId(organizationId, projectId);
-	}
 	
 	public Channel getOrThrow(HUID organizationId, HUID channelId) {
 		return repository.findById(organizationId, channelId).

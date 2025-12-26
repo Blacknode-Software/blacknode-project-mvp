@@ -1,7 +1,10 @@
-package software.blacknode.backend.application.channel.command;
+package software.blacknode.backend.application.task.command;
+
+import java.util.List;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.ToString;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.application.command.ExecutionCommand;
@@ -9,8 +12,9 @@ import software.blacknode.backend.application.command.ExecutionCommand;
 @Getter
 @Builder
 @ToString
-public class ChannelsInProjectCommand implements ExecutionCommand {
+public class TaskBatchFetchCommand implements ExecutionCommand {
 
-	private final HUID projectId;
+	@NonNull
+	private final List<HUID> taskIds;
 	
 }

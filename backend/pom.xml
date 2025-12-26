@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>software.blacknode.backend</groupId>
 	<artifactId>blacknode-software-backend</artifactId>
-	<version>0.0.1-DEV</version>
+	<version>dev-${maven.build.timestamp}</version>
 	<packaging>pom</packaging>
 	<name>Blacknode Software Backend</name>
 	<description>The system applies standard DDD partitions: aggregates,
@@ -26,6 +26,7 @@
 		<spring-swagger-docs.version>2.3.0</spring-swagger-docs.version>
 		<hinz-common.groupId>me.hinsinger.hinz</hinz-common.groupId>	
 		<hinz-common.version>1.0.0</hinz-common.version>	
+		<maven.build.timestamp.format>yyyy-MM-dd@HH-mm-ss</maven.build.timestamp.format>
 	</properties>
 	
 	<repositories>
