@@ -1,6 +1,7 @@
 package software.blacknode.backend.application.task.usecase;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import software.blacknode.backend.application.access.AccessControlService;
@@ -9,6 +10,7 @@ import software.blacknode.backend.application.task.command.TaskDeleteCommand;
 import software.blacknode.backend.application.usecase.ExecutionUseCase;
 import software.blacknode.backend.domain.context.SessionContext;
 
+@Service
 @RequiredArgsConstructor
 public class TaskDeleteUseCase implements ExecutionUseCase<TaskDeleteCommand> {
 
