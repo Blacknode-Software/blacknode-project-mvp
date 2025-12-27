@@ -6,6 +6,6 @@ import software.blacknode.backend.api.controller.response.impl.BatchResponse;
 
 @Getter
 @SuperBuilder
-public class TaskBatchResponse extends BatchResponse<TaskBatchResponse, TaskResponse> {
+public class TasksBatchFetchResponse extends BatchResponse<TasksBatchFetchResponse, TaskResponse> {
 	
 }

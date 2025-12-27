@@ -88,7 +88,7 @@ public class ChannelController extends BaseController {
 	@Operation(summary = "Get all channels for a project")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Found channels") })
 	@GetMapping("/projects/{projectId}/channels")
-	public ResponseEntity<ChannelsListResponse> getChannels(@PathVariable UUID projectId) {
+	public ResponseEntity<ChannelsListResponse> getChannelsInProject(@PathVariable UUID projectId) {
 		var command = ChannelsInProjectCommand.builder()
 				.projectId(HUID.fromUUID(projectId))
 				.build();
