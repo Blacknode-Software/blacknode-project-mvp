@@ -11,6 +11,6 @@ import software.blacknode.backend.domain.project.Project;
 public interface ProjectMapper extends ControllerMapper {
 
 	@ProjectResponseContentMapping
-    ProjectResponseContent toResponseContent(Project project);
+    ProjectResponseContent map(Project project);
     
 }

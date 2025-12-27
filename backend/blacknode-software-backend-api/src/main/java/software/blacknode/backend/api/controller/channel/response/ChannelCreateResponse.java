@@ -1,16 +1,15 @@
 package software.blacknode.backend.api.controller.channel.response;
 
+import java.util.UUID;
+
 import lombok.Getter;
-import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import software.blacknode.backend.api.controller.channel.response.content.ChannelResponseContent;
-import software.blacknode.backend.api.controller.response.impl.ResponseBySetter;
+import software.blacknode.backend.api.controller.response.impl.BaseResponse;
 
 @Getter
 @SuperBuilder
-public class ChannelCreateResponse extends ChannelResponseContent implements ResponseBySetter<ChannelCreateResponse> {
+public class ChannelCreateResponse extends BaseResponse<ChannelCreateResponse> {
 	
-	@Getter @Setter private Status status;
-	@Getter @Setter private String message;
+	private UUID channelId;
 	
 }
