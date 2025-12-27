@@ -129,7 +129,7 @@ public class ChannelController extends BaseController {
 	}
 	
 	@OrganizationHeader
-	@Operation(summary = "Update an existing channel")
+	@Operation(summary = "Update an existing channel", description = "Update an existing channel.")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Channel updated") })
 	@DisplayPatchOperations(ChannelPatchOperation.class)
 	@PatchMapping("/channels/{id}")

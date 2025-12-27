@@ -140,8 +140,8 @@ public class ProjectController extends BaseController {
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Project updated")})
 	@InvalidInputResponse
 	@NotFoundResponse
-	@PatchMapping("/projects/{id}")
 	@DisplayPatchOperations(ProjectPatchOperation.class)
+	@PatchMapping("/projects/{id}")
 	public ResponseEntity<ProjectPatchResponse> patchProject(@PathVariable UUID id, @RequestBody ProjectPatchRequest request) {
 		var command = projectPatchMapper.toCommand(request, id);
 		

@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.api.controller.organization.annotation.OrganizationHeader;
@@ -27,6 +28,7 @@ import software.blacknode.backend.domain.context.SessionContext;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Task Statuses", description = "Task status management APIs")
 public class TaskStatusController {
 	
 	private final TaskStatusService taskStatusService;
@@ -52,6 +54,9 @@ public class TaskStatusController {
 		return response.toOkResponse("Task status fetched successfully");
 	}
 	
+	@OrganizationHeader
+	@Operation(summary = "Batch fetch task statuses by IDs")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Task statuses fetched successfully") })
 	@PostMapping("/statuses/batch-fetch")
 	public ResponseEntity<TaskStatusBatchFetchResponse> batchFetchTaskStatuses(@RequestBody TaskStatusBatchFetchRequest request) {
 		var organizationId = sessionContext.getOrganizationId();

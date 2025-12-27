@@ -1,6 +1,7 @@
 package software.blacknode.backend.application.task.usecase;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -20,6 +21,7 @@ import software.blacknode.backend.domain.task.meta.modify.impl.TaskPriorityModif
 import software.blacknode.backend.domain.task.meta.modify.impl.TaskStatusIdModificationMeta;
 import software.blacknode.backend.domain.task.meta.modify.impl.TaskTitleModificationMeta;
 
+@Service
 @RequiredArgsConstructor
 public class TaskPatchUseCase implements ResultExecutionUseCase<TaskPatchCommand, TaskPatchUseCase.Result> {
 	

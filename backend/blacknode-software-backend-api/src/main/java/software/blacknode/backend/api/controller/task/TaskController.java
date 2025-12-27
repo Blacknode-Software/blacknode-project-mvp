@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.api.controller.annotation.DisplayPatchOperations;
@@ -46,6 +47,7 @@ import software.blacknode.backend.application.task.usecase.TasksInChannelUseCase
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Tasks", description = "Task management APIs")
 public class TaskController {
 	
 	private final TaskFetchMapper taskFetchMapper;
@@ -97,7 +99,7 @@ public class TaskController {
 	}
 	
 	@OrganizationHeader
-	@Operation(summary = "Patch an existing task")
+	@Operation(summary = "Patch an existing task", description = "Update specific fields of an existing task.")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Task updated") })
 	@DisplayPatchOperations(TaskPatchOperation.class)
 	@PatchMapping("/tasks/{id}")
@@ -114,7 +116,7 @@ public class TaskController {
 	@OrganizationHeader
 	@Operation(summary = "Get tasks by a batch of IDs")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Found tasks") })
-	@GetMapping("/tasks/batch-fetch")
+	@PostMapping("/tasks/batch-fetch")
 	public ResponseEntity<TasksBatchFetchResponse> getTasksBatch(@RequestBody TasksBatchFetchRequest request) {
 		var command = tasksBatchMapper.toCommand(request);
 		
