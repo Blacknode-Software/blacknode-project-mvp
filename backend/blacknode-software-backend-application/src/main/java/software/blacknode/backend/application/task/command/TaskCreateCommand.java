@@ -14,8 +14,8 @@ public class TaskCreateCommand implements ExecutionCommand {
 	private final String description;
 	
 	private final Integer priority;
-	private final Timestamp beginAtTimestamp;
-	private final Timestamp endAtTimestamp;
+	private final Timestamp beginAt;
+	private final Timestamp endAt;
 	
 	private final HUID statusId;
 	

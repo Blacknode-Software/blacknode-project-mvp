@@ -40,8 +40,8 @@ public class TaskCreateUseCase implements ResultExecutionUseCase<TaskCreateComma
 		
 		var priority = command.getPriority();
 		
-		var beginAtTimestamp = command.getBeginAtTimestamp();
-		var endAtTimestamp = command.getEndAtTimestamp();
+		var beginAtTimestamp = command.getBeginAt();
+		var endAtTimestamp = command.getEndAt();
 		
 		var statusId = command.getStatusId();
 		

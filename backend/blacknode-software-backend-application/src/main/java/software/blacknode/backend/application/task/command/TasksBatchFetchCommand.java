@@ -12,7 +12,7 @@ import software.blacknode.backend.application.command.ExecutionCommand;
 @Getter
 @Builder
 @ToString
-public class TaskBatchFetchCommand implements ExecutionCommand {
+public class TasksBatchFetchCommand implements ExecutionCommand {
 
 	@NonNull
 	private final List<HUID> taskIds;

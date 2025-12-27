@@ -19,11 +19,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.api.controller.BaseController;
-import software.blacknode.backend.api.controller.channel.mapper.ChannelCreateMapper;
-import software.blacknode.backend.api.controller.channel.mapper.ChannelFetchMapper;
-import software.blacknode.backend.api.controller.channel.mapper.ChannelPatchMapper;
-import software.blacknode.backend.api.controller.channel.mapper.ChannelsBatchFetchMapper;
-import software.blacknode.backend.api.controller.channel.mapper.ChannelsInProjectMapper;
+import software.blacknode.backend.api.controller.annotation.DisplayPatchOperations;
+import software.blacknode.backend.api.controller.channel.mapper.impl.ChannelCreateMapper;
+import software.blacknode.backend.api.controller.channel.mapper.impl.ChannelFetchMapper;
+import software.blacknode.backend.api.controller.channel.mapper.impl.ChannelPatchMapper;
+import software.blacknode.backend.api.controller.channel.mapper.impl.ChannelsBatchFetchMapper;
+import software.blacknode.backend.api.controller.channel.mapper.impl.ChannelsInProjectMapper;
 import software.blacknode.backend.api.controller.channel.request.ChannelCreateRequest;
 import software.blacknode.backend.api.controller.channel.request.ChannelPatchRequest;
 import software.blacknode.backend.api.controller.channel.request.ChannelsBatchFetchRequest;
@@ -41,6 +42,7 @@ import software.blacknode.backend.application.channel.usecase.ChannelCreateUseCa
 import software.blacknode.backend.application.channel.usecase.ChannelDeleteUseCase;
 import software.blacknode.backend.application.channel.usecase.ChannelFetchUseCase;
 import software.blacknode.backend.application.channel.usecase.ChannelPatchUseCase;
+import software.blacknode.backend.application.channel.usecase.ChannelPatchUseCase.ChannelPatchOperation;
 import software.blacknode.backend.application.channel.usecase.ChannelsBatchFetchUseCase;
 import software.blacknode.backend.application.channel.usecase.ChannelsInProjectUseCase;
 
@@ -86,7 +88,7 @@ public class ChannelController extends BaseController {
 	@Operation(summary = "Get all channels for a project")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Found channels") })
 	@GetMapping("/projects/{projectId}/channels")
-	public ResponseEntity<ChannelsListResponse> getChannels(@PathVariable UUID projectId) {
+	public ResponseEntity<ChannelsListResponse> getChannelsInProject(@PathVariable UUID projectId) {
 		var command = ChannelsInProjectCommand.builder()
 				.projectId(HUID.fromUUID(projectId))
 				.build();
@@ -127,8 +129,9 @@ public class ChannelController extends BaseController {
 	}
 	
 	@OrganizationHeader
-	@Operation(summary = "Update an existing channel")
+	@Operation(summary = "Update an existing channel", description = "Update an existing channel.")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Channel updated") })
+	@DisplayPatchOperations(ChannelPatchOperation.class)
 	@PatchMapping("/channels/{id}")
 	public ResponseEntity<ChannelPatchResponse> patchChannel(@PathVariable UUID id, @RequestBody ChannelPatchRequest request) {
 		var command = channelPatchMapper.toCommand(request, id);

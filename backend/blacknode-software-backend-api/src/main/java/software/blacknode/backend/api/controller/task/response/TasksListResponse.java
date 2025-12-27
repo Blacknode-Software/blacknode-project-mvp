@@ -7,7 +7,7 @@ import software.blacknode.backend.api.controller.response.impl.ListResponse;
 
 @Getter
 @SuperBuilder
-public class TaskListResponse extends ListResponse<TaskListResponse> {
+public class TasksListResponse extends ListResponse<TasksListResponse> {
 
 	
 }

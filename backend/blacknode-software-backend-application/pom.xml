@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>software.blacknode.backend</groupId>
 		<artifactId>blacknode-software-backend</artifactId>
-		<version>dev-${maven.build.timestamp}</version>
+		<version>dev-local-version</version>
 	</parent>
 	
 	<artifactId>blacknode-software-backend-application</artifactId>

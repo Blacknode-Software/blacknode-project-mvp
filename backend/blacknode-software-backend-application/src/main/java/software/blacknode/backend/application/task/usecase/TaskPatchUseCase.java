@@ -1,6 +1,7 @@
 package software.blacknode.backend.application.task.usecase;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -20,6 +21,7 @@ import software.blacknode.backend.domain.task.meta.modify.impl.TaskPriorityModif
 import software.blacknode.backend.domain.task.meta.modify.impl.TaskStatusIdModificationMeta;
 import software.blacknode.backend.domain.task.meta.modify.impl.TaskTitleModificationMeta;
 
+@Service
 @RequiredArgsConstructor
 public class TaskPatchUseCase implements ResultExecutionUseCase<TaskPatchCommand, TaskPatchUseCase.Result> {
 	
@@ -73,7 +75,7 @@ public class TaskPatchUseCase implements ResultExecutionUseCase<TaskPatchCommand
 		}
 		
 		if(TaskPatchOperation.BEGIN_AT_TIMESTAMP.isIn(operations)) {
-			var beginAtTimestamp = command.getBeginAtTimestamp();
+			var beginAtTimestamp = command.getBeginAt();
 			
 			var meta = TaskBeginAtTimestampModificationMeta.builder()
 					.beginAt(beginAtTimestamp)
@@ -83,7 +85,7 @@ public class TaskPatchUseCase implements ResultExecutionUseCase<TaskPatchCommand
 		}
 		
 		if(TaskPatchOperation.END_AT_TIMESTAMP.isIn(operations)) {
-			var endAtTimestamp = command.getEndAtTimestamp();
+			var endAtTimestamp = command.getEndAt();
 			
 			var meta = TaskBeginAtTimestampModificationMeta.builder()
 					.beginAt(endAtTimestamp)
