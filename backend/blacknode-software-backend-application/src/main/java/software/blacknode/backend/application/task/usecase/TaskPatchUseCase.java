@@ -73,7 +73,7 @@ public class TaskPatchUseCase implements ResultExecutionUseCase<TaskPatchCommand
 		}
 		
 		if(TaskPatchOperation.BEGIN_AT_TIMESTAMP.isIn(operations)) {
-			var beginAtTimestamp = command.getBeginAtTimestamp();
+			var beginAtTimestamp = command.getBeginAt();
 			
 			var meta = TaskBeginAtTimestampModificationMeta.builder()
 					.beginAt(beginAtTimestamp)
@@ -83,7 +83,7 @@ public class TaskPatchUseCase implements ResultExecutionUseCase<TaskPatchCommand
 		}
 		
 		if(TaskPatchOperation.END_AT_TIMESTAMP.isIn(operations)) {
-			var endAtTimestamp = command.getEndAtTimestamp();
+			var endAtTimestamp = command.getEndAt();
 			
 			var meta = TaskBeginAtTimestampModificationMeta.builder()
 					.beginAt(endAtTimestamp)

@@ -1,5 +1,6 @@
 package software.blacknode.backend.api.controller.task.response.content;
 
+import java.time.Instant;
 import java.util.UUID;
 
 import lombok.Getter;
@@ -15,8 +16,8 @@ public class TaskResponseContent {
 	private String description;
 	
 	private Integer priority;
-	private Long beginAtTimestamp;
-	private Long endAtTimestamp;
+	private Instant beginAt;
+	private Instant endAt;
 	
-	private String statusId;
+	private UUID statusId;
 }
