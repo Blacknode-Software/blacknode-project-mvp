@@ -1,5 +1,8 @@
 package software.blacknode.backend.application.project.usecase;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,24 +16,25 @@ import software.blacknode.backend.application.project.ProjectService;
 import software.blacknode.backend.application.project.command.ProjectPatchCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
 import software.blacknode.backend.domain.context.SessionContext;
-import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.list.ModificationMetaList;
+import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
 import software.blacknode.backend.domain.project.Project;
-import software.blacknode.backend.domain.project.meta.modify.ProjectColorModificationMeta;
-import software.blacknode.backend.domain.project.meta.modify.ProjectDescriptionModificationMeta;
-import software.blacknode.backend.domain.project.meta.modify.ProjectNameModificationMeta;
+import software.blacknode.backend.domain.project.meta.modify.impl.ProjectColorModificationMeta;
+import software.blacknode.backend.domain.project.meta.modify.impl.ProjectDescriptionModificationMeta;
+import software.blacknode.backend.domain.project.meta.modify.impl.ProjectNameModificationMeta;
 
 @Service
 @RequiredArgsConstructor
 public class ProjectPatchUseCase implements ResultExecutionUseCase<ProjectPatchCommand, ProjectPatchUseCase.Result> {
 
-	private final ProjectService projectService;
 	private final AccessControlService accessControlService;
+	private final ProjectService projectService;
 	
 	@Autowired
 	private SessionContext context;
 	
 	@Override
 	public Result execute(ProjectPatchCommand command) {
+		
 		var organizationId = context.getOrganizationId();
 		var memberId = context.getMemberId();
 		
@@ -40,7 +44,7 @@ public class ProjectPatchUseCase implements ResultExecutionUseCase<ProjectPatchC
 		
 		var operations = command.getOperations();
 		
-		var modifications = ModificationMetaList.empty();
+		var modifications = ModificationMeta.emptyList();
 		
 		if(ProjectPatchOperation.DESCRIPTION.isIn(operations)) {
 			var name = command.getName();
@@ -54,7 +58,7 @@ public class ProjectPatchUseCase implements ResultExecutionUseCase<ProjectPatchC
 			modifications.add(meta);
 		}
 		
-		else if(ProjectPatchOperation.NAME.isIn(operations)) {
+		if(ProjectPatchOperation.NAME.isIn(operations)) {
 			var description = command.getDescription();
 			
 			var meta = ProjectDescriptionModificationMeta.builder()
@@ -64,7 +68,7 @@ public class ProjectPatchUseCase implements ResultExecutionUseCase<ProjectPatchC
 			modifications.add(meta);
 		}
 		
-		else if(ProjectPatchOperation.COLOR.isIn(operations)) {
+		if(ProjectPatchOperation.COLOR.isIn(operations)) {
 			var color = command.getColor();
 			
 			var meta = ProjectColorModificationMeta.builder()
@@ -89,6 +93,7 @@ public class ProjectPatchUseCase implements ResultExecutionUseCase<ProjectPatchC
 		NAME,
 		DESCRIPTION,
 		COLOR
+		;
 	}
 
 }

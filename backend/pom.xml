@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>software.blacknode.backend</groupId>
 	<artifactId>blacknode-software-backend</artifactId>
-	<version>0.0.1-DEV</version>
+	<version>dev-local-version</version>
 	<packaging>pom</packaging>
 	<name>Blacknode Software Backend</name>
 	<description>The system applies standard DDD partitions: aggregates,

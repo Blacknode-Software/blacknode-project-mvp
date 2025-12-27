@@ -14,7 +14,7 @@ import software.blacknode.backend.api.controller.project.response.ProjectPatchRe
 import software.blacknode.backend.api.controller.response.Response;
 import software.blacknode.backend.application.project.usecase.ProjectPatchUseCase;
 import software.blacknode.backend.domain.project.Project;
-import software.blacknode.backend.domain.project.meta.create.ProjectInitialCreationMeta;
+import software.blacknode.backend.domain.project.meta.create.impl.ProjectInitialCreationMeta;
 
 /**
  * Test class for {@link ProjectPatchMapper} to verify that all fields are correctly

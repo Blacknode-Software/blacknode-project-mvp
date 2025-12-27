@@ -1,6 +1,7 @@
 package software.blacknode.backend.shared.mapper;
 
 import java.time.Instant;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.mapstruct.Mapper;
@@ -10,6 +11,14 @@ import me.hinsinger.hinz.common.time.timestamp.Timestamp;
 
 @Mapper(componentModel = "spring")
 public interface BaseMapper {
+	
+	default <T> T unwrap(Optional<T> value) {
+        return value == null ? null : value.orElse(null);
+    }
+
+    default <T> Optional<T> wrap(T value) {
+        return Optional.ofNullable(value);
+    }
 	
 	default UUID map(HUID huid) {
 		if (huid == null) {

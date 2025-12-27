@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import me.hinsinger.hinz.common.huid.HUID;
 import me.hinsinger.hinz.common.time.timestamp.Timestamp;
 import software.blacknode.backend.domain.entity.DomainEntity;
@@ -16,12 +17,15 @@ import software.blacknode.backend.domain.entity.modifier.impl.delete.meta.Deleti
 import software.blacknode.backend.domain.entity.modifier.impl.modify.Modifiable;
 import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
 import software.blacknode.backend.domain.organization.meta.OrganizationMeta;
-import software.blacknode.backend.domain.organization.meta.create.OrganizationInitialCreationMeta;
-import software.blacknode.backend.domain.organization.meta.modify.OrganizationNameModificationMeta;
+import software.blacknode.backend.domain.organization.meta.create.OrganizationCreationMeta;
+import software.blacknode.backend.domain.organization.meta.create.impl.OrganizationInitialCreationMeta;
+import software.blacknode.backend.domain.organization.meta.delete.OrganizationDeletionMeta;
+import software.blacknode.backend.domain.organization.meta.modify.OrganizationModificationMeta;
 
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor(onConstructor = @__({ @Deprecated }))
+@ToString
 public class Organization implements DomainEntity, Creatable, Modifiable, Deletable {
 	public static final HUID DEFAULT_ORGANIZATION_ID = HUID.fromString("e63c7895-6d65-41cb-9400-000000000001");
 	
@@ -42,22 +46,20 @@ public class Organization implements DomainEntity, Creatable, Modifiable, Deleta
 
 		this.id = HUID.random();
 		
-		//this.settings = new OrganizationSettings();
-		this.meta = OrganizationMeta.builder().build();
-		
 		var meta = meta0.get();
 		
-		if(meta instanceof OrganizationInitialCreationMeta initOrgMeta) {
-			var id = DEFAULT_ORGANIZATION_ID;
-			
-			var name = initOrgMeta.getName();
-			
-			this.id = id;
-			this.meta = this.meta.withName(name);
+		if(meta instanceof OrganizationInitialCreationMeta _meta) {
+			this.id = DEFAULT_ORGANIZATION_ID;
 		}
-		else {
-			throwUnsupportedCreationMeta(meta);
+		
+		if(meta instanceof OrganizationCreationMeta _meta) {
+			var name = _meta.getName().orElse("Unnamed Organization");
+			
+			this.meta = OrganizationMeta.builder()
+					.name(name)
+					.build();
 		}
+		else throwUnsupportedCreationMeta(meta);
 		
 		creationTimestamp = Timestamp.now();
 	}
@@ -70,14 +72,14 @@ public class Organization implements DomainEntity, Creatable, Modifiable, Deleta
 		
 		var meta = meta0.get();
 		
-		if(meta instanceof OrganizationNameModificationMeta nameMeta) {
-			var name = nameMeta.getName();
+		if(meta instanceof OrganizationModificationMeta _meta) {
+			var updated = this.meta;
 			
-			this.meta = this.meta.withName(name);
+			updated = _meta.getName().map(updated::withName).orElse(updated);
+			
+			this.meta = updated;
 		} 
-		else {
-			throwUnsupportedModificationMeta(meta);
-		}
+		else throwUnsupportedModificationMeta(meta);
 		
 		modificationTimestamp = Timestamp.now();
 	}
@@ -87,6 +89,13 @@ public class Organization implements DomainEntity, Creatable, Modifiable, Deleta
 		ensureCreated(meta0);
 		ensureNotDeleted(meta0);
 		ensureDeletionMetaProvided(meta0);
+		
+		var meta = meta0.get();
+		
+		if(meta instanceof OrganizationDeletionMeta _meta) {
+			// no specific deletion logic for now
+		} 
+		else throwUnsupportedDeletionMeta(meta);
 		
 		deletionTimestamp = Timestamp.now();
 	}

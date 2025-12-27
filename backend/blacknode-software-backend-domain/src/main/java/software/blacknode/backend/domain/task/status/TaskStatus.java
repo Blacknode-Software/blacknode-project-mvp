@@ -1,5 +1,9 @@
 package software.blacknode.backend.domain.task.status;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import me.hinsinger.hinz.common.huid.HUID;
 
 public interface TaskStatus {
@@ -32,7 +36,14 @@ public interface TaskStatus {
 			"#33C4a8"
 	);
 	
-	public static TaskStatus of(HUID id, String name, String description, String colorCode) {
+	public static final Map<HUID, TaskStatus> PREDEFINED_STATUSES = List.of(
+			STATUS_TODO,
+			STATUS_IN_PROGRESS,
+			STATUS_ON_HOLD,
+			STATUS_DONE
+	).stream().collect(Collectors.toMap(TaskStatus::getId, status -> status));
+	
+	public static TaskStatus of(HUID id, String name, String description, String color) {
 		return new TaskStatus() {
 			@Override
 			public HUID getId() {
@@ -50,8 +61,8 @@ public interface TaskStatus {
 			}
 			
 			@Override
-			public String getColorCode() {
-				return colorCode;
+			public String getColor() {
+				return color;
 			}
 			
 			@Override
@@ -75,6 +86,6 @@ public interface TaskStatus {
 	HUID getId();
 	String getName();
 	String getDescription();
-	String getColorCode();
+	String getColor();
 	
 }

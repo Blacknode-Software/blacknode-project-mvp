@@ -14,7 +14,7 @@ import software.blacknode.backend.api.controller.project.response.ProjectRespons
 import software.blacknode.backend.api.controller.response.Response;
 import software.blacknode.backend.application.project.usecase.ProjectFetchUseCase;
 import software.blacknode.backend.domain.project.Project;
-import software.blacknode.backend.domain.project.meta.create.ProjectInitialCreationMeta;
+import software.blacknode.backend.domain.project.meta.create.impl.ProjectInitialCreationMeta;
 
 /**
  * Test class for {@link ProjectFetchMapper} to verify that all fields are correctly

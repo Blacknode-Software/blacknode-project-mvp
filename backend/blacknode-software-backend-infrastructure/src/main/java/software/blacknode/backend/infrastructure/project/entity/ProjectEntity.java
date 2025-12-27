@@ -7,9 +7,9 @@ import jakarta.persistence.AccessType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
 import software.blacknode.backend.infrastructure.entity.version.annotation.VersionedEntity;
 import software.blacknode.backend.infrastructure.organization.related.OrganizationRelatedEntity;
@@ -23,7 +23,7 @@ import software.blacknode.backend.infrastructure.project.entity.meta.ProjectEnti
 @NoArgsConstructor
 public class ProjectEntity extends OrganizationRelatedEntity {
 
-	@NonNull
+	@NotNull
 	@Column(name = "meta")
 	@VersionedEntity
 	private ProjectEntityMeta meta;

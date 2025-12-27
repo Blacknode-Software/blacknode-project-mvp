@@ -50,13 +50,7 @@ public class OrganizationService {
 	}
 	
 	public Organization modify(HUID organizationId, ModificationMeta meta) {
-		var organization = getOrThrow(organizationId);
-		
-		organization.modify(meta);
-		
-		repository.save(organization);
-		
-		return organization;
+		return modify(organizationId, List.of(meta));
 	}
 	
 	public Organization modify(HUID organizationId, List<ModificationMeta> metas) {

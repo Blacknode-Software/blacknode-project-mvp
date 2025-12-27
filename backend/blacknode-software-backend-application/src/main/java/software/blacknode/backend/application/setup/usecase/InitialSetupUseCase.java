@@ -20,12 +20,12 @@ import software.blacknode.backend.application.setup.command.InitialSetupCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
 import software.blacknode.backend.domain.account.meta.create.AccountInitialAdminCreationMeta;
 import software.blacknode.backend.domain.auth.meta.create.AuthByPasswordCreationMeta;
-import software.blacknode.backend.domain.channel.meta.create.ChannelInitialCreationMeta;
+import software.blacknode.backend.domain.channel.meta.create.impl.ChannelInitialCreationMeta;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.member.association.meta.create.MemberOrganizationAssociationCreationMeta;
 import software.blacknode.backend.domain.member.meta.create.MemberAdminCreationMeta;
-import software.blacknode.backend.domain.organization.meta.create.OrganizationInitialCreationMeta;
-import software.blacknode.backend.domain.project.meta.create.ProjectInitialCreationMeta;
+import software.blacknode.backend.domain.organization.meta.create.impl.OrganizationInitialCreationMeta;
+import software.blacknode.backend.domain.project.meta.create.impl.ProjectInitialCreationMeta;
 import software.blacknode.backend.domain.role.meta.create.RoleInitialOrganizationScopeCreationMeta;
 import software.blacknode.backend.domain.role.meta.create.RoleInitialProjectScopeCreationMeta;
 

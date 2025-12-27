@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import software.blacknode.backend.api.controller.BaseController;
+import software.blacknode.backend.api.controller.annotation.DisplayPatchOperations;
 import software.blacknode.backend.api.controller.organization.annotation.OrganizationHeader;
 import software.blacknode.backend.api.controller.organization.mapper.impl.OrganizationFetchMapper;
 import software.blacknode.backend.api.controller.organization.mapper.impl.OrganizationPatchMapper;
@@ -21,6 +22,7 @@ import software.blacknode.backend.api.controller.organization.response.Organizat
 import software.blacknode.backend.application.organization.command.OrganizationFetchCommand;
 import software.blacknode.backend.application.organization.usecase.OrganizationFetchUseCase;
 import software.blacknode.backend.application.organization.usecase.OrganizationPatchUseCase;
+import software.blacknode.backend.application.organization.usecase.OrganizationPatchUseCase.OrganizationPatchOperation;
 
 @RestController
 @RequiredArgsConstructor
@@ -58,11 +60,12 @@ public class OrganizationController extends BaseController {
 //	}
 	
 	@OrganizationHeader
-	@Operation(summary = "Update organization")
+	@Operation(summary = "Update organization", description = "Update organization details.")
 	@ApiResponses(value = { 
 			@ApiResponse(responseCode = "200", description = "Organization updated"),
 			@ApiResponse(responseCode = "400", description = "Invalid request"),
 			@ApiResponse(responseCode = "404", description = "Organization not found") })
+	@DisplayPatchOperations(OrganizationPatchOperation.class)
 	@PatchMapping("/organization")
 	public ResponseEntity<OrganizationPatchResponse> patchOrganization(@RequestBody OrganizationPatchRequest request) {
 		var command = organizationPatchMapper.toCommand(request);

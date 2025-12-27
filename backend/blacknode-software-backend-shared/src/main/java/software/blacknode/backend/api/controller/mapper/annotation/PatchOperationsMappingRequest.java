@@ -9,7 +9,7 @@ import org.mapstruct.Mapping;
 
 @Target({ ElementType.METHOD, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.CLASS)
-@Mapping(target = "operations", source = "operations")
+@Mapping(target = "operations", source = "request.operations")
 public @interface PatchOperationsMappingRequest {
 
 }

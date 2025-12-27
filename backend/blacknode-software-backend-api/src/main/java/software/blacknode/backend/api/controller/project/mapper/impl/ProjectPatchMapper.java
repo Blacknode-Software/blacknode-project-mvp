@@ -1,9 +1,10 @@
 package software.blacknode.backend.api.controller.project.mapper.impl;
 
+import java.util.UUID;
+
 import org.mapstruct.Mapper;
 
 import software.blacknode.backend.api.controller.mapper.annotation.PatchOperationsMappingRequest;
-import software.blacknode.backend.api.controller.mapper.impl.RequestMapper;
 import software.blacknode.backend.api.controller.mapper.impl.ResponseMapper;
 import software.blacknode.backend.api.controller.project.request.ProjectPatchRequest;
 import software.blacknode.backend.api.controller.project.response.ProjectPatchResponse;
@@ -12,13 +13,11 @@ import software.blacknode.backend.application.project.command.ProjectPatchComman
 import software.blacknode.backend.application.project.usecase.ProjectPatchUseCase;
 
 @Mapper(componentModel = "spring")
-public interface ProjectPatchMapper extends RequestMapper<ProjectPatchRequest, ProjectPatchCommand>, ResponseMapper<ProjectPatchUseCase.Result, ProjectPatchResponse> {
+public interface ProjectPatchMapper extends ResponseMapper<ProjectPatchUseCase.Result, ProjectPatchResponse> {
 
-	@Override
 	@PatchOperationsMappingRequest
-	ProjectPatchCommand toCommand(ProjectPatchRequest request);
+	ProjectPatchCommand toCommand(ProjectPatchRequest request, UUID id);
 	
-	@Override
 	@ProjectResponseContentMapping
 	ProjectPatchResponse toResponse(ProjectPatchUseCase.Result result);
 	

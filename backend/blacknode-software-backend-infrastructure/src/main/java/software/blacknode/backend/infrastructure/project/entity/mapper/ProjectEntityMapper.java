@@ -1,7 +1,6 @@
 package software.blacknode.backend.infrastructure.project.entity.mapper;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 import software.blacknode.backend.domain.project.Project;
 import software.blacknode.backend.domain.project.meta.ProjectMeta;
@@ -23,7 +22,6 @@ import software.blacknode.backend.infrastructure.project.entity.meta.ProjectEnti
 @Mapper(componentModel = "spring")
 public interface ProjectEntityMapper extends InfrastructureMapper<Project, ProjectEntity> {
 	
-	@Override
 	@IdMappingInfrastructure
 	@OrganizationIdMappingInfrastructure
 	
@@ -34,7 +32,6 @@ public interface ProjectEntityMapper extends InfrastructureMapper<Project, Proje
 	@StateMappingInfrastructure
 	ProjectEntity toInfrastructureEntity(Project domain);
 	
-	@Override
 	@IdMappingDomain
 	@OrganizationIdMappingDomain
 	

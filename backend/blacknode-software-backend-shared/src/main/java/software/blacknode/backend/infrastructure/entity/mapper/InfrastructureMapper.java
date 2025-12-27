@@ -14,11 +14,11 @@ import software.blacknode.backend.infrastructure.entity.InfrastructureEntity;
 import software.blacknode.backend.infrastructure.entity.state.EntityState;
 import software.blacknode.backend.shared.mapper.BaseMapper;
 
-public interface InfrastructureMapper<D extends DomainEntity, E extends InfrastructureEntity> extends BaseMapper {
+public interface InfrastructureMapper<DOMAIN extends DomainEntity, INFRASTRUCTURE extends InfrastructureEntity> extends BaseMapper {
 	
-	D toDomainEntity(E infrastructureEntity);
+	DOMAIN toDomainEntity(INFRASTRUCTURE infrastructureEntity);
 
-	E toInfrastructureEntity(D domainEntity);
+	INFRASTRUCTURE toInfrastructureEntity(DOMAIN domainEntity);
 	
 	@Named("instant2Timestamp")
 	public default Timestamp instantToTimestamp(Instant instant) {
@@ -53,7 +53,7 @@ public interface InfrastructureMapper<D extends DomainEntity, E extends Infrastr
 	}
 	
 	@Named("getEntityState")
-	public default EntityState getEntityState(D domainEntity) {
+	public default EntityState getEntityState(DOMAIN domainEntity) {
 		EntityState state = EntityState.NOT_DEFINED;
 		
 		// TODO add logging if state is NOT_DEFINED

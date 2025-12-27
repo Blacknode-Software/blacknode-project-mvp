@@ -1,7 +1,13 @@
 package software.blacknode.backend.api.controller.organization.request;
 
-import software.blacknode.backend.api.controller.request.BaseRequest;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import software.blacknode.backend.api.controller.request.PatchRequest;
 
-public class OrganizationPatchRequest extends BaseRequest {
+@Getter
+@AllArgsConstructor
+public class OrganizationPatchRequest extends PatchRequest {
 
+	private String name;
+	
 }

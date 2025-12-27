@@ -16,11 +16,11 @@ import org.mapstruct.factory.Mappers;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.api.controller.project.response.ProjectsListResponse;
 import software.blacknode.backend.api.controller.response.Response.Status;
-import software.blacknode.backend.application.project.usecase.ProjectsInOrganizationFetchUseCase;
+import software.blacknode.backend.application.project.usecase.ProjectsInOrganizationUseCase;
 
 /**
  * Test class for {@link ProjectsInOrganizationFetchMapper} to verify that all fields are correctly
- * mapped from {@link ProjectsInOrganizationFetchUseCase.Result} to {@link ProjectsListResponse}.
+ * mapped from {@link ProjectsInOrganizationUseCase.Result} to {@link ProjectsListResponse}.
  */
 class ProjectsInOrganizationFetchMapperTest {
 
@@ -32,7 +32,7 @@ class ProjectsInOrganizationFetchMapperTest {
 		HUID projectId = HUID.random();
 		List<HUID> projectIds = Collections.singletonList(projectId);
 		
-		ProjectsInOrganizationFetchUseCase.Result result = ProjectsInOrganizationFetchUseCase.Result.builder()
+		ProjectsInOrganizationUseCase.Result result = ProjectsInOrganizationUseCase.Result.builder()
 				.projectsIds(projectIds)
 				.build();
 
@@ -54,7 +54,7 @@ class ProjectsInOrganizationFetchMapperTest {
 		HUID projectId3 = HUID.random();
 		List<HUID> projectIds = Arrays.asList(projectId1, projectId2, projectId3);
 		
-		ProjectsInOrganizationFetchUseCase.Result result = ProjectsInOrganizationFetchUseCase.Result.builder()
+		ProjectsInOrganizationUseCase.Result result = ProjectsInOrganizationUseCase.Result.builder()
 				.projectsIds(projectIds)
 				.build();
 
@@ -75,7 +75,7 @@ class ProjectsInOrganizationFetchMapperTest {
 		// Arrange
 		List<HUID> projectIds = Collections.emptyList();
 		
-		ProjectsInOrganizationFetchUseCase.Result result = ProjectsInOrganizationFetchUseCase.Result.builder()
+		ProjectsInOrganizationUseCase.Result result = ProjectsInOrganizationUseCase.Result.builder()
 				.projectsIds(projectIds)
 				.build();
 
@@ -106,7 +106,7 @@ class ProjectsInOrganizationFetchMapperTest {
 		HUID huid2 = HUID.fromUUID(uuid2);
 		List<HUID> projectIds = Arrays.asList(huid1, huid2);
 		
-		ProjectsInOrganizationFetchUseCase.Result result = ProjectsInOrganizationFetchUseCase.Result.builder()
+		ProjectsInOrganizationUseCase.Result result = ProjectsInOrganizationUseCase.Result.builder()
 				.projectsIds(projectIds)
 				.build();
 
@@ -126,7 +126,7 @@ class ProjectsInOrganizationFetchMapperTest {
 		// Arrange
 		List<HUID> projectIds = Arrays.asList(HUID.random(), HUID.random());
 		
-		ProjectsInOrganizationFetchUseCase.Result result = ProjectsInOrganizationFetchUseCase.Result.builder()
+		ProjectsInOrganizationUseCase.Result result = ProjectsInOrganizationUseCase.Result.builder()
 				.projectsIds(projectIds)
 				.build();
 
@@ -148,7 +148,7 @@ class ProjectsInOrganizationFetchMapperTest {
 			HUID.random(), HUID.random(), HUID.random(), HUID.random(), HUID.random()
 		);
 		
-		ProjectsInOrganizationFetchUseCase.Result result = ProjectsInOrganizationFetchUseCase.Result.builder()
+		ProjectsInOrganizationUseCase.Result result = ProjectsInOrganizationUseCase.Result.builder()
 				.projectsIds(projectIds)
 				.build();
 
@@ -175,7 +175,7 @@ class ProjectsInOrganizationFetchMapperTest {
 		HUID projectId3 = HUID.random();
 		List<HUID> projectIds = Arrays.asList(projectId1, projectId2, projectId3);
 		
-		ProjectsInOrganizationFetchUseCase.Result result = ProjectsInOrganizationFetchUseCase.Result.builder()
+		ProjectsInOrganizationUseCase.Result result = ProjectsInOrganizationUseCase.Result.builder()
 				.projectsIds(projectIds)
 				.build();
 

@@ -1,7 +1,6 @@
 package software.blacknode.backend.infrastructure.organization.entity.mapper;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 import software.blacknode.backend.domain.organization.Organization;
 import software.blacknode.backend.domain.organization.meta.OrganizationMeta;
@@ -21,10 +20,7 @@ import software.blacknode.backend.infrastructure.organization.entity.meta.Organi
 @Mapper(componentModel = "spring")
 public interface OrganizationEntityMapper extends InfrastructureMapper<Organization, OrganizationEntity> {
 
-	@Override
 	@IdMappingInfrastructure
-	
-	@Mapping(target = "meta.name", source = "meta.name")
 	
 	@CreationMappingInfrastructure
 	@ModificationMappingInfrastructure
@@ -35,8 +31,6 @@ public interface OrganizationEntityMapper extends InfrastructureMapper<Organizat
 	
 	
 	@IdMappingDomain
-	
-	@Mapping(target = "meta.name", source = "meta.name")
 	
 	@CreationMappingDomain
 	@ModificationMappingDomain
