@@ -1,4 +1,4 @@
-package software.blacknode.backend.api.controller.task.status.content;
+package software.blacknode.backend.api.controller.task.status.response.content;
 
 import java.util.UUID;
 
@@ -7,7 +7,7 @@ import lombok.experimental.SuperBuilder;
 
 @Getter
 @SuperBuilder
-public class TaskStatusContent {
+public class TaskStatusResponseContent {
 
 	private final UUID id;
 	private final String name;
