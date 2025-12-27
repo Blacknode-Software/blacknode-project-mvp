@@ -1,11 +1,11 @@
 package software.blacknode.backend.api.controller.task.request;
 
-import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import software.blacknode.backend.api.controller.request.BaseRequest;
 
 @Getter
-@Builder
+@NoArgsConstructor
 public class TaskCreateRequest extends BaseRequest {
 
 	private String title;

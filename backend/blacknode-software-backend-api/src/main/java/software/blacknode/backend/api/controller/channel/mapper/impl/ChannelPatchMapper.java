@@ -3,7 +3,6 @@ package software.blacknode.backend.api.controller.channel.mapper.impl;
 import java.util.UUID;
 
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 import software.blacknode.backend.api.controller.channel.request.ChannelPatchRequest;
 import software.blacknode.backend.api.controller.channel.response.ChannelPatchResponse;

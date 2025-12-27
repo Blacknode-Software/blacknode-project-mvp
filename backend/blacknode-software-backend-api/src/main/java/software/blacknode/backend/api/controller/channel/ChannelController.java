@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.api.controller.BaseController;
+import software.blacknode.backend.api.controller.annotation.DisplayPatchOperations;
 import software.blacknode.backend.api.controller.channel.mapper.impl.ChannelCreateMapper;
 import software.blacknode.backend.api.controller.channel.mapper.impl.ChannelFetchMapper;
 import software.blacknode.backend.api.controller.channel.mapper.impl.ChannelPatchMapper;
@@ -41,6 +42,7 @@ import software.blacknode.backend.application.channel.usecase.ChannelCreateUseCa
 import software.blacknode.backend.application.channel.usecase.ChannelDeleteUseCase;
 import software.blacknode.backend.application.channel.usecase.ChannelFetchUseCase;
 import software.blacknode.backend.application.channel.usecase.ChannelPatchUseCase;
+import software.blacknode.backend.application.channel.usecase.ChannelPatchUseCase.ChannelPatchOperation;
 import software.blacknode.backend.application.channel.usecase.ChannelsBatchFetchUseCase;
 import software.blacknode.backend.application.channel.usecase.ChannelsInProjectUseCase;
 
@@ -129,6 +131,7 @@ public class ChannelController extends BaseController {
 	@OrganizationHeader
 	@Operation(summary = "Update an existing channel")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Channel updated") })
+	@DisplayPatchOperations(ChannelPatchOperation.class)
 	@PatchMapping("/channels/{id}")
 	public ResponseEntity<ChannelPatchResponse> patchChannel(@PathVariable UUID id, @RequestBody ChannelPatchRequest request) {
 		var command = channelPatchMapper.toCommand(request, id);
