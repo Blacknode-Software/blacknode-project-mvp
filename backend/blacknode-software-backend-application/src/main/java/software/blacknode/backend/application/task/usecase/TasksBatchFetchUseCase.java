@@ -12,14 +12,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import software.blacknode.backend.application.access.AccessControlService;
 import software.blacknode.backend.application.task.TaskService;
-import software.blacknode.backend.application.task.command.TaskBatchFetchCommand;
+import software.blacknode.backend.application.task.command.TasksBatchFetchCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
 import software.blacknode.backend.domain.context.SessionContext;
 import software.blacknode.backend.domain.task.Task;
 
 @Service
 @RequiredArgsConstructor
-public class TaskBatchFetchUseCase implements ResultExecutionUseCase<TaskBatchFetchCommand, TaskBatchFetchUseCase.Result> {
+public class TasksBatchFetchUseCase implements ResultExecutionUseCase<TasksBatchFetchCommand, TasksBatchFetchUseCase.Result> {
 
 	private final AccessControlService accessControlService;
 	private final TaskService taskService;
@@ -28,7 +28,7 @@ public class TaskBatchFetchUseCase implements ResultExecutionUseCase<TaskBatchFe
 	private SessionContext sessionContext;
 	
 	@Override
-	public Result execute(TaskBatchFetchCommand command) {
+	public Result execute(TasksBatchFetchCommand command) {
 		var organizationId = sessionContext.getOrganizationId();
 		var memberId = sessionContext.getMemberId();
 		

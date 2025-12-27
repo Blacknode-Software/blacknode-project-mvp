@@ -1,4 +1,4 @@
-package software.blacknode.backend.api.controller.channel.mapper;
+package software.blacknode.backend.api.controller.channel.mapper.impl;
 
 import org.mapstruct.Mapper;
 

@@ -1,4 +1,4 @@
-package software.blacknode.backend.api.controller.channel.mapper;
+package software.blacknode.backend.api.controller.channel.mapper.impl;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -17,6 +17,7 @@ public interface ChannelsBatchFetchMapper extends RequestMapper<ChannelsBatchFet
 	@Mapping(target = "channelIds", source = "ids")
 	ChannelsBatchFetchCommand toCommand(ChannelsBatchFetchRequest request);
 
+	@Override
 	@Mapping(target = "items", source = "channels")
 	ChannelsBatchFetchResponse toResponse(ChannelsBatchFetchUseCase.Result result);
 

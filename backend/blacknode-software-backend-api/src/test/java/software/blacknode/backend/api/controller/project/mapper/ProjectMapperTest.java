@@ -57,7 +57,7 @@ class ProjectMapperTest {
 	}
 
 	@Test
-	void testToResponseContent_AllFieldsAreMappedCorrectly() {
+	void testmap_AllFieldsAreMappedCorrectly() {
 		// Arrange
 		String projectName = "Test Project";
 		String projectDescription = "This is a test project description";
@@ -67,7 +67,7 @@ class ProjectMapperTest {
 		HUID projectId = project.getId();
 
 		// Act
-		ProjectResponseContent responseContent = mapper.toResponseContent(project);
+		ProjectResponseContent responseContent = mapper.map(project);
 
 		// Assert
 		assertNotNull(responseContent, "Response content should not be null");
@@ -79,13 +79,13 @@ class ProjectMapperTest {
 	}
 
 	@Test
-	void testToResponseContent_WithDefaultValues() {
+	void testmap_WithDefaultValues() {
 		// Arrange - Using default values from ProjectMeta
 		Project project = createProject("Unknown Project", "Unknown description", "#FAFAFA");
 		HUID projectId = project.getId();
 
 		// Act
-		ProjectResponseContent responseContent = mapper.toResponseContent(project);
+		ProjectResponseContent responseContent = mapper.map(project);
 
 		// Assert
 		assertNotNull(responseContent, "Response content should not be null");
@@ -96,22 +96,24 @@ class ProjectMapperTest {
 	}
 
 	@Test
-	void testToResponseContent_WithNullProject() {
+	void testmap_WithNullProject() {
 		// Act
-		ProjectResponseContent responseContent = mapper.toResponseContent(null);
+		Project project = null;
+		
+		ProjectResponseContent responseContent = mapper.map(project);
 
 		// Assert
 		assertNull(responseContent, "Response content should be null when project is null");
 	}
 
 	@Test
-	void testToResponseContent_WithDifferentColorFormats() {
+	void testmap_WithDifferentColorFormats() {
 		// Arrange
 		String hexColor = "#123ABC";
 		Project project = createProject("Color Test Project", "Testing color mapping", hexColor);
 
 		// Act
-		ProjectResponseContent responseContent = mapper.toResponseContent(project);
+		ProjectResponseContent responseContent = mapper.map(project);
 
 		// Assert
 		assertNotNull(responseContent, "Response content should not be null");
@@ -119,13 +121,13 @@ class ProjectMapperTest {
 	}
 
 	@Test
-	void testToResponseContent_WithEmptyStrings() {
+	void testmap_WithEmptyStrings() {
 		// Arrange
 		Project project = createProject("", "", "");
 		HUID projectId = project.getId();
 
 		// Act
-		ProjectResponseContent responseContent = mapper.toResponseContent(project);
+		ProjectResponseContent responseContent = mapper.map(project);
 
 		// Assert
 		assertNotNull(responseContent, "Response content should not be null");
@@ -136,7 +138,7 @@ class ProjectMapperTest {
 	}
 
 	@Test
-	void testToResponseContent_WithSpecialCharactersInStrings() {
+	void testmap_WithSpecialCharactersInStrings() {
 		// Arrange
 		String specialName = "Test Project @#$%^&*()";
 		String specialDescription = "Description with\nnewlines and\ttabs";
@@ -145,7 +147,7 @@ class ProjectMapperTest {
 		Project project = createProject(specialName, specialDescription, specialColor);
 
 		// Act
-		ProjectResponseContent responseContent = mapper.toResponseContent(project);
+		ProjectResponseContent responseContent = mapper.map(project);
 
 		// Assert
 		assertNotNull(responseContent, "Response content should not be null");
@@ -155,7 +157,7 @@ class ProjectMapperTest {
 	}
 
 	@Test
-	void testToResponseContent_IdTypeConversion() {
+	void testmap_IdTypeConversion() {
 		// Arrange - Testing that HUID is correctly converted to UUID
 		UUID uuid = UUID.randomUUID();
 		HUID projectId = HUID.fromUUID(uuid);
@@ -164,7 +166,7 @@ class ProjectMapperTest {
 		setProjectId(project, projectId);
 
 		// Act
-		ProjectResponseContent responseContent = mapper.toResponseContent(project);
+		ProjectResponseContent responseContent = mapper.map(project);
 
 		// Assert
 		assertNotNull(responseContent, "Response content should not be null");
@@ -173,7 +175,7 @@ class ProjectMapperTest {
 	}
 
 	@Test
-	void testToResponseContent_NestedMetaFieldsAreMapped() {
+	void testmap_NestedMetaFieldsAreMapped() {
 		// Arrange - Explicitly testing that nested meta fields are accessible
 		String name = "Nested Test";
 		String description = "Testing nested meta mapping";
@@ -183,7 +185,7 @@ class ProjectMapperTest {
 		ProjectMeta meta = project.getMeta();
 
 		// Act
-		ProjectResponseContent responseContent = mapper.toResponseContent(project);
+		ProjectResponseContent responseContent = mapper.map(project);
 
 		// Assert
 		assertNotNull(responseContent, "Response content should not be null");

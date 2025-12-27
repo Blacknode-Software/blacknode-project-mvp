@@ -1,6 +1,7 @@
 package software.blacknode.backend.application.task;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -9,6 +10,7 @@ import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
 import software.blacknode.backend.domain.entity.modifier.impl.delete.meta.DeletionMeta;
 import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
+import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.task.Task;
 import software.blacknode.backend.domain.task.meta.delete.impl.TaskDefaultDeletionMeta;
 import software.blacknode.backend.domain.task.repository.TaskRepository;
@@ -59,9 +61,14 @@ public class TaskService {
 		repository.save(organizationId, task);
 	}
 	
+	public Optional<Task> get(HUID organizationId, HUID taskId) {
+		return repository.findById(organizationId, taskId);
+	}
+	
 	public Task getOrThrow(HUID organizationId, HUID taskId) {
-		return repository.findById(organizationId, taskId)
-				.orElseThrow(() -> new IllegalArgumentException("Task not found"));
+		return get(organizationId, taskId).orElseThrow(() -> 
+			new BlacknodeException("Task with id " + taskId + " not found")
+		);
 	}
 	
 	public List<Task> getByIds(HUID organizationId, List<HUID> taskIds) {

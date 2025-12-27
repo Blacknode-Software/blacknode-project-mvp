@@ -1,6 +1,7 @@
 package software.blacknode.backend.application.channel;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -61,10 +62,14 @@ public class ChannelService {
 		repository.save(organizationId, channel);
 	}
 	
+	public Optional<Channel> get(HUID organizationId, HUID channelId) {
+		return repository.findById(organizationId, channelId);
+	}
 	
 	public Channel getOrThrow(HUID organizationId, HUID channelId) {
-		return repository.findById(organizationId, channelId).
-				orElseThrow(() -> new BlacknodeException("Channel with ID " + channelId + " not found."));
+		return get(organizationId, channelId).orElseThrow(() -> 
+			new BlacknodeException("Channel with ID " + channelId + " not found.")
+		);
 	}
 	
 	public List<Channel> getByIds(HUID organizationId, List<HUID> channelIds) {
