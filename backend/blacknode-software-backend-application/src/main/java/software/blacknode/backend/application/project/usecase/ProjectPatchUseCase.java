@@ -1,8 +1,5 @@
 package software.blacknode.backend.application.project.usecase;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import software.blacknode.backend.application.access.AccessControlService;
-import software.blacknode.backend.application.access.AccessControlService.AccessLevel;
+import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.patch.impl.PatchOperationEnum;
 import software.blacknode.backend.application.project.ProjectService;
 import software.blacknode.backend.application.project.command.ProjectPatchCommand;

@@ -1,4 +1,4 @@
-package software.blacknode.backend.application.task.usecase;
+package software.blacknode.backend.application.view.usecase;
 
 import java.util.List;
 
@@ -13,24 +13,24 @@ import lombok.ToString;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.application.access.AccessControlService;
 import software.blacknode.backend.application.access.level.AccessLevel;
-import software.blacknode.backend.application.task.TaskService;
-import software.blacknode.backend.application.task.command.TasksInChannelCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
+import software.blacknode.backend.application.view.ViewService;
+import software.blacknode.backend.application.view.command.ViewsInChannelCommand;
 import software.blacknode.backend.domain.context.SessionContext;
 
 @Service
 @RequiredArgsConstructor
-public class TasksInChannelUseCase implements ResultExecutionUseCase<TasksInChannelCommand, TasksInChannelUseCase.Result> {
+public class ViewsInChannelUseCase implements ResultExecutionUseCase<ViewsInChannelCommand, ViewsInChannelUseCase.Result> {
 	
-	private final AccessControlService accessControlService;	
+	private final AccessControlService accessControlService;
 	
-	private final TaskService taskService;
+	private final ViewService viewService;
 	
 	@Autowired
 	private SessionContext sessionContext;
 	
 	@Override
-	public TasksInChannelUseCase.Result execute(TasksInChannelCommand command) {
+	public Result execute(ViewsInChannelCommand command) {
 		var organizationId = sessionContext.getOrganizationId();
 		var memberId = sessionContext.getMemberId();
 		
@@ -39,28 +39,28 @@ public class TasksInChannelUseCase implements ResultExecutionUseCase<TasksInChan
 		accessControlService.ensureMemberHasChannelAccess(organizationId, memberId, 
 				channelId, AccessLevel.READ);
 		
-		var tasks = taskService.getAllInChannel(organizationId, channelId);
+		var views = viewService.getAllInChannel(organizationId, channelId);
 		
-		var tasksIds = tasks.stream()
-				/* CURRENT VERSION: By default tasks are shown for all members of the channel - this check is not needed
-				.filter(task -> accessControlService.hasAccessToTask(organizationId, memberId, task.getId(), 
-						AccessControlService.AccessLevel.READ)) */
-				.map(task -> task.getId())
+		var viewIds = views.stream()
+				/* CURRENT VERSION: All views are accessible by default in this version */
+				.map(v -> v.getId())
 				.toList();
 		
 		return Result.builder()
-				.tasksIds(tasksIds)
+				.viewIds(viewIds)
 				.build();
 	}
-
+	
+	
 	@Getter
 	@Builder
 	@ToString
 	public static class Result {
-		
+	
 		@NonNull
-		private final List<HUID> tasksIds;
+		private final List<HUID> viewIds;
 		
 	}
-
+	
 }
+

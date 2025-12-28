@@ -1,7 +1,7 @@
 package software.blacknode.backend.application.access.exception;
 
 import me.hinsinger.hinz.common.huid.HUID;
-import software.blacknode.backend.application.access.AccessControlService.AccessLevel;
+import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 
 public class AccessDeniedException extends BlacknodeException {

@@ -1,8 +1,5 @@
 package software.blacknode.backend.application.channel.usecase;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +8,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import software.blacknode.backend.application.access.AccessControlService;
+import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.channel.ChannelService;
 import software.blacknode.backend.application.channel.command.ChannelPatchCommand;
 import software.blacknode.backend.application.patch.impl.PatchOperationEnum;
@@ -41,7 +39,7 @@ public class ChannelPatchUseCase implements ResultExecutionUseCase<ChannelPatchC
 		var channelId = command.getId();
 		
 		accessControlService.ensureMemberHasChannelAccess(organizationId, memberId, 
-				channelId, AccessControlService.AccessLevel.MANAGE);
+				channelId, AccessLevel.MANAGE);
 		
 		var operations = command.getOperations();
 		

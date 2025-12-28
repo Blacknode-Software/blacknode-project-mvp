@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import software.blacknode.backend.application.access.AccessControlService;
+import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.patch.impl.PatchOperationEnum;
 import software.blacknode.backend.application.task.TaskService;
 import software.blacknode.backend.application.task.command.TaskPatchCommand;
@@ -39,7 +40,7 @@ public class TaskPatchUseCase implements ResultExecutionUseCase<TaskPatchCommand
 		var taskId = command.getId();
 		
 		accessControlService.ensureMemberHasTaskAccess(organizationId, memberId, 
-				taskId, AccessControlService.AccessLevel.WRITE);
+				taskId, AccessLevel.WRITE);
 		
 		var operations = command.getOperations();
 		
