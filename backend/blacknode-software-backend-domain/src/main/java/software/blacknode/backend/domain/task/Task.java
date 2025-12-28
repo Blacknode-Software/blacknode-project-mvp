@@ -19,6 +19,7 @@ import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.Modifi
 import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.task.meta.TaskMeta;
 import software.blacknode.backend.domain.task.meta.create.TaskCreationMeta;
+import software.blacknode.backend.domain.task.meta.delete.TaskDeletionMeta;
 import software.blacknode.backend.domain.task.meta.modify.TaskModificationMeta;
 
 @Builder
@@ -38,7 +39,7 @@ public class Task implements DomainEntity, Creatable, Modifiable, Deletable {
 	
 	@Getter private HUID channelId;
 	@Getter private HUID ownerMemberId;
-	@Getter private HUID organizationId;
+	@Getter private final HUID organizationId;
 	
 	public Task(HUID organizationId) {
 		this.organizationId = organizationId;
@@ -109,8 +110,8 @@ public class Task implements DomainEntity, Creatable, Modifiable, Deletable {
 		    this.statusId = _meta.getStatusId().or(() -> this.statusId);
 		    
 		    this.meta = updated;
-		}
-		else throwUnsupportedModificationMeta(meta);
+		    
+		} else throwUnsupportedModificationMeta(meta);
 		
 		modificationTimestamp = Timestamp.now();
 	}
@@ -123,7 +124,7 @@ public class Task implements DomainEntity, Creatable, Modifiable, Deletable {
 		
 		var meta = meta0.get();
 		
-		if(meta instanceof DeletionMeta) {
+		if(meta instanceof TaskDeletionMeta) {
 			// No specific deletion meta for Task yet
 		} else throwUnsupportedDeletionMeta(meta);
 		
