@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.application.access.AccessControlService;
-import software.blacknode.backend.application.access.AccessControlService.AccessLevel;
+import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
 import software.blacknode.backend.application.view.ViewService;
 import software.blacknode.backend.application.view.command.ViewsInChannelCommand;

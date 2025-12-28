@@ -9,6 +9,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import software.blacknode.backend.application.access.AccessControlService;
+import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.task.TaskService;
 import software.blacknode.backend.application.task.command.TaskFetchCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
@@ -33,7 +34,7 @@ public class TaskFetchUseCase implements ResultExecutionUseCase<TaskFetchCommand
 		var taskId = command.getTaskId();
 		
 		accessControlService.ensureMemberHasTaskAccess(organizationId, memberId, 
-				taskId, AccessControlService.AccessLevel.READ);
+				taskId, AccessLevel.READ);
 		
 		var task = taskService.getOrThrow(organizationId, taskId);
 		

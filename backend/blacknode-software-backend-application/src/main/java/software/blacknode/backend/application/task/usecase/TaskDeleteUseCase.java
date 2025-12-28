@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import software.blacknode.backend.application.access.AccessControlService;
+import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.shared.SharedDeletionService;
 import software.blacknode.backend.application.task.command.TaskDeleteCommand;
 import software.blacknode.backend.application.usecase.ExecutionUseCase;
@@ -28,7 +29,7 @@ public class TaskDeleteUseCase implements ExecutionUseCase<TaskDeleteCommand> {
 		var taskId = command.getTaskId();
 		
 		accessControlService.ensureMemberHasTaskAccess(organizationId, memberId, 
-				taskId, AccessControlService.AccessLevel.MANAGE);
+				taskId, AccessLevel.MANAGE);
 		
 		sharedDeletionService.deleteTaskCascade(organizationId, taskId);
 	}

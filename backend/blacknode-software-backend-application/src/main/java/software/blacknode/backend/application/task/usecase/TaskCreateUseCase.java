@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.application.access.AccessControlService;
+import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.task.TaskService;
 import software.blacknode.backend.application.task.command.TaskCreateCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
@@ -33,7 +34,7 @@ public class TaskCreateUseCase implements ResultExecutionUseCase<TaskCreateComma
 		var channelId = command.getChannelId();
 		
 		accessControlService.ensureMemberHasChannelAccess(organizationId, memberId, 
-				channelId, AccessControlService.AccessLevel.WRITE);
+				channelId, AccessLevel.WRITE);
 		
 		var title = command.getTitle();
 		var description = command.getDescription();
