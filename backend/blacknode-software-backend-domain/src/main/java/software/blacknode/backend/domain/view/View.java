@@ -14,6 +14,7 @@ import software.blacknode.backend.domain.entity.modifier.impl.modify.Modifiable;
 import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
 import software.blacknode.backend.domain.view.meta.ViewMeta;
 import software.blacknode.backend.domain.view.meta.create.ViewCreationMeta;
+import software.blacknode.backend.domain.view.meta.delete.ViewDeletionMeta;
 import software.blacknode.backend.domain.view.meta.modify.ViewModificationMeta;
 
 public class View implements Creatable, Modifiable, Deletable {
@@ -76,6 +77,7 @@ public class View implements Creatable, Modifiable, Deletable {
 			updated = _meta.getType().map(updated::withType).orElse(updated);
 			
 			this.meta = updated;
+			
 		} else throwUnsupportedModificationMeta(meta);
 		
 		modificationTimestamp = Timestamp.now();
@@ -86,6 +88,12 @@ public class View implements Creatable, Modifiable, Deletable {
 		ensureCreated(meta0);
 		ensureNotDeleted(meta0);
 		ensureDeletionMetaProvided(meta0);
+		
+		var meta = meta0.get();
+		
+		if(meta instanceof ViewDeletionMeta) {
+			// No additional data to process for now
+		} else throwUnsupportedDeletionMeta(meta);
 		
 		deletionTimestamp = Timestamp.now();
 	}
