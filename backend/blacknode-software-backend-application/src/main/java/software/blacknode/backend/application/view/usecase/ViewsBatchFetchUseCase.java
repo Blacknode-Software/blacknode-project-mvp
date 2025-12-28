@@ -40,6 +40,10 @@ public class ViewsBatchFetchUseCase implements ResultExecutionUseCase<ViewsBatch
 				.filter(view -> accessControlService.hasAccessToView(meberId, view, 
 						AccessLevel.READ))
 				.toList();
+		
+		return Result.builder()
+				.views(views)
+				.build();
 	}
 
 	@Getter
