@@ -12,6 +12,7 @@ import software.blacknode.backend.application.organization.OrganizationService;
 import software.blacknode.backend.application.project.ProjectService;
 import software.blacknode.backend.application.role.RoleService;
 import software.blacknode.backend.application.task.TaskService;
+import software.blacknode.backend.application.view.ViewService;
 import software.blacknode.backend.domain.channel.Channel;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.member.Member;
@@ -19,6 +20,7 @@ import software.blacknode.backend.domain.organization.Organization;
 import software.blacknode.backend.domain.project.Project;
 import software.blacknode.backend.domain.role.Role;
 import software.blacknode.backend.domain.task.Task;
+import software.blacknode.backend.domain.view.View;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +33,7 @@ public class AccessControlService {
 	private final MemberService memberService;
 	private final RoleService roleService;
 	private final TaskService taskService;
+	private final ViewService viewService;
 	
 	public void ensureMemberHasOrganizationAccess(HUID memberId, HUID organizationId, AccessLevel level) {
 		var member = memberService.getOrThrow(organizationId, memberId);
@@ -154,24 +157,24 @@ public class AccessControlService {
 	
 	public void ensureMemberHasViewAccess(HUID memberId, HUID viewId, HUID organizationId, AccessLevel level) {
 		var member = memberService.getOrThrow(organizationId, memberId);
-		var view = channelService.getOrThrow(organizationId, viewId);
+		var view = viewService.getOrThrow(organizationId, viewId);
 		
 		ensureMemberHasViewAccess(member, view, level);
 	}
 	
 	public void ensureMemberHasViewAccess(Member member, HUID viewId, AccessLevel level) {
-		var view = channelService.getOrThrow(member.getOrganizationId(), viewId);
+		var view = viewService.getOrThrow(member.getOrganizationId(), viewId);
 		
 		ensureMemberHasViewAccess(member, view, level);
 	}
 	
-	public void ensureMemberHasViewAccess(HUID memberId, Channel view, AccessLevel level) {
+	public void ensureMemberHasViewAccess(HUID memberId, View view, AccessLevel level) {
 		var member = memberService.getOrThrow(view.getOrganizationId(), memberId);
 		
 		ensureMemberHasViewAccess(member, view, level);
 	}
 	
-	public void ensureMemberHasViewAccess(Member member, Channel view, AccessLevel level) {
+	public void ensureMemberHasViewAccess(Member member, View view, AccessLevel level) {
 		var hasAccess = hasAccessToView(member, view, level);
 		
 		var memberId = member.getId();
@@ -324,25 +327,25 @@ public class AccessControlService {
 	}
 	
 	public AccessLevel getRoleAccessInView(HUID memberId, HUID viewId, HUID organizationId) {
-		var view = channelService.getOrThrow(organizationId, viewId);
+		var view = viewService.getOrThrow(organizationId, viewId);
 		var member = memberService.getOrThrow(organizationId, memberId);
 		
 		return getRoleAccessInView(member, view);
 	}
 	
 	public AccessLevel getRoleAccessInView(Member member, HUID viewId) {
-		var view = channelService.getOrThrow(member.getOrganizationId(), viewId);
+		var view = viewService.getOrThrow(member.getOrganizationId(), viewId);
 		
 		return getRoleAccessInView(member, view);
 	}
 	
-	public AccessLevel getRoleAccessInView(HUID memberId, Channel view) {
+	public AccessLevel getRoleAccessInView(HUID memberId, View view) {
 		var member = memberService.getOrThrow(view.getOrganizationId(), memberId);
 		
 		return getRoleAccessInView(member, view);
 	}
 	
-	public AccessLevel getRoleAccessInView(Member member, Channel view) {
+	public AccessLevel getRoleAccessInView(Member member, View view) {
 		var organizationId = member.getOrganizationId();
 		
 		view.ensureBelongsToOrganization(organizationId);
@@ -480,25 +483,25 @@ public class AccessControlService {
 	}
 	
 	public boolean hasAccessToView(HUID memberId, HUID viewId, HUID organizationId, AccessLevel level) {
-		var view = channelService.getOrThrow(organizationId, viewId);
+		var view = viewService.getOrThrow(organizationId, viewId);
 		var member = memberService.getOrThrow(organizationId, memberId);
 		
 		return hasAccessToView(member, view, level);
 	}
 	
 	public boolean hasAccessToView(Member member, HUID viewId, AccessLevel level) {
-		var view = channelService.getOrThrow(member.getOrganizationId(), viewId);
+		var view = viewService.getOrThrow(member.getOrganizationId(), viewId);
 		
 		return hasAccessToView(member, view, level);
 	}
 	
-	public boolean hasAccessToView(HUID memberId, Channel view, AccessLevel level) {
+	public boolean hasAccessToView(HUID memberId, View view, AccessLevel level) {
 		var member = memberService.getOrThrow(view.getOrganizationId(), memberId);
 		
 		return hasAccessToView(member, view, level);
 	}
 	
-	public boolean hasAccessToView(Member member, Channel view, AccessLevel level) {
+	public boolean hasAccessToView(Member member, View view, AccessLevel level) {
 		var access = getRoleAccessInView(member, view);
 		
 		return access.atLeast(level);
