@@ -34,9 +34,8 @@ public class ProjectsBatchFetchUseCase implements ResultExecutionUseCase<Project
 		
 		var projectIds = command.getProjectIds();
 		
-		var projects = projectService.getByIds(organizationId, projectIds);
-				
-		projects = projects.stream()
+		var projects = projectService.getByIds(organizationId, projectIds)
+				.stream()
 				.filter(project -> accessControlService.hasAccessToProject(memberId, project, AccessLevel.READ))
 				.toList();
 		

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import me.hinsinger.hinz.common.huid.HUID;
 import me.hinsinger.hinz.common.time.timestamp.Timestamp;
+import software.blacknode.backend.domain.entity.DomainEntity;
 import software.blacknode.backend.domain.entity.modifier.impl.create.Creatable;
 import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
 import software.blacknode.backend.domain.entity.modifier.impl.delete.Deletable;
@@ -18,7 +19,7 @@ import software.blacknode.backend.domain.view.meta.create.ViewCreationMeta;
 import software.blacknode.backend.domain.view.meta.delete.ViewDeletionMeta;
 import software.blacknode.backend.domain.view.meta.modify.ViewModificationMeta;
 
-public class View implements Creatable, Modifiable, Deletable {
+public class View implements DomainEntity, Creatable, Modifiable, Deletable {
 
 	@Getter private HUID id;
 	
@@ -29,6 +30,7 @@ public class View implements Creatable, Modifiable, Deletable {
 	@Getter private Timestamp deletionTimestamp;
 	
 	@Getter private HUID channelId;
+	
 	@Getter private final HUID organizationId;
 	
 	public View(HUID organizationId) {
