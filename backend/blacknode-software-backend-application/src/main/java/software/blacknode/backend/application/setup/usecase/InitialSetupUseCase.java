@@ -18,6 +18,7 @@ import software.blacknode.backend.application.project.ProjectService;
 import software.blacknode.backend.application.role.RoleService;
 import software.blacknode.backend.application.setup.command.InitialSetupCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
+import software.blacknode.backend.application.view.ViewService;
 import software.blacknode.backend.domain.account.meta.create.AccountInitialAdminCreationMeta;
 import software.blacknode.backend.domain.auth.meta.create.AuthByPasswordCreationMeta;
 import software.blacknode.backend.domain.channel.meta.create.impl.ChannelInitialCreationMeta;
@@ -28,6 +29,8 @@ import software.blacknode.backend.domain.organization.meta.create.impl.Organizat
 import software.blacknode.backend.domain.project.meta.create.impl.ProjectInitialCreationMeta;
 import software.blacknode.backend.domain.role.meta.create.RoleInitialOrganizationScopeCreationMeta;
 import software.blacknode.backend.domain.role.meta.create.RoleInitialProjectScopeCreationMeta;
+import software.blacknode.backend.domain.view.View;
+import software.blacknode.backend.domain.view.meta.create.impl.ViewIntialCreationMeta;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +44,7 @@ public class InitialSetupUseCase implements ResultExecutionUseCase<InitialSetupC
 	private final RoleService roleService;
 	private final MemberService memberService;
 	private final AuthService authService;
+	private final ViewService viewService;
 	
 	@Override
 	@Transactional
@@ -146,36 +150,76 @@ public class InitialSetupUseCase implements ResultExecutionUseCase<InitialSetupC
 			
 			var project = projectService.create(organizationId, projectMeta);
 			
-			var channelMeta_0 = ChannelInitialCreationMeta.builder()
-					.name("General")
-					.description("Default channel for general tasks")
-					.projectId(project.getId())
-					.build();
-			
-			var channel_0 = channelService.create(organizationId, channelMeta_0);
-			
-			var channelMeta_1 = ChannelInitialCreationMeta.builder()
-					.name("Development")
-					.description("Channel for development tasks")
-					.projectId(project.getId())
-					.color("#DDEFFA")
-					.build();
-			
-			var channel_1 = channelService.create(organizationId, channelMeta_1);
-			
-			var channelMeta_2 = ChannelInitialCreationMeta.builder()
-					.name("Design")
-					.description("Channel for design tasks")
-					.projectId(project.getId())
-					.color("#FFF0DD")
-					.build();
-			
-			var channel_2 = channelService.create(organizationId, channelMeta_2);
+			initializeDefaultChannels(organizationId, project.getId());
 		}
 		
 		return Result.builder()
 				.organizationId(organization.getId())
 				.build();
+	}
+	
+	private void initializeDefaultChannels(HUID organizationId, HUID projectId) {
+		var channelMeta_0 = ChannelInitialCreationMeta.builder()
+				.name("General")
+				.description("Default channel for general tasks")
+				.projectId(projectId)
+				.build();
+		
+		var channel_0 = channelService.create(organizationId, channelMeta_0);
+		
+		initializeDefaultViewsForChannel(organizationId, channel_0.getId());
+		
+		// ============================
+		
+		var channelMeta_1 = ChannelInitialCreationMeta.builder()
+				.name("Development")
+				.description("Channel for development tasks")
+				.projectId(projectId)
+				.color("#DDEFFA")
+				.build();
+		
+		var channel_1 = channelService.create(organizationId, channelMeta_1);
+		
+		initializeDefaultViewsForChannel(organizationId, channel_1.getId());
+		
+		// ============================
+		
+		var channelMeta_2 = ChannelInitialCreationMeta.builder()
+				.name("Design")
+				.description("Channel for design tasks")
+				.projectId(projectId)
+				.color("#FFF0DD")
+				.build();
+		
+		var channel_2 = channelService.create(organizationId, channelMeta_2);
+		
+		initializeDefaultViewsForChannel(organizationId, channel_2.getId());
+	}
+	
+	private void initializeDefaultViewsForChannel(HUID organizationId, HUID channelId) {
+		var viewMeta_0 = ViewIntialCreationMeta.builder()
+				.name("List")
+				.type(View.Type.LIST)
+				.channelId(channelId)
+				.build();
+		
+		var view_0 =  viewService.create(organizationId, viewMeta_0);
+		
+		var viewMeta_1 = ViewIntialCreationMeta.builder()
+				.name("Board")
+				.type(View.Type.KANBAN)
+				.channelId(channelId)
+				.build();
+		
+		var view_1 =  viewService.create(organizationId, viewMeta_1);
+		
+		var viewMeta_2 = ViewIntialCreationMeta.builder()
+				.name("Gantt")
+				.type(View.Type.GANTT)
+				.channelId(channelId)
+				.build();
+		
+		var view_2 =  viewService.create(organizationId, viewMeta_2);
 	}
 
 	@Getter 
