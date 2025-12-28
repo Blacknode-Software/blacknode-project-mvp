@@ -8,9 +8,11 @@ import software.blacknode.backend.application.channel.ChannelService;
 import software.blacknode.backend.application.organization.OrganizationService;
 import software.blacknode.backend.application.project.ProjectService;
 import software.blacknode.backend.application.task.TaskService;
+import software.blacknode.backend.application.view.ViewService;
 import software.blacknode.backend.domain.channel.meta.delete.impl.ChannelCascadeDeletionMeta;
 import software.blacknode.backend.domain.project.meta.delete.impl.ProjectCascadeDeletionMeta;
 import software.blacknode.backend.domain.task.meta.delete.impl.TaskCascadeDeletionMeta;
+import software.blacknode.backend.domain.view.meta.delete.impl.ViewCascadeDeletionMeta;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +21,7 @@ public class SharedDeletionService {
 	private final OrganizationService organizationService;
 	private final ProjectService projectService;
 	private final ChannelService channelService;
+	private final ViewService viewService;
 	private final TaskService taskService;
 	
 	/* TO BE IMPLEMENTED LATER
@@ -46,7 +49,12 @@ public class SharedDeletionService {
 	}
 	
 	public void deleteChannelCascade(HUID organizationId, HUID channelId) {
-		// TODO VIEWS DELETION HANDLING
+		var views = viewService.getAllInChannel(organizationId, channelId);
+		
+		for(var view : views) {
+			deleteViewCascade(organizationId, view.getId());
+		}
+		
 		var tasks = taskService.getAllInChannel(organizationId, channelId);
 		
 		for(var task : tasks) {
@@ -64,5 +72,11 @@ public class SharedDeletionService {
 		var meta = TaskCascadeDeletionMeta.builder().build();
 		
 		taskService.delete(organizationId, taskId, meta);
+	}
+	
+	public void deleteViewCascade(HUID organizationId, HUID viewId) {
+		var meta = ViewCascadeDeletionMeta.builder().build();
+		
+		taskService.delete(organizationId, viewId, meta);
 	}
 }

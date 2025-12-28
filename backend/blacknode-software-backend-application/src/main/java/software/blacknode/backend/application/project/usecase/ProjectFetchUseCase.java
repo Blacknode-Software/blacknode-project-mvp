@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import software.blacknode.backend.application.access.AccessControlService;
-import software.blacknode.backend.application.access.AccessControlService.AccessLevel;
+import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.project.ProjectService;
 import software.blacknode.backend.application.project.command.ProjectFetchCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;

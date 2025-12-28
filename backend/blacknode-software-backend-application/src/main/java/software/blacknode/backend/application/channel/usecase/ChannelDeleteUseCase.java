@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import software.blacknode.backend.application.access.AccessControlService;
+import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.channel.ChannelService;
 import software.blacknode.backend.application.channel.command.ChannelDeleteCommand;
 import software.blacknode.backend.application.shared.SharedDeletionService;
@@ -36,7 +37,7 @@ public class ChannelDeleteUseCase implements ExecutionUseCase<ChannelDeleteComma
 		var projectId = channel.getProjectId();
 		
 		accessControlService.ensureMemberHasProjectAccess(organizationId, memberId, 
-				projectId, AccessControlService.AccessLevel.MANAGE);
+				projectId, AccessLevel.MANAGE);
 		
 		sharedDeletionService.deleteChannelCascade(organizationId, channelId);
 	}

@@ -1,24 +1,26 @@
-package software.blacknode.backend.application.organization.usecase;
+package software.blacknode.backend.application.view.usecase;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import software.blacknode.backend.application.access.AccessControlService;
 import software.blacknode.backend.application.access.level.AccessLevel;
-import software.blacknode.backend.application.organization.OrganizationService;
-import software.blacknode.backend.application.organization.command.OrganizationFetchCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
+import software.blacknode.backend.application.view.ViewService;
+import software.blacknode.backend.application.view.command.ViewFetchCommand;
 import software.blacknode.backend.domain.context.SessionContext;
-import software.blacknode.backend.domain.organization.Organization;
+import software.blacknode.backend.domain.view.View;
 
 @Service
 @RequiredArgsConstructor
-public class OrganizationFetchUseCase implements ResultExecutionUseCase<OrganizationFetchCommand, OrganizationFetchUseCase.Result>{
+public class ViewFetchUseCase implements ResultExecutionUseCase<ViewFetchCommand, ViewFetchUseCase.Result> {
 
-	private final OrganizationService organizationService;
+	private final ViewService viewService;
 	
 	private final AccessControlService accessControlService;
 	
@@ -26,24 +28,29 @@ public class OrganizationFetchUseCase implements ResultExecutionUseCase<Organiza
 	private SessionContext sessionContext;
 	
 	@Override
-	public Result execute(OrganizationFetchCommand command) {
+	public Result execute(ViewFetchCommand command) {
 		var organizationId = sessionContext.getOrganizationId();
 		var memberId = sessionContext.getMemberId();
 		
-		accessControlService.ensureMemberHasOrganizationAccess(memberId, organizationId, AccessLevel.READ);
+		var viewId = command.getViewId();
 		
-		var organization = organizationService.getOrThrow(organizationId);
+		accessControlService.ensureMemberHasViewAccess(organizationId, memberId, 
+				viewId, AccessLevel.READ);
+		
+		var view = viewService.getOrThrow(organizationId, viewId);
 		
 		return Result.builder()
-				.organization(organization)
+				.view(view)
 				.build();
 	}
-	
-	@Getter
+
 	@Builder
+	@Getter
+	@ToString
 	public static class Result {
 		
-		private Organization organization;
+		@NonNull
+		private final View view;
 		
 	}
 

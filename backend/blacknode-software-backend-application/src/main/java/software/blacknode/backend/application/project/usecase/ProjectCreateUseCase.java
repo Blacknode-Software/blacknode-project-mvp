@@ -9,6 +9,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.application.access.AccessControlService;
+import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.project.ProjectService;
 import software.blacknode.backend.application.project.command.ProjectCreateCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
@@ -30,7 +31,7 @@ public class ProjectCreateUseCase implements ResultExecutionUseCase<ProjectCreat
 		var organizationId = context.getOrganizationId();
 		var memberId = context.getMemberId();
 		
-		accessControlService.ensureMemberHasOrganizationAccess(memberId, organizationId, AccessControlService.AccessLevel.MANAGE);
+		accessControlService.ensureMemberHasOrganizationAccess(memberId, organizationId, AccessLevel.MANAGE);
 		
 		var projectName = command.getName();
 		var projectDescription = command.getDescription();

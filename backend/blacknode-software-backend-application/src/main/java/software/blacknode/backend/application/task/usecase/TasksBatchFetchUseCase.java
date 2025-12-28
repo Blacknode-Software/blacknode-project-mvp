@@ -11,6 +11,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import software.blacknode.backend.application.access.AccessControlService;
+import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.task.TaskService;
 import software.blacknode.backend.application.task.command.TasksBatchFetchCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
@@ -34,11 +35,10 @@ public class TasksBatchFetchUseCase implements ResultExecutionUseCase<TasksBatch
 		
 		var taskIds = command.getTaskIds();
 		
-		var tasks = taskService.getByIds(organizationId, taskIds);
-		
-		tasks = tasks.stream()
+		var tasks = taskService.getByIds(organizationId, taskIds)
+				.stream()
 				.filter(task -> accessControlService.hasAccessToTask(organizationId, memberId, task.getId(), 
-						AccessControlService.AccessLevel.READ))
+						AccessLevel.READ))
 				.toList();
 		
 		return Result.builder()

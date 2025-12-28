@@ -1,15 +1,12 @@
 package software.blacknode.backend.application.organization.usecase;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import software.blacknode.backend.application.access.AccessControlService;
-import software.blacknode.backend.application.access.AccessControlService.AccessLevel;
+import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.organization.OrganizationService;
 import software.blacknode.backend.application.organization.command.OrganizationPatchCommand;
 import software.blacknode.backend.application.patch.impl.PatchOperationEnum;

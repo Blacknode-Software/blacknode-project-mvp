@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import software.blacknode.backend.application.access.AccessControlService;
+import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.channel.ChannelService;
 import software.blacknode.backend.application.channel.command.ChannelsBatchFetchCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
@@ -37,7 +38,7 @@ public class ChannelsBatchFetchUseCase implements ResultExecutionUseCase<Channel
 		
 		channels = channels.stream()
 				.filter(channel -> accessControlService.hasAccessToChannel(organizationId, memberId, channel.getId(), 
-						AccessControlService.AccessLevel.READ))
+						AccessLevel.READ))
 				.toList();
 		
 		return Result.builder()
