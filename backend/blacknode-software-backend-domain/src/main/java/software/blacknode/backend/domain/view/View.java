@@ -16,7 +16,6 @@ import software.blacknode.backend.domain.view.meta.ViewMeta;
 public class View implements Creatable, Modifiable, Deletable {
 
 	@Getter private HUID id;
-	@Getter private String name;
 	
 	@Getter private ViewMeta meta;
 	
@@ -25,7 +24,6 @@ public class View implements Creatable, Modifiable, Deletable {
 	@Getter private Timestamp deletionTimestamp;
 	
 	@Getter private HUID channelId;
-	@Getter private HUID projectId;
 	@Getter private HUID organizationId;
 	
 	@Override
@@ -33,6 +31,8 @@ public class View implements Creatable, Modifiable, Deletable {
 		ensureNotCreated(meta0);
 		ensureNotDeleted(meta0);
 		ensureCreationMetaProvided(meta0);
+		
+		this.id = HUID.random();
 		
 		creationTimestamp = Timestamp.now();
 	}
@@ -54,5 +54,10 @@ public class View implements Creatable, Modifiable, Deletable {
 		
 		deletionTimestamp = Timestamp.now();
 	}
-	
+
+	public static enum Type {
+		KANBAN,
+		LIST,
+		GANTT,
+	}
 }
