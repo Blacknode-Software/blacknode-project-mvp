@@ -7,7 +7,7 @@ import software.blacknode.backend.domain.auth.Auth;
 
 public interface AuthRepository {
 
-	Optional<Auth> findById(HUID id);
+	Optional<Auth> findById(HUID accountId, HUID id);
 
-	void save(Auth auth);
+	void save(HUID accountId, Auth auth);
 }
