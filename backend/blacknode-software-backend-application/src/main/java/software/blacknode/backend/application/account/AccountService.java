@@ -26,7 +26,7 @@ public class AccountService {
 	}
 	
 	public Optional<Account> getByEmail(String email) {
-		//TODO to implement
+		//TODO to be implement
 		
 		return Optional.empty();
 	}

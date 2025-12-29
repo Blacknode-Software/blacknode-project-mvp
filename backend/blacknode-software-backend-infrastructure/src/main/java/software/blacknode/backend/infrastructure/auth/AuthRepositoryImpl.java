@@ -1,5 +1,6 @@
 package software.blacknode.backend.infrastructure.auth;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
@@ -12,15 +13,28 @@ import software.blacknode.backend.domain.auth.repository.AuthRepository;
 public class AuthRepositoryImpl implements AuthRepository {
 
 	@Override
-	public Optional<Auth> findById(HUID id) {
+	public Optional<Auth> findById(HUID accountId, HUID id) {
 		// TODO Auto-generated method stub
 		return Optional.empty();
 	}
 
 	@Override
-	public void save(Auth auth) {
+	public List<Auth> findAllByAccountId(HUID accountId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Auth> findAllByAccountIdAndTypeId(HUID accountId, HUID typeId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void save(HUID accountId, Auth auth) {
 		// TODO Auto-generated method stub
 		
 	}
+
 
 }
