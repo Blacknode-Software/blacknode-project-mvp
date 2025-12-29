@@ -61,7 +61,7 @@ public class ViewController {
 	@OrganizationHeader
 	@Operation(summary = "Fetch multiple views by IDs")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Found views") })
-	@GetMapping("/views/batch-betch")
+	@GetMapping("/views/batch-fetch")
 	public ResponseEntity<ViewsBatchFetchResponse> getViewsBatch(@RequestBody ViewsBatchFetchRequest request) {
 		var command = viewsBatchFetchMapper.toCommand(request);
 		
