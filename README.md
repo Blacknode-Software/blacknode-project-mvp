@@ -1,4 +1,4 @@
-<img width="1676" height="946" alt="image" src="https://github.com/user-attachments/assets/a3d3cbdb-ab3e-4843-82b4-6ecf3751219e" />
+<img width="100%" alt="blacknode-software-repo-banner@2025 12 29" src="https://github.com/user-attachments/assets/9d8016af-f9f2-433f-a348-e5c65a863978" />
 
 
 Blacknode is a lightweight, web-based project management system designed for small and medium-sized teams working with **Scrum** and **Kanban** methodologies. The project focuses on clarity, usability, and on-premise deployment, avoiding the complexity and cost of large SaaS tools while offering more structure than minimal task boards.
