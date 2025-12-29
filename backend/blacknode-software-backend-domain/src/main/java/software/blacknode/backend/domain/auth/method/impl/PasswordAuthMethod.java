@@ -11,7 +11,7 @@ import software.blacknode.backend.domain.auth.method.converter.deserializer.Auth
 import software.blacknode.backend.domain.auth.method.converter.model.AuthMethodSerializedModel;
 import software.blacknode.backend.domain.auth.method.meta.AuthMethodMeta;
 import software.blacknode.backend.domain.auth.method.type.AuthMethodType;
-import software.blacknode.backend.domain.auth.method.type.impl.BaseAuthMethod;
+import software.blacknode.backend.domain.auth.method.type.impl.BaseAuthMethodType;
 
 public class PasswordAuthMethod implements AuthMethod {
 	
@@ -59,7 +59,7 @@ public class PasswordAuthMethod implements AuthMethod {
 
 	@Override
 	public AuthMethodType getType() {
-		return BaseAuthMethod.PASSWORD;
+		return BaseAuthMethodType.PASSWORD;
 	}
 	
 	@Getter
@@ -77,7 +77,7 @@ public class PasswordAuthMethod implements AuthMethod {
 		
 		@Override
 		public PasswordAuthMethod deserialize(AuthMethodSerializedModel model) {
-			model.ensureAuthMethodType(BaseAuthMethod.PASSWORD.getId());
+			model.ensureAuthMethodType(BaseAuthMethodType.PASSWORD.getId());
 			
 			var properties = model.getProperties();
 			

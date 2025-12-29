@@ -10,7 +10,7 @@ import software.blacknode.backend.domain.exception.BlacknodeException;
 
 @Getter
 @AllArgsConstructor
-public enum BaseAuthMethod implements AuthMethodType {
+public enum BaseAuthMethodType implements AuthMethodType {
 	PASSWORD(
 		HUID.fromString("8bf20c11-fe0d-49b8-a6ca-000000000001"),
 		"Password Authentication",
@@ -24,7 +24,7 @@ public enum BaseAuthMethod implements AuthMethodType {
 	private final String description;
 	private final AuthMethodDeserializer<?> deserializer;
 	
-	public static BaseAuthMethod fromId(HUID id) {
+	public static BaseAuthMethodType fromId(HUID id) {
 		for(var method : values()) {
 			if(method.getId().equals(id)) {
 				return method;
