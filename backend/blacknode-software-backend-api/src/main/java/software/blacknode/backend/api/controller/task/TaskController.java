@@ -141,6 +141,9 @@ public class TaskController {
 		return SuccessResponse.with("Task deleted successfully");
 	}
 	
+	@OrganizationHeader
+	@Operation(summary = "Get tasks for a specific channel")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Tasks for channel fetched") })
 	@GetMapping("/channels/{channelId}/tasks")
 	public ResponseEntity<TasksListResponse> getTasksForChannel(@PathVariable UUID channelId) {
 	    var command = TasksInChannelCommand.builder()

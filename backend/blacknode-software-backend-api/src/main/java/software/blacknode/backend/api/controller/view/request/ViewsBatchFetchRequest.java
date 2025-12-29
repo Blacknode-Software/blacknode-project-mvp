@@ -1,9 +1,9 @@
-package software.blacknode.backend.api.controller.task.request;
+package software.blacknode.backend.api.controller.view.request;
 
 import lombok.NoArgsConstructor;
 import software.blacknode.backend.api.controller.request.BatchRequest;
 
 @NoArgsConstructor
-public class TasksBatchFetchRequest extends BatchRequest {
-	
+public class ViewsBatchFetchRequest extends BatchRequest {
+
 }
