@@ -20,7 +20,7 @@ import software.blacknode.backend.application.setup.command.InitialSetupCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
 import software.blacknode.backend.application.view.ViewService;
 import software.blacknode.backend.domain.account.meta.create.AccountInitialAdminCreationMeta;
-import software.blacknode.backend.domain.auth.meta.create.AuthByPasswordCreationMeta;
+import software.blacknode.backend.domain.auth.meta.create.impl.PasswordAuthCreationMeta;
 import software.blacknode.backend.domain.channel.meta.create.impl.ChannelInitialCreationMeta;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.member.association.meta.create.MemberOrganizationAssociationCreationMeta;
@@ -120,12 +120,11 @@ public class InitialSetupUseCase implements ResultExecutionUseCase<InitialSetupC
 		
 		var account = accountService.create(accountMeta);
 		
-		var authMeta = AuthByPasswordCreationMeta.builder()
+		var authMeta = PasswordAuthCreationMeta.builder()
 				.password(command.getAdminPassword())
-				.accountId(account.getId())
 				.build();
 		
-		var auth = authService.create(authMeta);
+		var auth = authService.create(account.getId(), authMeta);
 		
 		var memberMeta = MemberAdminCreationMeta.builder()
 				.accountId(account.getId())

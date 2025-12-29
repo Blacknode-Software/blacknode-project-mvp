@@ -30,7 +30,7 @@ public class PasswordAuthMethod implements AuthMethod {
 
 	@Override
 	public boolean authenticate(AuthMethodMeta meta) {
-		if(meta instanceof PasswordAuthMeta _meta) {
+		if(meta instanceof PasswordAuthMethodMeta _meta) {
 			String password = _meta.getPassword();
 
 			if(!checkPassword(password)) throw new AuthenticationException("Provided invalid password.");
@@ -64,7 +64,7 @@ public class PasswordAuthMethod implements AuthMethod {
 	
 	@Getter
 	@Builder
-	public static class PasswordAuthMeta implements AuthMethodMeta {
+	public static class PasswordAuthMethodMeta implements AuthMethodMeta {
 		
 		@NonNull
 		@NotBlank
