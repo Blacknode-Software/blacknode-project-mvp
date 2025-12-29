@@ -11,7 +11,7 @@ public class PasswordAuthCreationMeta implements AuthCreationMeta {
 	private String password;
 	
 	public AuthMethod getAuthMethod() {
-		return new PasswordAuthMethod(password);
+		return PasswordAuthMethod.withPassword(password);
 	}
 
 }

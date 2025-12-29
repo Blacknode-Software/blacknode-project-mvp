@@ -2,6 +2,9 @@ package software.blacknode.backend.domain.auth.method.impl;
 
 import java.util.ArrayList;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -16,27 +19,28 @@ import software.blacknode.backend.domain.validate.exception.BlacknodeValidationE
 
 public class PasswordAuthMethod implements AuthMethod {
 	
-	private String passwordHash;
-	private String salt;
+	private static final PasswordEncoder ENCODER = new BCryptPasswordEncoder(12);
 	
-	private PasswordAuthMethod(String passwordHash, String salt) {
-		this.passwordHash = passwordHash;
-		this.salt = salt;
-	}
-	
-	public PasswordAuthMethod(String password) {
+	public static PasswordAuthMethod withPassword(String password) {
 		password = password.trim();
 		
 		validatePassword(password);
 		
-		this.salt = generateSalt();
-		this.passwordHash = hashPassword(password, salt);
+		var hash = ENCODER.encode(password);
+		
+		return new PasswordAuthMethod(hash);
+	}
+	
+	private String hash;
+	
+	private PasswordAuthMethod(String hash) {
+		this.hash = hash;
 	}
 
 	@Override
 	public boolean authenticate(AuthMethodMeta meta) {
 		if(meta instanceof PasswordAuthMethodMeta _meta) {
-			String password = _meta.getPassword();
+			String password = _meta.getPassword().trim();
 
 			if(!checkPassword(password)) throw new AuthenticationException("Provided invalid password.");
 			
@@ -47,22 +51,10 @@ public class PasswordAuthMethod implements AuthMethod {
 	}
 	
 	private boolean checkPassword(String password) {
-		return this.passwordHash.equals(hashPassword(password.trim(), this.salt));
+		return ENCODER.matches(password, hash);
 	}
 	
-	private String hashPassword(String password, String salt) {
-		// Implement a proper hashing mechanism here.
-		// This is just a placeholder for demonstration.
-		return password + salt;
-	}
-	
-	private String generateSalt() {
-		// Implement a proper salt generation mechanism here.
-		// This is just a placeholder for demonstration.
-		return "random_salt";
-	}
-	
-	private void validatePassword(String password) {
+	private static void validatePassword(String password) {
 		var messages = new ArrayList<String>();
 		
 		if(password == null || password.isBlank()) {
@@ -125,10 +117,9 @@ public class PasswordAuthMethod implements AuthMethod {
 			
 			var properties = model.getProperties();
 			
-			@NonNull var passwordHash = properties.asText("passwordHash");
-			@NonNull var salt = properties.asText("salt");
+			@NonNull var hash = properties.asText("hash");
 			
-			return new PasswordAuthMethod(passwordHash, salt);
+			return new PasswordAuthMethod(hash);
 		}
 		
 	}
