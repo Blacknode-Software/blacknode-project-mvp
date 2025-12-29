@@ -1,9 +1,9 @@
-package software.blacknode.backend.infrastructure.task.entity.mapper;
+package software.blacknode.backend.infrastructure.view.entity.mapper;
 
 import org.mapstruct.Mapper;
 
-import software.blacknode.backend.domain.task.Task;
-import software.blacknode.backend.domain.task.meta.TaskMeta;
+import software.blacknode.backend.domain.view.View;
+import software.blacknode.backend.domain.view.meta.ViewMeta;
 import software.blacknode.backend.infrastructure.entity.mapper.InfrastructureMapper;
 import software.blacknode.backend.infrastructure.entity.mapper.annotation.domain.CreationMappingDomain;
 import software.blacknode.backend.infrastructure.entity.mapper.annotation.domain.DeletionMappingDomain;
@@ -16,12 +16,12 @@ import software.blacknode.backend.infrastructure.entity.mapper.annotation.infras
 import software.blacknode.backend.infrastructure.entity.mapper.annotation.infrastructure.ModificationMappingInfrastructure;
 import software.blacknode.backend.infrastructure.entity.mapper.annotation.infrastructure.OrganizationIdMappingInfrastructure;
 import software.blacknode.backend.infrastructure.entity.mapper.annotation.infrastructure.StateMappingInfrastructure;
-import software.blacknode.backend.infrastructure.task.entity.TaskEntity;
-import software.blacknode.backend.infrastructure.task.entity.meta.TaskEntityMeta;
+import software.blacknode.backend.infrastructure.view.entity.ViewEntity;
+import software.blacknode.backend.infrastructure.view.entity.meta.ViewEntityMeta;
 
 @Mapper(componentModel = "spring")
-public interface TaskEntityMapper extends InfrastructureMapper<Task, TaskEntity> {
-
+public interface ViewEntityMapper extends InfrastructureMapper<View, ViewEntity> {
+	
 	@Override
 	@IdMappingInfrastructure
 	@OrganizationIdMappingInfrastructure
@@ -31,7 +31,7 @@ public interface TaskEntityMapper extends InfrastructureMapper<Task, TaskEntity>
 	@DeletionMappingInfrastructure
 	
 	@StateMappingInfrastructure
-	TaskEntity toInfrastructureEntity(Task domain);
+	ViewEntity toInfrastructureEntity(View domain);
 	
 	@Override
 	@IdMappingDomain
@@ -40,9 +40,9 @@ public interface TaskEntityMapper extends InfrastructureMapper<Task, TaskEntity>
 	@CreationMappingDomain
 	@ModificationMappingDomain
 	@DeletionMappingDomain
-	Task toDomainEntity(TaskEntity entity);
+	View toDomainEntity(ViewEntity entity);
 	
-	TaskEntityMeta map(TaskMeta meta);
+	ViewEntityMeta map(ViewMeta meta);
 	
-	TaskMeta map(TaskEntityMeta meta);
+	ViewMeta map(ViewEntityMeta meta);
 }
