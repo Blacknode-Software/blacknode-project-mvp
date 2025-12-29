@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -61,7 +62,7 @@ public class ViewController {
 	@OrganizationHeader
 	@Operation(summary = "Fetch multiple views by IDs")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Found views") })
-	@GetMapping("/views/batch-fetch")
+	@PostMapping("/views/batch-fetch")
 	public ResponseEntity<ViewsBatchFetchResponse> getViewsBatch(@RequestBody ViewsBatchFetchRequest request) {
 		var command = viewsBatchFetchMapper.toCommand(request);
 		
