@@ -6,10 +6,10 @@ import lombok.Getter;
 import me.hinsinger.hinz.common.huid.HUID;
 import me.hinsinger.hinz.common.time.timestamp.Timestamp;
 import software.blacknode.backend.domain.auth.meta.AuthMeta;
-import software.blacknode.backend.domain.auth.meta.create.AuthByPasswordCreationMeta;
-import software.blacknode.backend.domain.auth.properties.AuthProperties;
-import software.blacknode.backend.domain.auth.properties.impl.AuthByPasswordProperties;
-import software.blacknode.backend.domain.auth.type.AuthType;
+import software.blacknode.backend.domain.auth.meta.create.AuthCreationMeta;
+import software.blacknode.backend.domain.auth.method.AuthMethod;
+import software.blacknode.backend.domain.auth.method.meta.AuthMethodMeta;
+import software.blacknode.backend.domain.auth.method.type.AuthMethodType;
 import software.blacknode.backend.domain.entity.modifier.impl.create.Creatable;
 import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
 import software.blacknode.backend.domain.entity.modifier.impl.delete.Deletable;
@@ -22,16 +22,19 @@ public class Auth implements Creatable, Deletable, Modifiable {
 	@Getter private HUID id;
 	
 	@Getter private AuthMeta meta;
-	@Getter private AuthType type;
 	
-	private AuthProperties properties;
+	private AuthMethod method;
 	
 	@Getter private Timestamp creationTimestamp;
 	@Getter private Timestamp modificationTimestamp;
 	@Getter private Timestamp deletionTimestamp;
 	
-	@Getter private HUID accountId;
+	@Getter private final HUID accountId;
 
+	public Auth(HUID accountId) {
+		this.accountId = accountId;
+	}
+	
 	@Override
 	public void create(Optional<CreationMeta> meta0) {
 		ensureNotCreated(meta0);
@@ -39,24 +42,14 @@ public class Auth implements Creatable, Deletable, Modifiable {
 		ensureCreationMetaProvided(meta0);
 		
 		this.id = HUID.random();
-		this.meta = new AuthMeta();
 		
 		var meta = meta0.get();
 		
-		if(meta instanceof AuthByPasswordCreationMeta _meta) {
-			var password = _meta.getPassword();
-			var accountId = _meta.getAccountId();
+		if(meta instanceof AuthCreationMeta _meta) {
+			this.method = _meta.getAuthMethod();
 			
-			var properties = new AuthByPasswordProperties();
-			
-			properties.changePassword(password);
-			
-			this.type = AuthType.PASSWORD_AUTHENTICATION;
-			this.properties = properties;
-			
-			this.accountId = accountId;
-		} else {
-			throwUnsupportedCreationMeta(meta);
+			this.meta = AuthMeta.builder()
+					.build();
 		}
 		
 		creationTimestamp = Timestamp.now();
@@ -78,5 +71,13 @@ public class Auth implements Creatable, Deletable, Modifiable {
 		ensureDeletionMetaProvided(meta0);
 		
 		deletionTimestamp = Timestamp.now();
+	}
+	
+	public boolean authenticate(AuthMethodMeta meta) {
+		return method.authenticate(meta);
+	}
+	
+	public AuthMethodType getAuthMethodType() {
+		return method.getType();
 	}
 }
