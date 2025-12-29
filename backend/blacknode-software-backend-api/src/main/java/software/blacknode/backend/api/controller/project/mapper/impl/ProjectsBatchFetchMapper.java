@@ -13,7 +13,7 @@ import software.blacknode.backend.application.project.command.ProjectsBatchFetch
 import software.blacknode.backend.application.project.usecase.ProjectsBatchFetchUseCase;
 
 @Mapper(componentModel = "spring")
-public interface ProjectsBatchFetchMapper extends RequestMapper<ProjectsBatchFetchRequest, ProjectsBatchFetchCommand>, ResponseMapper<ProjectsBatchFetchUseCase.Result, ProjectsBatchFetchResponse> {
+public interface ProjectsBatchFetchMapper extends ProjectMapper, RequestMapper<ProjectsBatchFetchRequest, ProjectsBatchFetchCommand>, ResponseMapper<ProjectsBatchFetchUseCase.Result, ProjectsBatchFetchResponse> {
 	
 	@Override
 	@Mapping(target = "projectIds", source = "ids")

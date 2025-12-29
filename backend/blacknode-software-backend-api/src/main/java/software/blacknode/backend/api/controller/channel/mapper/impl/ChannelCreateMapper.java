@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.mapstruct.Mapper;
 
+import software.blacknode.backend.api.controller.channel.mapper.ChannelMapper;
 import software.blacknode.backend.api.controller.channel.request.ChannelCreateRequest;
 import software.blacknode.backend.api.controller.channel.response.ChannelCreateResponse;
 import software.blacknode.backend.api.controller.mapper.impl.ResponseMapper;
@@ -11,7 +12,7 @@ import software.blacknode.backend.application.channel.command.ChannelCreateComma
 import software.blacknode.backend.application.channel.usecase.ChannelCreateUseCase;
 
 @Mapper(componentModel = "spring")
-public interface ChannelCreateMapper extends ResponseMapper<ChannelCreateUseCase.Result, ChannelCreateResponse> {
+public interface ChannelCreateMapper extends ChannelMapper, ResponseMapper<ChannelCreateUseCase.Result, ChannelCreateResponse> {
 	
 	ChannelCreateCommand toCommand(ChannelCreateRequest request, UUID projectId);
 	

@@ -47,7 +47,7 @@ public class ViewsInChannelUseCase implements ResultExecutionUseCase<ViewsInChan
 				.toList();
 		
 		return Result.builder()
-				.viewIds(viewIds)
+				.viewsIds(viewIds)
 				.build();
 	}
 	
@@ -58,7 +58,7 @@ public class ViewsInChannelUseCase implements ResultExecutionUseCase<ViewsInChan
 	public static class Result {
 	
 		@NonNull
-		private final List<HUID> viewIds;
+		private final List<HUID> viewsIds;
 		
 	}
 	
