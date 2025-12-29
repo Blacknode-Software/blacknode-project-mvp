@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.mapstruct.Mapper;
 
+import software.blacknode.backend.api.controller.channel.mapper.ChannelMapper;
 import software.blacknode.backend.api.controller.channel.request.ChannelPatchRequest;
 import software.blacknode.backend.api.controller.channel.response.ChannelPatchResponse;
 import software.blacknode.backend.api.controller.channel.response.content.annotation.ChannelResponseContentMapping;
@@ -13,7 +14,7 @@ import software.blacknode.backend.application.channel.command.ChannelPatchComman
 import software.blacknode.backend.application.channel.usecase.ChannelPatchUseCase;
 
 @Mapper(componentModel = "spring")
-public interface ChannelPatchMapper extends ResponseMapper<ChannelPatchUseCase.Result, ChannelPatchResponse> {
+public interface ChannelPatchMapper extends ChannelMapper, ResponseMapper<ChannelPatchUseCase.Result, ChannelPatchResponse> {
 
 	@PatchOperationsMappingRequest
 	ChannelPatchCommand toCommand(ChannelPatchRequest request, UUID id);

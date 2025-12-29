@@ -15,8 +15,8 @@ public class TaskPatchRequest extends PatchRequest {
 	private String description;
 
 	private Integer priority;
-	private Instant beginAtTimestamp;
-	private Instant endAtTimestamp;
+	private Instant beginAt;
+	private Instant endAt;
 
 	private UUID statusId;
 	
