@@ -30,7 +30,7 @@ public interface ChannelEntityMapper extends InfrastructureMapper<Channel, Chann
 	@DeletionMappingInfrastructure
 	
 	@StateMappingInfrastructure
-	public ChannelEntity toInfrastructureEntity(Channel domainEntity);
+	ChannelEntity toInfrastructureEntity(Channel domainEntity);
 
 	@IdMappingDomain
 	@OrganizationIdMappingDomain
@@ -38,10 +38,10 @@ public interface ChannelEntityMapper extends InfrastructureMapper<Channel, Chann
 	@CreationMappingDomain
 	@ModificationMappingDomain
 	@DeletionMappingDomain
-	public Channel toDomainEntity(ChannelEntity infrastructureEntity);
+	Channel toDomainEntity(ChannelEntity infrastructureEntity);
 
-	public ChannelEntityMeta map(ChannelMeta meta);
+	ChannelEntityMeta map(ChannelMeta meta);
 	
-	public ChannelMeta map(ChannelEntityMeta meta);
+	ChannelMeta map(ChannelEntityMeta meta);
 	
 }

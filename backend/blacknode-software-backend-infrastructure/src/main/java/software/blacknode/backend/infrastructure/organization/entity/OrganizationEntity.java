@@ -10,7 +10,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
-import software.blacknode.backend.infrastructure.entity.impl.BaseEntity;
+import software.blacknode.backend.infrastructure.entity.impl.BaseInfrastructureEntity;
 import software.blacknode.backend.infrastructure.entity.version.annotation.VersionedEntity;
 import software.blacknode.backend.infrastructure.organization.entity.meta.OrganizationEntityMeta;
 import software.blacknode.backend.infrastructure.organization.entity.settings.OrganizationEntitySettings;
@@ -20,7 +20,7 @@ import software.blacknode.backend.infrastructure.organization.entity.settings.Or
 @SuperBuilder
 @Table(name = "organizations")
 @Access(AccessType.FIELD)
-public class OrganizationEntity extends BaseEntity {
+public class OrganizationEntity extends BaseInfrastructureEntity {
 	
 	@NonNull
 	@Column(name = "meta")

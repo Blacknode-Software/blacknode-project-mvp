@@ -19,7 +19,7 @@ import software.blacknode.backend.infrastructure.entity.state.EntityState;
 @MappedSuperclass
 @Access(AccessType.FIELD)
 @NoArgsConstructor
-public class BaseEntity implements InfrastructureEntity {
+public class BaseInfrastructureEntity implements InfrastructureEntity {
 	
 	@Id
 	@Column(name = "id")
