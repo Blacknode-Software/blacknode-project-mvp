@@ -10,6 +10,7 @@ import me.hinsinger.hinz.common.huid.HUID;
 import me.hinsinger.hinz.common.time.timestamp.Timestamp;
 import software.blacknode.backend.domain.auth.meta.AuthMeta;
 import software.blacknode.backend.domain.auth.meta.create.AuthCreationMeta;
+import software.blacknode.backend.domain.auth.meta.delete.AuthDeletionMeta;
 import software.blacknode.backend.domain.auth.meta.modify.AuthModificationMeta;
 import software.blacknode.backend.domain.auth.method.AuthMethod;
 import software.blacknode.backend.domain.auth.method.meta.AuthMethodMeta;
@@ -97,6 +98,12 @@ public class Auth implements Creatable, Deletable, Modifiable {
 		ensureCreated(meta0);
 		ensureNotDeleted(meta0);
 		ensureDeletionMetaProvided(meta0);
+		
+		var meta = meta0.get();
+		
+		if(meta instanceof AuthDeletionMeta _meta) {
+			// No specific deletion logic for now
+		} else throwUnsupportedDeletionMeta(meta);
 		
 		deletionTimestamp = Timestamp.now();
 	}
