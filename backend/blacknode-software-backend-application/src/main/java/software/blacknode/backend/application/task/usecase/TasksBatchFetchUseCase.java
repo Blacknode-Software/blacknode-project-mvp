@@ -37,7 +37,7 @@ public class TasksBatchFetchUseCase implements ResultExecutionUseCase<TasksBatch
 		
 		var tasks = taskService.getByIds(organizationId, taskIds)
 				.stream()
-				.filter(task -> accessControlService.hasAccessToTask(organizationId, memberId, task.getId(), 
+				.filter(task -> accessControlService.hasAccessToTask(memberId, task, 
 						AccessLevel.READ))
 				.toList();
 		
