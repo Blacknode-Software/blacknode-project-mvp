@@ -5,6 +5,7 @@ import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.ToString;
 import me.hinsinger.hinz.common.huid.HUID;
 import me.hinsinger.hinz.common.time.timestamp.Timestamp;
@@ -55,7 +56,9 @@ public class Auth implements Creatable, Deletable, Modifiable {
 		var meta = meta0.get();
 		
 		if(meta instanceof AuthCreationMeta _meta) {
-			this.method = _meta.getAuthMethod();
+			@NonNull var method = _meta.getAuthMethod();
+			
+			this.method = method;
 			
 			this.meta = AuthMeta.builder()
 					.build();
