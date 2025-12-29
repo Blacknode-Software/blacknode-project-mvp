@@ -1,7 +1,7 @@
 package software.blacknode.backend.domain.auth.method.impl;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import java.util.ArrayList;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -12,6 +12,7 @@ import software.blacknode.backend.domain.auth.method.converter.model.AuthMethodS
 import software.blacknode.backend.domain.auth.method.meta.AuthMethodMeta;
 import software.blacknode.backend.domain.auth.method.type.AuthMethodType;
 import software.blacknode.backend.domain.auth.method.type.impl.BaseAuthMethodType;
+import software.blacknode.backend.domain.validate.exception.BlacknodeValidationException;
 
 public class PasswordAuthMethod implements AuthMethod {
 	
@@ -24,6 +25,10 @@ public class PasswordAuthMethod implements AuthMethod {
 	}
 	
 	public PasswordAuthMethod(String password) {
+		password = password.trim();
+		
+		validatePassword(password);
+		
 		this.salt = generateSalt();
 		this.passwordHash = hashPassword(password, salt);
 	}
@@ -42,7 +47,7 @@ public class PasswordAuthMethod implements AuthMethod {
 	}
 	
 	private boolean checkPassword(String password) {
-		return this.passwordHash.equals(hashPassword(password, this.salt));
+		return this.passwordHash.equals(hashPassword(password.trim(), this.salt));
 	}
 	
 	private String hashPassword(String password, String salt) {
@@ -56,6 +61,47 @@ public class PasswordAuthMethod implements AuthMethod {
 		// This is just a placeholder for demonstration.
 		return "random_salt";
 	}
+	
+	private void validatePassword(String password) {
+		var messages = new ArrayList<String>();
+		
+		if(password == null || password.isBlank()) {
+			messages.add("Password cannot be null or blank.");
+		}
+		
+		if(password.length() < 8) {
+			messages.add("Password must be at least 8 characters long.");
+		}
+		
+		if(password.length() > 128) {
+			messages.add("Password cannot exceed 128 characters.");
+		}
+		
+		if(password.contains(" ")) {
+			messages.add("Password cannot contain spaces.");
+		}
+		
+		if(!password.matches(".*[A-Z].*")) {
+			messages.add("Password must contain at least one uppercase letter.");
+		}
+		
+		if(!password.matches(".*[a-z].*")) {
+			messages.add("Password must contain at least one lowercase letter.");
+		}
+		
+		if(!password.matches(".*\\d.*")) {
+			messages.add("Password must contain at least one digit.");
+		}
+		
+		if(!password.matches(".*[!@#$%^&*()].*")) {
+			messages.add("Password must contain at least one special character (!@#$%^&*()).");
+		}
+		
+		if(!messages.isEmpty()) {
+			throw new BlacknodeValidationException(String.join("\n", messages));
+		}
+	}
+
 
 	@Override
 	public AuthMethodType getType() {
@@ -67,8 +113,6 @@ public class PasswordAuthMethod implements AuthMethod {
 	public static class PasswordAuthMethodMeta implements AuthMethodMeta {
 		
 		@NonNull
-		@NotBlank
-		@Size(min = 4, max = 128)
 		private String password;
 		
 	}

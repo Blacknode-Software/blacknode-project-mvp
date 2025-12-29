@@ -25,8 +25,8 @@ public class AuthenticateWithPasswordUseCase implements ResultExecutionUseCase<A
 	
 	@Override
 	public Result execute(AuthenticateWithPasswordCommand command) {
-		var email = command.getEmail(); //TODO sanitize email
-		var password = command.getPassword(); //TODO sanitize password
+		var email = command.getEmail().trim().toLowerCase();
+		var password = command.getPassword().trim();
 		
 		var account = accountService.getByEmail(email)
 				.orElseThrow(() -> new AuthenticationException("No account found for the provided email."));
