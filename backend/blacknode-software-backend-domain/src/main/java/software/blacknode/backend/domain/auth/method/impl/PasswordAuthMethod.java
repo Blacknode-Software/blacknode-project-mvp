@@ -81,8 +81,8 @@ public class PasswordAuthMethod implements AuthMethod {
 			
 			var properties = model.getProperties();
 			
-			String passwordHash = properties.asText("passwordHash");
-			String salt = properties.asText("salt");
+			@NonNull var passwordHash = properties.asText("passwordHash");
+			@NonNull var salt = properties.asText("salt");
 			
 			return new PasswordAuthMethod(passwordHash, salt);
 		}
