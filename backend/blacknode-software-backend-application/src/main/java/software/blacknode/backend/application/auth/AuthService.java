@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.domain.auth.Auth;
 import software.blacknode.backend.domain.auth.meta.delete.impl.AuthDefaultDeletionMeta;
+import software.blacknode.backend.domain.auth.method.type.AuthMethodType;
 import software.blacknode.backend.domain.auth.repository.AuthRepository;
 import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
 import software.blacknode.backend.domain.entity.modifier.impl.delete.meta.DeletionMeta;
@@ -71,4 +72,28 @@ public class AuthService {
 		return repository.findById(accountId,  authId);
 	}
 	
+	public List<Auth> getAll(HUID accountId) {
+		return repository.findAllByAccountId(accountId);
+	}
+	
+	public Auth getByMethodTypeOrThrow(HUID accountId, AuthMethodType methodType) {
+		return getByMethodTypeOrThrow(accountId, methodType.getId());
+	}
+	
+	public Auth getByMethodTypeOrThrow(HUID accountId, HUID mehtodId) {
+		return getByMethodType(accountId, mehtodId).orElseThrow(() -> 
+			new BlacknodeException("Auth with Method ID " + mehtodId + " not found.")
+		);
+	}
+	
+	public Optional<Auth> getByMethodType(HUID accountId, AuthMethodType methodType) {
+		return getByMethodType(accountId, methodType.getId());
+	}
+	
+	public Optional<Auth> getByMethodType(HUID accountId, HUID mehtodId) {
+		return repository.findAllByAccountIdAndTypeId(accountId, mehtodId)
+				.stream()
+				.findFirst();
+	}
+
 }
