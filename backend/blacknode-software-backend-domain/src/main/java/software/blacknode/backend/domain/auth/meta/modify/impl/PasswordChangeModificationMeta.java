@@ -15,6 +15,6 @@ public class PasswordChangeModificationMeta implements AuthModificationMeta {
 	private String password;
 	
 	public Optional<AuthMethod> getAuthMethod() {
-		return Optional.of(new PasswordAuthMethod(password));
+		return Optional.of(PasswordAuthMethod.withPassword(password));
 	}
 }
