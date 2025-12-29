@@ -21,6 +21,14 @@ public class PasswordAuthMethod implements AuthMethod {
 	
 	private static final PasswordEncoder ENCODER = new BCryptPasswordEncoder(12);
 	
+	private static final int PASSWORD_MIN_LENGTH = 8;
+	private static final int PASSWORD_MAX_LENGTH = 128;
+	private static final String PASSWORD_SPECIAL_CHARACTERS = ".*[!@#$%^&*()].*";
+	private static final String PASSWORD_UPPERCASE_REGEX = ".*[A-Z].*";
+	private static final String PASSWORD_LOWERCASE_REGEX = ".*[a-z].*";
+	private static final String PASSWORD_DIGIT_REGEX = ".*\\d.*";
+	private static final String PASSWORD_SPACE_REGEX = ".*\\s.*";
+	
 	public static PasswordAuthMethod withPassword(String password) {
 		password = password.trim();
 		
@@ -61,31 +69,31 @@ public class PasswordAuthMethod implements AuthMethod {
 			messages.add("Password cannot be null or blank.");
 		}
 		
-		if(password.length() < 8) {
+		if(password.length() < PASSWORD_MIN_LENGTH) {
 			messages.add("Password must be at least 8 characters long.");
 		}
 		
-		if(password.length() > 128) {
+		if(password.length() > PASSWORD_MAX_LENGTH) {
 			messages.add("Password cannot exceed 128 characters.");
 		}
 		
-		if(password.contains(" ")) {
+		if(password.matches(PASSWORD_SPACE_REGEX)) {
 			messages.add("Password cannot contain spaces.");
 		}
 		
-		if(!password.matches(".*[A-Z].*")) {
+		if(!password.matches(PASSWORD_UPPERCASE_REGEX)) {
 			messages.add("Password must contain at least one uppercase letter.");
 		}
 		
-		if(!password.matches(".*[a-z].*")) {
+		if(!password.matches(PASSWORD_LOWERCASE_REGEX)) {
 			messages.add("Password must contain at least one lowercase letter.");
 		}
 		
-		if(!password.matches(".*\\d.*")) {
+		if(!password.matches(PASSWORD_DIGIT_REGEX)) {
 			messages.add("Password must contain at least one digit.");
 		}
 		
-		if(!password.matches(".*[!@#$%^&*()].*")) {
+		if(!password.matches(PASSWORD_SPECIAL_CHARACTERS)) {
 			messages.add("Password must contain at least one special character (!@#$%^&*()).");
 		}
 		

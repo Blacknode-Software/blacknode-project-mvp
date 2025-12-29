@@ -9,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import software.blacknode.backend.infrastructure.entity.impl.BaseInfrastructureEntity;
 import software.blacknode.backend.infrastructure.entity.version.annotation.VersionedEntity;
@@ -20,6 +21,7 @@ import software.blacknode.backend.infrastructure.organization.entity.settings.Or
 @SuperBuilder
 @Table(name = "organizations")
 @Access(AccessType.FIELD)
+@ToString
 public class OrganizationEntity extends BaseInfrastructureEntity {
 	
 	@NonNull
