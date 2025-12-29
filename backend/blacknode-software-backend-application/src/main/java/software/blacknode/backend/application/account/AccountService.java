@@ -1,5 +1,7 @@
 package software.blacknode.backend.application.account;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,12 @@ public class AccountService {
 		repository.save(account);
 		
 		return account;
+	}
+	
+	public Optional<Account> getByEmail(String email) {
+		//TODO to be implement
+		
+		return Optional.empty();
 	}
 	
 }
