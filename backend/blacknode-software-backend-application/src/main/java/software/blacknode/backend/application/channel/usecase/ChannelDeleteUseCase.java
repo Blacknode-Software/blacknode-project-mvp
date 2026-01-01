@@ -10,7 +10,7 @@ import software.blacknode.backend.application.channel.ChannelService;
 import software.blacknode.backend.application.channel.command.ChannelDeleteCommand;
 import software.blacknode.backend.application.shared.SharedDeletionService;
 import software.blacknode.backend.application.usecase.ExecutionUseCase;
-import software.blacknode.backend.domain.context.SessionContext;
+import software.blacknode.backend.domain.session.context.SessionContext;
 
 @Service
 @RequiredArgsConstructor

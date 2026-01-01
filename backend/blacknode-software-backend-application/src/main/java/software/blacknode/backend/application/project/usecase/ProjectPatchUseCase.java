@@ -12,12 +12,12 @@ import software.blacknode.backend.application.patch.impl.PatchOperationEnum;
 import software.blacknode.backend.application.project.ProjectService;
 import software.blacknode.backend.application.project.command.ProjectPatchCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
-import software.blacknode.backend.domain.context.SessionContext;
 import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
 import software.blacknode.backend.domain.project.Project;
 import software.blacknode.backend.domain.project.meta.modify.impl.ProjectColorModificationMeta;
 import software.blacknode.backend.domain.project.meta.modify.impl.ProjectDescriptionModificationMeta;
 import software.blacknode.backend.domain.project.meta.modify.impl.ProjectNameModificationMeta;
+import software.blacknode.backend.domain.session.context.SessionContext;
 
 @Service
 @RequiredArgsConstructor

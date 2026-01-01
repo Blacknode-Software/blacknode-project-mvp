@@ -23,7 +23,7 @@ import software.blacknode.backend.api.controller.task.status.response.TaskStatus
 import software.blacknode.backend.api.controller.task.status.response.TaskStatusResponse;
 import software.blacknode.backend.api.controller.task.status.response.content.TaskStatusResponseContent;
 import software.blacknode.backend.application.task.status.TaskStatusService;
-import software.blacknode.backend.domain.context.SessionContext;
+import software.blacknode.backend.domain.session.context.SessionContext;
 
 
 @RestController

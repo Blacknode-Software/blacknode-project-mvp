@@ -11,8 +11,8 @@ import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.organization.OrganizationService;
 import software.blacknode.backend.application.organization.command.OrganizationFetchCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
-import software.blacknode.backend.domain.context.SessionContext;
 import software.blacknode.backend.domain.organization.Organization;
+import software.blacknode.backend.domain.session.context.SessionContext;
 
 @Service
 @RequiredArgsConstructor

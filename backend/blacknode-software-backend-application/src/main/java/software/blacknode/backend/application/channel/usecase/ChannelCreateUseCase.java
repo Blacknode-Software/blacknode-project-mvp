@@ -14,7 +14,7 @@ import software.blacknode.backend.application.channel.ChannelService;
 import software.blacknode.backend.application.channel.command.ChannelCreateCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
 import software.blacknode.backend.domain.channel.meta.create.impl.ChannelDefaultCreationMeta;
-import software.blacknode.backend.domain.context.SessionContext;
+import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
 
 @Service
 @RequiredArgsConstructor
@@ -24,13 +24,12 @@ public class ChannelCreateUseCase implements ResultExecutionUseCase<ChannelCreat
 	
 	private final ChannelService channelService;
 	
-	@Autowired
-	private SessionContext sessionContext;
+	private SessionContextHolder sessionContextHolder;
 	
 	@Override
 	public Result execute(ChannelCreateCommand command) {
-		var organizationId = sessionContext.getOrganizationId();
-		var memberId = sessionContext.getMemberId();
+		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
+		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		
 		var projectId = command.getProjectId();
 		

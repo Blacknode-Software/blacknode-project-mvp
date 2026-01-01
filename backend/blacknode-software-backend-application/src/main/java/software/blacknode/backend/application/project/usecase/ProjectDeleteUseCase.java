@@ -9,7 +9,7 @@ import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.project.command.ProjectDeleteCommand;
 import software.blacknode.backend.application.shared.SharedDeletionService;
 import software.blacknode.backend.application.usecase.ExecutionUseCase;
-import software.blacknode.backend.domain.context.SessionContext;
+import software.blacknode.backend.domain.session.context.SessionContext;
 
 @Service
 @RequiredArgsConstructor

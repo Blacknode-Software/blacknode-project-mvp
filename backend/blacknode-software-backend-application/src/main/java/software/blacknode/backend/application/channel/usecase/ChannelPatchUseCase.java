@@ -17,8 +17,8 @@ import software.blacknode.backend.domain.channel.Channel;
 import software.blacknode.backend.domain.channel.meta.modify.impl.ChannelColorModificationMeta;
 import software.blacknode.backend.domain.channel.meta.modify.impl.ChannelDescriptionModificationMeta;
 import software.blacknode.backend.domain.channel.meta.modify.impl.ChannelNameModificationMeta;
-import software.blacknode.backend.domain.context.SessionContext;
 import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
+import software.blacknode.backend.domain.session.context.SessionContext;
 
 @Service
 @RequiredArgsConstructor
