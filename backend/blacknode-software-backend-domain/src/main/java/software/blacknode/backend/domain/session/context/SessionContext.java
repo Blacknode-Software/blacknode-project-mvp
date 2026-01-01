@@ -4,9 +4,11 @@ import java.util.Optional;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.With;
 import me.hinsinger.hinz.common.huid.HUID;
 
 @Getter
+@With
 @Builder
 public class SessionContext {
 	public static SessionContext empty() {

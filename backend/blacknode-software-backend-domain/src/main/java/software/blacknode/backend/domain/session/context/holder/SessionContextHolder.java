@@ -3,7 +3,6 @@ package software.blacknode.backend.domain.session.context.holder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import me.hinsinger.hinz.common.huid.HUID;
@@ -13,10 +12,13 @@ import software.blacknode.backend.domain.session.exception.SessionException;
 @Component
 @RequestScope
 @Getter
-@Setter(AccessLevel.PACKAGE)
 public class SessionContextHolder {
 
 	private SessionContext context = SessionContext.empty();
+	
+	public void initialize(SessionContext context) {
+		this.context = context;
+	}
 	
 	public void ensureIsAuthenticated() {
 		if (!isAuthenticated()) throw new SessionException("Session is not authenticated");
