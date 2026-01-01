@@ -14,6 +14,7 @@ import software.blacknode.backend.application.project.command.ProjectFetchComman
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
 import software.blacknode.backend.domain.project.Project;
 import software.blacknode.backend.domain.session.context.SessionContext;
+import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
 
 @Service
 @RequiredArgsConstructor
@@ -22,13 +23,12 @@ public class ProjectFetchUseCase implements ResultExecutionUseCase<ProjectFetchC
 	private final ProjectService projectService;
 	private final AccessControlService accessControlService;
 	
-	@Autowired
-	private SessionContext context;
+	private final SessionContextHolder sessionContextHolder;
 	
 	@Override
 	public Result execute(ProjectFetchCommand command) {
-		var organizationId = context.getOrganizationId();
-		var memberId = context.getMemberId();
+		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
+		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		
 		var projectId = command.getProjectId();
 		

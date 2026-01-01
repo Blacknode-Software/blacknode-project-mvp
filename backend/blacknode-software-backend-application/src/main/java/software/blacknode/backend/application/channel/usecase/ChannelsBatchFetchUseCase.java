@@ -16,6 +16,7 @@ import software.blacknode.backend.application.channel.command.ChannelsBatchFetch
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
 import software.blacknode.backend.domain.channel.Channel;
 import software.blacknode.backend.domain.session.context.SessionContext;
+import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
 
 @Service
 @RequiredArgsConstructor
@@ -24,13 +25,12 @@ public class ChannelsBatchFetchUseCase implements ResultExecutionUseCase<Channel
 	private final AccessControlService accessControlService;
 	private final ChannelService channelService;
 	
-	@Autowired
-	private SessionContext context;
+	private final SessionContextHolder sessionContextHolder;
 	
 	@Override
 	public Result execute(ChannelsBatchFetchCommand command) {
-		var memberId = context.getMemberId();
-		var organizationId = context.getOrganizationId();
+		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
+		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		
 		var channelIds = command.getChannelIds();
 		

@@ -17,6 +17,7 @@ import software.blacknode.backend.application.task.TaskService;
 import software.blacknode.backend.application.task.command.TasksInChannelCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
 import software.blacknode.backend.domain.session.context.SessionContext;
+import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
 
 @Service
 @RequiredArgsConstructor
@@ -26,13 +27,12 @@ public class TasksInChannelUseCase implements ResultExecutionUseCase<TasksInChan
 	
 	private final TaskService taskService;
 	
-	@Autowired
-	private SessionContext sessionContext;
+	private final SessionContextHolder sessionContextHolder;
 	
 	@Override
 	public TasksInChannelUseCase.Result execute(TasksInChannelCommand command) {
-		var organizationId = sessionContext.getOrganizationId();
-		var memberId = sessionContext.getMemberId();
+		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
+		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		
 		var channelId = command.getChannelId();
 		

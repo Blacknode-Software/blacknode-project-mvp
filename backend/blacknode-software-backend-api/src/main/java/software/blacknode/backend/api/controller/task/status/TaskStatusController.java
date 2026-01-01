@@ -24,6 +24,7 @@ import software.blacknode.backend.api.controller.task.status.response.TaskStatus
 import software.blacknode.backend.api.controller.task.status.response.content.TaskStatusResponseContent;
 import software.blacknode.backend.application.task.status.TaskStatusService;
 import software.blacknode.backend.domain.session.context.SessionContext;
+import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
 
 
 @RestController
@@ -33,15 +34,14 @@ public class TaskStatusController {
 	
 	private final TaskStatusService taskStatusService;
 	
-	@Autowired
-	private SessionContext sessionContext;
+	private final SessionContextHolder sessionContextHolder;
 	
 	@OrganizationHeader
 	@Operation(summary = "Get a task status by ID")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Task status fetched successfully") })
 	@GetMapping("/statuses/{id}")
 	public ResponseEntity<TaskStatusResponse> getTaskStatus(@PathVariable UUID id) {
-		var organizationId = sessionContext.getOrganizationId();
+		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		
 		var status = taskStatusService.getOrThrow(organizationId, HUID.fromUUID(id));
 		
@@ -59,7 +59,7 @@ public class TaskStatusController {
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Task statuses fetched successfully") })
 	@PostMapping("/statuses/batch-fetch")
 	public ResponseEntity<TaskStatusBatchFetchResponse> batchFetchTaskStatuses(@RequestBody TaskStatusBatchFetchRequest request) {
-		var organizationId = sessionContext.getOrganizationId();
+		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		
 		var ids = request.getIds().stream()
 				.map(HUID::fromUUID)

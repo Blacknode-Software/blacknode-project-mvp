@@ -1,6 +1,5 @@
 package software.blacknode.backend.application.project.usecase;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lombok.Builder;
@@ -14,7 +13,7 @@ import software.blacknode.backend.application.project.ProjectService;
 import software.blacknode.backend.application.project.command.ProjectCreateCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
 import software.blacknode.backend.domain.project.meta.create.impl.ProjectDefaultCreationMeta;
-import software.blacknode.backend.domain.session.context.SessionContext;
+import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
 
 @Service
 @RequiredArgsConstructor
@@ -23,13 +22,12 @@ public class ProjectCreateUseCase implements ResultExecutionUseCase<ProjectCreat
 	private final AccessControlService accessControlService;
 	private final ProjectService projectService;
 	
-	@Autowired
-	private SessionContext context;
+	private final SessionContextHolder sessionContextHolder;
 	
 	@Override
 	public Result execute(ProjectCreateCommand command) {
-		var organizationId = context.getOrganizationId();
-		var memberId = context.getMemberId();
+		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
+		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		
 		accessControlService.ensureMemberHasOrganizationAccess(memberId, organizationId, AccessLevel.MANAGE);
 		

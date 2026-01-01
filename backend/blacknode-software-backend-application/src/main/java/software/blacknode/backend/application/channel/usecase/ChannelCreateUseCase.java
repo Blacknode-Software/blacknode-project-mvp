@@ -1,6 +1,5 @@
 package software.blacknode.backend.application.channel.usecase;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lombok.Builder;
@@ -24,7 +23,7 @@ public class ChannelCreateUseCase implements ResultExecutionUseCase<ChannelCreat
 	
 	private final ChannelService channelService;
 	
-	private SessionContextHolder sessionContextHolder;
+	private final SessionContextHolder sessionContextHolder;
 	
 	@Override
 	public Result execute(ChannelCreateCommand command) {

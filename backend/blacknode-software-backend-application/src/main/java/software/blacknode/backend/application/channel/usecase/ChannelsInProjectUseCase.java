@@ -18,6 +18,7 @@ import software.blacknode.backend.application.channel.command.ChannelsInProjectC
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
 import software.blacknode.backend.domain.channel.Channel;
 import software.blacknode.backend.domain.session.context.SessionContext;
+import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
 
 @Service
 @RequiredArgsConstructor
@@ -26,13 +27,12 @@ public class ChannelsInProjectUseCase implements ResultExecutionUseCase<Channels
 	private final AccessControlService accessControlService;
 	private final ChannelService channelService;
 	
-	@Autowired
-	private final SessionContext sessionContext;
+	private final SessionContextHolder sessionContextHolder;
 	
 	@Override
 	public Result execute(ChannelsInProjectCommand command) {
-		var organizationId = sessionContext.getOrganizationId();
-		var memberId = sessionContext.getMemberId();
+		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
+		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		
 		var projectId = command.getProjectId();
 		
