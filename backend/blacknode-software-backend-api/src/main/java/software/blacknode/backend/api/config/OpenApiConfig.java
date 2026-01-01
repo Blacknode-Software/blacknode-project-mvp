@@ -14,6 +14,7 @@ public class OpenApiConfig {
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
+        	.addServersItem(new Server().url("http://localhost:8080/api").description("Development (HTTP)"))
             .addServersItem(new Server().url("https://test.int.blacknode.software/api").description("Testing (HTTPS)"))
             .addServersItem(new Server().url("https://app.blacknode.software/api").description("Production (HTTPS)"));
     }

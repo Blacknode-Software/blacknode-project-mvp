@@ -4,11 +4,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class AuthMethodSerializedModel {
 
 	private HUID id;

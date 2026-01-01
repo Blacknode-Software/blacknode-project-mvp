@@ -1,9 +1,13 @@
 package software.blacknode.backend.api.controller.auth;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import software.blacknode.backend.api.controller.auth.mapper.AuthenticateWithPasswordMapper;
@@ -22,6 +26,9 @@ public class AuthController {
 	private final AuthenticateWithPasswordMapper authenticateWithPasswordMapper;
 	private final AuthenticateWithPasswordUseCase authenticateWithPasswordUseCase;
 
+	@Operation(summary = "Authenticate with Password", description = "Authenticate a user using their email and password.")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Authentication successful") })
+	@PostMapping("/auth/password")
 	public ResponseEntity<AuthenticateWithPasswordResponse> authenticateWithPassword(@RequestBody AuthenticateWithPasswordRequest request) {
 		var command = authenticateWithPasswordMapper.toCommand(request);
 		
