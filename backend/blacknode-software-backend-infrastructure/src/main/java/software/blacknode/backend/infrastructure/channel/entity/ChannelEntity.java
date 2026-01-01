@@ -11,6 +11,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import software.blacknode.backend.infrastructure.channel.entity.meta.ChannelEntityMeta;
 import software.blacknode.backend.infrastructure.entity.version.annotation.VersionedEntity;
@@ -22,6 +23,7 @@ import software.blacknode.backend.infrastructure.organization.related.Organizati
 @Table(name = "channels")
 @Access(AccessType.FIELD)
 @NoArgsConstructor
+@ToString
 public class ChannelEntity extends OrganizationRelatedEntity {
 
 	@NotNull

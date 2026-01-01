@@ -16,6 +16,7 @@ import software.blacknode.backend.domain.auth.meta.modify.AuthModificationMeta;
 import software.blacknode.backend.domain.auth.method.AuthMethod;
 import software.blacknode.backend.domain.auth.method.meta.AuthMethodMeta;
 import software.blacknode.backend.domain.auth.method.type.AuthMethodType;
+import software.blacknode.backend.domain.entity.DomainEntity;
 import software.blacknode.backend.domain.entity.modifier.impl.create.Creatable;
 import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
 import software.blacknode.backend.domain.entity.modifier.impl.delete.Deletable;
@@ -27,13 +28,13 @@ import software.blacknode.backend.domain.exception.BlacknodeException;
 @Builder
 @AllArgsConstructor(onConstructor = @__({ @Deprecated }))
 @ToString
-public class Auth implements Creatable, Deletable, Modifiable {
+public class Auth implements DomainEntity, Creatable, Deletable, Modifiable {
 
 	@Getter private HUID id;
 	
 	@Getter private AuthMeta meta;
 	
-	private AuthMethod method;
+	@Getter private AuthMethod method;
 	
 	@Getter private Timestamp creationTimestamp;
 	@Getter private Timestamp modificationTimestamp;
@@ -41,7 +42,7 @@ public class Auth implements Creatable, Deletable, Modifiable {
 	
 	@Getter private final HUID accountId;
 
-	public Auth(HUID accountId) {
+	public Auth(@NonNull HUID accountId) {
 		this.accountId = accountId;
 	}
 	
@@ -115,6 +116,10 @@ public class Auth implements Creatable, Deletable, Modifiable {
 		return method.authenticate(meta);
 	}
 	
+	public AuthMethodType getAuthMethodType() {
+		return method.getType();
+	}
+	
 	public boolean canAuthenticate(AuthMethodMeta meta) {
 		try { method.authenticate(meta); } 
 		catch (Exception e) { return false; }
@@ -122,7 +127,16 @@ public class Auth implements Creatable, Deletable, Modifiable {
 		return true;
 	}
 	
-	public AuthMethodType getAuthMethodType() {
-		return method.getType();
+	public void ensureBelongsToAccount(HUID accountId) {
+		if (!belongsToAccount(accountId)) {
+			throw new BlacknodeException("Auth with ID " + id + " does not belong to Account with ID " + accountId + ".");
+		}
 	}
+	
+	public boolean belongsToAccount(HUID accountId) {
+		if (accountId == null) return false;
+		return accountId.equals(this.accountId);
+	}
+
+	
 }

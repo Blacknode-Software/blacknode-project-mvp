@@ -1,16 +1,12 @@
-package software.blacknode.backend.infrastructure.organization.entity.meta;
+package software.blacknode.backend.infrastructure.auth.entity.meta;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.ToString;
 import software.blacknode.backend.infrastructure.entity.version.annotation.VersionedEntity;
 
 @Builder
 @Getter
 @VersionedEntity
-@ToString
-public class OrganizationEntityMeta {
+public class AuthEntityMeta {
 
-	private String name;
-	
 }
