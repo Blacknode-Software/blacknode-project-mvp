@@ -10,6 +10,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import software.blacknode.backend.infrastructure.entity.version.annotation.VersionedEntity;
 import software.blacknode.backend.infrastructure.organization.related.OrganizationRelatedEntity;
@@ -21,6 +22,7 @@ import software.blacknode.backend.infrastructure.project.entity.meta.ProjectEnti
 @Table(name = "projects")
 @Access(AccessType.FIELD)
 @NoArgsConstructor
+@ToString
 public class ProjectEntity extends OrganizationRelatedEntity {
 
 	@NotNull

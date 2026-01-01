@@ -9,14 +9,14 @@ import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import software.blacknode.backend.infrastructure.entity.impl.BaseEntity;
+import software.blacknode.backend.infrastructure.entity.impl.BaseInfrastructureEntity;
 
 @SuperBuilder
 @Getter
 @MappedSuperclass
 @Access(AccessType.FIELD)
 @NoArgsConstructor
-public class OrganizationRelatedEntity extends BaseEntity {
+public class OrganizationRelatedEntity extends BaseInfrastructureEntity {
 
 	@Column(name = "organization_id")
 	protected UUID organizationId;

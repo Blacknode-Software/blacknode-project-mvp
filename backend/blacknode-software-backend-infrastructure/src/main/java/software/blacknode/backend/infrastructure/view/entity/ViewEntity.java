@@ -11,6 +11,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import software.blacknode.backend.infrastructure.entity.version.annotation.VersionedEntity;
 import software.blacknode.backend.infrastructure.organization.related.OrganizationRelatedEntity;
@@ -22,6 +23,7 @@ import software.blacknode.backend.infrastructure.view.entity.meta.ViewEntityMeta
 @Table(name = "views")
 @Access(AccessType.FIELD)
 @NoArgsConstructor
+@ToString
 public class ViewEntity extends OrganizationRelatedEntity {
 
 	@NotNull
