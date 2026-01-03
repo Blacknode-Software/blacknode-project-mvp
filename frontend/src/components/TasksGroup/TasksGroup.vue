@@ -15,6 +15,10 @@ const dateFormatter = computed(
             day: '2-digit',
         }),
 );
+
+const emit = defineEmits<{
+    (e: 'open-task', task: Task): void;
+}>();
 </script>
 
 <template>
@@ -27,7 +31,12 @@ const dateFormatter = computed(
                 <th>Timeline date</th>
                 <th>Progress</th>
             </tr>
-            <tr v-for="task in tasks" :key="task.id" class="task-row">
+            <tr
+                v-for="task in tasks"
+                :key="task.id"
+                class="task-row"
+                @click="emit('open-task', task)"
+            >
                 <td>{{ task.title }}</td>
                 <td>{{ task.description }}</td>
                 <td><PriorityText :value="task.priority" /></td>

@@ -1,8 +1,9 @@
 :root {
-    --color-main: #5882dd;
-    --color-main-yellow: #ffbe74;
-    --color-second-gray: #7a7a90;
-    --color-main-green: #2ef0c9cc;
+    --color-main: oklab(61.934% -0.01529 -0.14491);
+    --color-main-yellow: oklab(84.60499999999999% 0.04291 0.10984);
+    --color-second-gray: oklab(58.724% 0.00883 -0.03227);
+    --color-main-green: oklab(85.60900000000001% -0.15395 0.01466 / 0.8);
+    --color-magenta: oklab(68.063% 0.16519 -0.17622);
 }
 
 *,
