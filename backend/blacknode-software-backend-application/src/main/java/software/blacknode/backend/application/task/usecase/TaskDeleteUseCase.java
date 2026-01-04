@@ -9,7 +9,8 @@ import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.shared.SharedDeletionService;
 import software.blacknode.backend.application.task.command.TaskDeleteCommand;
 import software.blacknode.backend.application.usecase.ExecutionUseCase;
-import software.blacknode.backend.domain.context.SessionContext;
+import software.blacknode.backend.domain.session.context.SessionContext;
+import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
 
 @Service
 @RequiredArgsConstructor
@@ -18,13 +19,12 @@ public class TaskDeleteUseCase implements ExecutionUseCase<TaskDeleteCommand> {
 	private final AccessControlService accessControlService;
 	private final SharedDeletionService sharedDeletionService;
 	
-	@Autowired
-	private SessionContext sessionContext;
+	private final SessionContextHolder sessionContextHolder;
 	
 	@Override
 	public void execute(TaskDeleteCommand command) {
-		var organizationId = sessionContext.getOrganizationId();
-		var memberId = sessionContext.getMemberId();
+		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
+		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		
 		var taskId = command.getTaskId();
 		

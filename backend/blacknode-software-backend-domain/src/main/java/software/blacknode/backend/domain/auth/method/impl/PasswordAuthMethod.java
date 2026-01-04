@@ -58,14 +58,14 @@ public class PasswordAuthMethod implements AuthMethod {
 		return false;
 	}
 	
-	private boolean checkPassword(String password) {
+	private boolean checkPassword(@NonNull String password) {
 		return ENCODER.matches(password, hash);
 	}
 	
-	private static void validatePassword(String password) {
+	private static void validatePassword(@NonNull String password) {
 		var messages = new ArrayList<String>();
 		
-		if(password == null || password.isBlank()) {
+		if(password.isBlank()) {
 			messages.add("Password cannot be null or blank.");
 		}
 		

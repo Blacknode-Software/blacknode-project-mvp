@@ -15,7 +15,8 @@ import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.task.TaskService;
 import software.blacknode.backend.application.task.command.TasksBatchFetchCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
-import software.blacknode.backend.domain.context.SessionContext;
+import software.blacknode.backend.domain.session.context.SessionContext;
+import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
 import software.blacknode.backend.domain.task.Task;
 
 @Service
@@ -25,13 +26,12 @@ public class TasksBatchFetchUseCase implements ResultExecutionUseCase<TasksBatch
 	private final AccessControlService accessControlService;
 	private final TaskService taskService;
 	
-	@Autowired
-	private SessionContext sessionContext;
+	private final SessionContextHolder sessionContextHolder;
 	
 	@Override
 	public Result execute(TasksBatchFetchCommand command) {
-		var organizationId = sessionContext.getOrganizationId();
-		var memberId = sessionContext.getMemberId();
+		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
+		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		
 		var taskIds = command.getTaskIds();
 		

@@ -9,7 +9,8 @@ import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.project.command.ProjectDeleteCommand;
 import software.blacknode.backend.application.shared.SharedDeletionService;
 import software.blacknode.backend.application.usecase.ExecutionUseCase;
-import software.blacknode.backend.domain.context.SessionContext;
+import software.blacknode.backend.domain.session.context.SessionContext;
+import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
 
 @Service
 @RequiredArgsConstructor
@@ -18,13 +19,12 @@ public class ProjectDeleteUseCase implements ExecutionUseCase<ProjectDeleteComma
 	private final SharedDeletionService sharedDeletionService;
 	private final AccessControlService accessControlService;
 	
-	@Autowired
-	private SessionContext context;
+	private final SessionContextHolder sessionContextHolder;
 	
 	@Override
 	public void execute(ProjectDeleteCommand command) {
-		var memberId = context.getMemberId();
-		var organizationId = context.getOrganizationId();
+		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
+		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		
 		var projectId = command.getProjectId();
 		

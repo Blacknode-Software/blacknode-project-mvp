@@ -12,12 +12,13 @@ import software.blacknode.backend.application.patch.impl.PatchOperationEnum;
 import software.blacknode.backend.application.project.ProjectService;
 import software.blacknode.backend.application.project.command.ProjectPatchCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
-import software.blacknode.backend.domain.context.SessionContext;
 import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
 import software.blacknode.backend.domain.project.Project;
 import software.blacknode.backend.domain.project.meta.modify.impl.ProjectColorModificationMeta;
 import software.blacknode.backend.domain.project.meta.modify.impl.ProjectDescriptionModificationMeta;
 import software.blacknode.backend.domain.project.meta.modify.impl.ProjectNameModificationMeta;
+import software.blacknode.backend.domain.session.context.SessionContext;
+import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
 
 @Service
 @RequiredArgsConstructor
@@ -26,14 +27,12 @@ public class ProjectPatchUseCase implements ResultExecutionUseCase<ProjectPatchC
 	private final AccessControlService accessControlService;
 	private final ProjectService projectService;
 	
-	@Autowired
-	private SessionContext context;
+	private final SessionContextHolder sessionContextHolder;
 	
 	@Override
 	public Result execute(ProjectPatchCommand command) {
-		
-		var organizationId = context.getOrganizationId();
-		var memberId = context.getMemberId();
+		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
+		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		
 		var projectId = command.getId();
 		

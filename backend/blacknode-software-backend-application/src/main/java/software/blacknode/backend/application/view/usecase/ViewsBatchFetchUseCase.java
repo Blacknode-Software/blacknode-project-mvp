@@ -15,7 +15,8 @@ import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
 import software.blacknode.backend.application.view.ViewService;
 import software.blacknode.backend.application.view.command.ViewsBatchFetchCommand;
-import software.blacknode.backend.domain.context.SessionContext;
+import software.blacknode.backend.domain.session.context.SessionContext;
+import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
 import software.blacknode.backend.domain.view.View;
 
 @Service
@@ -25,19 +26,18 @@ public class ViewsBatchFetchUseCase implements ResultExecutionUseCase<ViewsBatch
 	private final AccessControlService accessControlService;
 	private final ViewService viewService;
 	
-	@Autowired
-	private SessionContext sessionContext;
+	private final SessionContextHolder sessionContextHolder;
 	
 	@Override
 	public Result execute(ViewsBatchFetchCommand command) {
-		var organizationId = sessionContext.getOrganizationId();
-		var meberId = sessionContext.getMemberId();
+		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
+		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		
 		var viewIds = command.getViewIds();
 		
 		var views = viewService.getByIds(organizationId, viewIds)
 				.stream()
-				.filter(view -> accessControlService.hasAccessToView(meberId, view, 
+				.filter(view -> accessControlService.hasAccessToView(memberId, view, 
 						AccessLevel.READ))
 				.toList();
 		

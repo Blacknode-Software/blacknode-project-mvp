@@ -13,8 +13,9 @@ import software.blacknode.backend.application.patch.impl.PatchOperationEnum;
 import software.blacknode.backend.application.task.TaskService;
 import software.blacknode.backend.application.task.command.TaskPatchCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
-import software.blacknode.backend.domain.context.SessionContext;
 import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
+import software.blacknode.backend.domain.session.context.SessionContext;
+import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
 import software.blacknode.backend.domain.task.Task;
 import software.blacknode.backend.domain.task.meta.modify.impl.TaskBeginAtTimestampModificationMeta;
 import software.blacknode.backend.domain.task.meta.modify.impl.TaskDescriptionModificationMeta;
@@ -29,13 +30,12 @@ public class TaskPatchUseCase implements ResultExecutionUseCase<TaskPatchCommand
 	private final AccessControlService accessControlService;
 	private final TaskService taskService;
 	
-	@Autowired
-	private SessionContext sessionContext;
+	private final SessionContextHolder sessionContextHolder;
 	
 	@Override
 	public Result execute(TaskPatchCommand command) {
-		var organizationId = sessionContext.getOrganizationId();
-		var memberId = sessionContext.getMemberId();
+		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
+		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		
 		var taskId = command.getId();
 		
