@@ -1,5 +1,10 @@
+<script setup lang="ts">
+import { ChannelNavigation } from '@/components';
+</script>
+
 <template>
     <div class="main-view-container">
+        <ChannelNavigation />
         <slot></slot>
     </div>
 </template>
