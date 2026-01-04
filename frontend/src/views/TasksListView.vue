@@ -1,7 +1,19 @@
 <script setup lang="ts">
-import { FixedBackground, MainSidebar, TasksGroup } from '@/components';
+import { FixedBackground, MainSidebar, TasksGroup, TaskDialog } from '@/components';
 import { MainHeader, UniSidebar, MainView } from '@/layout';
+import type { Task } from '@/shared-types';
 import { UnixTimestamp } from '@/utils';
+import { ref } from 'vue';
+
+const selectedTask = ref<Task | null>(null);
+
+function openTask(task: Task) {
+    selectedTask.value = task;
+}
+
+function closeTask() {
+    selectedTask.value = null;
+}
 </script>
 
 <template>
@@ -42,6 +54,7 @@ import { UnixTimestamp } from '@/utils';
                                 progress: 0,
                             },
                         ]"
+                        @open-task="openTask"
                     />
                 </div>
                 <div class="tasks-group">
@@ -75,6 +88,7 @@ import { UnixTimestamp } from '@/utils';
                                 progress: 75,
                             },
                         ]"
+                        @open-task="openTask"
                     />
                 </div>
                 <div class="tasks-group">
@@ -244,11 +258,13 @@ import { UnixTimestamp } from '@/utils';
                                 progress: 100,
                             },
                         ]"
+                        @open-task="openTask"
                     />
                 </div>
             </div>
         </MainView>
     </div>
+    <TaskDialog v-if="selectedTask" :task="selectedTask" @close="closeTask" />
 </template>
 
 <style scoped>
