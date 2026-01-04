@@ -17,8 +17,9 @@ import software.blacknode.backend.domain.channel.Channel;
 import software.blacknode.backend.domain.channel.meta.modify.impl.ChannelColorModificationMeta;
 import software.blacknode.backend.domain.channel.meta.modify.impl.ChannelDescriptionModificationMeta;
 import software.blacknode.backend.domain.channel.meta.modify.impl.ChannelNameModificationMeta;
-import software.blacknode.backend.domain.context.SessionContext;
 import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
+import software.blacknode.backend.domain.session.context.SessionContext;
+import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
 
 @Service
 @RequiredArgsConstructor
@@ -28,13 +29,12 @@ public class ChannelPatchUseCase implements ResultExecutionUseCase<ChannelPatchC
 
 	private final ChannelService channelService;
 
-	@Autowired
-	private SessionContext sessionContext;
+	private final SessionContextHolder sessionContextHolder;
 
 	@Override
 	public Result execute(ChannelPatchCommand command) {
-		var organizationId = sessionContext.getOrganizationId();
-		var memberId = sessionContext.getMemberId();
+		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
+		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		
 		var channelId = command.getId();
 		
