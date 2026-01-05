@@ -32,12 +32,12 @@ public class AccountEntity extends BaseInfrastructureEntity {
 	private AccountEntityMeta meta;
 	
 	@Column(name = "created_at", nullable = false, updatable = false)
-	private Timestamp createdAt;
+	private Instant createdAt;
 	
 	@Column(name = "modified_at")
-	private Timestamp modifiedAt;
+	private Instant modifiedAt;
 	
 	@Column(name = "deleted_at")
-	private Timestamp deletedAt;
+	private Instant deletedAt;
 	
 }
