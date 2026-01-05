@@ -15,9 +15,11 @@ import software.blacknode.backend.application.organization.usecase.OrganizationP
 @Mapper(componentModel = "spring")
 public interface OrganizationPatchMapper extends OrganizationMapper, RequestMapper<OrganizationPatchRequest, OrganizationPatchCommand>, ResponseMapper<OrganizationPatchUseCase.Result, OrganizationPatchResponse> {
 
+	@Override
 	@PatchOperationsMappingRequest
 	OrganizationPatchCommand toCommand(OrganizationPatchRequest request);
 
+	@Override
 	@OrganizationResponseContentMapping
 	OrganizationPatchResponse toResponse(OrganizationPatchUseCase.Result result);
 
