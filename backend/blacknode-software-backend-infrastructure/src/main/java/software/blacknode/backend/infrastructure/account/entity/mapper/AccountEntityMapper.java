@@ -22,7 +22,7 @@ public interface AccountEntityMapper extends InfrastructureMapper<Account, Accou
 
 	@Override
 	@IdMappingInfrastructure
-	
+
 	@CreationMappingInfrastructure
 	@ModificationMappingInfrastructure
 	@DeletionMappingInfrastructure

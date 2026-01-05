@@ -9,7 +9,7 @@ import org.mapstruct.Mapping;
 
 @Target({ ElementType.METHOD, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.CLASS)
-@Mapping(target = "modificationTimestamp", source = "modifiedAt", qualifiedByName = "instant2Timestamp")
+@Mapping(target = "modificationTimestamp", source = "modifiedAt")
 public @interface ModificationMappingDomain {
 
 }

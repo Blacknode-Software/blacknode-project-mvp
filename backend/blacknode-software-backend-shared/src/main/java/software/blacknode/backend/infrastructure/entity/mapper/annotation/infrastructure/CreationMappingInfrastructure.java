@@ -9,7 +9,7 @@ import org.mapstruct.Mapping;
 
 @Target({ ElementType.METHOD, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.CLASS)
-@Mapping(target = "createdAt", source = "creationTimestamp", qualifiedByName = "timestamp2Instant")
+@Mapping(target = "createdAt", source = "creationTimestamp")
 public @interface CreationMappingInfrastructure {
 
 }

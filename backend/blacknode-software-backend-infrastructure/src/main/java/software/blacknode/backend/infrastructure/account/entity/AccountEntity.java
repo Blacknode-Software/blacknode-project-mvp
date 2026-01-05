@@ -1,5 +1,6 @@
 package software.blacknode.backend.infrastructure.account.entity;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 
 import jakarta.persistence.Column;
@@ -31,12 +32,12 @@ public class AccountEntity extends BaseInfrastructureEntity {
 	private AccountEntityMeta meta;
 	
 	@Column(name = "created_at", nullable = false, updatable = false)
-	private Instant createdAt;
+	private Timestamp createdAt;
 	
 	@Column(name = "modified_at")
-	private Instant modifiedAt;
+	private Timestamp modifiedAt;
 	
 	@Column(name = "deleted_at")
-	private Instant deletedAt;
+	private Timestamp deletedAt;
 	
 }
