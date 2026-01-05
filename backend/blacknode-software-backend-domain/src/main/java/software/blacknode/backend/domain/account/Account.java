@@ -36,6 +36,10 @@ public class Account implements DomainEntity, Creatable, Modifiable, Deletable {
 	@Getter private Timestamp modificationTimestamp;
 	@Getter private Timestamp deletionTimestamp;
 	
+	public Account() {
+		// Default constructor
+	}
+	
 	@Override
 	public void create(Optional<CreationMeta> meta0) {
 		ensureNotCreated(meta0);
