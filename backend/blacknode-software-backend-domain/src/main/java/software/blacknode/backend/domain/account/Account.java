@@ -2,14 +2,18 @@ package software.blacknode.backend.domain.account;
 
 import java.util.Optional;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.ToString;
 import me.hinsinger.hinz.common.huid.HUID;
 import me.hinsinger.hinz.common.time.timestamp.Timestamp;
 import software.blacknode.backend.domain.account.meta.AccountMeta;
 import software.blacknode.backend.domain.account.meta.create.AccountCreationMeta;
 import software.blacknode.backend.domain.account.meta.delete.AccountDeletionMeta;
 import software.blacknode.backend.domain.account.meta.modify.AccountModificationMeta;
+import software.blacknode.backend.domain.entity.DomainEntity;
 import software.blacknode.backend.domain.entity.modifier.impl.create.Creatable;
 import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
 import software.blacknode.backend.domain.entity.modifier.impl.delete.Deletable;
@@ -17,7 +21,10 @@ import software.blacknode.backend.domain.entity.modifier.impl.delete.meta.Deleti
 import software.blacknode.backend.domain.entity.modifier.impl.modify.Modifiable;
 import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
 
-public class Account implements Creatable, Modifiable, Deletable {
+@Builder
+@AllArgsConstructor(onConstructor = @__({ @Deprecated }))
+@ToString
+public class Account implements DomainEntity, Creatable, Modifiable, Deletable {
 
 	@Getter private HUID id;
 	@Getter private String email;
@@ -28,6 +35,10 @@ public class Account implements Creatable, Modifiable, Deletable {
 	@Getter private Timestamp creationTimestamp;
 	@Getter private Timestamp modificationTimestamp;
 	@Getter private Timestamp deletionTimestamp;
+	
+	public Account() {
+		// Default constructor
+	}
 	
 	@Override
 	public void create(Optional<CreationMeta> meta0) {
