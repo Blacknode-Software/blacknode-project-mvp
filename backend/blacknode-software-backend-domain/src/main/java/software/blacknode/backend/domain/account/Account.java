@@ -10,6 +10,9 @@ import software.blacknode.backend.domain.account.meta.AccountMeta;
 import software.blacknode.backend.domain.account.meta.create.AccountCreationMeta;
 import software.blacknode.backend.domain.account.meta.delete.AccountDeletionMeta;
 import software.blacknode.backend.domain.account.meta.modify.AccountModificationMeta;
+import software.blacknode.backend.domain.account.meta.create.AccountInitialAdminCreationMeta;
+import software.blacknode.backend.domain.account.settings.AccountSettings;
+import software.blacknode.backend.domain.entity.DomainEntity;
 import software.blacknode.backend.domain.entity.modifier.impl.create.Creatable;
 import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
 import software.blacknode.backend.domain.entity.modifier.impl.delete.Deletable;
@@ -17,7 +20,7 @@ import software.blacknode.backend.domain.entity.modifier.impl.delete.meta.Deleti
 import software.blacknode.backend.domain.entity.modifier.impl.modify.Modifiable;
 import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
 
-public class Account implements Creatable, Modifiable, Deletable {
+public class Account implements DomainEntity, Creatable, Modifiable, Deletable {
 
 	@Getter private HUID id;
 	@Getter private String email;
