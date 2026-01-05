@@ -4,12 +4,14 @@ import org.springframework.stereotype.Service;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import software.blacknode.backend.application.account.AccountService;
 import software.blacknode.backend.application.account.command.AccountPatchCommand;
 import software.blacknode.backend.application.patch.impl.PatchOperationEnum;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
+import software.blacknode.backend.domain.account.Account;
 import software.blacknode.backend.domain.account.meta.modify.impl.AccountFirstNameModificationMeta;
 import software.blacknode.backend.domain.account.meta.modify.impl.AccountLastNameModificationMeta;
 import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
@@ -54,6 +56,7 @@ public class AccountPatchUseCase implements ResultExecutionUseCase<AccountPatchC
 		var account = accountService.modify(accountId, modifications);
 		
 		return Result.builder()
+				.account(account)
 				.build();
 	}
 
@@ -61,6 +64,9 @@ public class AccountPatchUseCase implements ResultExecutionUseCase<AccountPatchC
 	@Builder
 	@ToString
 	public static class Result {
+		
+		@NonNull
+		private final Account account;
 		
 	}
 	

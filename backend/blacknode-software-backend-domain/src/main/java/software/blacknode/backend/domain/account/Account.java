@@ -1,6 +1,8 @@
 package software.blacknode.backend.domain.account;
 
+import java.net.IDN;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,12 +22,15 @@ import software.blacknode.backend.domain.entity.modifier.impl.delete.Deletable;
 import software.blacknode.backend.domain.entity.modifier.impl.delete.meta.DeletionMeta;
 import software.blacknode.backend.domain.entity.modifier.impl.modify.Modifiable;
 import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
+import software.blacknode.backend.domain.validate.exception.BlacknodeValidationException;
 
 @Builder
 @AllArgsConstructor(onConstructor = @__({ @Deprecated }))
 @ToString
 public class Account implements DomainEntity, Creatable, Modifiable, Deletable {
 
+	private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}$", Pattern.CASE_INSENSITIVE);
+	
 	@Getter private HUID id;
 	@Getter private String email;
 	
@@ -35,6 +40,8 @@ public class Account implements DomainEntity, Creatable, Modifiable, Deletable {
 	@Getter private Timestamp creationTimestamp;
 	@Getter private Timestamp modificationTimestamp;
 	@Getter private Timestamp deletionTimestamp;
+	
+	
 	
 	public Account() {
 		// Default constructor
@@ -53,6 +60,8 @@ public class Account implements DomainEntity, Creatable, Modifiable, Deletable {
 		
 		if(meta instanceof AccountCreationMeta _meta) {
 			@NonNull var email = _meta.getEmail();
+			
+			validateEmail(email);
 			
 			var firstName = _meta.getFirstName().orElse("Unknown");
 			var lastName = _meta.getLastName().orElse("User");
@@ -101,5 +110,45 @@ public class Account implements DomainEntity, Creatable, Modifiable, Deletable {
 		} else throwUnsupportedDeletionMeta(meta);
 		
 		deletionTimestamp = Timestamp.now();
+	}
+	
+	private void validateEmail(String email) {
+		 if (email == null) {
+	        throw new BlacknodeValidationException("Invalid email address: null");
+	    }
+
+	    String trimmed = email.trim();
+	    if (trimmed.isEmpty()) {
+	        throw new BlacknodeValidationException("Invalid email address: empty");
+	    }
+
+	    // Overall length limit per RFCs (practical)
+	    if (trimmed.length() > 254) {
+	        throw new BlacknodeValidationException("Invalid email address (too long): " + email);
+	    }
+
+	    int atIndex = trimmed.lastIndexOf('@');
+	    if (atIndex <= 0 || atIndex == trimmed.length() - 1) {
+	        throw new BlacknodeValidationException("Invalid email address: " + email);
+	    }
+
+	    String local = trimmed.substring(0, atIndex);
+	    String domain = trimmed.substring(atIndex + 1);
+
+	    // Convert internationalized domain names to ASCII form (punycode)
+	    try {
+	        domain = IDN.toASCII(domain);
+	    } catch (Exception ex) {
+	        throw new BlacknodeValidationException("Invalid email domain: " + email);
+	    }
+
+	    String normalized = local + "@" + domain;
+	    if (normalized.length() > 254) {
+	        throw new BlacknodeValidationException("Invalid email address (too long after normalization): " + email);
+	    }
+
+	    if (!EMAIL_PATTERN.matcher(normalized).matches()) {
+	        throw new BlacknodeValidationException("Invalid email address: " + email);
+	    }
 	}
 }
