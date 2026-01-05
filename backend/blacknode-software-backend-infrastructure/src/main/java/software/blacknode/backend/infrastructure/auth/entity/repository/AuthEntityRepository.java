@@ -19,6 +19,6 @@ public interface AuthEntityRepository extends JpaRepository<AuthEntity, UUID> {
 	Optional<AuthEntity> queryByIdAndAccountIdAndState(@Param("id") UUID id, @Param("accountId") UUID accountId, @Param("state") EntityState state);
 	
 	@Query("SELECT a FROM AuthEntity a WHERE a.accountId = :accountId AND a.state = :state")
-	List<AuthEntity> queryAllByAccountIdAndState(UUID accountId, @Param("state") EntityState state);
+	List<AuthEntity> queryAllByAccountIdAndState(@Param("accountId") UUID accountId, @Param("state") EntityState state);
 	
 }
