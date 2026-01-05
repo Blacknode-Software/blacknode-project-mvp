@@ -2,8 +2,11 @@ package software.blacknode.backend.domain.account;
 
 import java.util.Optional;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.ToString;
 import me.hinsinger.hinz.common.huid.HUID;
 import me.hinsinger.hinz.common.time.timestamp.Timestamp;
 import software.blacknode.backend.domain.account.meta.AccountMeta;
@@ -18,6 +21,9 @@ import software.blacknode.backend.domain.entity.modifier.impl.delete.meta.Deleti
 import software.blacknode.backend.domain.entity.modifier.impl.modify.Modifiable;
 import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
 
+@Builder
+@AllArgsConstructor(onConstructor = @__({ @Deprecated }))
+@ToString
 public class Account implements DomainEntity, Creatable, Modifiable, Deletable {
 
 	@Getter private HUID id;
