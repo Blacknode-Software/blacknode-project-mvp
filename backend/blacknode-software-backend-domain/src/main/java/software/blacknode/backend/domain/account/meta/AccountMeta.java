@@ -9,9 +9,6 @@ import lombok.With;
 @Builder
 public class AccountMeta {
 
-	@Builder.Default
-	private String firstName = "Unknown";
-	
-	@Builder.Default
-	private String lastName = "Unknown";
+	private String firstName;
+	private String lastName;
 }

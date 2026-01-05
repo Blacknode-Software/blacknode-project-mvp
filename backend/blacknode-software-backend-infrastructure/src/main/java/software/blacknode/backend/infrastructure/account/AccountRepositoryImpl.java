@@ -23,4 +23,10 @@ public class AccountRepositoryImpl implements AccountRepository {
 		
 	}
 
+	@Override
+	public Optional<Account> findByEmail(String email) {
+		// TODO Auto-generated method stub
+		return Optional.empty();
+	}
+
 }

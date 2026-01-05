@@ -19,7 +19,7 @@ import software.blacknode.backend.application.role.RoleService;
 import software.blacknode.backend.application.setup.command.InitialSetupCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
 import software.blacknode.backend.application.view.ViewService;
-import software.blacknode.backend.domain.account.meta.create.AccountInitialAdminCreationMeta;
+import software.blacknode.backend.domain.account.meta.create.impl.AccountInitialAdminCreationMeta;
 import software.blacknode.backend.domain.auth.meta.create.impl.PasswordAuthCreationMeta;
 import software.blacknode.backend.domain.channel.meta.create.impl.ChannelInitialCreationMeta;
 import software.blacknode.backend.domain.exception.BlacknodeException;
