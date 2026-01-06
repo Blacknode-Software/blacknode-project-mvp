@@ -17,9 +17,9 @@ public interface MemberAssociationRepository {
 	
 	public List<MemberAssociation> findByMemberId(HUID memberId);
 	
-	public List<MemberAssociation> findByMemberIdAndScope(HUID memberId, MemberAssociationMeta.Scope scope);
+	public List<MemberAssociation> findByMemberIdAndScope(HUID memberId, MemberAssociation.Scope scope);
 	
-	public Optional<MemberAssociation> findByMemberIdAndScopeIdAndScope(HUID memberId, HUID scopeId, MemberAssociationMeta.Scope scope);
+	public Optional<MemberAssociation> findByMemberIdAndScopeIdAndScope(HUID memberId, HUID scopeId, MemberAssociation.Scope scope);
 	
 	public void save(MemberAssociation association);
 }

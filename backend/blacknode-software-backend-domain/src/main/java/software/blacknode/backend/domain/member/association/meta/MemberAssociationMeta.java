@@ -8,15 +8,5 @@ import lombok.With;
 @With
 @Builder
 public class MemberAssociationMeta {
-
-	@Builder.Default
-	private Scope scope = Scope.UNKNOWN;
-	
-	public enum Scope {
-		ORGANIZATION,
-		PROJECT,
-		CHANNEL,
-		UNKNOWN
-	}
 	
 }
