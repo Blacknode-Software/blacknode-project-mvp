@@ -29,9 +29,9 @@ public class BaseControllerAdvice {
 		return ErrorResponse.with(ex.getMessage(), HttpStatus.OK);
 	}
 	
-	@ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGeneric(Exception ex) {
-        return ErrorResponse.with(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+//	@ExceptionHandler(Exception.class)
+//    public ResponseEntity<ErrorResponse> handleGeneric(Exception ex) {
+//        return ErrorResponse.with(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
 	
 }

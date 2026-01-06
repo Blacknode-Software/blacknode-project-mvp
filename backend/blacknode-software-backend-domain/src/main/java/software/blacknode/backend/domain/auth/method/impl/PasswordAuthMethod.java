@@ -125,7 +125,7 @@ public class PasswordAuthMethod implements AuthMethod {
 			
 			var properties = model.getProperties();
 			
-			@NonNull var hash = properties.asText("hash");
+			@NonNull var hash = properties.get("hash").asText();
 			
 			return new PasswordAuthMethod(hash);
 		}

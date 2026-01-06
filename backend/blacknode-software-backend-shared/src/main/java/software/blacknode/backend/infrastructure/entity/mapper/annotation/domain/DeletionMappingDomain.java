@@ -9,7 +9,7 @@ import org.mapstruct.Mapping;
 
 @Target({ ElementType.METHOD, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.CLASS)
-@Mapping(target = "deletionTimestamp", source = "deletedAt", qualifiedByName = "instant2Timestamp")
+@Mapping(target = "deletionTimestamp", source = "deletedAt")
 public @interface DeletionMappingDomain {
 
 }

@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
+import software.blacknode.backend.api.controller.annotation.BearerAuth;
 import software.blacknode.backend.api.controller.organization.annotation.OrganizationHeader;
 import software.blacknode.backend.api.controller.view.mapper.impl.ViewFetchMapper;
 import software.blacknode.backend.api.controller.view.mapper.impl.ViewsBatchFetchMapper;
@@ -29,6 +30,7 @@ import software.blacknode.backend.application.view.usecase.ViewFetchUseCase;
 import software.blacknode.backend.application.view.usecase.ViewsBatchFetchUseCase;
 import software.blacknode.backend.application.view.usecase.ViewsInChannelUseCase;
 
+@BearerAuth
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "Views", description = "View management APIs")
