@@ -134,6 +134,7 @@ public class InitialSetupUseCase implements ResultExecutionUseCase<InitialSetupC
 		
 		var associationMeta = MemberOrganizationAssociationCreationMeta.builder()
 				.memberId(member.getId())
+				.roleId(adminOrgRole.getId())
 				.organizationId(organizationId)
 				.build();
 		

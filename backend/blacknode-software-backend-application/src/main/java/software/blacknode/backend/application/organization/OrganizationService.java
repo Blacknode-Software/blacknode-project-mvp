@@ -19,7 +19,7 @@ import software.blacknode.backend.domain.organization.repository.OrganizationRep
 @RequiredArgsConstructor
 public class OrganizationService {
 
-	private OrganizationRepository repository;
+	private final OrganizationRepository repository;
 	
 	public Organization getOrThrow(HUID organizationId) {
 		return repository.findById(organizationId)
