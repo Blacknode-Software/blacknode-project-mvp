@@ -5,21 +5,20 @@ import java.util.Optional;
 
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.domain.member.association.MemberAssociation;
-import software.blacknode.backend.domain.member.association.meta.MemberAssociationMeta;
 
 public interface MemberAssociationRepository {
 
-	public Optional<MemberAssociation> findById(HUID id);
+	public Optional<MemberAssociation> findById(HUID organizationId, HUID id);
 	
-	public List<MemberAssociation> findAll();
+	public List<MemberAssociation> findAll(HUID organizationId);
 	
-	public List<MemberAssociation> findByMemberIds(List<HUID> memberIds);
+	public List<MemberAssociation> findByMemberIds(HUID organizationId, List<HUID> memberIds);
 	
-	public List<MemberAssociation> findByMemberId(HUID memberId);
+	public List<MemberAssociation> findByMemberId(HUID organizationId, HUID memberId);
 	
-	public List<MemberAssociation> findByMemberIdAndScope(HUID memberId, MemberAssociation.Scope scope);
+	public List<MemberAssociation> findByMemberIdAndScope(HUID organizationId, HUID memberId, MemberAssociation.Scope scope);
 	
-	public Optional<MemberAssociation> findByMemberIdAndScopeIdAndScope(HUID memberId, HUID scopeId, MemberAssociation.Scope scope);
+	public Optional<MemberAssociation> findByMemberIdAndScopeIdAndScope(HUID organizationId, HUID memberId, HUID scopeId, MemberAssociation.Scope scope);
 	
-	public void save(MemberAssociation association);
+	public void save(HUID organizationId, MemberAssociation association);
 }

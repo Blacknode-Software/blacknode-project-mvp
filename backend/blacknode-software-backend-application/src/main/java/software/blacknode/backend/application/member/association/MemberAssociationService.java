@@ -7,36 +7,17 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
-import software.blacknode.backend.application.channel.ChannelService;
-import software.blacknode.backend.application.member.MemberService;
-import software.blacknode.backend.application.organization.OrganizationService;
-import software.blacknode.backend.application.project.ProjectService;
-import software.blacknode.backend.application.role.RoleService;
 import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
 import software.blacknode.backend.domain.entity.modifier.impl.delete.meta.DeletionMeta;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.member.association.MemberAssociation;
-import software.blacknode.backend.domain.member.association.meta.MemberAssociationMeta;
+import software.blacknode.backend.domain.member.association.meta.delete.impl.MemberAssociationDefaultDeletionMeta;
 import software.blacknode.backend.domain.member.association.repository.MemberAssociationRepository;
 
-/*
- * Current behavior:
- * - A member can have only one role per scope (organization, project, channel)
- * - Setting a new role for a member in a scope replaces the previous role
- * - Roles must belong to the same organization as the member
- * - Removing superior roles will return previous roles if they exist (maybe change later)
- * - If a member has a super privileged role in a superior scope, that role is returned for inferior scopes
- */
 
 @Service
 @RequiredArgsConstructor
 public class MemberAssociationService {
-	
-	private final OrganizationService organizationService;
-	private final ProjectService projectService;
-	private final ChannelService channelService;
-	private final MemberService memberService;
-	private final RoleService roleService;
 	
 	private final MemberAssociationRepository repository;
 	
@@ -45,9 +26,20 @@ public class MemberAssociationService {
 		
 		association.create(meta);
 		
-		repository.save(association);
+		repository.save(organizationId, association);
 		
 		return association;
+	}
+	
+	public void delete(HUID organizationId, HUID associationId) {
+		var association = getOrThrow(organizationId, associationId);
+		
+		var deletionMeta = MemberAssociationDefaultDeletionMeta.builder()
+				.build();
+		
+		association.delete(deletionMeta);
+		
+		repository.save(organizationId, association);
 	}
 	
 	public void delete(HUID organizationId, HUID associationId, DeletionMeta meta) {
@@ -55,31 +47,31 @@ public class MemberAssociationService {
 		
 		association.delete(meta);
 		
-		repository.save(association);
+		repository.save(organizationId, association);
 	}
 	
 	public Optional<MemberAssociation> get(HUID organizationId, HUID associationId) {
-		return repository.findById(associationId);
+		return repository.findById(organizationId, associationId);
 	}
 	
 	public MemberAssociation getOrThrow(HUID organizationId, HUID associationId) {
-		return repository.findById(associationId)
+		return repository.findById(organizationId, associationId)
 				.orElseThrow(() -> new BlacknodeException("Member association with ID " + associationId + " not found."));
 	}
 	
 	public Optional<MemberAssociation> get(HUID organizationId, HUID memberId, HUID scopeId, MemberAssociation.Scope scope) {
-		var association = repository.findByMemberIdAndScopeIdAndScope(memberId, scopeId, scope);
+		var association = repository.findByMemberIdAndScopeIdAndScope(organizationId, memberId, scopeId, scope);
 		
 		return association;
 	}
 	
 	public MemberAssociation getOrThrow(HUID organizationId, HUID memberId, HUID scopeId, MemberAssociation.Scope scope) {
-		return repository.findByMemberIdAndScopeIdAndScope(memberId, scopeId, scope)
+		return repository.findByMemberIdAndScopeIdAndScope(organizationId, memberId, scopeId, scope)
 				.orElseThrow(() -> new BlacknodeException("Member with ID " + memberId + " has no role association in scope " + scope));
 	}
 	
 	public List<MemberAssociation> get(HUID organizationId, HUID memberId, MemberAssociation.Scope scope) {
-		var associations = repository.findByMemberIdAndScope(memberId, scope);
+		var associations = repository.findByMemberIdAndScope(organizationId, memberId, scope);
 		
 		return associations;
 	}
