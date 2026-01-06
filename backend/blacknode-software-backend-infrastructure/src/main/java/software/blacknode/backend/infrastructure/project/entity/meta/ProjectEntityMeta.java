@@ -12,6 +12,8 @@ import software.blacknode.backend.infrastructure.entity.version.migration.Migrat
 
 @Builder
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @VersionedEntity
 @ToString
 public class ProjectEntityMeta implements VersionableEntity {

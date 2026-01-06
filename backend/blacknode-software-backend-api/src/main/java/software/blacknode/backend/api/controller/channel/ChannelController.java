@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.api.controller.BaseController;
+import software.blacknode.backend.api.controller.annotation.BearerAuth;
 import software.blacknode.backend.api.controller.annotation.DisplayPatchOperations;
 import software.blacknode.backend.api.controller.channel.mapper.impl.ChannelCreateMapper;
 import software.blacknode.backend.api.controller.channel.mapper.impl.ChannelFetchMapper;
@@ -46,6 +47,7 @@ import software.blacknode.backend.application.channel.usecase.ChannelPatchUseCas
 import software.blacknode.backend.application.channel.usecase.ChannelsBatchFetchUseCase;
 import software.blacknode.backend.application.channel.usecase.ChannelsInProjectUseCase;
 
+@BearerAuth
 @Tag(name = "Channels", description = "Channel management APIs")
 @RestController
 @RequiredArgsConstructor

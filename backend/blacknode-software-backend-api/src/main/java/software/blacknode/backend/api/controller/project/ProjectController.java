@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.api.controller.BaseController;
+import software.blacknode.backend.api.controller.annotation.BearerAuth;
 import software.blacknode.backend.api.controller.annotation.DisplayPatchOperations;
 import software.blacknode.backend.api.controller.annotation.InvalidInputResponse;
 import software.blacknode.backend.api.controller.annotation.NotFoundResponse;
@@ -48,6 +49,7 @@ import software.blacknode.backend.application.project.usecase.ProjectPatchUseCas
 import software.blacknode.backend.application.project.usecase.ProjectsBatchFetchUseCase;
 import software.blacknode.backend.application.project.usecase.ProjectsInOrganizationUseCase;
 
+@BearerAuth
 @Tag(name = "Projects", description = "Project management APIs")
 @RestController
 @RequiredArgsConstructor

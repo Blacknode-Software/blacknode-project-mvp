@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import software.blacknode.backend.api.controller.BaseController;
+import software.blacknode.backend.api.controller.annotation.BearerAuth;
 import software.blacknode.backend.api.controller.annotation.DisplayPatchOperations;
 import software.blacknode.backend.api.controller.organization.annotation.OrganizationHeader;
 import software.blacknode.backend.api.controller.organization.mapper.impl.OrganizationFetchMapper;
@@ -24,9 +25,10 @@ import software.blacknode.backend.application.organization.usecase.OrganizationF
 import software.blacknode.backend.application.organization.usecase.OrganizationPatchUseCase;
 import software.blacknode.backend.application.organization.usecase.OrganizationPatchUseCase.OrganizationPatchOperation;
 
+@BearerAuth
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "Organizations", description = "Organization management APIs")
+@Tag(name = "Organization", description = "Organization management APIs")
 public class OrganizationController extends BaseController {
 
 	private final OrganizationFetchMapper organizationFetchMapper;

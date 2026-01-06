@@ -12,15 +12,18 @@ import me.hinsinger.hinz.common.huid.HUID;
 @Builder
 public class SessionContext {
 	public static SessionContext empty() {
-		return SessionContext.builder()
-			.build();
+		return SessionContext.builder().build();
 	}
 	
-	private final Optional<HUID> sessionId;
+	@Builder.Default
+	private final Optional<HUID> sessionId = Optional.empty();
 	
-	private final Optional<HUID> accountId;
+	@Builder.Default
+	private final Optional<HUID> accountId = Optional.empty();
 	
-	private final Optional<HUID> memberId;
+	@Builder.Default
+	private final Optional<HUID> memberId = Optional.empty();
 	
-	private final Optional<HUID> organizationId;
+	@Builder.Default
+	private final Optional<HUID> organizationId = Optional.empty();
 }

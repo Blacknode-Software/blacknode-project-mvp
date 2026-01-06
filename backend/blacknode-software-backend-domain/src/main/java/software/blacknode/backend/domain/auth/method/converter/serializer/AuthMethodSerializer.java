@@ -2,6 +2,8 @@ package software.blacknode.backend.domain.auth.method.converter.serializer;
 
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
@@ -16,8 +18,10 @@ public class AuthMethodSerializer {
 	private final ObjectMapper objectMapper;
 	
 	public AuthMethodSerializedModel serialize(AuthMethod method) {
+		var mapper = objectMapper.copy().setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+		
 		var id = method.getType().getId();
-		var properties = objectMapper.valueToTree(method);
+		var properties = mapper.valueToTree(method);
 		
 		return new AuthMethodSerializedModel(id, properties);
 	}

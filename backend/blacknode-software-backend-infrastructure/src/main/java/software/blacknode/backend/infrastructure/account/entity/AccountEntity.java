@@ -1,5 +1,6 @@
 package software.blacknode.backend.infrastructure.account.entity;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 
 import jakarta.persistence.Column;
