@@ -2,6 +2,7 @@ package software.blacknode.backend.application.access;
 
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.application.access.impl.ChannelAccessControl;
@@ -10,14 +11,6 @@ import software.blacknode.backend.application.access.impl.ProjectAccessControl;
 import software.blacknode.backend.application.access.impl.TaskAccessControl;
 import software.blacknode.backend.application.access.impl.ViewAccessControl;
 import software.blacknode.backend.application.access.level.AccessLevel;
-import software.blacknode.backend.application.channel.ChannelService;
-import software.blacknode.backend.application.member.MemberService;
-import software.blacknode.backend.application.member.association.MemberAssociationService;
-import software.blacknode.backend.application.organization.OrganizationService;
-import software.blacknode.backend.application.project.ProjectService;
-import software.blacknode.backend.application.role.RoleService;
-import software.blacknode.backend.application.task.TaskService;
-import software.blacknode.backend.application.view.ViewService;
 import software.blacknode.backend.domain.channel.Channel;
 import software.blacknode.backend.domain.member.Member;
 import software.blacknode.backend.domain.organization.Organization;
@@ -26,6 +19,7 @@ import software.blacknode.backend.domain.role.Role;
 import software.blacknode.backend.domain.task.Task;
 import software.blacknode.backend.domain.view.View;
 
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class AccessControlService {

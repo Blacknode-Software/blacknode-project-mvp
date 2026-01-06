@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -28,6 +29,7 @@ public class ProjectsBatchFetchUseCase implements ResultExecutionUseCase<Project
 	private final SessionContextHolder sessionContextHolder;
 	
 	@Override
+	@Transactional
 	public Result execute(ProjectsBatchFetchCommand command) {
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();

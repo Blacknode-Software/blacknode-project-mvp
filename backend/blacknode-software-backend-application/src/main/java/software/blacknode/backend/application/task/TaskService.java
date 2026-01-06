@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
@@ -15,6 +16,7 @@ import software.blacknode.backend.domain.task.Task;
 import software.blacknode.backend.domain.task.meta.delete.impl.TaskDefaultDeletionMeta;
 import software.blacknode.backend.domain.task.repository.TaskRepository;
 
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class TaskService {

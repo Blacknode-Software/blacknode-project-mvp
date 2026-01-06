@@ -2,6 +2,7 @@ package software.blacknode.backend.application.auth.usecase;
 
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -24,6 +25,7 @@ public class AuthenticateWithPasswordUseCase implements ResultExecutionUseCase<A
 	private final AuthService authService;
 	
 	@Override
+	@Transactional
 	public Result execute(AuthenticateWithPasswordCommand command) {
 		var email = command.getEmail().trim().toLowerCase();
 		var password = command.getPassword().trim();

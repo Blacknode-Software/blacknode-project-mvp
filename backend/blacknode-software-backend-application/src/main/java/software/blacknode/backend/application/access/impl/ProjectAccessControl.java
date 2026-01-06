@@ -2,6 +2,7 @@ package software.blacknode.backend.application.access.impl;
 
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.application.access.exception.AccessDeniedException;
@@ -12,6 +13,7 @@ import software.blacknode.backend.application.project.ProjectService;
 import software.blacknode.backend.domain.member.Member;
 import software.blacknode.backend.domain.project.Project;
 
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class ProjectAccessControl {

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -30,6 +31,7 @@ public class TasksInChannelUseCase implements ResultExecutionUseCase<TasksInChan
 	private final SessionContextHolder sessionContextHolder;
 	
 	@Override
+	@Transactional
 	public TasksInChannelUseCase.Result execute(TasksInChannelCommand command) {
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();

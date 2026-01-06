@@ -1,6 +1,7 @@
 package software.blacknode.backend.application.organization.usecase;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -26,6 +27,7 @@ public class OrganizationPatchUseCase implements ResultExecutionUseCase<Organiza
 	private final SessionContextHolder sessionContextHolder;
 	
 	@Override
+	@Transactional
 	public Result execute(OrganizationPatchCommand command) {
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();

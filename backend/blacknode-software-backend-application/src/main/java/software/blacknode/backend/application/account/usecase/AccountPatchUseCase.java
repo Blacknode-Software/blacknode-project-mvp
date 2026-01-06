@@ -2,6 +2,7 @@ package software.blacknode.backend.application.account.usecase;
 
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -26,6 +27,7 @@ public class AccountPatchUseCase implements ResultExecutionUseCase<AccountPatchC
 	private final AccountService accountService;
 	
 	@Override
+	@Transactional
 	public Result execute(AccountPatchCommand command) {
 		var accountId = sessionContextHolder.getAccountIdOrThrow();
 	
