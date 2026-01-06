@@ -2,6 +2,8 @@ package software.blacknode.backend.domain.member.association;
 
 import java.util.Optional;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import me.hinsinger.hinz.common.huid.HUID;
@@ -16,6 +18,8 @@ import software.blacknode.backend.domain.member.association.meta.MemberAssociati
 import software.blacknode.backend.domain.member.association.meta.create.MemberAssociationCreationMeta;
 import software.blacknode.backend.domain.member.association.meta.delete.MemberAssociationDeletionMeta;
 
+@Builder
+@AllArgsConstructor(onConstructor = @__({ @Deprecated }))
 public class MemberAssociation implements DomainEntity, Creatable, Deletable {
 
 	@Getter private HUID id;

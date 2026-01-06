@@ -1,6 +1,7 @@
 package software.blacknode.backend.infrastructure.member.association.entity;
 
 import java.time.Instant;
+import java.util.UUID;
 
 import jakarta.persistence.Access;
 import jakarta.persistence.AccessType;
@@ -33,15 +34,15 @@ public class MemberAssociationEntity extends OrganizationRelatedEntity {
 	
 	@NotNull
 	@Column(name = "member_id", nullable = false)
-	private HUID memberId;
+	private UUID memberId;
 	
 	@NotNull
 	@Column(name = "entity_id", nullable = false)
-	private HUID entityId;
+	private UUID entityId;
 	
 	@NotNull
 	@Column(name = "role_id", nullable = false)
-	private HUID roleId;
+	private UUID roleId;
 	
 	@NotNull
 	@Column(name = "scope", nullable = false)
