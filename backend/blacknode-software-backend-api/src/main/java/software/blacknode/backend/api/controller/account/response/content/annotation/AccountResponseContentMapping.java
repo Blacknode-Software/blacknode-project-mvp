@@ -12,8 +12,8 @@ import org.mapstruct.Mappings;
 @Retention(RetentionPolicy.CLASS)
 @Mappings({
 	@Mapping(target = "id", source = "account.id"),
-	@Mapping(target = "firstName", source = "account.meta.name"),
-	@Mapping(target = "lastName", source = "account.meta.name"),
+	@Mapping(target = "firstName", source = "account.meta.firstName"),
+	@Mapping(target = "lastName", source = "account.meta.lastName"),
 })
 public @interface AccountResponseContentMapping {
 

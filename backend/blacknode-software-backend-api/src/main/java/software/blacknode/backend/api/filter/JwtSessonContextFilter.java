@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
+import software.blacknode.backend.application.member.MemberService;
 import software.blacknode.backend.domain.session.context.SessionContext;
 import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
 
@@ -25,6 +26,8 @@ public class JwtSessonContextFilter extends OncePerRequestFilter {
     private static final String ORG_HEADER = "X-Organization-Id";
 
 	private final JwtParser jwtParser;
+	
+	private final MemberService memberService;
 	
 	private final SessionContextHolder sessionContextHolder;
 	
@@ -47,14 +50,18 @@ public class JwtSessonContextFilter extends OncePerRequestFilter {
             var accountId = HUID.fromString(claims.getSubject());
             
             context = context.withAccountId(Optional.ofNullable(accountId));
-        }
-
-        String orgHeader = request.getHeader(ORG_HEADER);
         
-        if (orgHeader != null && !orgHeader.isBlank()) {
-        	var organizationId = HUID.fromString(orgHeader);
-        	
-            context = context.withOrganizationId(Optional.ofNullable(organizationId));
+            String orgHeader = request.getHeader(ORG_HEADER);
+            
+            if (orgHeader != null && !orgHeader.isBlank()) {
+            	var organizationId = HUID.fromString(orgHeader);
+            	
+            	var memberId = memberService.getByAccountIdOrThrow(accountId, organizationId);
+            	
+                context = context.withOrganizationId(Optional.ofNullable(organizationId))
+                			 .withMemberId(Optional.ofNullable(memberId.getId()));
+                
+            }
         }
 
         sessionContextHolder.initialize(context);
