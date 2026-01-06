@@ -78,10 +78,21 @@ public class MemberAssociation implements DomainEntity, Creatable, Deletable {
 		
 	}
 	
+	public boolean belognsToOrganization(HUID organizationId) {
+		return this.organizationId.equals(organizationId);
+	}
+	
+	public void ensureBelongsToOrganization(HUID organizationId) {
+		if(!belognsToOrganization(organizationId)) {
+			throw new BlacknodeException("Association does not belong to organization with ID: " + organizationId);
+		}
+	}
+	
 	public enum Scope {
 		ORGANIZATION,
 		PROJECT,
 		CHANNEL,
 		UNKNOWN
 	}
+	
 }
