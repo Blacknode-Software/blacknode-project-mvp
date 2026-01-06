@@ -24,7 +24,7 @@ import software.blacknode.backend.domain.auth.meta.create.impl.PasswordAuthCreat
 import software.blacknode.backend.domain.channel.meta.create.impl.ChannelInitialCreationMeta;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.member.association.meta.create.MemberOrganizationAssociationCreationMeta;
-import software.blacknode.backend.domain.member.meta.create.MemberAdminCreationMeta;
+import software.blacknode.backend.domain.member.meta.create.impl.MemberInitialAdminCreationMeta;
 import software.blacknode.backend.domain.organization.meta.create.impl.OrganizationInitialCreationMeta;
 import software.blacknode.backend.domain.project.meta.create.impl.ProjectInitialCreationMeta;
 import software.blacknode.backend.domain.role.meta.create.RoleInitialOrganizationScopeCreationMeta;
@@ -126,7 +126,7 @@ public class InitialSetupUseCase implements ResultExecutionUseCase<InitialSetupC
 		
 		var auth = authService.create(account.getId(), authMeta);
 		
-		var memberMeta = MemberAdminCreationMeta.builder()
+		var memberMeta = MemberInitialAdminCreationMeta.builder()
 				.accountId(account.getId())
 				.build();
 		
