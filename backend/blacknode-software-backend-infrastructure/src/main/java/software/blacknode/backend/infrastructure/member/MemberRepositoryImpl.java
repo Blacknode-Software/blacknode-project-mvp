@@ -1,5 +1,6 @@
 package software.blacknode.backend.infrastructure.member;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
@@ -12,21 +13,34 @@ import software.blacknode.backend.domain.member.repository.MemberRepository;
 public class MemberRepositoryImpl implements MemberRepository {
 
 	@Override
-	public Optional<Member> findById(HUID id) {
+	public Optional<Member> findById(HUID organizationId, HUID id) {
 		// TODO Auto-generated method stub
 		return Optional.empty();
 	}
 
 	@Override
-	public Optional<Member> findByAccountId(HUID accountId) {
+	public List<Member> findAllById(HUID organizationId, List<HUID> ids) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Member> findAllInOrganization(HUID organizationId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Optional<Member> findByAccountId(HUID organizationId, HUID accountId) {
 		// TODO Auto-generated method stub
 		return Optional.empty();
 	}
 
 	@Override
-	public void save(Member member) {
+	public void save(HUID organizationId, Member member) {
 		// TODO Auto-generated method stub
 		
 	}
+
 
 }

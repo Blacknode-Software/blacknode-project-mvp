@@ -2,7 +2,10 @@ package software.blacknode.backend.domain.member;
 
 import java.util.Optional;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NonNull;
 import me.hinsinger.hinz.common.huid.HUID;
 import me.hinsinger.hinz.common.time.timestamp.Timestamp;
 import software.blacknode.backend.domain.entity.modifier.impl.create.Creatable;
@@ -13,14 +16,17 @@ import software.blacknode.backend.domain.entity.modifier.impl.modify.Modifiable;
 import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.member.meta.MemberMeta;
-import software.blacknode.backend.domain.member.meta.create.MemberAdminCreationMeta;
-import software.blacknode.backend.domain.member.settings.MemberSettings;
+import software.blacknode.backend.domain.member.meta.create.MemberCreationMeta;
+import software.blacknode.backend.domain.member.meta.delete.MemberDeletionMeta;
+import software.blacknode.backend.domain.member.meta.modify.MemberModificationMeta;
 
+@Builder
+@AllArgsConstructor(onConstructor = @__({ @Deprecated }))
 public class Member implements Creatable, Modifiable, Deletable {
 
 	@Getter private HUID id;
 	
-	@Getter private MemberSettings settings;
+	//@Getter private MemberSettings settings;
 	@Getter private MemberMeta meta;
 
 	@Getter private Timestamp creationTimestamp;
@@ -43,14 +49,18 @@ public class Member implements Creatable, Modifiable, Deletable {
 		var meta = meta0.get();
 		
 		this.id = HUID.random();
-		this.settings = new MemberSettings();
-		this.meta = new MemberMeta();
+		//this.settings = new MemberSettings();
 		
-		if(meta instanceof MemberAdminCreationMeta adminMeta) {
-			this.accountId = adminMeta.getAccountId();
-		} else {
-			throwUnsupportedCreationMeta(meta);
-		}
+		if(meta instanceof MemberCreationMeta _meta) {
+			
+			@NonNull var accountId = _meta.getAccountId();
+			
+			this.accountId = accountId;
+			
+			this.meta = MemberMeta.builder()
+					.build();
+			
+		} else throwUnsupportedCreationMeta(meta);
 		
 		creationTimestamp = Timestamp.now();
 	}
@@ -61,6 +71,12 @@ public class Member implements Creatable, Modifiable, Deletable {
 		ensureNotDeleted(meta0);
 		ensureModificationMetaProvided(meta0);
 		
+		var meta = meta0.get();
+		
+		if(meta instanceof MemberModificationMeta _meta) {
+			// Apply modifications here
+		} else throwUnsupportedModificationMeta(meta);
+		
 		modificationTimestamp = Timestamp.now();
 	}
 	
@@ -69,6 +85,12 @@ public class Member implements Creatable, Modifiable, Deletable {
 		ensureCreated(meta0);
 		ensureNotDeleted(meta0);
 		ensureDeletionMetaProvided(meta0);
+		
+		var meta = meta0.get();
+		
+		if(meta instanceof MemberDeletionMeta _meta) {
+			// Apply deletion logic here
+		} else throwUnsupportedDeletionMeta(meta);
 		
 		deletionTimestamp = Timestamp.now();
 	}
