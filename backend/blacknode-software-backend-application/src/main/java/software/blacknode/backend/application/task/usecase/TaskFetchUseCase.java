@@ -28,7 +28,7 @@ public class TaskFetchUseCase implements ResultExecutionUseCase<TaskFetchCommand
 	private final SessionContextHolder sessionContextHolder;
 	
 	@Override
-	@Transactional(readOnly = true)
+	@Transactional
 	public Result execute(TaskFetchCommand command) {
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
