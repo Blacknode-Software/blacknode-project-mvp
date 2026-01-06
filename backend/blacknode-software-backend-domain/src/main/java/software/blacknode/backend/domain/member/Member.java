@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import me.hinsinger.hinz.common.huid.HUID;
 import me.hinsinger.hinz.common.time.timestamp.Timestamp;
+import software.blacknode.backend.domain.entity.DomainEntity;
 import software.blacknode.backend.domain.entity.modifier.impl.create.Creatable;
 import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
 import software.blacknode.backend.domain.entity.modifier.impl.delete.Deletable;
@@ -22,7 +23,7 @@ import software.blacknode.backend.domain.member.meta.modify.MemberModificationMe
 
 @Builder
 @AllArgsConstructor(onConstructor = @__({ @Deprecated }))
-public class Member implements Creatable, Modifiable, Deletable {
+public class Member implements DomainEntity, Creatable, Modifiable, Deletable {
 
 	@Getter private HUID id;
 	

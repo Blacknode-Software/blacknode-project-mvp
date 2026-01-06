@@ -10,9 +10,9 @@ public interface MemberRepository {
 
 	Optional<Member> findById(HUID organizationId, HUID id);
 	
-	List<Member> findAllById(HUID organizationId, List<HUID> ids);
+	List<Member> findByIds(HUID organizationId, List<HUID> ids);
 	
-	List<Member> findAllInOrganization(HUID organizationId);
+	List<Member> findByOrganizationId(HUID organizationId);
 
 	Optional<Member> findByAccountId(HUID organizationId, HUID accountId);
 	
