@@ -2,51 +2,71 @@ package software.blacknode.backend.api.controller.member;
 
 import java.util.UUID;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import software.blacknode.backend.api.controller.BaseController;
-import software.blacknode.backend.api.controller.member.response.MemberDeleteResponse;
-import software.blacknode.backend.api.controller.member.response.MemberResponse;
+import software.blacknode.backend.api.controller.member.mapper.MemberAssignRoleMapper;
+import software.blacknode.backend.api.controller.member.request.MemberAssignRoleRequest;
+import software.blacknode.backend.api.controller.organization.annotation.OrganizationHeader;
+import software.blacknode.backend.api.controller.response.impl.SuccessResponse;
+import software.blacknode.backend.application.member.usecase.MemberAssignChannelRoleUseCase;
+import software.blacknode.backend.application.member.usecase.MemberAssignOrganizationRoleUseCase;
+import software.blacknode.backend.application.member.usecase.MemberAssignProjectRoleUseCase;
 
-@Hidden
 @RestController
 @Tag(name = "Members", description = "Member management APIs")
+@RequiredArgsConstructor
 public class MemberController extends BaseController {
-
-	@Operation(summary = "Create a new member")
-	@ApiResponses(value = { @ApiResponse(responseCode = "201", description = "Member created"),
-			@ApiResponse(responseCode = "400", description = "Invalid input") })
-	@PostMapping("/organization/{organizationId}/members")
-	public ResponseEntity<MemberResponse> createMember(@PathVariable UUID organizationId, @RequestBody MemberResponse request) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(null);
+	
+	private final MemberAssignRoleMapper memberAssignRoleMapper;
+	
+	private final MemberAssignOrganizationRoleUseCase memberAssignOrganizationRoleUseCase;
+	private final MemberAssignProjectRoleUseCase memberAssignProjectRoleUseCase;
+	private final MemberAssignChannelRoleUseCase memberAssignChannelRoleUseCase;
+	
+	@OrganizationHeader
+	@Operation(summary = "Assign Organization Role to Member", description = "Assigns a specific role to a member within the organization.")
+	@ApiResponse(responseCode = "200", description = "Organization role assigned successfully.")
+	@PostMapping("/ogranization/members/{memberId}/role")
+	public ResponseEntity<SuccessResponse> assignOrganizationRole(@RequestBody MemberAssignRoleRequest request, @PathVariable UUID memberId) {
+		var command = memberAssignRoleMapper.toOrganizationAssignCommand(request, memberId);
+		
+		memberAssignOrganizationRoleUseCase.execute(command);
+		
+		return SuccessResponse.with("Organization role assigned successfully.");
 	}
 	
-	@Operation(summary = "Get a member by ID")
-	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Found the member"),
-			@ApiResponse(responseCode = "404", description = "Member not found") })
-	@GetMapping("/members/{memberId}")
-	public ResponseEntity<MemberResponse> getMember(@PathVariable UUID id) {
-		return ResponseEntity.ok(null);
+	@OrganizationHeader
+	@Operation(summary = "Assign Project Role to Member", description = "Assigns a specific role to a member within the project.")
+	@ApiResponse(responseCode = "200", description = "Organization role assigned successfully.")
+	@PostMapping("/projects/{projectId}/members/{memberId}/role")
+	public ResponseEntity<SuccessResponse> assignProjectRole(@RequestBody MemberAssignRoleRequest request, @PathVariable UUID memberId, @PathVariable UUID projectId) {
+		var command = memberAssignRoleMapper.toProjectAssignCommand(request, memberId, projectId);
+		
+		memberAssignProjectRoleUseCase.execute(command);
+		
+		return SuccessResponse.with("Project role assigned successfully.");
 	}
 	
-	@Operation(summary = "Delete a member")
-	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Member deleted"),
-			@ApiResponse(responseCode = "404", description = "Member not found") })
-	@DeleteMapping("/members/{memberId}")
-	public ResponseEntity<MemberDeleteResponse> deleteMember(@PathVariable UUID id) {
-		return ResponseEntity.ok(null);
+	@OrganizationHeader
+	@Operation(summary = "Assign Channel Role to Member", description = "Assigns a specific role to a member within the channel.")
+	@ApiResponse(responseCode = "200", description = "Organization role assigned successfully.")
+	@PostMapping("/channels/{channelId}/members/{memberId}/role")
+	public ResponseEntity<SuccessResponse> assignChannelRole(@RequestBody MemberAssignRoleRequest request, @PathVariable UUID memberId, @PathVariable UUID channelId) {
+		var command = memberAssignRoleMapper.toChannelAssignCommand(request, memberId, channelId);
+		
+		memberAssignChannelRoleUseCase.execute(command);
+		
+		return SuccessResponse.with("Channel role assigned successfully.");
 	}
+	
 	
 }

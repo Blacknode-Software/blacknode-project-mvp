@@ -11,7 +11,6 @@ import software.blacknode.backend.application.member.association.MemberAssociati
 import software.blacknode.backend.application.member.command.MemberAssignProjectRoleCommand;
 import software.blacknode.backend.application.role.RoleService;
 import software.blacknode.backend.application.usecase.ExecutionUseCase;
-import software.blacknode.backend.domain.member.association.MemberAssociation;
 import software.blacknode.backend.domain.member.association.meta.create.impl.MemberProjectAssociationCreationMeta;
 import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
 
