@@ -57,7 +57,7 @@ public class MemberAssociationService {
 	}
 	
 	public MemberAssociation getOrThrow(HUID organizationId, HUID associationId) {
-		return repository.findById(organizationId, associationId)
+		return get(organizationId, associationId)
 				.orElseThrow(() -> new BlacknodeException("Member association with ID " + associationId + " not found."));
 	}
 	

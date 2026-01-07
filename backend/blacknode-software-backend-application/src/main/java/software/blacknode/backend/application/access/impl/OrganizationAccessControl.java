@@ -80,7 +80,7 @@ public class OrganizationAccessControl {
 		
 		member.ensureBelongsToOrganization(organizationId);
 		
-		var association = memberAssociationService.getMemberOrganizationAssociationOrThrow(member.getId(), organization.getId());
+		var association = memberAssociationService.getMemberOrganizationAssociationOrThrow(organization.getId(), member.getId());
 		
 		var roleId = association.getRoleId();
 		
