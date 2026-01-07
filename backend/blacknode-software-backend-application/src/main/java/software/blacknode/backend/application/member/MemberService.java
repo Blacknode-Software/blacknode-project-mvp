@@ -11,6 +11,7 @@ import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
 import software.blacknode.backend.domain.entity.modifier.impl.delete.meta.DeletionMeta;
 import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
+import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.member.Member;
 import software.blacknode.backend.domain.member.meta.delete.impl.MemberDefaultDeletionMeta;
 import software.blacknode.backend.domain.member.repository.MemberRepository;
@@ -28,7 +29,7 @@ public class MemberService {
 	
 	public Member getOrThrow(HUID organizationId, HUID memberId) {
 		return get(organizationId, memberId)
-				.orElseThrow(() -> new RuntimeException("Member with ID " + memberId + " not found."));
+				.orElseThrow(() -> new BlacknodeException("Member with ID " + memberId + " not found."));
 	}
 	
 	public Optional<Member> getByAccountId(HUID accountId, HUID organizationId) {
@@ -37,7 +38,7 @@ public class MemberService {
 	
 	public Member getByAccountIdOrThrow(HUID accountId, HUID organizationId) {
 		return getByAccountId(accountId, organizationId)
-				.orElseThrow(() -> new RuntimeException("Member with Account ID " + accountId + " not found."));
+				.orElseThrow(() -> new BlacknodeException("Member with Account ID " + accountId + " not found."));
 	}
 	
 	public List<Member> getAll(HUID organizationId) {
