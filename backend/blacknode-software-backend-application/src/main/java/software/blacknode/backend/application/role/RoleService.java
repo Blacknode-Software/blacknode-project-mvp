@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
@@ -12,6 +13,7 @@ import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.role.Role;
 import software.blacknode.backend.domain.role.repository.RoleRepository;
 
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class RoleService {

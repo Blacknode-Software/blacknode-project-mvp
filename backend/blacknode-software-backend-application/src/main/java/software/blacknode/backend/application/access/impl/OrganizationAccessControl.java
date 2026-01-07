@@ -2,6 +2,7 @@ package software.blacknode.backend.application.access.impl;
 
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.application.access.exception.AccessDeniedException;
@@ -15,6 +16,7 @@ import software.blacknode.backend.domain.member.Member;
 import software.blacknode.backend.domain.organization.Organization;
 import software.blacknode.backend.domain.role.Role;
 
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class OrganizationAccessControl {
@@ -78,7 +80,7 @@ public class OrganizationAccessControl {
 		
 		member.ensureBelongsToOrganization(organizationId);
 		
-		var association = memberAssociationService.getMemberOrganizationAssociationOrThrow(member.getId(), organization.getId());
+		var association = memberAssociationService.getMemberOrganizationAssociationOrThrow(organization.getId(), member.getId());
 		
 		var roleId = association.getRoleId();
 		

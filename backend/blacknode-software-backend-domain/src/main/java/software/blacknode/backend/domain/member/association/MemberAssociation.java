@@ -2,21 +2,25 @@ package software.blacknode.backend.domain.member.association;
 
 import java.util.Optional;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NonNull;
 import me.hinsinger.hinz.common.huid.HUID;
 import me.hinsinger.hinz.common.time.timestamp.Timestamp;
+import software.blacknode.backend.domain.entity.DomainEntity;
 import software.blacknode.backend.domain.entity.modifier.impl.create.Creatable;
 import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
 import software.blacknode.backend.domain.entity.modifier.impl.delete.Deletable;
 import software.blacknode.backend.domain.entity.modifier.impl.delete.meta.DeletionMeta;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.member.association.meta.MemberAssociationMeta;
-import software.blacknode.backend.domain.member.association.meta.create.MemberChannelAssociationCreationMeta;
-import software.blacknode.backend.domain.member.association.meta.create.MemberOrganizationAssociationCreationMeta;
-import software.blacknode.backend.domain.member.association.meta.create.MemberProjectAssociationCreationMeta;
+import software.blacknode.backend.domain.member.association.meta.create.MemberAssociationCreationMeta;
 import software.blacknode.backend.domain.member.association.meta.delete.MemberAssociationDeletionMeta;
 
-public class MemberAssociation implements Creatable, Deletable {
+@Builder
+@AllArgsConstructor(onConstructor = @__({ @Deprecated }))
+public class MemberAssociation implements DomainEntity, Creatable, Deletable {
 
 	@Getter private HUID id;
 	
@@ -26,8 +30,10 @@ public class MemberAssociation implements Creatable, Deletable {
 	@Getter private Timestamp deletionTimestamp;
 	
 	@Getter private HUID memberId;
-	@Getter private HUID scopeId;
+	@Getter private HUID entityId;
 	@Getter private HUID roleId;
+	
+	@Getter private Scope scope;
 	
 	@Getter private HUID organizationId;
 	
@@ -41,54 +47,56 @@ public class MemberAssociation implements Creatable, Deletable {
 		ensureCreationMetaProvided(meta0);
 		
 		this.id = HUID.random();
-		this.meta = MemberAssociationMeta.builder().build();
 		
 		var meta = meta0.get();
 		
-		if(meta instanceof MemberOrganizationAssociationCreationMeta _meta) {
-			this.memberId = _meta.getMemberId();
-			this.roleId = _meta.getRoleId();
-			this.scopeId = _meta.getOrganizationId();
+		if(meta instanceof MemberAssociationCreationMeta _meta) {
+			@NonNull var memberId = _meta.getMemberId();
+			@NonNull var entityId = _meta.getEntityId();
+			@NonNull var roleId = _meta.getRoleId();
+			@NonNull var scope = _meta.getScope();
 			
-			this.meta = this.meta.withScope(MemberAssociationMeta.Scope.ORGANIZATION);
-		}
-		
-		else if(meta instanceof MemberProjectAssociationCreationMeta _meta) {
-			this.memberId = _meta.getMemberId();
-			this.roleId = _meta.getRoleId();
-			this.scopeId = _meta.getProjectId();
+			this.memberId = memberId;
+			this.entityId = entityId;
+			this.roleId = roleId;
+			this.scope = scope;
 			
-			this.meta = this.meta.withScope(MemberAssociationMeta.Scope.PROJECT);
-		}
-		
-		else if(meta instanceof MemberChannelAssociationCreationMeta _meta) {
-			this.memberId = _meta.getMemberId();
-			this.roleId = _meta.getRoleId();
-			this.scopeId = _meta.getChannelId();
-			
-			this.meta = this.meta.withScope(MemberAssociationMeta.Scope.CHANNEL);
-		}
-		else {
-			throwUnsupportedCreationMeta(meta);
-		}
+			this.meta = MemberAssociationMeta.builder().build();
+		} else throwUnsupportedCreationMeta(meta);
 		
 		creationTimestamp = Timestamp.now();
 	}
 	
 	@Override
 	public void delete(Optional<DeletionMeta> meta0) {
-		if(meta0.isEmpty()) throw new BlacknodeException("Deletion meta must be provided when deleting an member association.");
-
+		ensureCreated(meta0);
+		ensureNotDeleted(meta0);
+		
 		var meta = meta0.get();
 		
 		if(meta instanceof MemberAssociationDeletionMeta _meta) {
 			// Currently no specific deletion logic
-		}
-		else {
-			throw new BlacknodeException("Unsupported DeletionMeta type for MemberAssociation deletion");
-		}
+		} else throwUnsupportedDeletionMeta(meta);
 		
 		deletionTimestamp = Timestamp.now();
 		
 	}
+	
+	public boolean belognsToOrganization(HUID organizationId) {
+		return this.organizationId.equals(organizationId);
+	}
+	
+	public void ensureBelongsToOrganization(HUID organizationId) {
+		if(!belognsToOrganization(organizationId)) {
+			throw new BlacknodeException("Association does not belong to organization with ID: " + organizationId);
+		}
+	}
+	
+	public enum Scope {
+		ORGANIZATION,
+		PROJECT,
+		CHANNEL,
+		UNKNOWN
+	}
+	
 }

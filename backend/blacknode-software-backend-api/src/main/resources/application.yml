@@ -20,12 +20,12 @@ jwt:
   secret: "f0KeSbOwDytCaVKhPKqaBOkFM7t80hMc6mGVIArVJdI="
   
 logging:
-  # level:
-  #  org.hibernate: TRACE
-  #  org.hibernate.SQL: DEBUG
-  #  org.hibernate.type.descriptor.sql: TRACE
-  #  org.hibernate.orm.jdbc.bind: TRACE
-  #  org.hibernate.type.descriptor.converter: TRACE
-  #  org.hibernate.metamodel.model.convert: TRACE
-  #  org.springframework.orm.jpa: DEBUG
-  #  org.springframework.transaction: TRACE
+  level:
+    org.hibernate: TRACE
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql: TRACE
+    org.hibernate.orm.jdbc.bind: TRACE
+    org.hibernate.type.descriptor.converter: TRACE
+    org.hibernate.metamodel.model.convert: TRACE
+    org.springframework.orm.jpa: DEBUG
+    org.springframework.transaction: TRACE

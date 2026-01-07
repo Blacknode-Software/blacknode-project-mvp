@@ -2,51 +2,200 @@ package software.blacknode.backend.api.controller.member;
 
 import java.util.UUID;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.api.controller.BaseController;
-import software.blacknode.backend.api.controller.member.response.MemberDeleteResponse;
-import software.blacknode.backend.api.controller.member.response.MemberResponse;
+import software.blacknode.backend.api.controller.annotation.BearerAuth;
+import software.blacknode.backend.api.controller.member.mapper.MemberAssignRoleMapper;
+import software.blacknode.backend.api.controller.member.mapper.MemberAssignedRoleMapper;
+import software.blacknode.backend.api.controller.member.mapper.MemberListMapper;
+import software.blacknode.backend.api.controller.member.request.MemberAssignRoleRequest;
+import software.blacknode.backend.api.controller.member.response.MemberAssignedRoleResponse;
+import software.blacknode.backend.api.controller.member.response.MemberListResponse;
+import software.blacknode.backend.api.controller.organization.annotation.OrganizationHeader;
+import software.blacknode.backend.api.controller.response.impl.SuccessResponse;
+import software.blacknode.backend.application.member.command.MemberAssignedChannelRoleFetchCommand;
+import software.blacknode.backend.application.member.command.MemberAssignedOrganizationRoleFetchCommand;
+import software.blacknode.backend.application.member.command.MemberAssignedProjectRoleFetchCommand;
+import software.blacknode.backend.application.member.command.MembersInChannelCommand;
+import software.blacknode.backend.application.member.command.MembersInOrganizationCommand;
+import software.blacknode.backend.application.member.command.MembersInProjectCommand;
+import software.blacknode.backend.application.member.usecase.MemberAssignChannelRoleUseCase;
+import software.blacknode.backend.application.member.usecase.MemberAssignOrganizationRoleUseCase;
+import software.blacknode.backend.application.member.usecase.MemberAssignProjectRoleUseCase;
+import software.blacknode.backend.application.member.usecase.MemberAssignedChannelRoleFetchUseCase;
+import software.blacknode.backend.application.member.usecase.MemberAssignedOrganizationRoleFetchUseCase;
+import software.blacknode.backend.application.member.usecase.MemberAssignedProjectRoleFetchUseCase;
+import software.blacknode.backend.application.member.usecase.MembersInChannelUseCase;
+import software.blacknode.backend.application.member.usecase.MembersInOrganizationUseCase;
+import software.blacknode.backend.application.member.usecase.MembersInProjectUseCase;
 
-@Hidden
+@BearerAuth
 @RestController
 @Tag(name = "Members", description = "Member management APIs")
+@RequiredArgsConstructor
 public class MemberController extends BaseController {
-
-	@Operation(summary = "Create a new member")
-	@ApiResponses(value = { @ApiResponse(responseCode = "201", description = "Member created"),
-			@ApiResponse(responseCode = "400", description = "Invalid input") })
-	@PostMapping("/organization/{organizationId}/members")
-	public ResponseEntity<MemberResponse> createMember(@PathVariable UUID organizationId, @RequestBody MemberResponse request) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(null);
+	
+	private final MemberAssignRoleMapper memberAssignRoleMapper;
+	
+	private final MemberAssignOrganizationRoleUseCase memberAssignOrganizationRoleUseCase;
+	private final MemberAssignProjectRoleUseCase memberAssignProjectRoleUseCase;
+	private final MemberAssignChannelRoleUseCase memberAssignChannelRoleUseCase;
+	
+	private final MemberListMapper memberListMapper;
+	
+	private final MembersInOrganizationUseCase membersInOrganizationUseCase;
+	private final MembersInProjectUseCase membersInProjectUseCase;
+	private final MembersInChannelUseCase membersInChannelUseCase;
+	
+	private final MemberAssignedRoleMapper memberAssignedRoleMapper;
+	
+	private final MemberAssignedOrganizationRoleFetchUseCase memberAssignedOrganizationRoleUseCase;
+	private final MemberAssignedProjectRoleFetchUseCase memberAssignedProjectRoleUseCase;
+	private final MemberAssignedChannelRoleFetchUseCase memberAssignedChannelRoleUseCase;
+	
+	@OrganizationHeader
+	@Operation(summary = "Assign Organization Role to Member", description = "Assigns a specific role to a member within the organization.")
+	@ApiResponse(responseCode = "200", description = "Organization role assigned successfully.")
+	@PostMapping("/ogranization/members/{memberId}/role")
+	public ResponseEntity<SuccessResponse> assignOrganizationRole(@RequestBody MemberAssignRoleRequest request, @PathVariable UUID memberId) {
+		var command = memberAssignRoleMapper.toOrganizationAssignCommand(request, memberId);
+		
+		memberAssignOrganizationRoleUseCase.execute(command);
+		
+		return SuccessResponse.with("Organization role assigned successfully.");
 	}
 	
-	@Operation(summary = "Get a member by ID")
-	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Found the member"),
-			@ApiResponse(responseCode = "404", description = "Member not found") })
-	@GetMapping("/members/{memberId}")
-	public ResponseEntity<MemberResponse> getMember(@PathVariable UUID id) {
-		return ResponseEntity.ok(null);
+	@OrganizationHeader
+	@Operation(summary = "Assign Project Role to Member", description = "Assigns a specific role to a member within the project.")
+	@ApiResponse(responseCode = "200", description = "Organization role assigned successfully.")
+	@PostMapping("/projects/{projectId}/members/{memberId}/role")
+	public ResponseEntity<SuccessResponse> assignProjectRole(@RequestBody MemberAssignRoleRequest request, @PathVariable UUID memberId, @PathVariable UUID projectId) {
+		var command = memberAssignRoleMapper.toProjectAssignCommand(request, memberId, projectId);
+		
+		memberAssignProjectRoleUseCase.execute(command);
+		
+		return SuccessResponse.with("Project role assigned successfully.");
 	}
 	
-	@Operation(summary = "Delete a member")
-	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Member deleted"),
-			@ApiResponse(responseCode = "404", description = "Member not found") })
-	@DeleteMapping("/members/{memberId}")
-	public ResponseEntity<MemberDeleteResponse> deleteMember(@PathVariable UUID id) {
-		return ResponseEntity.ok(null);
+	@OrganizationHeader
+	@Operation(summary = "Get Assigned Organization Role for Member", description = "Retrieves the assigned role of a member within the organization.")
+	@ApiResponse(responseCode = "200", description = "Assigned organization role retrieved successfully.")
+	@GetMapping("/organization/members/{memberId}/role")
+	public ResponseEntity<MemberAssignedRoleResponse> getAssignedOrganizationRole(@PathVariable UUID memberId) {
+		var command = MemberAssignedOrganizationRoleFetchCommand.builder()
+				.memberId(HUID.fromUUID(memberId))
+				.build();
+		
+		var result = memberAssignedOrganizationRoleUseCase.execute(command);
+		
+		var response = memberAssignedRoleMapper.toOrganizationResponse(result);
+		
+		return response.toOkResponse("Assigned organization role retrieved successfully.");
 	}
+	
+	@OrganizationHeader
+	@Operation(summary = "Get Assigned Project Role for Member", description = "Retrieves the assigned role of a member within the project.")
+	@ApiResponse(responseCode = "200", description = "Assigned project role retrieved successfully.")
+	@GetMapping("/projects/{projectId}/members/{memberId}/role")
+	public ResponseEntity<MemberAssignedRoleResponse> getAssignedProjectRole(@PathVariable UUID memberId, @PathVariable UUID projectId) {
+		var command = MemberAssignedProjectRoleFetchCommand.builder()
+				.memberId(HUID.fromUUID(memberId))
+				.projectId(HUID.fromUUID(projectId))
+				.build();
+		
+		var result = memberAssignedProjectRoleUseCase.execute(command);
+		
+		var response = memberAssignedRoleMapper.toProjectResponse(result);
+		
+		return response.toOkResponse("Assigned project role retrieved successfully.");
+	}
+	
+	@OrganizationHeader
+	@Operation(summary = "Get Assigned Channel Role for Member", description = "Retrieves the assigned role of a member within the channel.")
+	@ApiResponse(responseCode = "200", description = "Assigned channel role retrieved successfully.")
+	@GetMapping("/channels/{channelId}/members/{memberId}/role")
+	public ResponseEntity<MemberAssignedRoleResponse> getAssignedChannelRole(@PathVariable UUID memberId, @PathVariable UUID channelId) {
+		var command = MemberAssignedChannelRoleFetchCommand.builder()
+				.memberId(HUID.fromUUID(memberId))
+				.channelId(HUID.fromUUID(channelId))
+				.build();
+		
+		var result = memberAssignedChannelRoleUseCase.execute(command);
+		
+		var response = memberAssignedRoleMapper.toChannelResponse(result);
+		
+		return response.toOkResponse("Assigned channel role retrieved successfully.");
+	}
+	
+	@OrganizationHeader
+	@Operation(summary = "Assign Channel Role to Member", description = "Assigns a specific role to a member within the channel.")
+	@ApiResponse(responseCode = "200", description = "Organization role assigned successfully.")
+	@PostMapping("/channels/{channelId}/members/{memberId}/role")
+	public ResponseEntity<SuccessResponse> assignChannelRole(@RequestBody MemberAssignRoleRequest request, @PathVariable UUID memberId, @PathVariable UUID channelId) {
+		var command = memberAssignRoleMapper.toChannelAssignCommand(request, memberId, channelId);
+		
+		memberAssignChannelRoleUseCase.execute(command);
+		
+		return SuccessResponse.with("Channel role assigned successfully.");
+	}
+	
+	@OrganizationHeader
+	@Operation(summary = "Get All Members in Organization", description = "Retrieves a list of all members within the organization.")
+	@ApiResponse(responseCode = "200", description = "Members retrieved successfully.")
+	@GetMapping("/organization/members")
+	public ResponseEntity<MemberListResponse> getAllMembersInOrganization() {
+		var command = MembersInOrganizationCommand.builder()
+				.build();
+		
+		var result = membersInOrganizationUseCase.execute(command);
+		
+		var response = memberListMapper.toOrganizationResponse(result);
+	
+		return response.toOkResponse("Members retrieved successfully.");
+	}
+	
+	@OrganizationHeader
+	@Operation(summary = "Get All Members in Project", description = "Retrieves a list of all members within the project.")
+	@ApiResponse(responseCode = "200", description = "Members retrieved successfully.")
+	@GetMapping("/projects/{projectId}/members")
+	public ResponseEntity<MemberListResponse> getAllMembersInProject(@PathVariable UUID projectId) {
+		var command = MembersInProjectCommand.builder()
+				.projectId(HUID.fromUUID(projectId))
+				.build();
+		
+		var result = membersInProjectUseCase.execute(command);
+		
+		var response = memberListMapper.toProjectResponse(result);
+	
+		return response.toOkResponse("Members retrieved successfully.");
+	}
+	
+	@OrganizationHeader
+	@Operation(summary = "Get All Members in Channel", description = "Retrieves a list of all members within the channel.")
+	@ApiResponse(responseCode = "200", description = "Members retrieved successfully.")
+	@GetMapping("/channels/{channelId}/members")
+	public ResponseEntity<MemberListResponse> getAllMembersInChannel(@PathVariable UUID channelId) {
+		var command = MembersInChannelCommand.builder()
+				.channelId(HUID.fromUUID(channelId))
+				.build();
+		
+		var result = membersInChannelUseCase.execute(command);
+		
+		var response = memberListMapper.toChannelResponse(result);
+	
+		return response.toOkResponse("Members retrieved successfully.");
+	}
+	
 	
 }

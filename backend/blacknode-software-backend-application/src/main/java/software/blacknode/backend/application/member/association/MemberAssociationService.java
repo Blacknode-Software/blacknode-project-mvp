@@ -4,39 +4,22 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
-import software.blacknode.backend.application.channel.ChannelService;
-import software.blacknode.backend.application.member.MemberService;
-import software.blacknode.backend.application.organization.OrganizationService;
-import software.blacknode.backend.application.project.ProjectService;
-import software.blacknode.backend.application.role.RoleService;
 import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
 import software.blacknode.backend.domain.entity.modifier.impl.delete.meta.DeletionMeta;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.member.association.MemberAssociation;
-import software.blacknode.backend.domain.member.association.meta.MemberAssociationMeta;
+import software.blacknode.backend.domain.member.association.meta.delete.impl.MemberAssociationDefaultDeletionMeta;
 import software.blacknode.backend.domain.member.association.repository.MemberAssociationRepository;
 
-/*
- * Current behavior:
- * - A member can have only one role per scope (organization, project, channel)
- * - Setting a new role for a member in a scope replaces the previous role
- * - Roles must belong to the same organization as the member
- * - Removing superior roles will return previous roles if they exist (maybe change later)
- * - If a member has a super privileged role in a superior scope, that role is returned for inferior scopes
- */
 
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class MemberAssociationService {
-	
-	private final OrganizationService organizationService;
-	private final ProjectService projectService;
-	private final ChannelService channelService;
-	private final MemberService memberService;
-	private final RoleService roleService;
 	
 	private final MemberAssociationRepository repository;
 	
@@ -45,9 +28,20 @@ public class MemberAssociationService {
 		
 		association.create(meta);
 		
-		repository.save(association);
+		repository.save(organizationId, association);
 		
 		return association;
+	}
+	
+	public void delete(HUID organizationId, HUID associationId) {
+		var association = getOrThrow(organizationId, associationId);
+		
+		var deletionMeta = MemberAssociationDefaultDeletionMeta.builder()
+				.build();
+		
+		association.delete(deletionMeta);
+		
+		repository.save(organizationId, association);
 	}
 	
 	public void delete(HUID organizationId, HUID associationId, DeletionMeta meta) {
@@ -55,57 +49,57 @@ public class MemberAssociationService {
 		
 		association.delete(meta);
 		
-		repository.save(association);
+		repository.save(organizationId, association);
 	}
 	
 	public Optional<MemberAssociation> get(HUID organizationId, HUID associationId) {
-		return repository.findById(associationId);
+		return repository.findById(organizationId, associationId);
 	}
 	
 	public MemberAssociation getOrThrow(HUID organizationId, HUID associationId) {
-		return repository.findById(associationId)
+		return get(organizationId, associationId)
 				.orElseThrow(() -> new BlacknodeException("Member association with ID " + associationId + " not found."));
 	}
 	
-	public Optional<MemberAssociation> get(HUID organizationId, HUID memberId, HUID scopeId, MemberAssociationMeta.Scope scope) {
-		var association = repository.findByMemberIdAndScopeIdAndScope(memberId, scopeId, scope);
+	public Optional<MemberAssociation> get(HUID organizationId, HUID memberId, HUID scopeId, MemberAssociation.Scope scope) {
+		var association = repository.findByMemberIdAndScopeIdAndScope(organizationId, memberId, scopeId, scope);
 		
 		return association;
 	}
 	
-	public MemberAssociation getOrThrow(HUID organizationId, HUID memberId, HUID scopeId, MemberAssociationMeta.Scope scope) {
-		return repository.findByMemberIdAndScopeIdAndScope(memberId, scopeId, scope)
+	public MemberAssociation getOrThrow(HUID organizationId, HUID memberId, HUID scopeId, MemberAssociation.Scope scope) {
+		return repository.findByMemberIdAndScopeIdAndScope(organizationId, memberId, scopeId, scope)
 				.orElseThrow(() -> new BlacknodeException("Member with ID " + memberId + " has no role association in scope " + scope));
 	}
 	
-	public List<MemberAssociation> get(HUID organizationId, HUID memberId, MemberAssociationMeta.Scope scope) {
-		var associations = repository.findByMemberIdAndScope(memberId, scope);
+	public List<MemberAssociation> get(HUID organizationId, HUID memberId, MemberAssociation.Scope scope) {
+		var associations = repository.findByMemberIdAndScope(organizationId, memberId, scope);
 		
 		return associations;
 	}
 	
 	public Optional<MemberAssociation> getMemberOrganizationAssociation(HUID organizationId, HUID memberId) {
-		return get(organizationId, memberId, organizationId, MemberAssociationMeta.Scope.ORGANIZATION);
+		return get(organizationId, memberId, organizationId, MemberAssociation.Scope.ORGANIZATION);
 	}
 	
 	public Optional<MemberAssociation> getMemberProjectAssociation(HUID organizationId, HUID memberId, HUID projectId) {
-		return get(organizationId, memberId, projectId, MemberAssociationMeta.Scope.PROJECT);
+		return get(organizationId, memberId, projectId, MemberAssociation.Scope.PROJECT);
 	}
 	
 	public Optional<MemberAssociation> getMemberChannelAssociation(HUID organizationId, HUID memberId, HUID channelId) {
-		return get(organizationId, memberId, channelId, MemberAssociationMeta.Scope.CHANNEL);
+		return get(organizationId, memberId, channelId, MemberAssociation.Scope.CHANNEL);
 	}
 	
 	public MemberAssociation getMemberOrganizationAssociationOrThrow(HUID organizationId, HUID memberId) {
-		return getOrThrow(organizationId, memberId, organizationId, MemberAssociationMeta.Scope.ORGANIZATION);
+		return getOrThrow(organizationId, memberId, organizationId, MemberAssociation.Scope.ORGANIZATION);
 	}
 	
 	public MemberAssociation getMemberProjectAssociationOrThrow(HUID organizationId, HUID memberId, HUID projectId) {
-		return getOrThrow(organizationId, memberId, projectId, MemberAssociationMeta.Scope.PROJECT);
+		return getOrThrow(organizationId, memberId, projectId, MemberAssociation.Scope.PROJECT);
 	}
 	
 	public MemberAssociation getMemberChannelAssociationOrThrow(HUID organizationId, HUID memberId, HUID channelId) {
-		return getOrThrow(organizationId, memberId, channelId, MemberAssociationMeta.Scope.CHANNEL);
+		return getOrThrow(organizationId, memberId, channelId, MemberAssociation.Scope.CHANNEL);
 	}
 	
 //	public Role getMemberRoleInOrganizationOrThrow(HUID memberId, HUID organizationId) {
@@ -118,7 +112,7 @@ public class MemberAssociationService {
 //	
 //		member.ensureBelongsToOrganization(organizationId);
 //		
-//		var association = findAssociation(memberId, organizationId, MemberAssociationMeta.Scope.ORGANIZATION);
+//		var association = findAssociation(memberId, organizationId, MemberAssociation.Scope.ORGANIZATION);
 //		
 //		return association.flatMap(a -> roleService.getById(a.getRoleId()));
 //	}
@@ -142,7 +136,7 @@ public class MemberAssociationService {
 //			return organizationRole;
 //		}
 //		
-//		var association = findAssociation(memberId, projectId, MemberAssociationMeta.Scope.PROJECT);
+//		var association = findAssociation(memberId, projectId, MemberAssociation.Scope.PROJECT);
 //		
 //		return association.flatMap(a -> roleService.getById(a.getRoleId()));
 //	}
@@ -165,7 +159,7 @@ public class MemberAssociationService {
 //			return projectRole;
 //		}
 //		
-//		var association = findAssociation(memberId, channelId, MemberAssociationMeta.Scope.CHANNEL);
+//		var association = findAssociation(memberId, channelId, MemberAssociation.Scope.CHANNEL);
 //		
 //		return association.flatMap(a -> roleService.getById(a.getRoleId()));
 //	}
@@ -180,7 +174,7 @@ public class MemberAssociationService {
 //		role.ensureBelongsToOrganization(organizationId);
 //		role.ensureHasScope(Role.Scope.ORGANIZATION);
 //		
-//		removeAssociationIfExists(memberId, organizationId, MemberAssociationMeta.Scope.ORGANIZATION);
+//		removeAssociationIfExists(memberId, organizationId, MemberAssociation.Scope.ORGANIZATION);
 //		
 //		var newAssociationMeta = MemberOrganizationAssociationCreationMeta.builder()
 //				.memberId(memberId)
@@ -207,7 +201,7 @@ public class MemberAssociationService {
 //		var project = projectService.getOrThrow(projectId);
 //		project.ensureBelongsToOrganization(organizationId);
 //		
-//		removeAssociationIfExists(memberId, projectId, MemberAssociationMeta.Scope.PROJECT);
+//		removeAssociationIfExists(memberId, projectId, MemberAssociation.Scope.PROJECT);
 //		
 //		var newAssociationMeta = MemberProjectAssociationCreationMeta.builder()
 //				.memberId(memberId)
@@ -235,7 +229,7 @@ public class MemberAssociationService {
 //		var channel = channelService.getOrThrow(channelId);
 //		channel.ensureBelongsToOrganization(organizationId);
 //		
-//		removeAssociationIfExists(memberId, channelId, MemberAssociationMeta.Scope.CHANNEL);
+//		removeAssociationIfExists(memberId, channelId, MemberAssociation.Scope.CHANNEL);
 //		
 //		var newAssociationMeta = MemberChannelAssociationCreationMeta.builder()
 //				.memberId(memberId)
@@ -251,7 +245,7 @@ public class MemberAssociationService {
 //		
 //	}
 //	
-//	public List<MemberAssociation> findAssociations(HUID memberId, MemberAssociationMeta.Scope scope) {
+//	public List<MemberAssociation> findAssociations(HUID memberId, MemberAssociation.Scope scope) {
 //		var associations = repository.findByMemberId(memberId);
 //		
 //		return associations.stream()
@@ -260,7 +254,7 @@ public class MemberAssociationService {
 //			.toList();
 //	}
 //	
-//	public Optional<MemberAssociation> findAssociation(HUID memberId, HUID scopeId, MemberAssociationMeta.Scope scope) {
+//	public Optional<MemberAssociation> findAssociation(HUID memberId, HUID scopeId, MemberAssociation.Scope scope) {
 //		var associations = repository.findByMemberId(memberId);
 //		
 //		return associations.stream()
@@ -270,7 +264,7 @@ public class MemberAssociationService {
 //			.findFirst();
 //	}
 //	
-//	public List<MemberAssociation> findAssociationsWithIds(HUID memberId, List<HUID> scopeIds, MemberAssociationMeta.Scope scope) {
+//	public List<MemberAssociation> findAssociationsWithIds(HUID memberId, List<HUID> scopeIds, MemberAssociation.Scope scope) {
 //		var associations = repository.findByMemberId(memberId);
 //		
 //		return associations.stream()
@@ -280,12 +274,12 @@ public class MemberAssociationService {
 //			.toList();
 //	}
 //	
-//	public MemberAssociation findAssociationOrThrow(HUID memberId, HUID scopeId, MemberAssociationMeta.Scope scope) {
+//	public MemberAssociation findAssociationOrThrow(HUID memberId, HUID scopeId, MemberAssociation.Scope scope) {
 //		return findAssociation(memberId, scopeId, scope)
 //				.orElseThrow(() -> new BlacknodeException("Member with ID " + memberId + " has no role association in scope " + scope));
 //	}
 //	
-//	public List<MemberAssociation> findAssociationsOrThrow(HUID memberId, List<HUID> scopeIds, MemberAssociationMeta.Scope scope) {
+//	public List<MemberAssociation> findAssociationsOrThrow(HUID memberId, List<HUID> scopeIds, MemberAssociation.Scope scope) {
 //		var associations = findAssociationsWithIds(memberId, scopeIds, scope);
 //		
 //		if(associations.size() != scopeIds.size()) {
@@ -296,7 +290,7 @@ public class MemberAssociationService {
 //	}
 //	
 //		
-//	private void removeAssociationIfExists(HUID memberId, HUID scopeId, MemberAssociationMeta.Scope scope) {
+//	private void removeAssociationIfExists(HUID memberId, HUID scopeId, MemberAssociation.Scope scope) {
 //		var currentAssociation = findAssociation(memberId, scopeId, scope);
 //		
 //		if(currentAssociation.isPresent()) {
@@ -312,7 +306,7 @@ public class MemberAssociationService {
 //	}
 //	
 //	public List<HUID> filterAssociatedProjectIds(HUID memberId, List<HUID> projectIds) {
-//		var associations = findAssociationsWithIds(memberId, projectIds, MemberAssociationMeta.Scope.PROJECT);
+//		var associations = findAssociationsWithIds(memberId, projectIds, MemberAssociation.Scope.PROJECT);
 //		
 //		var associatedProjectIds = associations.stream()
 //				.map(assoc -> assoc.getScopeId())
@@ -354,7 +348,7 @@ public class MemberAssociationService {
 //	}
 //	
 //	public List<Project> filterAssociatedProjects(HUID memberId, List<Project> projects) {
-//		var associations = findAssociations(memberId, MemberAssociationMeta.Scope.PROJECT);
+//		var associations = findAssociations(memberId, MemberAssociation.Scope.PROJECT);
 //		
 //		var associatedProjectIds = associations.stream()
 //				.map(assoc -> assoc.getScopeId())
@@ -366,7 +360,7 @@ public class MemberAssociationService {
 //	}
 //	
 //	public List<HUID> filterAssociatedChannelIds(HUID memberId, List<HUID> projectIds) {
-//		var associations = findAssociationsWithIds(memberId, projectIds, MemberAssociationMeta.Scope.PROJECT);
+//		var associations = findAssociationsWithIds(memberId, projectIds, MemberAssociation.Scope.PROJECT);
 //		
 //		var associatedProjectIds = associations.stream()
 //				.map(assoc -> assoc.getScopeId())
@@ -376,7 +370,7 @@ public class MemberAssociationService {
 //	}
 //	
 //	public List<Channel> filterAssociatedChannels(HUID memberId, List<Channel> channels) {	
-//		var associations = findAssociations(memberId, MemberAssociationMeta.Scope.CHANNEL);
+//		var associations = findAssociations(memberId, MemberAssociation.Scope.CHANNEL);
 //		
 //		var associatedChannelIds = associations.stream()
 //				.map(assoc -> assoc.getScopeId())
@@ -406,7 +400,7 @@ public class MemberAssociationService {
 //	}
 //	
 //	public void ensureMemberCanAccessProjects(HUID memberId, List<HUID> projectIds) {
-//		var associations = findAssociationsWithIds(memberId, projectIds, MemberAssociationMeta.Scope.PROJECT);
+//		var associations = findAssociationsWithIds(memberId, projectIds, MemberAssociation.Scope.PROJECT);
 //		
 //		if(associations.size() != projectIds.size()) {
 //			throw new BlacknodeException("Member with ID " + memberId + " has no access to all specified projects.");
@@ -414,7 +408,7 @@ public class MemberAssociationService {
 //	}
 //	
 //	public void ensureMemberCanAccessChannels(HUID memberId, List<HUID> channelIds) {
-//		var associations = findAssociationsWithIds(memberId, channelIds, MemberAssociationMeta.Scope.CHANNEL);
+//		var associations = findAssociationsWithIds(memberId, channelIds, MemberAssociation.Scope.CHANNEL);
 //	
 //		if(associations.size() != channelIds.size()) {
 //			throw new BlacknodeException("Member with ID " + memberId + " has no access to all specified channels.");

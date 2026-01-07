@@ -3,8 +3,10 @@ package software.blacknode.backend.domain.role;
 import java.util.Optional;
 
 import lombok.Getter;
+import lombok.NonNull;
 import me.hinsinger.hinz.common.huid.HUID;
 import me.hinsinger.hinz.common.time.timestamp.Timestamp;
+import software.blacknode.backend.domain.entity.DomainEntity;
 import software.blacknode.backend.domain.entity.modifier.impl.create.Creatable;
 import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
 import software.blacknode.backend.domain.entity.modifier.impl.delete.Deletable;
@@ -13,11 +15,11 @@ import software.blacknode.backend.domain.entity.modifier.impl.modify.Modifiable;
 import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.role.meta.RoleMeta;
-import software.blacknode.backend.domain.role.meta.create.RoleInitialChannelScopeCreationMeta;
-import software.blacknode.backend.domain.role.meta.create.RoleInitialOrganizationScopeCreationMeta;
-import software.blacknode.backend.domain.role.meta.create.RoleInitialProjectScopeCreationMeta;
+import software.blacknode.backend.domain.role.meta.create.RoleCreationMeta;
+import software.blacknode.backend.domain.role.meta.delete.RoleDeletionMeta;
+import software.blacknode.backend.domain.role.meta.modify.RoleModificationMeta;
 
-public class Role implements Creatable, Modifiable, Deletable {
+public class Role implements DomainEntity, Creatable, Modifiable, Deletable {
 
 	@Getter private HUID id;
 	
@@ -42,55 +44,29 @@ public class Role implements Creatable, Modifiable, Deletable {
 		ensureCreationMetaProvided(meta0);
 		
 		this.id = HUID.random();
-		this.meta = RoleMeta.builder().build();
 		
 		var meta = meta0.get();
 		
-		if(meta instanceof RoleInitialOrganizationScopeCreationMeta _meta) {
-			var name = _meta.getName();
-			var description = _meta.getDescription();
-			var color = _meta.getColor();
-			var byDefaultAssigned = _meta.isByDefaultAssigned();
+		if(meta instanceof RoleCreationMeta _meta) {
+			@NonNull var scope = _meta.getScope();
 			
-			this.scope = Scope.ORGANIZATION;
+			var name = _meta.getName().orElse("Unknown");
+			var description = _meta.getDescription().orElse("Unknown role description");
+			var color = _meta.getColor().orElse("#FF0000");
+			var systemDefault = _meta.isSystemDefault().orElse(false);
+			var byDefaultAssigned = _meta.isByDefaultAssigned().orElse(false);
+			var superPrivileged = _meta.isSuperPrivileged().orElse(false);
 			
-			this.meta = this.meta.withName(name)
-					.withDescription(description)
-				 	.withColor(color)
-				 	.withByDefaultAssigned(byDefaultAssigned)
-				 	.withSystemDefault(true);
-		} 
-		else if (meta instanceof RoleInitialProjectScopeCreationMeta _meta) {
-			var name = _meta.getName();
-			var description = _meta.getDescription();
-			var color = _meta.getColor();
-			var byDefaultAssigned = _meta.isByDefaultAssigned();
-			
-			this.scope = Scope.PROJECT;
-			
-			this.meta = this.meta.withName(name)
-					.withDescription(description)
-				 	.withColor(color)
-				 	.withByDefaultAssigned(byDefaultAssigned)
-				 	.withSystemDefault(true);
-		}
-		else if (meta instanceof RoleInitialChannelScopeCreationMeta _meta) {
-			var name = _meta.getName();
-			var description = _meta.getDescription();
-			var color = _meta.getColor();
-			var byDefaultAssigned = _meta.isByDefaultAssigned();
-			
-			this.scope = Scope.CHANNEL;
-			
-			this.meta = this.meta.withName(name)
-					.withDescription(description)
-				 	.withColor(color)
-				 	.withByDefaultAssigned(byDefaultAssigned)
-				 	.withSystemDefault(true);
-		}
-		else {
-			throwUnsupportedCreationMeta(meta);
-		}
+			this.scope = scope;
+			this.meta = RoleMeta.builder()
+					.name(name)
+					.description(description)
+				 	.color(color)
+				 	.systemDefault(systemDefault)
+				 	.byDefaultAssigned(byDefaultAssigned)
+				 	.superPrivileged(superPrivileged)
+				 	.build();
+		} else throwUnsupportedCreationMeta(meta);
 		
 		creationTimestamp = Timestamp.now();
 	}
@@ -101,6 +77,21 @@ public class Role implements Creatable, Modifiable, Deletable {
 		ensureNotDeleted(meta0);
 		ensureModificationMetaProvided(meta0);
 		
+		var meta = meta0.get();
+		
+		if(meta instanceof RoleModificationMeta _meta) {
+			var updated = this.meta;
+			
+			updated = _meta.getName().map(updated::withName).orElse(updated);
+			updated = _meta.getDescription().map(updated::withDescription).orElse(updated);
+			updated = _meta.getColor().map(updated::withColor).orElse(updated);
+			updated = _meta.isSystemDefault().map(updated::withSystemDefault).orElse(updated);
+			updated = _meta.isByDefaultAssigned().map(updated::withByDefaultAssigned).orElse(updated);
+			updated = _meta.isSuperPrivileged().map(updated::withSuperPrivileged).orElse(updated);
+
+			this.meta = updated;
+		} else throwUnsupportedModificationMeta(meta);
+		
 		modificationTimestamp = Timestamp.now();
 	}
 	
@@ -109,6 +100,12 @@ public class Role implements Creatable, Modifiable, Deletable {
 		ensureCreated(meta0);
 		ensureNotDeleted(meta0);
 		ensureDeletionMetaProvided(meta0);
+		
+		var meta = meta0.get();
+		
+		if(meta instanceof RoleDeletionMeta _meta) {
+			// No specific deletion logic for now
+		} else throwUnsupportedDeletionMeta(meta);
 		
 		deletionTimestamp = Timestamp.now();
 	}
