@@ -83,9 +83,13 @@ public class ChannelAccessControl {
 			return access;
 		}
 		
-		var association = memberAssociationService.getMemberChannelAssociationOrThrow(organizationId, member.getId(), channel.getId());
+		var association = memberAssociationService.getMemberChannelAssociation(organizationId, member.getId(), channel.getId());
 		
-		var roleId = association.getRoleId();
+		if(association.isEmpty()) {
+			return AccessLevel.NONE;
+		}
+		
+		var roleId = association.get().getRoleId();
 		
 		return projectAccessControl.getRoleAccess(organizationId, roleId);
 	}

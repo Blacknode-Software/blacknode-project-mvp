@@ -83,9 +83,13 @@ public class ProjectAccessControl {
 			return access;
 		}
 		
-		var association = memberAssociationService.getMemberProjectAssociationOrThrow(organizationId, member.getId(), project.getId());
+		var association = memberAssociationService.getMemberProjectAssociation(organizationId, member.getId(), project.getId());
 		
-		var roleId = association.getRoleId();
+		if(association.isEmpty()) {
+			return AccessLevel.NONE;
+		}
+		
+		var roleId = association.get().getRoleId();
 		
 		return organizationAccessControl.getRoleAccess(organizationId, roleId);
 	}

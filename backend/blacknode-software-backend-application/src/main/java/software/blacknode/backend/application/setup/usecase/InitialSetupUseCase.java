@@ -65,6 +65,7 @@ public class InitialSetupUseCase implements ResultExecutionUseCase<InitialSetupC
 				.name("Admin")
 				.description("Default organization admin role with full permissions")
 				.color("#C12566")
+				.superPrivileged(true)
 				.build();
 		
 		var adminOrgRole = roleService.create(organizationId, adminOrgRoleMeta);
@@ -82,6 +83,7 @@ public class InitialSetupUseCase implements ResultExecutionUseCase<InitialSetupC
 				.name("Project Manager")
 				.description("Default project manager role with project management permissions")
 				.color("#E6AD6E")
+				.superPrivileged(true)
 				.build();
 
 		var pmProjRole = roleService.create(organizationId, pmProjRoleMeta);
@@ -99,6 +101,7 @@ public class InitialSetupUseCase implements ResultExecutionUseCase<InitialSetupC
 				.name("Lead")
 				.description("Default lead channel role with elevated permissions")
 				.color("#5B80DA")
+				.superPrivileged(true)
 				.build();
 		
 		var leadChnlRole = roleService.create(organizationId, leadChnlRoleMeta);
