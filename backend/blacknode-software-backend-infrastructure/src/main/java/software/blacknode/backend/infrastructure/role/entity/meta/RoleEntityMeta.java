@@ -1,14 +1,10 @@
-package software.blacknode.backend.infrastructure.task.entity.meta;
+package software.blacknode.backend.infrastructure.role.entity.meta;
 
-import java.time.Instant;
-
-import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.ToString;
 import software.blacknode.backend.infrastructure.entity.version.VersionableEntity;
 import software.blacknode.backend.infrastructure.entity.version.annotation.VersionedEntity;
@@ -19,14 +15,21 @@ import software.blacknode.backend.infrastructure.entity.version.annotation.Versi
 @AllArgsConstructor
 @VersionedEntity
 @ToString
-public class TaskEntityMeta implements VersionableEntity {
+public class RoleEntityMeta implements VersionableEntity {
 
-	@NotNull private String title;
-	@NotNull private String description;
+	@NotNull
+	private String name;
 	
-	@Nullable private Integer priority;
+	@NotNull
+	private String description;
 	
-	@Nullable private Instant beginAt;
-	@Nullable private Instant endAt;
+	@NotNull
+	private String color;
+	
+	private boolean systemDefault;
+	
+	private boolean byDefaultAssigned;
+	
+	private boolean superPrivileged;
 	
 }
