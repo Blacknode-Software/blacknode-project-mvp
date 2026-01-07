@@ -8,15 +8,15 @@ import software.blacknode.backend.application.access.AccessControlService;
 import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.member.MemberService;
 import software.blacknode.backend.application.member.association.MemberAssociationService;
-import software.blacknode.backend.application.member.command.MemberAssignOrganizationRoleCommand;
+import software.blacknode.backend.application.member.command.MemberAssignChannelRoleCommand;
 import software.blacknode.backend.application.role.RoleService;
 import software.blacknode.backend.application.usecase.ExecutionUseCase;
-import software.blacknode.backend.domain.member.association.meta.create.impl.MemberOrganizationAssociationCreationMeta;
+import software.blacknode.backend.domain.member.association.meta.create.impl.MemberChannelAssociationCreationMeta;
 import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
 
 @Service
 @RequiredArgsConstructor
-public class MemberAssignOrganizationRoleUseCase implements ExecutionUseCase<MemberAssignOrganizationRoleCommand> {
+public class MemberAssignChannelRoleUseCase implements ExecutionUseCase<MemberAssignChannelRoleCommand> {
 
 	private final AccessControlService accessControlService;
 	
@@ -28,11 +28,14 @@ public class MemberAssignOrganizationRoleUseCase implements ExecutionUseCase<Mem
 	
 	@Override
 	@Transactional
-	public void execute(MemberAssignOrganizationRoleCommand command) {
+	public void execute(MemberAssignChannelRoleCommand command) {
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		
-		accessControlService.ensureMemberHasOrganizationAccess(memberId, organizationId, AccessLevel.MANAGE);
+		var channelId = command.getChannelId();
+		
+		accessControlService.ensureMemberHasChannelAccess(memberId, channelId, organizationId, AccessLevel.MANAGE);
+		
 		
 		var assingeeId = command.getMemberId();
 		var assignee = memberService.getOrThrow(organizationId, assingeeId);
@@ -40,13 +43,15 @@ public class MemberAssignOrganizationRoleUseCase implements ExecutionUseCase<Mem
 		var roleId = command.getRoleId();
 		var role = roleService.getOrThrow(organizationId, roleId);
 		
-		var currentAssoc = memberAssociationService.getMemberOrganizationAssociationOrThrow(organizationId, assingeeId);
+		var currentAssoc = memberAssociationService.getMemberChannelAssociation(organizationId, assingeeId, channelId);
 		
-		memberAssociationService.delete(organizationId, currentAssoc.getId());
+		if(currentAssoc.isPresent()) {
+			memberAssociationService.delete(organizationId, currentAssoc.get().getId());
+		}
 		
-		var meta = MemberOrganizationAssociationCreationMeta.builder()
+		var meta = MemberChannelAssociationCreationMeta.builder()
 				.memberId(assingeeId)
-				.organizationId(organizationId)
+				.channelId(channelId)
 				.roleId(roleId)
 				.build();
 		
