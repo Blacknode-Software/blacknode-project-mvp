@@ -11,6 +11,7 @@ import lombok.ToString;
 import software.blacknode.backend.application.access.AccessControlService;
 import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.channel.ChannelService;
+import software.blacknode.backend.application.member.MemberService;
 import software.blacknode.backend.application.member.association.MemberAssociationService;
 import software.blacknode.backend.application.member.command.MemberAssignedChannelRoleFetchCommand;
 import software.blacknode.backend.application.role.RoleService;
@@ -25,6 +26,8 @@ public class MemberAssignedChannelRoleFetchUseCase implements ResultExecutionUse
 	private final AccessControlService accessControlService;
 	
 	private final MemberAssociationService memberAssociationService;
+	
+	private final MemberService memberService;
 	
 	private final ChannelService channelService;
 	
@@ -43,7 +46,10 @@ public class MemberAssignedChannelRoleFetchUseCase implements ResultExecutionUse
 		
 		accessControlService.ensureMemberHasChannelAccess(memberId, channelId, organizationId, AccessLevel.READ);
 		
-		var association = memberAssociationService.getMemberOrganizationAssociationOrThrow(organizationId, memberId);
+		var assigneeId = command.getMemberId();
+		var assignee = memberService.getOrThrow(organizationId, assigneeId);
+		
+		var association = memberAssociationService.getMemberOrganizationAssociationOrThrow(organizationId, assigneeId);
 		
 		var roleId = association.getRoleId();
 		var role = roleService.getOrThrow(organizationId, roleId);
@@ -53,7 +59,7 @@ public class MemberAssignedChannelRoleFetchUseCase implements ResultExecutionUse
 			// Return project specific role
 			var projectId = channel.getProjectId();
 			
-			association = memberAssociationService.getMemberProjectAssociationOrThrow(organizationId, memberId, projectId);
+			association = memberAssociationService.getMemberProjectAssociationOrThrow(organizationId, assigneeId, projectId);
 			
 			roleId = association.getRoleId();
 			role = roleService.getOrThrow(organizationId, roleId);
@@ -61,7 +67,7 @@ public class MemberAssignedChannelRoleFetchUseCase implements ResultExecutionUse
 			// Not Project Super Privileged Role
 			if(!role.getMeta().isSuperPrivileged()) {
 				// Return channel specific role
-				association = memberAssociationService.getMemberChannelAssociationOrThrow(organizationId, memberId, channelId);
+				association = memberAssociationService.getMemberChannelAssociationOrThrow(organizationId, assigneeId, channelId);
 			}
 		}
 		

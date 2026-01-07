@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import software.blacknode.backend.application.access.AccessControlService;
 import software.blacknode.backend.application.access.level.AccessLevel;
+import software.blacknode.backend.application.member.MemberService;
 import software.blacknode.backend.application.member.association.MemberAssociationService;
 import software.blacknode.backend.application.member.command.MemberAssignedProjectRoleFetchCommand;
 import software.blacknode.backend.application.project.ProjectService;
@@ -25,6 +26,8 @@ public class MemberAssignedProjectRoleFetchUseCase implements ResultExecutionUse
 	private final AccessControlService accessControlService;
 	
 	private final MemberAssociationService memberAssociationService;
+	
+	private final MemberService memberService;
 	
 	private final ProjectService projectService;
 	
@@ -42,14 +45,17 @@ public class MemberAssignedProjectRoleFetchUseCase implements ResultExecutionUse
 		
 		accessControlService.ensureMemberHasProjectAccess(memberId, projectId, organizationId, AccessLevel.READ);
 		
-		var association = memberAssociationService.getMemberOrganizationAssociationOrThrow(organizationId, memberId);
+		var assigneeId = command.getMemberId();
+		var assignee = memberService.getOrThrow(organizationId, assigneeId);
+		
+		var association = memberAssociationService.getMemberOrganizationAssociationOrThrow(organizationId, assigneeId);
 		
 		var roleId = association.getRoleId();
 		var role = roleService.getOrThrow(organizationId, roleId);
 		
 		// Not Organization Super Privileged Role - return project specific role
 		if(!role.getMeta().isSuperPrivileged()) {		
-			association = memberAssociationService.getMemberProjectAssociationOrThrow(organizationId, memberId, projectId);
+			association = memberAssociationService.getMemberProjectAssociationOrThrow(organizationId, assigneeId, projectId);
 		}
 		
 		return Result.builder()
