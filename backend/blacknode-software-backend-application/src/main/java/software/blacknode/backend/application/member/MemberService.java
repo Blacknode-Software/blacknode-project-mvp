@@ -40,6 +40,10 @@ public class MemberService {
 				.orElseThrow(() -> new RuntimeException("Member with Account ID " + accountId + " not found."));
 	}
 	
+	public List<Member> getAll(HUID organizationId) {
+		return repository.findByOrganizationId(organizationId);
+	}
+	
 	public Member create(HUID organizationId, CreationMeta meta) {
 		var member = new Member(organizationId);
 		
