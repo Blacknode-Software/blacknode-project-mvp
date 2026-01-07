@@ -23,12 +23,12 @@ import software.blacknode.backend.domain.account.meta.create.impl.AccountInitial
 import software.blacknode.backend.domain.auth.meta.create.impl.PasswordAuthCreationMeta;
 import software.blacknode.backend.domain.channel.meta.create.impl.ChannelInitialCreationMeta;
 import software.blacknode.backend.domain.exception.BlacknodeException;
-import software.blacknode.backend.domain.member.association.meta.create.MemberOrganizationAssociationCreationMeta;
+import software.blacknode.backend.domain.member.association.meta.create.impl.MemberOrganizationAssociationCreationMeta;
 import software.blacknode.backend.domain.member.meta.create.impl.MemberInitialAdminCreationMeta;
 import software.blacknode.backend.domain.organization.meta.create.impl.OrganizationInitialCreationMeta;
 import software.blacknode.backend.domain.project.meta.create.impl.ProjectInitialCreationMeta;
-import software.blacknode.backend.domain.role.meta.create.RoleInitialOrganizationScopeCreationMeta;
-import software.blacknode.backend.domain.role.meta.create.RoleInitialProjectScopeCreationMeta;
+import software.blacknode.backend.domain.role.meta.create.impl.RoleInitialOrganizationScopeCreationMeta;
+import software.blacknode.backend.domain.role.meta.create.impl.RoleInitialProjectScopeCreationMeta;
 import software.blacknode.backend.domain.view.View;
 import software.blacknode.backend.domain.view.meta.create.impl.ViewIntialCreationMeta;
 
@@ -134,6 +134,7 @@ public class InitialSetupUseCase implements ResultExecutionUseCase<InitialSetupC
 		
 		var associationMeta = MemberOrganizationAssociationCreationMeta.builder()
 				.memberId(member.getId())
+				.roleId(adminOrgRole.getId())
 				.organizationId(organizationId)
 				.build();
 		

@@ -4,23 +4,22 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
 import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.organization.Organization;
 import software.blacknode.backend.domain.organization.repository.OrganizationRepository;
-import software.blacknode.backend.domain.project.Project;
 
+@Transactional
 @Service
+@RequiredArgsConstructor
 public class OrganizationService {
 
-	private OrganizationRepository repository;
-	
-	public OrganizationService(OrganizationRepository repository) {
-		this.repository = repository;
-	}
+	private final OrganizationRepository repository;
 	
 	public Organization getOrThrow(HUID organizationId) {
 		return repository.findById(organizationId)

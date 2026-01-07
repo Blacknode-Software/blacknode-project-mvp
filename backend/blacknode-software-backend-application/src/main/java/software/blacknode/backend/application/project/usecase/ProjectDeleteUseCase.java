@@ -2,6 +2,7 @@ package software.blacknode.backend.application.project.usecase;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import software.blacknode.backend.application.access.AccessControlService;
@@ -22,6 +23,7 @@ public class ProjectDeleteUseCase implements ExecutionUseCase<ProjectDeleteComma
 	private final SessionContextHolder sessionContextHolder;
 	
 	@Override
+	@Transactional
 	public void execute(ProjectDeleteCommand command) {
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();

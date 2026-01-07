@@ -1,6 +1,7 @@
 package software.blacknode.backend.application.shared;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
@@ -14,6 +15,7 @@ import software.blacknode.backend.domain.project.meta.delete.impl.ProjectCascade
 import software.blacknode.backend.domain.task.meta.delete.impl.TaskCascadeDeletionMeta;
 import software.blacknode.backend.domain.view.meta.delete.impl.ViewCascadeDeletionMeta;
 
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class SharedDeletionService {

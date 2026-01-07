@@ -1,6 +1,7 @@
 package software.blacknode.backend.application.project.usecase;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -25,6 +26,7 @@ public class ProjectCreateUseCase implements ResultExecutionUseCase<ProjectCreat
 	private final SessionContextHolder sessionContextHolder;
 	
 	@Override
+	@Transactional
 	public Result execute(ProjectCreateCommand command) {
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();

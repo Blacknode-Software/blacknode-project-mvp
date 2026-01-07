@@ -2,6 +2,7 @@ package software.blacknode.backend.application.channel.usecase;
 
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -26,6 +27,7 @@ public class ChannelCreateUseCase implements ResultExecutionUseCase<ChannelCreat
 	private final SessionContextHolder sessionContextHolder;
 	
 	@Override
+	@Transactional
 	public Result execute(ChannelCreateCommand command) {
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();

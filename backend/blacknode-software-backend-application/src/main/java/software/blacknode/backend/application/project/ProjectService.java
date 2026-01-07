@@ -3,6 +3,7 @@ package software.blacknode.backend.application.project;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
@@ -14,6 +15,7 @@ import software.blacknode.backend.domain.project.Project;
 import software.blacknode.backend.domain.project.meta.delete.impl.ProjectDefaultDeletionMeta;
 import software.blacknode.backend.domain.project.repository.ProjectRepository;
 
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class ProjectService {

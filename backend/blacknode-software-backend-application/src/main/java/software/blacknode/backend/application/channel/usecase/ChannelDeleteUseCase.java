@@ -2,6 +2,7 @@ package software.blacknode.backend.application.channel.usecase;
 
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import software.blacknode.backend.application.access.AccessControlService;
 import software.blacknode.backend.application.access.level.AccessLevel;
@@ -24,6 +25,7 @@ public class ChannelDeleteUseCase implements ExecutionUseCase<ChannelDeleteComma
 	private final SessionContextHolder sessionContextHolder;
 	
 	@Override
+	@Transactional
 	public void execute(ChannelDeleteCommand command) {
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();

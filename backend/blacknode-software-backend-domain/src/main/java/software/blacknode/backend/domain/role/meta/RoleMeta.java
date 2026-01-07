@@ -13,22 +13,16 @@ import lombok.With;
 @NoArgsConstructor
 public class RoleMeta {
 	
-	@Builder.Default
-	private String name = "Unknown";
+	private String name;
 	
-	@Builder.Default
-	private String description = "Unknown role description";
+	private String description;
 	
-	@Builder.Default
-	private String color = "#FF0000";
+	private String color;
 	
-	@Builder.Default
-	private boolean systemDefault = false;
+	private boolean systemDefault;
 	
-	@Builder.Default
-	private boolean byDefaultAssigned = false;
+	private boolean byDefaultAssigned;
 
-	@Builder.Default
-	private boolean superPrivileged = false;
+	private boolean superPrivileged;
 	
 }
