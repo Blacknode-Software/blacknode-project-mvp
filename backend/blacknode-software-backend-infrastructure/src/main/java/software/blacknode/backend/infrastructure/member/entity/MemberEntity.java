@@ -27,7 +27,7 @@ import software.blacknode.backend.infrastructure.organization.related.Organizati
 public class MemberEntity extends OrganizationRelatedEntity {
 
 	@NotNull
-	@Column(name = "meta")
+	@Column(name = "meta", length = 65_535)
 	@VersionedEntity
 	private MemberEntityMeta meta;
 	

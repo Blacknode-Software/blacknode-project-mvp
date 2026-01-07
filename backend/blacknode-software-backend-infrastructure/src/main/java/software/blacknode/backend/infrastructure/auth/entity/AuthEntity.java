@@ -36,7 +36,7 @@ public class AuthEntity extends BaseInfrastructureEntity {
 	private UUID accountId;
 	
 	@NotNull
-	@Column(name = "meta")
+	@Column(name = "meta", length = 65_535)
 	@VersionedEntity
 	private AuthEntityMeta meta;
 	

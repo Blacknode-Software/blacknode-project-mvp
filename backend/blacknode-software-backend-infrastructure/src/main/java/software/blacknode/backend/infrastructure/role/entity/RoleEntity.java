@@ -26,7 +26,7 @@ import software.blacknode.backend.infrastructure.role.entity.meta.RoleEntityMeta
 public class RoleEntity extends OrganizationRelatedEntity {
 
 	@NotNull
-	@Column(name = "meta")
+	@Column(name = "meta", length = 65_535)
 	@VersionedEntity
 	private RoleEntityMeta meta;
 	

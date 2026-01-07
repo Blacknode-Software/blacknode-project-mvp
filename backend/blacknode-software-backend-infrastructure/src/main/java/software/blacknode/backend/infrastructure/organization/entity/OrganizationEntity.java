@@ -27,7 +27,7 @@ import software.blacknode.backend.infrastructure.organization.entity.meta.Organi
 public class OrganizationEntity extends BaseInfrastructureEntity {
 	
 	@NonNull
-	@Column(name = "meta")
+	@Column(name = "meta", length = 65_535)
 	@VersionedEntity
 	private OrganizationEntityMeta meta;
 	

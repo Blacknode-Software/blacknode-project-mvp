@@ -27,7 +27,7 @@ public class AccountEntity extends BaseInfrastructureEntity {
 	private String email;
 	
 	@NotNull
-	@Column(name = "meta")
+	@Column(name = "meta", length = 65_535)
 	@VersionedEntity
 	private AccountEntityMeta meta;
 	
