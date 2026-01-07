@@ -17,17 +17,25 @@ import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.api.controller.BaseController;
 import software.blacknode.backend.api.controller.annotation.BearerAuth;
 import software.blacknode.backend.api.controller.member.mapper.MemberAssignRoleMapper;
+import software.blacknode.backend.api.controller.member.mapper.MemberAssignedRoleMapper;
 import software.blacknode.backend.api.controller.member.mapper.MemberListMapper;
 import software.blacknode.backend.api.controller.member.request.MemberAssignRoleRequest;
+import software.blacknode.backend.api.controller.member.response.MemberAssignedRoleResponse;
 import software.blacknode.backend.api.controller.member.response.MemberListResponse;
 import software.blacknode.backend.api.controller.organization.annotation.OrganizationHeader;
 import software.blacknode.backend.api.controller.response.impl.SuccessResponse;
+import software.blacknode.backend.application.member.command.MemberAssignedChannelRoleFetchCommand;
+import software.blacknode.backend.application.member.command.MemberAssignedOrganizationRoleFetchCommand;
+import software.blacknode.backend.application.member.command.MemberAssignedProjectRoleFetchCommand;
 import software.blacknode.backend.application.member.command.MembersInChannelCommand;
 import software.blacknode.backend.application.member.command.MembersInOrganizationCommand;
 import software.blacknode.backend.application.member.command.MembersInProjectCommand;
 import software.blacknode.backend.application.member.usecase.MemberAssignChannelRoleUseCase;
 import software.blacknode.backend.application.member.usecase.MemberAssignOrganizationRoleUseCase;
 import software.blacknode.backend.application.member.usecase.MemberAssignProjectRoleUseCase;
+import software.blacknode.backend.application.member.usecase.MemberAssignedChannelRoleFetchUseCase;
+import software.blacknode.backend.application.member.usecase.MemberAssignedOrganizationRoleFetchUseCase;
+import software.blacknode.backend.application.member.usecase.MemberAssignedProjectRoleFetchUseCase;
 import software.blacknode.backend.application.member.usecase.MembersInChannelUseCase;
 import software.blacknode.backend.application.member.usecase.MembersInOrganizationUseCase;
 import software.blacknode.backend.application.member.usecase.MembersInProjectUseCase;
@@ -49,6 +57,12 @@ public class MemberController extends BaseController {
 	private final MembersInOrganizationUseCase membersInOrganizationUseCase;
 	private final MembersInProjectUseCase membersInProjectUseCase;
 	private final MembersInChannelUseCase membersInChannelUseCase;
+	
+	private final MemberAssignedRoleMapper memberAssignedRoleMapper;
+	
+	private final MemberAssignedOrganizationRoleFetchUseCase memberAssignedOrganizationRoleUseCase;
+	private final MemberAssignedProjectRoleFetchUseCase memberAssignedProjectRoleUseCase;
+	private final MemberAssignedChannelRoleFetchUseCase memberAssignedChannelRoleUseCase;
 	
 	@OrganizationHeader
 	@Operation(summary = "Assign Organization Role to Member", description = "Assigns a specific role to a member within the organization.")
@@ -72,6 +86,56 @@ public class MemberController extends BaseController {
 		memberAssignProjectRoleUseCase.execute(command);
 		
 		return SuccessResponse.with("Project role assigned successfully.");
+	}
+	
+	@OrganizationHeader
+	@Operation(summary = "Get Assigned Organization Role for Member", description = "Retrieves the assigned role of a member within the organization.")
+	@ApiResponse(responseCode = "200", description = "Assigned organization role retrieved successfully.")
+	@GetMapping("/organization/members/{memberId}/role")
+	public ResponseEntity<MemberAssignedRoleResponse> getAssignedOrganizationRole(@PathVariable UUID memberId) {
+		var command = MemberAssignedOrganizationRoleFetchCommand.builder()
+				.memberId(HUID.fromUUID(memberId))
+				.build();
+		
+		var result = memberAssignedOrganizationRoleUseCase.execute(command);
+		
+		var response = memberAssignedRoleMapper.toOrganizationResponse(result);
+		
+		return response.toOkResponse("Assigned organization role retrieved successfully.");
+	}
+	
+	@OrganizationHeader
+	@Operation(summary = "Get Assigned Project Role for Member", description = "Retrieves the assigned role of a member within the project.")
+	@ApiResponse(responseCode = "200", description = "Assigned project role retrieved successfully.")
+	@GetMapping("/projects/{projectId}/members/{memberId}/role")
+	public ResponseEntity<MemberAssignedRoleResponse> getAssignedProjectRole(@PathVariable UUID memberId, @PathVariable UUID projectId) {
+		var command = MemberAssignedProjectRoleFetchCommand.builder()
+				.memberId(HUID.fromUUID(memberId))
+				.projectId(HUID.fromUUID(projectId))
+				.build();
+		
+		var result = memberAssignedProjectRoleUseCase.execute(command);
+		
+		var response = memberAssignedRoleMapper.toProjectResponse(result);
+		
+		return response.toOkResponse("Assigned project role retrieved successfully.");
+	}
+	
+	@OrganizationHeader
+	@Operation(summary = "Get Assigned Channel Role for Member", description = "Retrieves the assigned role of a member within the channel.")
+	@ApiResponse(responseCode = "200", description = "Assigned channel role retrieved successfully.")
+	@GetMapping("/channels/{channelId}/members/{memberId}/role")
+	public ResponseEntity<MemberAssignedRoleResponse> getAssignedChannelRole(@PathVariable UUID memberId, @PathVariable UUID channelId) {
+		var command = MemberAssignedChannelRoleFetchCommand.builder()
+				.memberId(HUID.fromUUID(memberId))
+				.channelId(HUID.fromUUID(channelId))
+				.build();
+		
+		var result = memberAssignedChannelRoleUseCase.execute(command);
+		
+		var response = memberAssignedRoleMapper.toChannelResponse(result);
+		
+		return response.toOkResponse("Assigned channel role retrieved successfully.");
 	}
 	
 	@OrganizationHeader
