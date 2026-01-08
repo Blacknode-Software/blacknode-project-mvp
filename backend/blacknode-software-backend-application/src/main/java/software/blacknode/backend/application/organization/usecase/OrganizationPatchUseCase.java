@@ -33,8 +33,8 @@ public class OrganizationPatchUseCase implements ResultExecutionUseCase<Organiza
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		
-		organizationAccessControl.ensureMemberHasOrganizationAccess(memberId, 
-				organizationId, AccessLevel.MANAGE);
+		organizationAccessControl.ensureMemberHasOrganizationAccess(organizationId, 
+				memberId, AccessLevel.MANAGE);
 		
 		var operations = command.getOperations();
 		

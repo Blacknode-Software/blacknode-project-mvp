@@ -34,7 +34,8 @@ public class MemberAssignChannelRoleUseCase implements ExecutionUseCase<MemberAs
 		
 		var channelId = command.getChannelId();
 		
-		channelAccessControl.ensureMemberHasChannelAccess(memberId, channelId, organizationId, AccessLevel.MANAGE);
+		channelAccessControl.ensureMemberHasChannelAccess(organizationId, memberId, 
+				channelId, AccessLevel.MANAGE);
 		
 		
 		var assingeeId = command.getMemberId();

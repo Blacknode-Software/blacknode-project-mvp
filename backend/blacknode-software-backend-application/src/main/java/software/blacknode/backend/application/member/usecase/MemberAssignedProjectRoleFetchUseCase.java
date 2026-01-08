@@ -43,7 +43,8 @@ public class MemberAssignedProjectRoleFetchUseCase implements ResultExecutionUse
 		
 		var projectId = command.getProjectId();
 		
-		projectAccessControl.ensureMemberHasProjectAccess(memberId, projectId, organizationId, AccessLevel.READ);
+		projectAccessControl.ensureMemberHasProjectAccess(organizationId, memberId,
+				projectId, AccessLevel.READ);
 		
 		var assigneeId = command.getMemberId();
 		var assignee = memberService.getOrThrow(organizationId, assigneeId);

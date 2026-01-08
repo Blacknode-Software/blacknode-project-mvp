@@ -34,8 +34,8 @@ public class ChannelFetchUseCase implements ResultExecutionUseCase<ChannelFetchC
 		
 		var channelId = command.getChannelId();
 		
-		channelAccessControl.ensureMemberHasChannelAccess(memberId, 
-				channelId, organizationId, AccessLevel.READ);
+		channelAccessControl.ensureMemberHasChannelAccess(organizationId, memberId, 
+				channelId, AccessLevel.READ);
 		
 		var channel = channelService.getOrThrow(organizationId, channelId);
 	

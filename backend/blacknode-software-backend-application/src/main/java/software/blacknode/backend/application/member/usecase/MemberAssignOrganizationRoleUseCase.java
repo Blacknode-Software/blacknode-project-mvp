@@ -32,7 +32,7 @@ public class MemberAssignOrganizationRoleUseCase implements ExecutionUseCase<Mem
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		
-		organizationAccessControl.ensureMemberHasOrganizationAccess(memberId, organizationId, AccessLevel.MANAGE);
+		organizationAccessControl.ensureMemberHasOrganizationAccess(organizationId, memberId, AccessLevel.MANAGE);
 		
 		var assingeeId = command.getMemberId();
 		var assignee = memberService.getOrThrow(organizationId, assingeeId);

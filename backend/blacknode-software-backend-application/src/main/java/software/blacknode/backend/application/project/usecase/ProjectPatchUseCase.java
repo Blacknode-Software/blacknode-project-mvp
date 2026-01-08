@@ -36,8 +36,8 @@ public class ProjectPatchUseCase implements ResultExecutionUseCase<ProjectPatchC
 		
 		var projectId = command.getId();
 		
-		projectAccessControl.ensureMemberHasProjectAccess(memberId, 
-				projectId, organizationId, AccessLevel.MANAGE);
+		projectAccessControl.ensureMemberHasProjectAccess(organizationId, memberId, 
+				projectId, AccessLevel.MANAGE);
 		
 		var operations = command.getOperations();
 		

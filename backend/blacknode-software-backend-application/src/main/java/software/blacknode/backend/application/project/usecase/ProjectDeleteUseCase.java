@@ -28,7 +28,8 @@ public class ProjectDeleteUseCase implements ExecutionUseCase<ProjectDeleteComma
 		
 		var projectId = command.getProjectId();
 		
-		organizationAccessControl.ensureMemberHasOrganizationAccess(memberId, organizationId, AccessLevel.MANAGE);
+		organizationAccessControl.ensureMemberHasOrganizationAccess(organizationId, 
+				memberId, AccessLevel.MANAGE);
 		
 		sharedDeletionService.deleteProjectCascade(organizationId, projectId);
 	}

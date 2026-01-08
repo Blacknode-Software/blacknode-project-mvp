@@ -44,7 +44,8 @@ public class MemberAssignedChannelRoleFetchUseCase implements ResultExecutionUse
 		var channelId = command.getChannelId();
 		var channel = channelService.getOrThrow(organizationId, channelId);
 		
-		channelAccessControl.ensureMemberHasChannelAccess(memberId, channelId, organizationId, AccessLevel.READ);
+		channelAccessControl.ensureMemberHasChannelAccess(organizationId, memberId,
+				channelId, AccessLevel.READ);
 		
 		var assigneeId = command.getMemberId();
 		var assignee = memberService.getOrThrow(organizationId, assigneeId);

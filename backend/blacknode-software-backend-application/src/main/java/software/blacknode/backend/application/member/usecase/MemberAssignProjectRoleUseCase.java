@@ -34,7 +34,7 @@ public class MemberAssignProjectRoleUseCase implements ExecutionUseCase<MemberAs
 		
 		var projectId = command.getProjectId();
 		
-		projectAccessControl.ensureMemberHasProjectAccess(memberId, projectId, organizationId, AccessLevel.MANAGE);
+		projectAccessControl.ensureMemberHasProjectAccess(organizationId, memberId, projectId, AccessLevel.MANAGE);
 		
 		
 		var assingeeId = command.getMemberId();

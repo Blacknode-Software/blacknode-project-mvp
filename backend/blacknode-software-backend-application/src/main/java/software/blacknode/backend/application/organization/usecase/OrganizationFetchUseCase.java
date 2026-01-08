@@ -30,8 +30,8 @@ public class OrganizationFetchUseCase implements ResultExecutionUseCase<Organiza
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		
-		organizationAccessControl.ensureMemberHasOrganizationAccess(memberId, 
-				organizationId, AccessLevel.READ);
+		organizationAccessControl.ensureMemberHasOrganizationAccess(organizationId, 
+				memberId, AccessLevel.READ);
 		
 		var organization = organizationService.getOrThrow(organizationId);
 		

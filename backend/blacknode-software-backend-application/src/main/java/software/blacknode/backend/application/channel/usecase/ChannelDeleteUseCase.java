@@ -36,8 +36,8 @@ public class ChannelDeleteUseCase implements ExecutionUseCase<ChannelDeleteComma
 		
 		var projectId = channel.getProjectId();
 		
-		projectAccessControl.ensureMemberHasProjectAccess(memberId, 
-				projectId, organizationId, AccessLevel.MANAGE);
+		projectAccessControl.ensureMemberHasProjectAccess(organizationId, memberId, 
+				projectId, AccessLevel.MANAGE);
 		
 		sharedDeletionService.deleteChannelCascade(organizationId, channelId);
 	}
