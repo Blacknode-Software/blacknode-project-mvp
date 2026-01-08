@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import software.blacknode.backend.application.access.AccessControlService;
+import software.blacknode.backend.application.access.impl.ProjectAccessControl;
 import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.member.MemberService;
 import software.blacknode.backend.application.member.association.MemberAssociationService;
@@ -18,7 +18,7 @@ import software.blacknode.backend.domain.session.context.holder.SessionContextHo
 @RequiredArgsConstructor
 public class MemberAssignProjectRoleUseCase implements ExecutionUseCase<MemberAssignProjectRoleCommand> {
 
-	private final AccessControlService accessControlService;
+	private final ProjectAccessControl projectAccessControl;
 	
 	private final MemberAssociationService memberAssociationService;	
 	private final MemberService memberService;
@@ -34,7 +34,7 @@ public class MemberAssignProjectRoleUseCase implements ExecutionUseCase<MemberAs
 		
 		var projectId = command.getProjectId();
 		
-		accessControlService.ensureMemberHasProjectAccess(memberId, projectId, organizationId, AccessLevel.MANAGE);
+		projectAccessControl.ensureMemberHasProjectAccess(memberId, projectId, organizationId, AccessLevel.MANAGE);
 		
 		
 		var assingeeId = command.getMemberId();

@@ -1,6 +1,5 @@
 package software.blacknode.backend.application.view.usecase;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -9,12 +8,11 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-import software.blacknode.backend.application.access.AccessControlService;
+import software.blacknode.backend.application.access.impl.ViewAccessControl;
 import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
 import software.blacknode.backend.application.view.ViewService;
 import software.blacknode.backend.application.view.command.ViewFetchCommand;
-import software.blacknode.backend.domain.session.context.SessionContext;
 import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
 import software.blacknode.backend.domain.view.View;
 
@@ -24,7 +22,7 @@ public class ViewFetchUseCase implements ResultExecutionUseCase<ViewFetchCommand
 
 	private final ViewService viewService;
 	
-	private final AccessControlService accessControlService;
+	private final ViewAccessControl viewAccessControl;
 	
 	private final SessionContextHolder sessionContextHolder;
 	
@@ -36,7 +34,7 @@ public class ViewFetchUseCase implements ResultExecutionUseCase<ViewFetchCommand
 		
 		var viewId = command.getViewId();
 		
-		accessControlService.ensureMemberHasViewAccess(organizationId, memberId, 
+		viewAccessControl.ensureMemberHasViewAccess(organizationId, memberId, 
 				viewId, AccessLevel.READ);
 		
 		var view = viewService.getOrThrow(organizationId, viewId);

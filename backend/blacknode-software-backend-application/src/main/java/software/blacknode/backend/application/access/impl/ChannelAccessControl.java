@@ -23,7 +23,7 @@ public class ChannelAccessControl {
 	private final ChannelService channelService;
 	private final MemberService memberService;
 	
-	public void ensureMemberHasChannelAccess(HUID memberId, HUID channelId, HUID organizationId, AccessLevel level) {
+	public void ensureMemberHasChannelAccess(HUID organizationId, HUID memberId, HUID channelId, AccessLevel level) {
 		var member = memberService.getOrThrow(organizationId, memberId);
 		var channel = channelService.getOrThrow(organizationId, channelId);
 		
@@ -53,7 +53,7 @@ public class ChannelAccessControl {
 		}
 	}
 	
-	public AccessLevel getRoleAccessInChannel(HUID memberId, HUID channelId, HUID organizationId) {
+	public AccessLevel getRoleAccessInChannel(HUID organizationId, HUID memberId, HUID channelId) {
 		var channel = channelService.getOrThrow(organizationId, channelId);
 		var member = memberService.getOrThrow(organizationId, memberId);
 		
@@ -94,7 +94,7 @@ public class ChannelAccessControl {
 		return projectAccessControl.getRoleAccess(organizationId, roleId);
 	}
 	
-	public boolean hasAccessToChannel(HUID memberId, HUID channelId, HUID organizationId, AccessLevel level) {
+	public boolean hasAccessToChannel(HUID organizationId, HUID memberId, HUID channelId, AccessLevel level) {
 		var channel = channelService.getOrThrow(organizationId, channelId);
 		var member = memberService.getOrThrow(organizationId, memberId);
 		

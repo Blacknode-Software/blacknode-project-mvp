@@ -1,13 +1,12 @@
 package software.blacknode.backend.application.project.usecase;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import software.blacknode.backend.application.access.AccessControlService;
+import software.blacknode.backend.application.access.impl.ProjectAccessControl;
 import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.patch.impl.PatchOperationEnum;
 import software.blacknode.backend.application.project.ProjectService;
@@ -18,14 +17,13 @@ import software.blacknode.backend.domain.project.Project;
 import software.blacknode.backend.domain.project.meta.modify.impl.ProjectColorModificationMeta;
 import software.blacknode.backend.domain.project.meta.modify.impl.ProjectDescriptionModificationMeta;
 import software.blacknode.backend.domain.project.meta.modify.impl.ProjectNameModificationMeta;
-import software.blacknode.backend.domain.session.context.SessionContext;
 import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
 
 @Service
 @RequiredArgsConstructor
 public class ProjectPatchUseCase implements ResultExecutionUseCase<ProjectPatchCommand, ProjectPatchUseCase.Result> {
 
-	private final AccessControlService accessControlService;
+	private final ProjectAccessControl projectAccessControl;
 	private final ProjectService projectService;
 	
 	private final SessionContextHolder sessionContextHolder;
@@ -38,7 +36,8 @@ public class ProjectPatchUseCase implements ResultExecutionUseCase<ProjectPatchC
 		
 		var projectId = command.getId();
 		
-		accessControlService.ensureMemberHasProjectAccess(memberId, projectId, organizationId, AccessLevel.MANAGE);
+		projectAccessControl.ensureMemberHasProjectAccess(memberId, 
+				projectId, organizationId, AccessLevel.MANAGE);
 		
 		var operations = command.getOperations();
 		

@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import software.blacknode.backend.application.access.AccessControlService;
+import software.blacknode.backend.application.access.impl.ChannelAccessControl;
 import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.member.MemberService;
 import software.blacknode.backend.application.member.association.MemberAssociationService;
@@ -18,7 +18,7 @@ import software.blacknode.backend.domain.session.context.holder.SessionContextHo
 @RequiredArgsConstructor
 public class MemberAssignChannelRoleUseCase implements ExecutionUseCase<MemberAssignChannelRoleCommand> {
 
-	private final AccessControlService accessControlService;
+	private final ChannelAccessControl channelAccessControl;
 	
 	private final MemberAssociationService memberAssociationService;	
 	private final MemberService memberService;
@@ -34,7 +34,7 @@ public class MemberAssignChannelRoleUseCase implements ExecutionUseCase<MemberAs
 		
 		var channelId = command.getChannelId();
 		
-		accessControlService.ensureMemberHasChannelAccess(memberId, channelId, organizationId, AccessLevel.MANAGE);
+		channelAccessControl.ensureMemberHasChannelAccess(memberId, channelId, organizationId, AccessLevel.MANAGE);
 		
 		
 		var assingeeId = command.getMemberId();
@@ -42,6 +42,9 @@ public class MemberAssignChannelRoleUseCase implements ExecutionUseCase<MemberAs
 		
 		var roleId = command.getRoleId();
 		var role = roleService.getOrThrow(organizationId, roleId);
+		
+		// TODO make sure that the member has role assigned
+		// (dedicated use case will be creater for "adding" members to channel/project)
 		
 		var currentAssoc = memberAssociationService.getMemberChannelAssociation(organizationId, assingeeId, channelId);
 		

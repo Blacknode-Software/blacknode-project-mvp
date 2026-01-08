@@ -1,6 +1,5 @@
 package software.blacknode.backend.application.task.usecase;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -8,14 +7,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-import software.blacknode.backend.application.access.AccessControlService;
+import software.blacknode.backend.application.access.impl.TaskAccessControl;
 import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.patch.impl.PatchOperationEnum;
 import software.blacknode.backend.application.task.TaskService;
 import software.blacknode.backend.application.task.command.TaskPatchCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
 import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
-import software.blacknode.backend.domain.session.context.SessionContext;
 import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
 import software.blacknode.backend.domain.task.Task;
 import software.blacknode.backend.domain.task.meta.modify.impl.TaskBeginAtTimestampModificationMeta;
@@ -28,7 +26,7 @@ import software.blacknode.backend.domain.task.meta.modify.impl.TaskTitleModifica
 @RequiredArgsConstructor
 public class TaskPatchUseCase implements ResultExecutionUseCase<TaskPatchCommand, TaskPatchUseCase.Result> {
 	
-	private final AccessControlService accessControlService;
+	private final TaskAccessControl taskAccessControl;
 	private final TaskService taskService;
 	
 	private final SessionContextHolder sessionContextHolder;
@@ -41,7 +39,7 @@ public class TaskPatchUseCase implements ResultExecutionUseCase<TaskPatchCommand
 		
 		var taskId = command.getId();
 		
-		accessControlService.ensureMemberHasTaskAccess(organizationId, memberId, 
+		taskAccessControl.ensureMemberHasTaskAccess(organizationId, memberId, 
 				taskId, AccessLevel.WRITE);
 		
 		var operations = command.getOperations();

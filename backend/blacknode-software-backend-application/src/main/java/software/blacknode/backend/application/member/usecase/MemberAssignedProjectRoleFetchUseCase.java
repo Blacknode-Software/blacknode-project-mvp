@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-import software.blacknode.backend.application.access.AccessControlService;
+import software.blacknode.backend.application.access.impl.ProjectAccessControl;
 import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.member.MemberService;
 import software.blacknode.backend.application.member.association.MemberAssociationService;
@@ -23,7 +23,7 @@ import software.blacknode.backend.domain.session.context.holder.SessionContextHo
 @RequiredArgsConstructor
 public class MemberAssignedProjectRoleFetchUseCase implements ResultExecutionUseCase<MemberAssignedProjectRoleFetchCommand, MemberAssignedProjectRoleFetchUseCase.Result> {
 
-	private final AccessControlService accessControlService;
+	private final ProjectAccessControl projectAccessControl;
 	
 	private final MemberAssociationService memberAssociationService;
 	
@@ -43,7 +43,7 @@ public class MemberAssignedProjectRoleFetchUseCase implements ResultExecutionUse
 		
 		var projectId = command.getProjectId();
 		
-		accessControlService.ensureMemberHasProjectAccess(memberId, projectId, organizationId, AccessLevel.READ);
+		projectAccessControl.ensureMemberHasProjectAccess(memberId, projectId, organizationId, AccessLevel.READ);
 		
 		var assigneeId = command.getMemberId();
 		var assignee = memberService.getOrThrow(organizationId, assigneeId);

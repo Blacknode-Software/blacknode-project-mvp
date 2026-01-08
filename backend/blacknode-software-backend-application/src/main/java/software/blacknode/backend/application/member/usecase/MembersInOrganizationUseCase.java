@@ -11,7 +11,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import me.hinsinger.hinz.common.huid.HUID;
-import software.blacknode.backend.application.access.AccessControlService;
+import software.blacknode.backend.application.access.impl.OrganizationAccessControl;
+import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.member.MemberService;
 import software.blacknode.backend.application.member.command.MembersInOrganizationCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
@@ -21,7 +22,7 @@ import software.blacknode.backend.domain.session.context.holder.SessionContextHo
 @RequiredArgsConstructor
 public class MembersInOrganizationUseCase implements ResultExecutionUseCase<MembersInOrganizationCommand, MembersInOrganizationUseCase.Result> {
 
-	private final AccessControlService accessControlService;
+	private final OrganizationAccessControl organizationAccessControl;
 	
 	private final MemberService memberService;
 	
@@ -32,6 +33,9 @@ public class MembersInOrganizationUseCase implements ResultExecutionUseCase<Memb
 	public Result execute(MembersInOrganizationCommand command) {
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
+		
+		organizationAccessControl.ensureMemberHasOrganizationAccess(organizationId, 
+				memberId, AccessLevel.READ);
 		
 		var members = memberService.getAll(organizationId)
 				.stream()

@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-import software.blacknode.backend.application.access.AccessControlService;
+import software.blacknode.backend.application.access.impl.ChannelAccessControl;
 import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.channel.ChannelService;
 import software.blacknode.backend.application.member.MemberService;
@@ -23,7 +23,7 @@ import software.blacknode.backend.domain.session.context.holder.SessionContextHo
 @RequiredArgsConstructor
 public class MemberAssignedChannelRoleFetchUseCase implements ResultExecutionUseCase<MemberAssignedChannelRoleFetchCommand, MemberAssignedChannelRoleFetchUseCase.Result> {
 
-	private final AccessControlService accessControlService;
+	private final ChannelAccessControl channelAccessControl;
 	
 	private final MemberAssociationService memberAssociationService;
 	
@@ -44,7 +44,7 @@ public class MemberAssignedChannelRoleFetchUseCase implements ResultExecutionUse
 		var channelId = command.getChannelId();
 		var channel = channelService.getOrThrow(organizationId, channelId);
 		
-		accessControlService.ensureMemberHasChannelAccess(memberId, channelId, organizationId, AccessLevel.READ);
+		channelAccessControl.ensureMemberHasChannelAccess(memberId, channelId, organizationId, AccessLevel.READ);
 		
 		var assigneeId = command.getMemberId();
 		var assignee = memberService.getOrThrow(organizationId, assigneeId);

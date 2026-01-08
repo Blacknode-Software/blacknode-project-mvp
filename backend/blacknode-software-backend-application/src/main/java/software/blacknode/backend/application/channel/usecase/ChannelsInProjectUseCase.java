@@ -2,7 +2,6 @@ package software.blacknode.backend.application.channel.usecase;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -12,20 +11,22 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import me.hinsinger.hinz.common.huid.HUID;
-import software.blacknode.backend.application.access.AccessControlService;
+import software.blacknode.backend.application.access.impl.ChannelAccessControl;
+import software.blacknode.backend.application.access.impl.ProjectAccessControl;
 import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.channel.ChannelService;
 import software.blacknode.backend.application.channel.command.ChannelsInProjectCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
 import software.blacknode.backend.domain.channel.Channel;
-import software.blacknode.backend.domain.session.context.SessionContext;
 import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
 
 @Service
 @RequiredArgsConstructor
 public class ChannelsInProjectUseCase implements ResultExecutionUseCase<ChannelsInProjectCommand, ChannelsInProjectUseCase.Result> {
 
-	private final AccessControlService accessControlService;
+	private final ProjectAccessControl projectAccessControl;
+	private final ChannelAccessControl channelAccessControl;
+	
 	private final ChannelService channelService;
 	
 	private final SessionContextHolder sessionContextHolder;
@@ -38,13 +39,13 @@ public class ChannelsInProjectUseCase implements ResultExecutionUseCase<Channels
 		
 		var projectId = command.getProjectId();
 		
-		accessControlService.ensureMemberHasProjectAccess(organizationId, memberId, 
+		projectAccessControl.ensureMemberHasProjectAccess(organizationId, memberId, 
 				projectId, AccessLevel.READ);
 		
 		var channels = channelService.getAllInProject(organizationId, projectId);
 		
 		var channelsIds = channels.stream()
-				.filter(channel -> accessControlService.hasAccessToChannel(organizationId, memberId, channel.getId(), AccessLevel.READ))
+				.filter(channel -> channelAccessControl.hasAccessToChannel(organizationId, memberId, channel.getId(), AccessLevel.READ))
 				.map(Channel::getId)
 				.toList();
 		
