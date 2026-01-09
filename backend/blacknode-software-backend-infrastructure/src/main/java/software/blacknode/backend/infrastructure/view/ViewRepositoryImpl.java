@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.domain.view.View;
@@ -23,7 +24,7 @@ public class ViewRepositoryImpl implements ViewRepository, OrganizationRelatedEn
 	private final ViewEntityMapper mapper;
 	
 	@Override
-	public Optional<View> findById(HUID organizationId, HUID id) {
+	public Optional<View> findById(@NonNull HUID organizationId, @NonNull HUID id) {
 		var view = repository.queryByIdAndOrganizationIdAndState(id.toUUID(),
 				organizationId.toUUID(), EntityState.ACTIVE);
 		
@@ -31,7 +32,7 @@ public class ViewRepositoryImpl implements ViewRepository, OrganizationRelatedEn
 	}
 
 	@Override
-	public List<View> findByIds(HUID organizationId, List<HUID> ids) {
+	public List<View> findByIds(@NonNull HUID organizationId, @NonNull List<HUID> ids) {
 		var uuidIds = ids.stream().map(HUID::toUUID).toList();
 		
 		var views = repository.queryAllByIdInAndOrganizationIdAndState(uuidIds,
@@ -43,7 +44,7 @@ public class ViewRepositoryImpl implements ViewRepository, OrganizationRelatedEn
 	}
 
 	@Override
-	public List<View> findByChannelId(HUID organizationId, HUID channelId) {
+	public List<View> findByChannelId(@NonNull HUID organizationId, @NonNull HUID channelId) {
 		var views = repository.queryAllByChannelIdAndOrganizationIdAndState(
 				channelId.toUUID(), organizationId.toUUID(), EntityState.ACTIVE);
 		
@@ -53,7 +54,7 @@ public class ViewRepositoryImpl implements ViewRepository, OrganizationRelatedEn
 	}
 
 	@Override
-	public void save(HUID organizationId, View view) {
+	public void save(@NonNull HUID organizationId, @NonNull View view) {
 		view.ensureBelongsToOrganization(organizationId);
 		
 		var viewEntity = toInfrastructureEntity(view);
