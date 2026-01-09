@@ -2,9 +2,11 @@ package software.blacknode.backend.infrastructure.task;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.stereotype.Repository;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.domain.task.Task;
@@ -24,7 +26,7 @@ public class TaskRepositoryImpl implements TaskRepository, OrganizationRelatedEn
 	
 	
 	@Override
-	public Optional<Task> findById(HUID organizationId, HUID id) {
+	public Optional<Task> findById(@NonNull HUID organizationId, HUID id) {
 		var task = repository.queryByIdAndOrganizationIdAndState(id.toUUID(), 
 				organizationId.toUUID(), EntityState.ACTIVE);
 		
@@ -32,7 +34,7 @@ public class TaskRepositoryImpl implements TaskRepository, OrganizationRelatedEn
 	}
 	
 	@Override
-	public List<Task> findByIds(HUID organizationId, List<HUID> ids) {
+	public List<Task> findByIds(@NonNull HUID organizationId, @NonNull Set<HUID> ids) {
 		var uuidList = ids.stream().map(HUID::toUUID).toList();
 		
 		var tasks = repository.queryAllByIdInAndOrganizationIdAndState(uuidList, 
@@ -44,7 +46,7 @@ public class TaskRepositoryImpl implements TaskRepository, OrganizationRelatedEn
 	}
 
 	@Override
-	public List<Task> findByChannelId(HUID organizationId, HUID channelId) {
+	public List<Task> findByChannelId(@NonNull HUID organizationId, @NonNull HUID channelId) {
 		var tasks = repository.queryAllByChannelIdAndOrganizationIdAndState(
 				channelId.toUUID(), organizationId.toUUID(), EntityState.ACTIVE);
 		
@@ -54,7 +56,7 @@ public class TaskRepositoryImpl implements TaskRepository, OrganizationRelatedEn
 	}
 
 	@Override
-	public void save(HUID organizationId, Task task) {
+	public void save(@NonNull HUID organizationId, @NonNull Task task) {
 		task.ensureBelongsToOrganization(organizationId);
 		
 		var taskEntity = toInfrastructureEntity(task);

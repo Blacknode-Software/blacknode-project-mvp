@@ -2,6 +2,7 @@ package software.blacknode.backend.infrastructure.view;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.stereotype.Repository;
 
@@ -32,7 +33,7 @@ public class ViewRepositoryImpl implements ViewRepository, OrganizationRelatedEn
 	}
 
 	@Override
-	public List<View> findByIds(@NonNull HUID organizationId, @NonNull List<HUID> ids) {
+	public List<View> findByIds(@NonNull HUID organizationId, @NonNull Set<HUID> ids) {
 		var uuidIds = ids.stream().map(HUID::toUUID).toList();
 		
 		var views = repository.queryAllByIdInAndOrganizationIdAndState(uuidIds,

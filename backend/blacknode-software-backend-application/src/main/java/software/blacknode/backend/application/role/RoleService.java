@@ -2,6 +2,7 @@ package software.blacknode.backend.application.role;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +31,10 @@ public class RoleService {
 	}
 	
 	public List<Role> getByIds(HUID organizationId, List<HUID> roleIds) {
+		return getByIds(organizationId, Set.copyOf(roleIds));
+	}
+	
+	public List<Role> getByIds(HUID organizationId, Set<HUID> roleIds) {
 		return repository.findAllById(organizationId, roleIds);
 	}
 	

@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.domain.auth.Auth;
@@ -23,7 +24,7 @@ public class AuthRepositoryImpl implements AuthRepository, InfrastructureReposit
 	private final AuthEntityMapper mapper;
 	
 	@Override
-	public Optional<Auth> findById(HUID accountId, HUID id) {
+	public Optional<Auth> findById(@NonNull HUID accountId, @NonNull HUID id) {
 		var auth = repository.queryByIdAndAccountIdAndState(id.toUUID(), 
 				accountId.toUUID(), EntityState.ACTIVE);
 		
@@ -31,7 +32,7 @@ public class AuthRepositoryImpl implements AuthRepository, InfrastructureReposit
 	}
 
 	@Override
-	public List<Auth> findAllByAccountId(HUID accountId) {
+	public List<Auth> findAllByAccountId(@NonNull HUID accountId) {
 		var auths = repository.queryAllByAccountIdAndState(
 				accountId.toUUID(), EntityState.ACTIVE);
 		
@@ -41,7 +42,7 @@ public class AuthRepositoryImpl implements AuthRepository, InfrastructureReposit
 	}
 
 	@Override
-	public List<Auth> findAllByAccountIdAndTypeId(HUID accountId, HUID typeId) {
+	public List<Auth> findAllByAccountIdAndTypeId(@NonNull HUID accountId, @NonNull HUID typeId) {
 		var auths = repository.queryAllByAccountIdAndState(
 				accountId.toUUID(), EntityState.ACTIVE);
 		
@@ -54,7 +55,7 @@ public class AuthRepositoryImpl implements AuthRepository, InfrastructureReposit
 	}
 
 	@Override
-	public void save(HUID accountId, Auth auth) {
+	public void save(@NonNull HUID accountId, @NonNull Auth auth) {
 		auth.ensureBelongsToAccount(accountId);
 		
 		var authEntity = toInfrastructureEntity(auth);

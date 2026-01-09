@@ -1,6 +1,7 @@
 package software.blacknode.backend.application.project;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,9 +73,11 @@ public class ProjectService {
 	}
 	
 	public List<Project> getByIds(HUID organizationId, List<HUID> projectIds) {
-		var projects = repository.findAllById(organizationId, projectIds);
-		
-		return projects;
+		return getByIds(organizationId, Set.copyOf(projectIds));
+	}
+	
+	public List<Project> getByIds(HUID organizationId, Set<HUID> projectIds) {
+		return repository.findAllById(organizationId, projectIds);
 	}
 	
 	public List<Project> getAll(HUID organizationId) {

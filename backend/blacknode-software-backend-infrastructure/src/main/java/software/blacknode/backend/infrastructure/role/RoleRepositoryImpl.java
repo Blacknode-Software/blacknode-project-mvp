@@ -2,9 +2,11 @@ package software.blacknode.backend.infrastructure.role;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.stereotype.Repository;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.domain.role.Role;
@@ -24,7 +26,7 @@ public class RoleRepositoryImpl implements RoleRepository, OrganizationRelatedEn
 	
 	
 	@Override
-	public Optional<Role> findById(HUID organizationId, HUID id) {
+	public Optional<Role> findById(@NonNull HUID organizationId, @NonNull HUID id) {
 		var role = repository.queryByIdAndOrganizationIdAndState(id.toUUID(),
 				organizationId.toUUID(), EntityState.ACTIVE);
 		
@@ -32,7 +34,7 @@ public class RoleRepositoryImpl implements RoleRepository, OrganizationRelatedEn
 	}
 
 	@Override
-	public List<Role> findAllById(HUID organizationId, List<HUID> ids) {
+	public List<Role> findAllById(@NonNull HUID organizationId, @NonNull Set<HUID> ids) {
 		var uuidIds = ids.stream()
 				.map(HUID::toUUID)
 				.toList();
@@ -47,7 +49,7 @@ public class RoleRepositoryImpl implements RoleRepository, OrganizationRelatedEn
 	}
 
 	@Override
-	public List<Role> findAll(HUID organizationId) {
+	public List<Role> findAll(@NonNull HUID organizationId) {
 		var roles = repository.queryByOrganizationIdAndState(
 				organizationId.toUUID(), EntityState.ACTIVE);
 		
@@ -57,7 +59,7 @@ public class RoleRepositoryImpl implements RoleRepository, OrganizationRelatedEn
 	}
 
 	@Override
-	public void save(HUID organizationId, Role role) {
+	public void save(@NonNull HUID organizationId, @NonNull Role role) {
 		role.ensureBelongsToOrganization(organizationId);
 		
 		var roleEntity = toInfrastructureEntity(role);

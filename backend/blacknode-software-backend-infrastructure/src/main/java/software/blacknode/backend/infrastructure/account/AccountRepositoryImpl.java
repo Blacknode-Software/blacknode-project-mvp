@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.domain.account.Account;
@@ -22,21 +23,21 @@ public class AccountRepositoryImpl implements AccountRepository, InfrastructureR
 	private final AccountEntityMapper mapper;
 	
 	@Override
-	public Optional<Account> findById(HUID id) {
+	public Optional<Account> findById(@NonNull HUID id) {
 		var account = repository.queryByIdAndState(id.toUUID(), EntityState.ACTIVE);
 	
 		return account.map(this::toDomainEntity);
 	}
 
 	@Override
-	public Optional<Account> findByEmail(String email) {
+	public Optional<Account> findByEmail(@NonNull String email) {
 		var account = repository.queryByEmailAndState(email, EntityState.ACTIVE);
 		
 		return account.map(this::toDomainEntity);
 	}
 	
 	@Override
-	public void save(Account account) {
+	public void save(@NonNull Account account) {
 		var accountEntity = toInfrastructureEntity(account);
 		
 		repository.save(accountEntity);

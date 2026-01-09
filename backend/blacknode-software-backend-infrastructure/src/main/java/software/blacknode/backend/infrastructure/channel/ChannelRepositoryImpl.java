@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.domain.channel.Channel;
@@ -23,7 +24,7 @@ public class ChannelRepositoryImpl implements ChannelRepository, OrganizationRel
 	private final ChannelEntityMapper mapper;
 	
 	@Override
-	public Optional<Channel> findById(HUID organizationId, HUID id) {
+	public Optional<Channel> findById(@NonNull HUID organizationId, @NonNull HUID id) {
 		var channel = repository.queryByIdAndOrganizationIdAndState(id.toUUID(), 
 				organizationId.toUUID(), EntityState.ACTIVE);
 		
@@ -31,7 +32,7 @@ public class ChannelRepositoryImpl implements ChannelRepository, OrganizationRel
 	}
 
 	@Override
-	public List<Channel> findByIds(HUID organizationId, List<HUID> ids) {
+	public List<Channel> findByIds(@NonNull HUID organizationId, @NonNull List<HUID> ids) {
 		var uuidList = ids.stream().map(HUID::toUUID).toList();
 		
 		var channels = repository.queryAllByIdInAndOrganizationIdAndState(uuidList, 
@@ -43,7 +44,7 @@ public class ChannelRepositoryImpl implements ChannelRepository, OrganizationRel
 	}
 
 	@Override
-	public List<Channel> findAllByProjectId(HUID organizationId, HUID projectId) {
+	public List<Channel> findAllByProjectId(@NonNull HUID organizationId, @NonNull HUID projectId) {
 		var channels = repository.queryAllByProjectIdAndOrganizationIdAndState(
 				projectId.toUUID(), organizationId.toUUID(), EntityState.ACTIVE);
 		
@@ -53,7 +54,7 @@ public class ChannelRepositoryImpl implements ChannelRepository, OrganizationRel
 	}
 
 	@Override
-	public void save(HUID organizationId, Channel channel) {
+	public void save(@NonNull HUID organizationId, @NonNull Channel channel) {
 		channel.ensureBelongsToOrganization(organizationId);
 		
 		var channelEntity = toInfrastructureEntity(channel);

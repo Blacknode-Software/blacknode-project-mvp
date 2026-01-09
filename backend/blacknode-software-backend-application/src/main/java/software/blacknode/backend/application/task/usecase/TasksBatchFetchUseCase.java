@@ -52,7 +52,7 @@ public class TasksBatchFetchUseCase implements ResultExecutionUseCase<TasksBatch
 	public static class Result {
 		
 		@NonNull
-		private List<Task> tasks;
+		private final List<Task> tasks;
 		
 	}
 
