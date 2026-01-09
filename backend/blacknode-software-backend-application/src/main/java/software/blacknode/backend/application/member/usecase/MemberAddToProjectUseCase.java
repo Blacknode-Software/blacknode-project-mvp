@@ -2,13 +2,11 @@ package software.blacknode.backend.application.member.usecase;
 
 import org.springframework.stereotype.Service;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import software.blacknode.backend.application.access.impl.ProjectAccessControl;
 import software.blacknode.backend.application.access.level.AccessLevel;
-import software.blacknode.backend.application.member.MemberService;
 import software.blacknode.backend.application.member.association.MemberAssociationService;
-import software.blacknode.backend.application.member.command.MemberAssignProjectRoleCommand;
+import software.blacknode.backend.application.member.command.MemberAddToProjectCommand;
 import software.blacknode.backend.application.role.RoleService;
 import software.blacknode.backend.application.usecase.ExecutionUseCase;
 import software.blacknode.backend.domain.exception.BlacknodeException;
@@ -17,44 +15,44 @@ import software.blacknode.backend.domain.session.context.holder.SessionContextHo
 
 @Service
 @RequiredArgsConstructor
-public class MemberAssignProjectRoleUseCase implements ExecutionUseCase<MemberAssignProjectRoleCommand> {
-
+public class MemberAddToProjectUseCase implements ExecutionUseCase<MemberAddToProjectCommand> {
+	
 	private final ProjectAccessControl projectAccessControl;
 	
-	private final MemberAssociationService memberAssociationService;	
-	private final MemberService memberService;
+	private final MemberAssociationService memberAssociationService;
+
 	private final RoleService roleService;
-	
+
 	private final SessionContextHolder sessionContextHolder;
 	
 	@Override
-	@Transactional
-	public void execute(MemberAssignProjectRoleCommand command) {
+	public void execute(MemberAddToProjectCommand command) {
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		
 		var projectId = command.getProjectId();
+		var addingMemberId = command.getMemberId();
 		
-		projectAccessControl.ensureMemberHasProjectAccess(organizationId, memberId, projectId, AccessLevel.MANAGE);
+		projectAccessControl.ensureMemberHasProjectAccess(organizationId, 
+				memberId, projectId, AccessLevel.MANAGE);
 		
+		if(projectAccessControl.hasAccessToProject(organizationId, addingMemberId, projectId, AccessLevel.READ)) {
+			throw new BlacknodeException("Member already has access to project: " + projectId);
+		}
 		
-		var assingeeId = command.getMemberId();
-		var assignee = memberService.getOrThrow(organizationId, assingeeId);
-		
-		var roleId = command.getRoleId();
-		var role = roleService.getOrThrow(organizationId, roleId);
-		
-		var currentAssoc = memberAssociationService.getMemberProjectAssociation(organizationId, assingeeId, projectId);
-		
-		if(currentAssoc.isEmpty()) throw new BlacknodeException(
-				"Member %s is not associated with the project %s".formatted(assingeeId, projectId));
-		
+		var defaultRole = roleService.getProjectRoles(organizationId)
+				.stream()
+				.filter(role -> role.getMeta().isByDefaultAssigned())
+				.findFirst()
+				.orElseThrow(() -> new BlacknodeException("No default role found for project: " + projectId));
+	
 		var meta = MemberProjectAssociationCreationMeta.builder()
-				.memberId(assingeeId)
 				.projectId(projectId)
-				.roleId(roleId)
+				.memberId(addingMemberId)
+				.roleId(defaultRole.getId())
 				.build();
 		
-		var assoc = memberAssociationService.create(organizationId, meta);
+		var association = memberAssociationService.create(organizationId, meta);
 	}
+
 }
