@@ -11,6 +11,7 @@ import software.blacknode.backend.application.member.association.MemberAssociati
 import software.blacknode.backend.application.member.command.MemberAssignProjectRoleCommand;
 import software.blacknode.backend.application.role.RoleService;
 import software.blacknode.backend.application.usecase.ExecutionUseCase;
+import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.member.association.meta.create.impl.MemberProjectAssociationCreationMeta;
 import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
 
@@ -45,9 +46,7 @@ public class MemberAssignProjectRoleUseCase implements ExecutionUseCase<MemberAs
 		
 		var currentAssoc = memberAssociationService.getMemberProjectAssociation(organizationId, assingeeId, projectId);
 		
-		if(currentAssoc.isPresent()) {
-			memberAssociationService.delete(organizationId, currentAssoc.get().getId());
-		}
+		if(currentAssoc.isEmpty()) throw new BlacknodeException("Member %s is not associated with the project %s".formatted(assingeeId, projectId));
 		
 		var meta = MemberProjectAssociationCreationMeta.builder()
 				.memberId(assingeeId)

@@ -11,6 +11,7 @@ import software.blacknode.backend.application.member.association.MemberAssociati
 import software.blacknode.backend.application.member.command.MemberAssignChannelRoleCommand;
 import software.blacknode.backend.application.role.RoleService;
 import software.blacknode.backend.application.usecase.ExecutionUseCase;
+import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.member.association.meta.create.impl.MemberChannelAssociationCreationMeta;
 import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
 
@@ -49,9 +50,7 @@ public class MemberAssignChannelRoleUseCase implements ExecutionUseCase<MemberAs
 		
 		var currentAssoc = memberAssociationService.getMemberChannelAssociation(organizationId, assingeeId, channelId);
 		
-		if(currentAssoc.isPresent()) {
-			memberAssociationService.delete(organizationId, currentAssoc.get().getId());
-		}
+		if(currentAssoc.isEmpty()) throw new BlacknodeException("Member %s is not associated with the channel %s".formatted(assingeeId, channelId));
 		
 		var meta = MemberChannelAssociationCreationMeta.builder()
 				.memberId(assingeeId)

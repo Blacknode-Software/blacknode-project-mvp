@@ -106,7 +106,7 @@ public class MemberAssociationRepositoryImpl implements MemberAssociationReposit
 	}
 	
 	@Override
-	public List<MemberAssociation> findBydRoleId(HUID organizationId, HUID roleId) {
+	public List<MemberAssociation> findByRoleId(HUID organizationId, HUID roleId) {
 		var associations = repository.queryByOrganizationIdRoleIdAndState(
 				organizationId.toUUID(),
 				roleId.toUUID(),

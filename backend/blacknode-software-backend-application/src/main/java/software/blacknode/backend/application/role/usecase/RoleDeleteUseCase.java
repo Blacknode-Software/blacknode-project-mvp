@@ -36,7 +36,7 @@ public class RoleDeleteUseCase implements ExecutionUseCase<RoleDeleteCommand> {
 		var role = roleService.getOrThrow(organizationId, roleId);
 		
 		if(role.getMeta().isSystemDefault()) {
-			throw new BlacknodeException("Cannot delete system default role");
+			throw new BlacknodeException("Cannot delete system default role: " + role.getMeta().getName());
 		}
 		
 		sharedDeletionService.deleteRoleCascade(organizationId, roleId);

@@ -13,7 +13,7 @@ public interface MemberAssociationRepository {
 	
 	public List<MemberAssociation> findAll(HUID organizationId);
 	
-	public List<MemberAssociation> findBydRoleId(HUID organizationId, HUID roleId);
+	public List<MemberAssociation> findByRoleId(HUID organizationId, HUID roleId);
 	
 	public List<MemberAssociation> findByMemberIds(HUID organizationId, Set<HUID> memberIds);
 	
