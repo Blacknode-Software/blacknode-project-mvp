@@ -39,7 +39,7 @@ public class RolesInOrganizationUseCase implements ResultExecutionUseCase<RolesI
 				.toList();
 		
 		return Result.builder()
-				.roleIds(rolesIds)
+				.rolesIds(rolesIds)
 				.build();
 	}
 	
@@ -49,7 +49,7 @@ public class RolesInOrganizationUseCase implements ResultExecutionUseCase<RolesI
 	public static class Result {
 		
 		@NonNull
-		private final List<HUID> roleIds;
+		private final List<HUID> rolesIds;
 		
 	}
 

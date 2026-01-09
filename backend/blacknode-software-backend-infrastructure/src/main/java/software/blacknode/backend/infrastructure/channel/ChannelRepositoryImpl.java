@@ -2,6 +2,7 @@ package software.blacknode.backend.infrastructure.channel;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.stereotype.Repository;
 
@@ -32,7 +33,7 @@ public class ChannelRepositoryImpl implements ChannelRepository, OrganizationRel
 	}
 
 	@Override
-	public List<Channel> findByIds(@NonNull HUID organizationId, @NonNull List<HUID> ids) {
+	public List<Channel> findByIds(@NonNull HUID organizationId, @NonNull Set<HUID> ids) {
 		var uuidList = ids.stream().map(HUID::toUUID).toList();
 		
 		var channels = repository.queryAllByIdInAndOrganizationIdAndState(uuidList, 

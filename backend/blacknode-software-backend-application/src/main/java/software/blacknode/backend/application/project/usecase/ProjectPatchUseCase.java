@@ -43,7 +43,7 @@ public class ProjectPatchUseCase implements ResultExecutionUseCase<ProjectPatchC
 		
 		var modifications = ModificationMeta.emptyList();
 		
-		if(ProjectPatchOperation.DESCRIPTION.isIn(operations)) {
+		if(ProjectPatchOperation.NAME.isIn(operations)) {
 			var name = command.getName();
 			
 			//TODO add name uniqueness check
@@ -55,7 +55,7 @@ public class ProjectPatchUseCase implements ResultExecutionUseCase<ProjectPatchC
 			modifications.add(meta);
 		}
 		
-		if(ProjectPatchOperation.NAME.isIn(operations)) {
+		if(ProjectPatchOperation.DESCRIPTION.isIn(operations)) {
 			var description = command.getDescription();
 			
 			var meta = ProjectDescriptionModificationMeta.builder()

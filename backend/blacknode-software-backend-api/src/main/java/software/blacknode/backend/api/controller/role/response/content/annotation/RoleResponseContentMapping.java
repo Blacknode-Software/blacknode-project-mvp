@@ -20,6 +20,8 @@ import org.mapstruct.Mappings;
 	@Mapping(target = "isByDefault", source = "role.meta.byDefaultAssigned"),
 	@Mapping(target = "isSystemRole", source = "role.meta.systemDefault"),
 	@Mapping(target = "isSuperPrivileged", source = "role.meta.superPrivileged"),
+	
+	@Mapping(target = "scope", source = "role.scope"),
 })
 public @interface RoleResponseContentMapping {
 

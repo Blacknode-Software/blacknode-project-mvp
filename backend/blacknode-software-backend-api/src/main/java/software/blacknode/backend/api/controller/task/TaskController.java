@@ -74,7 +74,7 @@ public class TaskController {
 	@Operation(summary = "Fetch a task by ID")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Task fetched") })
 	@GetMapping("/tasks/{id}")
-	public ResponseEntity<TaskResponse> getTask(UUID id) {
+	public ResponseEntity<TaskResponse> getTask(@PathVariable UUID id) {
 		var command = TaskFetchCommand.builder()
 				.taskId(HUID.fromUUID(id))
 				.build();

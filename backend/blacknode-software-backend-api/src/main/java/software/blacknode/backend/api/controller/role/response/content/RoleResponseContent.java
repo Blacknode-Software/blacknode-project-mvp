@@ -23,4 +23,5 @@ public class RoleResponseContent {
 	
 	private boolean isSuperPrivileged;
 	
+	private String scope;
 }

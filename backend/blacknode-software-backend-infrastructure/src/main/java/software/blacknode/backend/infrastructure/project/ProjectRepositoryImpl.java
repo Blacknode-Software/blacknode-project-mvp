@@ -2,6 +2,7 @@ package software.blacknode.backend.infrastructure.project;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.stereotype.Repository;
 
@@ -32,7 +33,7 @@ public class ProjectRepositoryImpl implements ProjectRepository, OrganizationRel
 	}
 
 	@Override
-	public List<Project> findAllById(@NonNull HUID organizationId, @NonNull List<HUID> ids) {
+	public List<Project> findAllById(@NonNull HUID organizationId, @NonNull Set<HUID> ids) {
 		var uuidIds = ids.stream().map(HUID::toUUID).toList();
 		
 		var projects = repository.queryAllByIdInAndOrganizationIdAndState(uuidIds, 
