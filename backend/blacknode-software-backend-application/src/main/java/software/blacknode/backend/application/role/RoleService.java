@@ -10,8 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
+import software.blacknode.backend.domain.entity.modifier.impl.delete.meta.DeletionMeta;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.role.Role;
+import software.blacknode.backend.domain.role.meta.delete.impl.RoleDefaultDeletionMeta;
 import software.blacknode.backend.domain.role.repository.RoleRepository;
 
 @Transactional
@@ -20,6 +22,30 @@ import software.blacknode.backend.domain.role.repository.RoleRepository;
 public class RoleService {
 
 	private final RoleRepository repository;
+	
+	public Role create(HUID organizationId, CreationMeta meta) {
+		var role = new Role(organizationId);
+		
+		role.create(meta);
+		
+		repository.save(organizationId, role);
+		
+		return role;
+	}
+	
+	public void delete(HUID organizationId, HUID roleId) {
+		var meta = RoleDefaultDeletionMeta.builder().build();
+		
+		delete(organizationId, roleId, meta);
+	}
+	
+	public void delete(HUID organizationId, HUID roleId, DeletionMeta meta) {
+		var role = getOrThrow(organizationId, roleId);
+		
+		role.delete(meta);
+		
+		repository.save(organizationId, role);
+	}
 	
 	public Role getOrThrow(HUID organizationId, HUID roleId) {
 		return repository.findById(organizationId, roleId)
@@ -62,13 +88,5 @@ public class RoleService {
 		return roles;
 	}
 	
-	public Role create(HUID organizationId, CreationMeta meta) {
-		var role = new Role(organizationId);
-		
-		role.create(meta);
-		
-		repository.save(organizationId, role);
-		
-		return role;
-	}
+	
 }

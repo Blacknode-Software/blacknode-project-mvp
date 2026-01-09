@@ -57,4 +57,11 @@ public interface MemberAssociationEntityRepository extends JpaRepository<MemberA
 		@Param("state") EntityState state
 	);
 	
+	@Query("SELECT m FROM MemberAssociationEntity m WHERE m.organizationId = :organizationId AND m.roleId = :roleId AND m.state = :state")
+	List<MemberAssociationEntity> queryByOrganizationIdRoleIdAndState(
+		@Param("organizationId") UUID organizationId,
+		@Param("roleId") UUID roleId,
+		@Param("state") EntityState state
+	);
+	
 }

@@ -102,6 +102,10 @@ public class MemberAssociationService {
 		return getOrThrow(organizationId, memberId, channelId, MemberAssociation.Scope.CHANNEL);
 	}
 	
+	public List<MemberAssociation> getMemberAssociationsByRole(HUID organizationId, HUID roleId) {
+		return repository.findByRoleId(organizationId, roleId);
+	}
+	
 //	public Role getMemberRoleInOrganizationOrThrow(HUID memberId, HUID organizationId) {
 //		return getMemberRoleInOrganization(memberId, organizationId, null)
 //				.orElseThrow(() -> new BlacknodeException("Member with ID " + memberId + " has no role in organization with ID " + organizationId));

@@ -6,6 +6,6 @@ import software.blacknode.backend.domain.role.meta.delete.RoleDeletionMeta;
 
 @Getter
 @Builder
-public class RoleDefaultDeletionMeta implements RoleDeletionMeta {
+public class RoleCascadeDeletionMeta implements RoleDeletionMeta {
 
 }

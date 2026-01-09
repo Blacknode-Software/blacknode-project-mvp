@@ -6,12 +6,18 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.application.channel.ChannelService;
+import software.blacknode.backend.application.member.association.MemberAssociationService;
 import software.blacknode.backend.application.organization.OrganizationService;
 import software.blacknode.backend.application.project.ProjectService;
+import software.blacknode.backend.application.role.RoleService;
 import software.blacknode.backend.application.task.TaskService;
 import software.blacknode.backend.application.view.ViewService;
 import software.blacknode.backend.domain.channel.meta.delete.impl.ChannelCascadeDeletionMeta;
+import software.blacknode.backend.domain.exception.BlacknodeException;
+import software.blacknode.backend.domain.member.association.MemberAssociation;
+import software.blacknode.backend.domain.member.association.meta.create.impl.MemberFallbackAssociationCreationMeta;
 import software.blacknode.backend.domain.project.meta.delete.impl.ProjectCascadeDeletionMeta;
+import software.blacknode.backend.domain.role.meta.delete.impl.RoleCascadeDeletionMeta;
 import software.blacknode.backend.domain.task.meta.delete.impl.TaskCascadeDeletionMeta;
 import software.blacknode.backend.domain.view.meta.delete.impl.ViewCascadeDeletionMeta;
 
@@ -20,10 +26,12 @@ import software.blacknode.backend.domain.view.meta.delete.impl.ViewCascadeDeleti
 @RequiredArgsConstructor
 public class SharedDeletionService {
 
+	private final MemberAssociationService memberAssociationService;
 	private final OrganizationService organizationService;
 	private final ProjectService projectService;
 	private final ChannelService channelService;
 	private final ViewService viewService;
+	private final RoleService roleService;
 	private final TaskService taskService;
 	
 	/* TO BE IMPLEMENTED LATER
@@ -79,6 +87,48 @@ public class SharedDeletionService {
 	public void deleteViewCascade(HUID organizationId, HUID viewId) {
 		var meta = ViewCascadeDeletionMeta.builder().build();
 		
-		taskService.delete(organizationId, viewId, meta);
+		viewService.delete(organizationId, viewId, meta);
 	}
+	
+	public void deleteRoleCascade(HUID organizationId, HUID roleId) {
+		var meta = RoleCascadeDeletionMeta.builder().build();
+	
+		var role = roleService.getOrThrow(organizationId, roleId);
+		
+		var scope = role.getScope();
+		
+		var defaultRoleId = roleService.getAll(organizationId)
+				.stream()
+				.filter(r -> r.getScope() == scope)
+				.filter(r -> r.getMeta().isByDefaultAssigned())
+				.findFirst()
+				.orElseThrow(() -> new BlacknodeException("No default role found for scope " + scope))
+				.getId();
+		
+		var associations = memberAssociationService.getMemberAssociationsByRole(organizationId, roleId);
+		
+		for(var association : associations) {
+			assignFallbackRoleToMember(organizationId, association, defaultRoleId);
+		}
+		
+		roleService.delete(organizationId, roleId, meta);
+	}
+	
+	private void assignFallbackRoleToMember(HUID organizationId, MemberAssociation association, HUID defaultRoleId) {
+		var memberId = association.getMemberId();
+		var associationId = association.getId();
+		var entityId = association.getEntityId();
+		
+		memberAssociationService.delete(organizationId, associationId);
+		
+		var fallbackMeta = MemberFallbackAssociationCreationMeta.builder()
+				.memberId(memberId)
+				.roleId(defaultRoleId)
+				.entityId(entityId)
+				.build();
+		
+		memberAssociationService.create(organizationId, fallbackMeta);
+	}
+	
+	
 }
