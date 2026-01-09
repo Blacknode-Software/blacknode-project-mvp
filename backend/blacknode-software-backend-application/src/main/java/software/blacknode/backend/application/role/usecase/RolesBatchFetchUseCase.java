@@ -3,6 +3,7 @@ package software.blacknode.backend.application.role.usecase;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -28,6 +29,7 @@ public class RolesBatchFetchUseCase implements ResultExecutionUseCase<RolesBatch
 	private final SessionContextHolder sessionContextHolder;
 	
 	@Override
+	@Transactional
 	public Result execute(RolesBatchFetchCommand command) {
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();

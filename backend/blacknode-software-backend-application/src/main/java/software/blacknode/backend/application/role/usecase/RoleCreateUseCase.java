@@ -1,6 +1,7 @@
 package software.blacknode.backend.application.role.usecase;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -27,6 +28,7 @@ public class RoleCreateUseCase implements ResultExecutionUseCase<RoleCreateComma
 	private final SessionContextHolder sessionContextHolder;
 	
 	@Override
+	@Transactional
 	public Result execute(RoleCreateCommand command) {
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
@@ -34,10 +36,22 @@ public class RoleCreateUseCase implements ResultExecutionUseCase<RoleCreateComma
 		organizationAccessControl.ensureMemberHasOrganizationAccess(organizationId, 
 				memberId, AccessLevel.MANAGE);
 		
+		var name = command.getName();
+		var description = command.getDescription();
+		var color = command.getColor();
+		
+		var inheritedRoleId = command.getInheritedRoleId();
+		var inheritedRole = roleService.getOrThrow(organizationId, inheritedRoleId);
+		
+		var scope = inheritedRole.getScope();
+		var superPrivileged = inheritedRole.getMeta().isSuperPrivileged();
+		
 		var meta = RoleCustomCreationMeta.builder()
-				.name(command.getName())
-				.description(command.getDescription())
-				.color(command.getColor())
+				.name(name)
+				.description(description)
+				.color(color)
+				.scope(scope)
+				.superPrivileged(superPrivileged)
 				.build();
 		
 		var role = roleService.create(organizationId, meta);

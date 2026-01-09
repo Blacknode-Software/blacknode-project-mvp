@@ -1,6 +1,7 @@
 package software.blacknode.backend.application.role.usecase;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import software.blacknode.backend.application.access.impl.OrganizationAccessControl;
@@ -25,6 +26,7 @@ public class RoleDeleteUseCase implements ExecutionUseCase<RoleDeleteCommand> {
 	private final SessionContextHolder sessionContextHolder;
 	
 	@Override
+	@Transactional
 	public void execute(RoleDeleteCommand command) {
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();

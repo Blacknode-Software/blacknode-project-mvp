@@ -1,6 +1,7 @@
 package software.blacknode.backend.application.role.usecase;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -26,6 +27,7 @@ public class RoleFetchUseCase implements ResultExecutionUseCase<RoleFetchCommand
 	private final SessionContextHolder sessionContextHolder;
 	
 	@Override
+	@Transactional
 	public Result execute(RoleFetchCommand command) {
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();

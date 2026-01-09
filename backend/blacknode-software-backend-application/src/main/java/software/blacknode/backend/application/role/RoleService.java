@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
 import software.blacknode.backend.domain.entity.modifier.impl.delete.meta.DeletionMeta;
+import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.role.Role;
 import software.blacknode.backend.domain.role.meta.delete.impl.RoleDefaultDeletionMeta;
@@ -27,6 +28,22 @@ public class RoleService {
 		var role = new Role(organizationId);
 		
 		role.create(meta);
+		
+		repository.save(organizationId, role);
+		
+		return role;
+	}
+	
+	
+	public Role modify(HUID organizationId, HUID roleId, ModificationMeta meta) {
+		return modify(organizationId, roleId, List.of(meta));
+	}
+	public Role modify(HUID organizationId, HUID roleId, List<ModificationMeta> metas) {
+		var role = getOrThrow(organizationId, roleId);
+		
+		for(var meta : metas) {
+			role.modify(meta);
+		}
 		
 		repository.save(organizationId, role);
 		

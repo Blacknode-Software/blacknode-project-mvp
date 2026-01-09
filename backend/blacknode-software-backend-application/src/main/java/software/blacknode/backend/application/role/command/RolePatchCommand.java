@@ -1,21 +1,22 @@
 package software.blacknode.backend.application.role.command;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.experimental.SuperBuilder;
 import me.hinsinger.hinz.common.huid.HUID;
-import software.blacknode.backend.application.command.ExecutionCommand;
+import software.blacknode.backend.application.command.impl.PatchExecutionCommand;
 
 @Getter
-@Builder
-public class RoleCreateCommand implements ExecutionCommand {
+@SuperBuilder
+public class RolePatchCommand extends PatchExecutionCommand {
 
 	private final String name;
 	
 	private final String description;
 	
 	private final String color;
-	
+
 	@NonNull
-	private final HUID inheritedRoleId;
+	private final HUID id;
+	
 }

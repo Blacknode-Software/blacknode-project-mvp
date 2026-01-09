@@ -15,6 +15,8 @@ public class RoleCustomCreationMeta implements RoleCreationMeta {
 	private String description;
 	private String color;
 	
+	private boolean superPrivileged;
+	
 	private Role.Scope scope;
 	
 	public Optional<String> getName() {
@@ -27,6 +29,10 @@ public class RoleCustomCreationMeta implements RoleCreationMeta {
 	
 	public Optional<String> getColor() {
 		return Optional.ofNullable(color);
+	}
+	
+	public Optional<Boolean> isSuperPrivileged() {
+		return Optional.of(superPrivileged);
 	}
 	
 }
