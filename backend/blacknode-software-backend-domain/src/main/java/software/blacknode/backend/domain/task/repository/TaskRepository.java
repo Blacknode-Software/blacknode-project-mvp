@@ -15,6 +15,6 @@ public interface TaskRepository {
 	
 	List<Task> findByIds(HUID organizationId, Set<HUID> ids);
 
-	void save(HUID organizationId,Task task);
+	void save(HUID organizationId, Task task);
 	
 }
