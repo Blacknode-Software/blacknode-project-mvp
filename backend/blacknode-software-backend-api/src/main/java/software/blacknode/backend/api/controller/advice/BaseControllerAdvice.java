@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import io.jsonwebtoken.JwtException;
 import software.blacknode.backend.api.controller.response.impl.ErrorResponse;
 import software.blacknode.backend.domain.auth.exception.AuthenticationException;
 import software.blacknode.backend.domain.exception.BlacknodeException;
@@ -16,6 +17,11 @@ public class BaseControllerAdvice {
 
 	@ExceptionHandler(AuthenticationException.class)
 	public ResponseEntity<ErrorResponse> handleAuthenticationException(Exception ex) {
+		return ErrorResponse.with(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+	}
+	
+	@ExceptionHandler(JwtException.class)
+	public ResponseEntity<ErrorResponse> handleJwtException(Exception ex) {
 		return ErrorResponse.with(ex.getMessage(), HttpStatus.UNAUTHORIZED);
 	}
 	
@@ -29,9 +35,17 @@ public class BaseControllerAdvice {
 		return ErrorResponse.with(ex.getMessage(), HttpStatus.OK);
 	}
 	
-//	@ExceptionHandler(Exception.class)
-//    public ResponseEntity<ErrorResponse> handleGeneric(Exception ex) {
-//        return ErrorResponse.with(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
+	
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseEntity<ErrorResponse> handleIllegalArgumentException(Exception ex) {
+		return ErrorResponse.with(ex.getMessage(), HttpStatus.BAD_REQUEST);
+	}
+	
+	@ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleGeneric(Exception ex) {
+        ex.printStackTrace();
+        
+		return ErrorResponse.with(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 	
 }

@@ -2,7 +2,6 @@ package software.blacknode.backend.application.project.usecase;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,19 +10,18 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
-import software.blacknode.backend.application.access.AccessControlService;
+import software.blacknode.backend.application.access.impl.ProjectAccessControl;
 import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.project.ProjectService;
 import software.blacknode.backend.application.project.command.ProjectsInOrganizationCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
-import software.blacknode.backend.domain.session.context.SessionContext;
 import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
 
 @Service
 @RequiredArgsConstructor
 public class ProjectsInOrganizationUseCase implements ResultExecutionUseCase<ProjectsInOrganizationCommand, ProjectsInOrganizationUseCase.Result> {
 	
-	private final AccessControlService accessControlService;
+	private final ProjectAccessControl projectAccessControl;
 	private final ProjectService projectService;
 	
 	private final SessionContextHolder sessionContextHolder;
@@ -37,7 +35,7 @@ public class ProjectsInOrganizationUseCase implements ResultExecutionUseCase<Pro
 		var projects = projectService.getAll(organizationId);
 		
 		var projectIds = projects.stream()
-				.filter(project -> accessControlService.hasAccessToProject(memberId, project, AccessLevel.READ))
+				.filter(project -> projectAccessControl.hasAccessToProject(memberId, project, AccessLevel.READ))
 				.map(project -> project.getId())
 				.toList();
 		

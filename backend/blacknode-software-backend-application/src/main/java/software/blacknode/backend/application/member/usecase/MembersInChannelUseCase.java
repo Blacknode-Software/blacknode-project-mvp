@@ -11,7 +11,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import me.hinsinger.hinz.common.huid.HUID;
-import software.blacknode.backend.application.access.AccessControlService;
+import software.blacknode.backend.application.access.impl.ChannelAccessControl;
 import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.channel.ChannelService;
 import software.blacknode.backend.application.member.MemberService;
@@ -23,7 +23,7 @@ import software.blacknode.backend.domain.session.context.holder.SessionContextHo
 @RequiredArgsConstructor
 public class MembersInChannelUseCase implements ResultExecutionUseCase<MembersInChannelCommand, MembersInChannelUseCase.Result> {
 
-	private final AccessControlService accessControlService;
+	private final ChannelAccessControl channelAccessControl;
 	
 	private final MemberService memberService;
 	
@@ -40,11 +40,11 @@ public class MembersInChannelUseCase implements ResultExecutionUseCase<MembersIn
 		var channelId = command.getChannelId();
 		var channel = channelService.getOrThrow(organizationId, channelId);
 		
-		accessControlService.ensureMemberHasChannelAccess(memberId, channel, AccessLevel.READ);
+		channelAccessControl.ensureMemberHasChannelAccess(memberId, channel, AccessLevel.READ);
 		
 		var members = memberService.getAll(organizationId)
 				.stream()
-				.filter(m -> accessControlService.hasAccessToChannel(
+				.filter(m -> channelAccessControl.hasAccessToChannel(
 						m, channel, AccessLevel.READ))
 				.map(member -> member.getId())
 				.toList();

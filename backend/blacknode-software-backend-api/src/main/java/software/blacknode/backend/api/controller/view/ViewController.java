@@ -48,7 +48,7 @@ public class ViewController {
 	@OrganizationHeader
 	@Operation(summary = "Fetch a view by ID")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "View fetched") })
-	@GetMapping("/views/{id}	")
+	@GetMapping("/views/{id}")
 	public ResponseEntity<ViewResponse> getView(@PathVariable UUID id) {
 		var command = ViewFetchCommand.builder()
 				.viewId(HUID.fromUUID(id))

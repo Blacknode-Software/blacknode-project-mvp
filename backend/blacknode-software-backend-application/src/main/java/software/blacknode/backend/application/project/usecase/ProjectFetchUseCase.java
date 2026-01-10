@@ -1,6 +1,5 @@
 package software.blacknode.backend.application.project.usecase;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -8,13 +7,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import software.blacknode.backend.application.access.AccessControlService;
+import software.blacknode.backend.application.access.impl.ProjectAccessControl;
 import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.project.ProjectService;
 import software.blacknode.backend.application.project.command.ProjectFetchCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
 import software.blacknode.backend.domain.project.Project;
-import software.blacknode.backend.domain.session.context.SessionContext;
 import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
 
 @Service
@@ -22,7 +20,7 @@ import software.blacknode.backend.domain.session.context.holder.SessionContextHo
 public class ProjectFetchUseCase implements ResultExecutionUseCase<ProjectFetchCommand, ProjectFetchUseCase.Result> {
 	
 	private final ProjectService projectService;
-	private final AccessControlService accessControlService;
+	private final ProjectAccessControl projectAccessControl;
 	
 	private final SessionContextHolder sessionContextHolder;
 	
@@ -36,7 +34,7 @@ public class ProjectFetchUseCase implements ResultExecutionUseCase<ProjectFetchC
 		
 		var project = projectService.getOrThrow(organizationId, projectId);
 
-		accessControlService.ensureMemberHasProjectAccess(memberId, project, AccessLevel.READ);
+		projectAccessControl.ensureMemberHasProjectAccess(memberId, project, AccessLevel.READ);
 		
 		return Result.builder().project(project).build();
 	}

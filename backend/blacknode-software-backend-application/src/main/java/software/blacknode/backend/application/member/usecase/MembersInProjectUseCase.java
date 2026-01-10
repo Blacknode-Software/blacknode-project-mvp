@@ -11,7 +11,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import me.hinsinger.hinz.common.huid.HUID;
-import software.blacknode.backend.application.access.AccessControlService;
+import software.blacknode.backend.application.access.impl.ProjectAccessControl;
 import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.member.MemberService;
 import software.blacknode.backend.application.member.command.MembersInProjectCommand;
@@ -23,7 +23,7 @@ import software.blacknode.backend.domain.session.context.holder.SessionContextHo
 @RequiredArgsConstructor
 public class MembersInProjectUseCase implements ResultExecutionUseCase<MembersInProjectCommand, MembersInProjectUseCase.Result> {
 
-	private final AccessControlService accessControlService;
+	private final ProjectAccessControl projectAccessControl;
 	
 	private final MemberService memberService;
 	
@@ -40,11 +40,11 @@ public class MembersInProjectUseCase implements ResultExecutionUseCase<MembersIn
 		var projectId = command.getProjectId();
 		var project = projectService.getOrThrow(organizationId, projectId);
 		
-		accessControlService.ensureMemberHasProjectAccess(memberId, project, AccessLevel.READ);
+		projectAccessControl.ensureMemberHasProjectAccess(memberId, project, AccessLevel.READ);
 		
 		var members = memberService.getAll(organizationId)
 				.stream()
-				.filter(m -> accessControlService.hasAccessToProject(
+				.filter(m -> projectAccessControl.hasAccessToProject(
 						m, project, AccessLevel.READ))
 				.map(member -> member.getId())
 				.toList();

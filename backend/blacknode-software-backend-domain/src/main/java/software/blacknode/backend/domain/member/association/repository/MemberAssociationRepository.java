@@ -2,6 +2,7 @@ package software.blacknode.backend.domain.member.association.repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.domain.member.association.MemberAssociation;
@@ -12,7 +13,9 @@ public interface MemberAssociationRepository {
 	
 	public List<MemberAssociation> findAll(HUID organizationId);
 	
-	public List<MemberAssociation> findByMemberIds(HUID organizationId, List<HUID> memberIds);
+	public List<MemberAssociation> findByRoleId(HUID organizationId, HUID roleId);
+	
+	public List<MemberAssociation> findByMemberIds(HUID organizationId, Set<HUID> memberIds);
 	
 	public List<MemberAssociation> findByMemberId(HUID organizationId, HUID memberId);
 	

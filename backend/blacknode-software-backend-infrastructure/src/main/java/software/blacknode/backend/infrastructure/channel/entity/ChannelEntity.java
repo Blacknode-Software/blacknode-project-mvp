@@ -31,7 +31,7 @@ public class ChannelEntity extends OrganizationRelatedEntity {
 	private UUID projectId;
 	
 	@NotNull
-	@Column(name = "meta")
+	@Column(name = "meta", length = 65_535)
 	@VersionedEntity
 	private ChannelEntityMeta meta;
 	

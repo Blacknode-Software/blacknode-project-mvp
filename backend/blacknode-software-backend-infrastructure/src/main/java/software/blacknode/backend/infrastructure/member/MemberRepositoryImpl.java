@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.domain.member.Member;
@@ -23,7 +24,7 @@ public class MemberRepositoryImpl implements MemberRepository, OrganizationRelat
 	private final MemberEntityMapper mapper;
 	
 	@Override
-	public Optional<Member> findById(HUID organizationId, HUID id) {
+	public Optional<Member> findById(@NonNull HUID organizationId, @NonNull HUID id) {
 		var member = repository.queryByIdAndOrganizationIdAndState(
 				organizationId.toUUID(),
 				id.toUUID(),
@@ -34,7 +35,7 @@ public class MemberRepositoryImpl implements MemberRepository, OrganizationRelat
 	}
 
 	@Override
-	public List<Member> findByIds(HUID organizationId, List<HUID> ids) {
+	public List<Member> findByIds(@NonNull HUID organizationId, @NonNull List<HUID> ids) {
 		var uuidIds = ids.stream().map(HUID::toUUID).toList();
 		
 		var members = repository.queryAllByIdInOrganizationIdAndState(
@@ -47,7 +48,7 @@ public class MemberRepositoryImpl implements MemberRepository, OrganizationRelat
 	}
 
 	@Override
-	public List<Member> findByOrganizationId(HUID organizationId) {
+	public List<Member> findByOrganizationId(@NonNull HUID organizationId) {
 		var members = repository.queryByOrganizationIdAndState(
 				organizationId.toUUID(),
 				EntityState.ACTIVE
@@ -57,7 +58,7 @@ public class MemberRepositoryImpl implements MemberRepository, OrganizationRelat
 	}
 
 	@Override
-	public Optional<Member> findByAccountId(HUID organizationId, HUID accountId) {
+	public Optional<Member> findByAccountId(@NonNull HUID organizationId, @NonNull HUID accountId) {
 		var member = repository.queryByOrganizationIdAndAccountIdAndState(
 				organizationId.toUUID(),
 				accountId.toUUID(),
@@ -68,7 +69,7 @@ public class MemberRepositoryImpl implements MemberRepository, OrganizationRelat
 	}
 
 	@Override
-	public void save(HUID organizationId, Member member) {
+	public void save(@NonNull HUID organizationId, @NonNull Member member) {
 		member.ensureBelongsToOrganization(organizationId);
 		
 		var memberEntity = toInfrastructureEntity(member);

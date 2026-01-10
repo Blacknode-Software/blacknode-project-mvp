@@ -2,9 +2,11 @@ package software.blacknode.backend.infrastructure.project;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.stereotype.Repository;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.domain.project.Project;
@@ -23,7 +25,7 @@ public class ProjectRepositoryImpl implements ProjectRepository, OrganizationRel
 	private final ProjectEntityMapper mapper;
 	
 	@Override
-	public Optional<Project> findById(HUID organizationId, HUID id) {
+	public Optional<Project> findById(@NonNull HUID organizationId, @NonNull HUID id) {
 		var project = repository.queryByIdAndOrganizationIdAndState(id.toUUID(), 
 				organizationId.toUUID(), EntityState.ACTIVE);
 		
@@ -31,7 +33,7 @@ public class ProjectRepositoryImpl implements ProjectRepository, OrganizationRel
 	}
 
 	@Override
-	public List<Project> findAllById(HUID organizationId, List<HUID> ids) {
+	public List<Project> findAllById(@NonNull HUID organizationId, @NonNull Set<HUID> ids) {
 		var uuidIds = ids.stream().map(HUID::toUUID).toList();
 		
 		var projects = repository.queryAllByIdInAndOrganizationIdAndState(uuidIds, 
@@ -43,7 +45,7 @@ public class ProjectRepositoryImpl implements ProjectRepository, OrganizationRel
 	}
 
 	@Override
-	public List<Project> findProjectInOrganization(HUID organizationId) {
+	public List<Project> findProjectInOrganization(@NonNull HUID organizationId) {
 		var projects = repository.queryAllByOrganizationIdAndState(organizationId.toUUID(), 
 				EntityState.ACTIVE);
 		
@@ -53,7 +55,7 @@ public class ProjectRepositoryImpl implements ProjectRepository, OrganizationRel
 	}
 
 	@Override
-	public void save(HUID organizationId, Project project) {
+	public void save(@NonNull HUID organizationId, @NonNull Project project) {
 		project.ensureBelongsToOrganization(organizationId);
 		
 		var projectEntity = toInfrastructureEntity(project);

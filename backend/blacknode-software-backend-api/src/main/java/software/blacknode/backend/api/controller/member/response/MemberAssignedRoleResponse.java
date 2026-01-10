@@ -1,9 +1,10 @@
 package software.blacknode.backend.api.controller.member.response;
 
+import java.util.UUID;
+
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
-import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.api.controller.response.impl.BaseResponse;
 
 @Getter
@@ -11,6 +12,6 @@ import software.blacknode.backend.api.controller.response.impl.BaseResponse;
 public class MemberAssignedRoleResponse extends BaseResponse<MemberAssignedRoleResponse> {
 
 	@NonNull
-	private final HUID roleId;
+	private final UUID roleId;
 	
 }

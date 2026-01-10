@@ -96,7 +96,20 @@ public class MemberAssociation implements DomainEntity, Creatable, Deletable {
 		ORGANIZATION,
 		PROJECT,
 		CHANNEL,
-		UNKNOWN
+		UNKNOWN,
+		;
+		
+		public boolean isOrganizationScope() {
+			return this == ORGANIZATION;
+		}
+		
+		public boolean isProjectScope() {
+			return this == PROJECT;
+		}
+		
+		public boolean isChannelScope() {
+			return this == CHANNEL;
+		}
 	}
 	
 }

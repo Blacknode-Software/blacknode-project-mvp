@@ -27,7 +27,7 @@ import software.blacknode.backend.infrastructure.view.entity.meta.ViewEntityMeta
 public class ViewEntity extends OrganizationRelatedEntity {
 
 	@NotNull
-	@Column(name = "meta")
+	@Column(name = "meta", length = 65_535)
 	@VersionedEntity
 	private ViewEntityMeta meta;
 	

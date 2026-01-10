@@ -2,6 +2,7 @@ package software.blacknode.backend.domain.project.repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.stereotype.Repository;
 
@@ -13,7 +14,7 @@ public interface ProjectRepository {
 
 	Optional<Project> findById(HUID organizationId, HUID id);
 
-	List<Project> findAllById(HUID organizationId, List<HUID> ids);
+	List<Project> findAllById(HUID organizationId, Set<HUID> ids);
 	
 	List<Project> findProjectInOrganization(HUID organizationId);
 	

@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
-import software.blacknode.backend.application.access.AccessControlService;
+import software.blacknode.backend.application.access.impl.ProjectAccessControl;
 import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.channel.ChannelService;
 import software.blacknode.backend.application.channel.command.ChannelCreateCommand;
@@ -20,7 +20,7 @@ import software.blacknode.backend.domain.session.context.holder.SessionContextHo
 @RequiredArgsConstructor
 public class ChannelCreateUseCase implements ResultExecutionUseCase<ChannelCreateCommand, ChannelCreateUseCase.Result> {
 
-	private final AccessControlService accessControlService;
+	private final ProjectAccessControl projectAccessControl;
 	
 	private final ChannelService channelService;
 	
@@ -35,7 +35,7 @@ public class ChannelCreateUseCase implements ResultExecutionUseCase<ChannelCreat
 		var projectId = command.getProjectId();
 		
 		
-		accessControlService.ensureMemberHasProjectAccess(organizationId, memberId, 
+		projectAccessControl.ensureMemberHasProjectAccess(organizationId, memberId, 
 				projectId, AccessLevel.MANAGE);
 
 		var name = command.getName();

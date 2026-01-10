@@ -1,16 +1,14 @@
 package software.blacknode.backend.application.project.usecase;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import software.blacknode.backend.application.access.AccessControlService;
+import software.blacknode.backend.application.access.impl.OrganizationAccessControl;
 import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.project.command.ProjectDeleteCommand;
 import software.blacknode.backend.application.shared.SharedDeletionService;
 import software.blacknode.backend.application.usecase.ExecutionUseCase;
-import software.blacknode.backend.domain.session.context.SessionContext;
 import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
 
 @Service
@@ -18,7 +16,7 @@ import software.blacknode.backend.domain.session.context.holder.SessionContextHo
 public class ProjectDeleteUseCase implements ExecutionUseCase<ProjectDeleteCommand> {
 
 	private final SharedDeletionService sharedDeletionService;
-	private final AccessControlService accessControlService;
+	private final OrganizationAccessControl organizationAccessControl;
 	
 	private final SessionContextHolder sessionContextHolder;
 	
@@ -30,7 +28,8 @@ public class ProjectDeleteUseCase implements ExecutionUseCase<ProjectDeleteComma
 		
 		var projectId = command.getProjectId();
 		
-		accessControlService.ensureMemberHasOrganizationAccess(memberId, organizationId, AccessLevel.MANAGE);
+		organizationAccessControl.ensureMemberHasOrganizationAccess(organizationId, 
+				memberId, AccessLevel.MANAGE);
 		
 		sharedDeletionService.deleteProjectCascade(organizationId, projectId);
 	}

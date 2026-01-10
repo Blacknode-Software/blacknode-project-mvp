@@ -16,9 +16,11 @@ import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.api.controller.BaseController;
 import software.blacknode.backend.api.controller.annotation.BearerAuth;
+import software.blacknode.backend.api.controller.member.mapper.MemberAddMapper;
 import software.blacknode.backend.api.controller.member.mapper.MemberAssignRoleMapper;
 import software.blacknode.backend.api.controller.member.mapper.MemberAssignedRoleMapper;
 import software.blacknode.backend.api.controller.member.mapper.MemberListMapper;
+import software.blacknode.backend.api.controller.member.request.MemberAddRequest;
 import software.blacknode.backend.api.controller.member.request.MemberAssignRoleRequest;
 import software.blacknode.backend.api.controller.member.response.MemberAssignedRoleResponse;
 import software.blacknode.backend.api.controller.member.response.MemberListResponse;
@@ -30,6 +32,8 @@ import software.blacknode.backend.application.member.command.MemberAssignedProje
 import software.blacknode.backend.application.member.command.MembersInChannelCommand;
 import software.blacknode.backend.application.member.command.MembersInOrganizationCommand;
 import software.blacknode.backend.application.member.command.MembersInProjectCommand;
+import software.blacknode.backend.application.member.usecase.MemberAddToChannelUseCase;
+import software.blacknode.backend.application.member.usecase.MemberAddToProjectUseCase;
 import software.blacknode.backend.application.member.usecase.MemberAssignChannelRoleUseCase;
 import software.blacknode.backend.application.member.usecase.MemberAssignOrganizationRoleUseCase;
 import software.blacknode.backend.application.member.usecase.MemberAssignProjectRoleUseCase;
@@ -63,6 +67,11 @@ public class MemberController extends BaseController {
 	private final MemberAssignedOrganizationRoleFetchUseCase memberAssignedOrganizationRoleUseCase;
 	private final MemberAssignedProjectRoleFetchUseCase memberAssignedProjectRoleUseCase;
 	private final MemberAssignedChannelRoleFetchUseCase memberAssignedChannelRoleUseCase;
+	
+	private final MemberAddMapper memberAddMapper;
+	
+	private final MemberAddToProjectUseCase memberAddToProjectUseCase;
+	private final MemberAddToChannelUseCase memberAddToChannelUseCase;
 	
 	@OrganizationHeader
 	@Operation(summary = "Assign Organization Role to Member", description = "Assigns a specific role to a member within the organization.")
@@ -197,5 +206,28 @@ public class MemberController extends BaseController {
 		return response.toOkResponse("Members retrieved successfully.");
 	}
 	
+	@OrganizationHeader
+	@Operation(summary = "Add Member to Project", description = "Adds a new member to the specified project.")
+	@ApiResponse(responseCode = "200", description = "Member added to project successfully.")
+	@PostMapping("/projects/{projectId}/members/add")
+	public ResponseEntity<SuccessResponse> addMemberToProject(@RequestBody MemberAddRequest request, @PathVariable UUID projectId) {
+		var command = memberAddMapper.toProjectCommand(request, HUID.fromUUID(projectId));
+		
+		memberAddToProjectUseCase.execute(command);
+		
+		return SuccessResponse.with("Member added to project successfully.");
+	}
+	
+	@OrganizationHeader
+	@Operation(summary = "Add Member to Channel", description = "Adds a new member to the specified channel.")
+	@ApiResponse(responseCode = "200", description = "Member added to channel successfully.")
+	@PostMapping("/channels/{channelId}/members/add")
+	public ResponseEntity<SuccessResponse> addMemberToChannel(@RequestBody MemberAddRequest request, @PathVariable UUID channelId) {
+		var command = memberAddMapper.toChannelCommand(request, HUID.fromUUID(channelId));
+		
+		memberAddToChannelUseCase.execute(command);
+		
+		return SuccessResponse.with("Member added to channel successfully.");
+	}
 	
 }

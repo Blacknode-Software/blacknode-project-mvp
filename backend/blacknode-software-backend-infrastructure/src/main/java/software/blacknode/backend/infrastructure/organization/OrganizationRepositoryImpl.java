@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.domain.organization.Organization;
@@ -23,7 +24,7 @@ public class OrganizationRepositoryImpl implements OrganizationRepository, Infra
 	private final OrganizationEntityRepository organizationEntityRepository;
 	
 	@Override
-	public Optional<Organization> findById(HUID id) {
+	public Optional<Organization> findById(@NonNull HUID id) {
 		var organization = organizationEntityRepository.queryByIdAndState(id.toUUID(), EntityState.ACTIVE);
 		
 		return organization.map(this::toDomainEntity);
@@ -39,7 +40,7 @@ public class OrganizationRepositoryImpl implements OrganizationRepository, Infra
 	}
 
 	@Override
-	public void save(Organization organization) {
+	public void save(@NonNull Organization organization) {
 		var organizationEntity = toInfrastructureEntity(organization);
 		
 		organizationEntityRepository.save(organizationEntity);

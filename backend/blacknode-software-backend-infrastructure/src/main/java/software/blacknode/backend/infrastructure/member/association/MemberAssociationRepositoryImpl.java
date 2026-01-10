@@ -2,6 +2,7 @@ package software.blacknode.backend.infrastructure.member.association;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.stereotype.Repository;
 
@@ -47,7 +48,7 @@ public class MemberAssociationRepositoryImpl implements MemberAssociationReposit
 	}
 
 	@Override
-	public List<MemberAssociation> findByMemberIds(HUID organizationId, List<HUID> memberIds) {
+	public List<MemberAssociation> findByMemberIds(HUID organizationId, Set<HUID> memberIds) {
 		var uuidMemberIds = memberIds.stream()
 				.map(HUID::toUUID)
 				.toList();
@@ -103,6 +104,19 @@ public class MemberAssociationRepositoryImpl implements MemberAssociationReposit
 		
 		return association.map(this::toDomainEntity);
 	}
+	
+	@Override
+	public List<MemberAssociation> findByRoleId(HUID organizationId, HUID roleId) {
+		var associations = repository.queryByOrganizationIdRoleIdAndState(
+				organizationId.toUUID(),
+				roleId.toUUID(),
+				EntityState.ACTIVE
+			);
+		
+		return associations.stream()
+				.map(this::toDomainEntity)
+				.toList();
+	}
 
 	@Override
 	public void save(HUID organizationId, MemberAssociation association) {
@@ -122,6 +136,4 @@ public class MemberAssociationRepositoryImpl implements MemberAssociationReposit
 	public MemberAssociation toDomainEntity(MemberAssociationEntity infrastructureEntity) {
 		return mapper.toDomainEntity(infrastructureEntity);
 	}
-
-
 }

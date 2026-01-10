@@ -3,6 +3,7 @@ package software.blacknode.backend.infrastructure.task.entity.meta;
 import java.time.Instant;
 
 import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,8 +21,8 @@ import software.blacknode.backend.infrastructure.entity.version.annotation.Versi
 @ToString
 public class TaskEntityMeta implements VersionableEntity {
 
-	@NonNull private String title;
-	@NonNull private String description;
+	@NotNull private String title;
+	@NotNull private String description;
 	
 	@Nullable private Integer priority;
 	

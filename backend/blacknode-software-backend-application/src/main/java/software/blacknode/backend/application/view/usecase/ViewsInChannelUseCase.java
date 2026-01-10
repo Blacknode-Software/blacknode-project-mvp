@@ -2,7 +2,6 @@ package software.blacknode.backend.application.view.usecase;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -12,19 +11,18 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import me.hinsinger.hinz.common.huid.HUID;
-import software.blacknode.backend.application.access.AccessControlService;
+import software.blacknode.backend.application.access.impl.ChannelAccessControl;
 import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
 import software.blacknode.backend.application.view.ViewService;
 import software.blacknode.backend.application.view.command.ViewsInChannelCommand;
-import software.blacknode.backend.domain.session.context.SessionContext;
 import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
 
 @Service
 @RequiredArgsConstructor
 public class ViewsInChannelUseCase implements ResultExecutionUseCase<ViewsInChannelCommand, ViewsInChannelUseCase.Result> {
 	
-	private final AccessControlService accessControlService;
+	private final ChannelAccessControl channelAccessControl;
 	
 	private final ViewService viewService;
 	
@@ -38,7 +36,7 @@ public class ViewsInChannelUseCase implements ResultExecutionUseCase<ViewsInChan
 		
 		var channelId = command.getChannelId();
 		
-		accessControlService.ensureMemberHasChannelAccess(organizationId, memberId, 
+		channelAccessControl.ensureMemberHasChannelAccess(organizationId, memberId, 
 				channelId, AccessLevel.READ);
 		
 		var views = viewService.getAllInChannel(organizationId, channelId);

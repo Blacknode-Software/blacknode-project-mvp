@@ -29,7 +29,7 @@ import software.blacknode.backend.infrastructure.task.entity.meta.TaskEntityMeta
 public class TaskEntity extends OrganizationRelatedEntity {
 
 	@NotNull
-	@Column(name = "meta")
+	@Column(name = "meta", length = 65_535)
 	@VersionedEntity
 	private TaskEntityMeta meta;
 	

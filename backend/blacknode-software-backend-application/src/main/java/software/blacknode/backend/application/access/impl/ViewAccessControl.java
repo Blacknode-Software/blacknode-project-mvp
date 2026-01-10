@@ -19,7 +19,7 @@ public class ViewAccessControl {
 	private final MemberService memberService;
 	private final ViewService viewService;
 	
-	public void ensureMemberHasViewAccess(HUID memberId, HUID viewId, HUID organizationId, AccessLevel level) {
+	public void ensureMemberHasViewAccess(HUID organizationId, HUID memberId, HUID viewId, AccessLevel level) {
 		var member = memberService.getOrThrow(organizationId, memberId);
 		var view = viewService.getOrThrow(organizationId, viewId);
 		
@@ -49,7 +49,7 @@ public class ViewAccessControl {
 		}
 	}
 	
-	public AccessLevel getRoleAccessInView(HUID memberId, HUID viewId, HUID organizationId) {
+	public AccessLevel getRoleAccessInView(HUID organizationId, HUID memberId, HUID viewId) {
 		var view = viewService.getOrThrow(organizationId, viewId);
 		var member = memberService.getOrThrow(organizationId, memberId);
 		
@@ -80,7 +80,7 @@ public class ViewAccessControl {
 		return access;
 	}
 	
-	public boolean hasAccessToView(HUID memberId, HUID viewId, HUID organizationId, AccessLevel level) {
+	public boolean hasAccessToView(HUID organizationId, HUID memberId, HUID viewId, AccessLevel level) {
 		var view = viewService.getOrThrow(organizationId, viewId);
 		var member = memberService.getOrThrow(organizationId, memberId);
 		
