@@ -2,7 +2,6 @@ package software.blacknode.backend.application.task.usecase;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,12 +10,11 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-import software.blacknode.backend.application.access.AccessControlService;
+import software.blacknode.backend.application.access.impl.TaskAccessControl;
 import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.task.TaskService;
 import software.blacknode.backend.application.task.command.TasksBatchFetchCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
-import software.blacknode.backend.domain.session.context.SessionContext;
 import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
 import software.blacknode.backend.domain.task.Task;
 
@@ -24,7 +22,7 @@ import software.blacknode.backend.domain.task.Task;
 @RequiredArgsConstructor
 public class TasksBatchFetchUseCase implements ResultExecutionUseCase<TasksBatchFetchCommand, TasksBatchFetchUseCase.Result> {
 
-	private final AccessControlService accessControlService;
+	private final TaskAccessControl taskAccessControl;
 	private final TaskService taskService;
 	
 	private final SessionContextHolder sessionContextHolder;
@@ -39,7 +37,7 @@ public class TasksBatchFetchUseCase implements ResultExecutionUseCase<TasksBatch
 		
 		var tasks = taskService.getByIds(organizationId, taskIds)
 				.stream()
-				.filter(task -> accessControlService.hasAccessToTask(memberId, task, 
+				.filter(task -> taskAccessControl.hasAccessToTask(memberId, task, 
 						AccessLevel.READ))
 				.toList();
 		
@@ -54,7 +52,7 @@ public class TasksBatchFetchUseCase implements ResultExecutionUseCase<TasksBatch
 	public static class Result {
 		
 		@NonNull
-		private List<Task> tasks;
+		private final List<Task> tasks;
 		
 	}
 

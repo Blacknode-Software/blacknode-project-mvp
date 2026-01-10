@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import software.blacknode.backend.application.access.AccessControlService;
+import software.blacknode.backend.application.access.impl.OrganizationAccessControl;
 import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.organization.OrganizationService;
 import software.blacknode.backend.application.organization.command.OrganizationFetchCommand;
@@ -20,7 +20,7 @@ public class OrganizationFetchUseCase implements ResultExecutionUseCase<Organiza
 
 	private final OrganizationService organizationService;
 	
-	private final AccessControlService accessControlService;
+	private final OrganizationAccessControl organizationAccessControl;
 	
 	private final SessionContextHolder sessionContextHolder;
 	
@@ -30,7 +30,8 @@ public class OrganizationFetchUseCase implements ResultExecutionUseCase<Organiza
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		
-		accessControlService.ensureMemberHasOrganizationAccess(memberId, organizationId, AccessLevel.READ);
+		organizationAccessControl.ensureMemberHasOrganizationAccess(organizationId, 
+				memberId, AccessLevel.READ);
 		
 		var organization = organizationService.getOrThrow(organizationId);
 		

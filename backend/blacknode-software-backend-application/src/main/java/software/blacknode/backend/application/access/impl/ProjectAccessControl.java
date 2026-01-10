@@ -23,7 +23,7 @@ public class ProjectAccessControl {
 	private final ProjectService projectService;
 	private final MemberService memberService;
 	
-	public void ensureMemberHasProjectAccess(HUID memberId, HUID projectId, HUID organizationId, AccessLevel level) {
+	public void ensureMemberHasProjectAccess(HUID organizationId, HUID memberId, HUID projectId, AccessLevel level) {
 		var member = memberService.getOrThrow(organizationId, memberId);
 		var project = projectService.getOrThrow(organizationId, projectId);
 		
@@ -53,7 +53,7 @@ public class ProjectAccessControl {
 		}
 	}
 	
-	public AccessLevel getRoleAccessInProject(HUID memberId, HUID projectId, HUID organizationId) {
+	public AccessLevel getRoleAccessInProject(HUID organizationId, HUID memberId, HUID projectId) {
 		var project = projectService.getOrThrow(organizationId, projectId);
 		var member = memberService.getOrThrow(organizationId, memberId);
 		
@@ -77,20 +77,24 @@ public class ProjectAccessControl {
 		
 		project.ensureBelongsToOrganization(organizationId);
 		
-		var access = organizationAccessControl.getRoleAccessInOrganization(member, organizationId);
+		var access = organizationAccessControl.getRoleAccessInOrganization(organizationId, member);
 		
 		if(access.atLeast(AccessLevel.MANAGE)) {
 			return access;
 		}
 		
-		var association = memberAssociationService.getMemberProjectAssociationOrThrow(organizationId, member.getId(), project.getId());
+		var association = memberAssociationService.getMemberProjectAssociation(organizationId, member.getId(), project.getId());
 		
-		var roleId = association.getRoleId();
+		if(association.isEmpty()) {
+			return AccessLevel.NONE;
+		}
+		
+		var roleId = association.get().getRoleId();
 		
 		return organizationAccessControl.getRoleAccess(organizationId, roleId);
 	}
 	
-	public boolean hasAccessToProject(HUID memberId, HUID projectId, HUID organizationId, AccessLevel level) {
+	public boolean hasAccessToProject(HUID organizationId, HUID memberId, HUID projectId, AccessLevel level) {
 		var project = projectService.getOrThrow(organizationId, projectId);
 		var member = memberService.getOrThrow(organizationId, memberId);
 		

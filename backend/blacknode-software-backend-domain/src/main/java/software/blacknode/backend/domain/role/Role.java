@@ -2,8 +2,11 @@ package software.blacknode.backend.domain.role;
 
 import java.util.Optional;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.ToString;
 import me.hinsinger.hinz.common.huid.HUID;
 import me.hinsinger.hinz.common.time.timestamp.Timestamp;
 import software.blacknode.backend.domain.entity.DomainEntity;
@@ -19,6 +22,9 @@ import software.blacknode.backend.domain.role.meta.create.RoleCreationMeta;
 import software.blacknode.backend.domain.role.meta.delete.RoleDeletionMeta;
 import software.blacknode.backend.domain.role.meta.modify.RoleModificationMeta;
 
+@Builder
+@AllArgsConstructor(onConstructor = @__({ @Deprecated }))
+@ToString
 public class Role implements DomainEntity, Creatable, Modifiable, Deletable {
 
 	@Getter private HUID id;

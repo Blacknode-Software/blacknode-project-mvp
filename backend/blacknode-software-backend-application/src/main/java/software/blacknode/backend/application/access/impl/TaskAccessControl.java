@@ -19,7 +19,7 @@ public class TaskAccessControl {
 	private final MemberService memberService;
 	private final TaskService taskService;
 	
-	public void ensureMemberHasTaskAccess(HUID memberId, HUID taskId, HUID organizationId, AccessLevel level) {
+	public void ensureMemberHasTaskAccess(HUID organizationId, HUID memberId, HUID taskId, AccessLevel level) {
 		var member = memberService.getOrThrow(organizationId, memberId);
 		var task = taskService.getOrThrow(organizationId, taskId);
 		
@@ -49,7 +49,7 @@ public class TaskAccessControl {
 		}
 	}
 	
-	public AccessLevel getRoleAccessInTask(HUID memberId, HUID taskId, HUID organizationId) {
+	public AccessLevel getRoleAccessInTask(HUID organizationId, HUID memberId, HUID taskId) {
 		var task = taskService.getOrThrow(organizationId, taskId);
 		var member = memberService.getOrThrow(organizationId, memberId);
 		
@@ -85,7 +85,7 @@ public class TaskAccessControl {
 		return access;
 	}
 	
-	public boolean hasAccessToTask(HUID memberId, HUID taskId, HUID organizationId, AccessLevel level) {
+	public boolean hasAccessToTask(HUID organizationId, HUID memberId, HUID taskId, AccessLevel level) {
 		var task = taskService.getOrThrow(organizationId, taskId);
 		var member = memberService.getOrThrow(organizationId, memberId);
 		

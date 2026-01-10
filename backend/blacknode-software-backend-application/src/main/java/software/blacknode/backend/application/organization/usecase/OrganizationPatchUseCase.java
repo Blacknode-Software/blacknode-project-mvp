@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import software.blacknode.backend.application.access.AccessControlService;
+import software.blacknode.backend.application.access.impl.OrganizationAccessControl;
 import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.organization.OrganizationService;
 import software.blacknode.backend.application.organization.command.OrganizationPatchCommand;
@@ -21,8 +21,9 @@ import software.blacknode.backend.domain.session.context.holder.SessionContextHo
 @RequiredArgsConstructor
 public class OrganizationPatchUseCase implements ResultExecutionUseCase<OrganizationPatchCommand, OrganizationPatchUseCase.Result> {
 
+	private final OrganizationAccessControl organizationAccessControl;
+
 	private final OrganizationService organizationService;
-	private final AccessControlService accessControlService;
 	
 	private final SessionContextHolder sessionContextHolder;
 	
@@ -32,7 +33,8 @@ public class OrganizationPatchUseCase implements ResultExecutionUseCase<Organiza
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		
-		accessControlService.ensureMemberHasOrganizationAccess(memberId, organizationId, AccessLevel.MANAGE);
+		organizationAccessControl.ensureMemberHasOrganizationAccess(organizationId, 
+				memberId, AccessLevel.MANAGE);
 		
 		var operations = command.getOperations();
 		

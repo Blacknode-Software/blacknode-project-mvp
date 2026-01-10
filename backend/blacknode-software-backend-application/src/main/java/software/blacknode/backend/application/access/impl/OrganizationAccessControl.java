@@ -26,27 +26,27 @@ public class OrganizationAccessControl {
 	private final MemberService memberService;
 	private final RoleService roleService;
 	
-	public void ensureMemberHasOrganizationAccess(HUID memberId, HUID organizationId, AccessLevel level) {
+	public void ensureMemberHasOrganizationAccess(HUID organizationId, HUID memberId, AccessLevel level) {
 		var member = memberService.getOrThrow(organizationId, memberId);
 		var organization = organizationService.getOrThrow(organizationId);
 		
-		ensureMemberHasOrganizationAccess(member, organization, level);
+		ensureMemberHasOrganizationAccess(organization, member, level);
 	}
 	
-	public void ensureMemberHasOrganizationAccess(Member member, HUID organizationId, AccessLevel level) {
+	public void ensureMemberHasOrganizationAccess(HUID organizationId, Member member, AccessLevel level) {
 		var organization = organizationService.getOrThrow(organizationId);
 		
-		ensureMemberHasOrganizationAccess(member, organization, level);
+		ensureMemberHasOrganizationAccess(organization, member, level);
 	}
 	
-	public void ensureMemberHasOrganizationAccess(HUID memberId, Organization organization, AccessLevel level) {
+	public void ensureMemberHasOrganizationAccess(Organization organization, HUID memberId, AccessLevel level) {
 		var member = memberService.getOrThrow(organization.getId(), memberId);
 		
-		ensureMemberHasOrganizationAccess(member, organization, level);
+		ensureMemberHasOrganizationAccess(organization, member, level);
 	}
 	
-	public void ensureMemberHasOrganizationAccess(Member member, Organization organization, AccessLevel level) {
-		var hasAccess = hasAccessToOrganization(member, organization, level);
+	public void ensureMemberHasOrganizationAccess(Organization organization, Member member, AccessLevel level) {
+		var hasAccess = hasAccessToOrganization(organization, member, level);
 		
 		var organizationId = organization.getId();
 		var memberId = member.getId();
@@ -56,26 +56,26 @@ public class OrganizationAccessControl {
 		}
 	}
 	
-	public AccessLevel getRoleAccessInOrganization(HUID memberId, HUID organizationId) {
+	public AccessLevel getRoleAccessInOrganization(HUID organizationId, HUID memberId) {
 		var organization = organizationService.getOrThrow(organizationId);
 		var member = memberService.getOrThrow(organizationId, memberId);
 		
-		return getRoleAccessInOrganization(member, organization);
+		return getRoleAccessInOrganization(organization, member);
 	}
 	
-	public AccessLevel getRoleAccessInOrganization(Member member, HUID organizationId) {
+	public AccessLevel getRoleAccessInOrganization(HUID organizationId, Member member) {
 		var organization = organizationService.getOrThrow(organizationId);
 		
-		return getRoleAccessInOrganization(member, organization);
+		return getRoleAccessInOrganization(organization, member);
 	}
 	
-	public AccessLevel getRoleAccessInOrganization(HUID memberId, Organization organization) {
+	public AccessLevel getRoleAccessInOrganization(Organization organization, HUID memberId) {
 		var member = memberService.getOrThrow(organization.getId(), memberId);
 		
-		return getRoleAccessInOrganization(member, organization);
+		return getRoleAccessInOrganization(organization, member);
 	}
 	
-	public AccessLevel getRoleAccessInOrganization(Member member, Organization organization) {
+	public AccessLevel getRoleAccessInOrganization(Organization organization, Member member) {
 		var organizationId = organization.getId();
 		
 		member.ensureBelongsToOrganization(organizationId);
@@ -112,27 +112,27 @@ public class OrganizationAccessControl {
 		throw new BlacknodeException("Unsupported role scope for access level determination: " + scope);
 	}
 	
-	public boolean hasAccessToOrganization(HUID memberId, HUID organizationId, AccessLevel level) {
+	public boolean hasAccessToOrganization(HUID organizationId, HUID memberId, AccessLevel level) {
 		var organization = organizationService.getOrThrow(organizationId);
 		var member = memberService.getOrThrow(organizationId, memberId);
 		
-		return hasAccessToOrganization(member, organization, level);
+		return hasAccessToOrganization(organization, member, level);
 	}
 	
-	public boolean hasAccessToOrganization(Member member, HUID organizationId, AccessLevel level) {
+	public boolean hasAccessToOrganization(HUID organizationId, Member member, AccessLevel level) {
 		var organization = organizationService.getOrThrow(organizationId);
 		
-		return hasAccessToOrganization(member, organization, level);
+		return hasAccessToOrganization(organization, member, level);
 	}
 	
-	public boolean hasAccessToOrganization(HUID memberId, Organization organization, AccessLevel level) {
+	public boolean hasAccessToOrganization(Organization organization, HUID memberId, AccessLevel level) {
 		var member = memberService.getOrThrow(organization.getId(), memberId);
 		
-		return hasAccessToOrganization(member, organization, level);
+		return hasAccessToOrganization(organization, member, level);
 	}
 	
-	public boolean hasAccessToOrganization(Member member, Organization organization, AccessLevel level) {
-		var access = getRoleAccessInOrganization(member, organization);
+	public boolean hasAccessToOrganization(Organization organization, Member member, AccessLevel level) {
+		var access = getRoleAccessInOrganization(organization, member);
 		
 		return access.atLeast(level);
 	}

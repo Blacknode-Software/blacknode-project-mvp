@@ -2,6 +2,7 @@ package software.blacknode.backend.application.channel;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,6 +76,10 @@ public class ChannelService {
 	}
 	
 	public List<Channel> getByIds(HUID organizationId, List<HUID> channelIds) {
+		return getByIds(organizationId, Set.copyOf(channelIds));
+	}
+	
+	public List<Channel> getByIds(HUID organizationId, Set<HUID> channelIds) {
 		return repository.findByIds(organizationId, channelIds);
 	}
 	

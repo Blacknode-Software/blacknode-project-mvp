@@ -1,6 +1,5 @@
 package software.blacknode.backend.application.channel.usecase;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -8,7 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import software.blacknode.backend.application.access.AccessControlService;
+import software.blacknode.backend.application.access.impl.ChannelAccessControl;
 import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.channel.ChannelService;
 import software.blacknode.backend.application.channel.command.ChannelPatchCommand;
@@ -19,14 +18,13 @@ import software.blacknode.backend.domain.channel.meta.modify.impl.ChannelColorMo
 import software.blacknode.backend.domain.channel.meta.modify.impl.ChannelDescriptionModificationMeta;
 import software.blacknode.backend.domain.channel.meta.modify.impl.ChannelNameModificationMeta;
 import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
-import software.blacknode.backend.domain.session.context.SessionContext;
 import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
 
 @Service
 @RequiredArgsConstructor
 public class ChannelPatchUseCase implements ResultExecutionUseCase<ChannelPatchCommand, ChannelPatchUseCase.Result> {
 
-	private final AccessControlService accessControlService;
+	private final ChannelAccessControl channelAccessControl;
 
 	private final ChannelService channelService;
 
@@ -40,7 +38,7 @@ public class ChannelPatchUseCase implements ResultExecutionUseCase<ChannelPatchC
 		
 		var channelId = command.getId();
 		
-		accessControlService.ensureMemberHasChannelAccess(organizationId, memberId, 
+		channelAccessControl.ensureMemberHasChannelAccess(organizationId, memberId, 
 				channelId, AccessLevel.MANAGE);
 		
 		var operations = command.getOperations();

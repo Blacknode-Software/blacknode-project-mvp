@@ -2,6 +2,7 @@ package software.blacknode.backend.application.view;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -74,6 +75,10 @@ public class ViewService {
 	}
 	
 	public List<View> getByIds(HUID organizationId, List<HUID> viewIds) {
+		return getByIds(organizationId, Set.copyOf(viewIds));
+	}
+	
+	public List<View> getByIds(HUID organizationId, Set<HUID> viewIds) {
 		return repository.findByIds(organizationId, viewIds);
 	}
 	

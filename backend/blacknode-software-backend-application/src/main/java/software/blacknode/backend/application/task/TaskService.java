@@ -2,6 +2,7 @@ package software.blacknode.backend.application.task;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -74,6 +75,10 @@ public class TaskService {
 	}
 	
 	public List<Task> getByIds(HUID organizationId, List<HUID> taskIds) {
+		return getByIds(organizationId, Set.copyOf(taskIds));
+	}
+	
+	public List<Task> getByIds(HUID organizationId, Set<HUID> taskIds) {
 		return repository.findByIds(organizationId, taskIds);
 	}
 	
