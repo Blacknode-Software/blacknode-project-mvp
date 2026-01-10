@@ -9,11 +9,11 @@ import software.blacknode.backend.domain.invite.Invite;
 
 public interface InviteRepository {
 
+	Optional<Invite> findByToken(String token);
+	
 	Optional<Invite> findById(HUID organizationId, HUID id);
 	
 	Optional<Invite> findByEmail(HUID organizationId, String email);
-	
-	Optional<Invite> findByToken(HUID organizationId, String token);
 	
 	List<Invite> findAll(HUID organizationId);
 	

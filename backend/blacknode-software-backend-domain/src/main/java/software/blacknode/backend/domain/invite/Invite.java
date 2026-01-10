@@ -18,6 +18,7 @@ import software.blacknode.backend.domain.entity.modifier.impl.delete.Deletable;
 import software.blacknode.backend.domain.entity.modifier.impl.delete.meta.DeletionMeta;
 import software.blacknode.backend.domain.entity.modifier.impl.modify.Modifiable;
 import software.blacknode.backend.domain.entity.modifier.impl.modify.meta.ModificationMeta;
+import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.invite.meta.InviteMeta;
 import software.blacknode.backend.domain.invite.meta.create.InviteCreationMeta;
 import software.blacknode.backend.domain.invite.meta.delete.InviteDeletionMeta;
@@ -142,4 +143,17 @@ public class Invite implements DomainEntity, Creatable, Modifiable, Deletable {
                      .encodeToString(buffer);
 	}
 	
+	public boolean isExpired() {
+		return meta.getExpiresAt().isPast();
+	}
+	
+	public void ensureBelongsToOrganization(HUID organizationId) {
+		if(!this.organizationId.equals(organizationId)) {
+			throw new BlacknodeException("Invite does not belong to organization: " + organizationId);
+		}
+	}
+
+	public boolean belongsToOrganization(HUID organizationId) {
+		return this.organizationId.equals(organizationId);
+	}
 }
