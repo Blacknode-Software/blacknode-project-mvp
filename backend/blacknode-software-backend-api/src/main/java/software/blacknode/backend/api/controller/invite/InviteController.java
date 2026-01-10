@@ -35,12 +35,14 @@ import software.blacknode.backend.api.controller.response.impl.SuccessResponse;
 import software.blacknode.backend.application.invite.command.InviteDeleteCommand;
 import software.blacknode.backend.application.invite.command.InviteFetchCommand;
 import software.blacknode.backend.application.invite.command.InvitePreClaimFetchCommand;
+import software.blacknode.backend.application.invite.command.InviteRevokeCommand;
 import software.blacknode.backend.application.invite.command.InvitesInOrganizationCommand;
 import software.blacknode.backend.application.invite.usecase.InviteClaimUseCase;
 import software.blacknode.backend.application.invite.usecase.InviteCreateUseCase;
 import software.blacknode.backend.application.invite.usecase.InviteDeleteUseCase;
 import software.blacknode.backend.application.invite.usecase.InviteFetchUseCase;
 import software.blacknode.backend.application.invite.usecase.InvitePreClaimFetchUseCase;
+import software.blacknode.backend.application.invite.usecase.InviteRevokeUseCase;
 import software.blacknode.backend.application.invite.usecase.InvitesBatchFetchUseCase;
 import software.blacknode.backend.application.invite.usecase.InvitesInOrganizationUseCase;
 
@@ -62,6 +64,8 @@ public class InviteController {
 	private final InvitesInOrganizationUseCase invitesInOrganizationUseCase;
 	
 	private final InviteDeleteUseCase inviteDeleteUseCase;
+	
+	private final InviteRevokeUseCase inviteRevokeUseCase;
 	
 	private final InvitePreClaimFetchMapper invitePreClaimFetchMapper;
 	private final InvitePreClaimFetchUseCase invitePreClaimFetchUseCase;
@@ -146,6 +150,22 @@ public class InviteController {
 		
 		return SuccessResponse.with("Invite deleted successfully.");
 	}
+	
+	@BearerAuth
+	@OrganizationHeader
+	@Operation(summary = "Revoke Invite", description = "Revoke an invite by its ID.")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Invite revoked") })
+	@PostMapping("/invites/{id}/revoke")
+	public ResponseEntity<SuccessResponse> revokeInvite(@PathVariable("id") HUID id) {
+		var command = InviteRevokeCommand.builder()
+				.inviteId(id)
+				.build();
+		
+		inviteRevokeUseCase.execute(command);
+		
+		return SuccessResponse.with("Invite revoked successfully.");
+	}
+	
 	
 	@Operation(summary = "Get Invite Info", description = "Fetch pre-claim information about an invite using its token.")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Invite info fetched") })
