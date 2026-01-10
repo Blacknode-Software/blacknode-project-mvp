@@ -13,6 +13,12 @@ public class TaskEndAtTimestampModificationMeta implements TaskModificationMeta 
 
     private final Timestamp endAt;
 
+    @Override
+    public boolean isEndAtTimestampSet() {
+    	return true;
+    }
+    
+    @Override
     public Optional<Timestamp> getEndAtTimestamp() {
         return Optional.ofNullable(endAt);
     }
