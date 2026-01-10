@@ -13,6 +13,11 @@ public class TaskBeginAtTimestampModificationMeta implements TaskModificationMet
 
     private final Timestamp beginAt;
 
+    @Override
+    public boolean isBeginAtTimestampSet() {
+		return true;
+	}
+    
     public Optional<Timestamp> getBeginAtTimestamp() {
         return Optional.ofNullable(beginAt);
     }

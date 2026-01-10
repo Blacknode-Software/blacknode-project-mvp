@@ -102,10 +102,17 @@ public class Task implements DomainEntity, Creatable, Modifiable, Deletable {
 			updated = _meta.getTitle().map(updated::withTitle).orElse(updated);
 		    updated = _meta.getDescription().map(updated::withDescription).orElse(updated);
 		    
-		    updated = updated.withPriority(_meta.getPriority());
+		    if(_meta.isPrioritySet()) {
+		    	updated = updated.withPriority(_meta.getPriority());
+		    }
 		    
-		    updated = updated.withBeginAt(_meta.getBeginAtTimestamp());
-		    updated = updated.withEndAt(_meta.getEndAtTimestamp());
+		    if(_meta.isBeginAtTimestampSet()) {
+		    	updated = updated.withBeginAt(_meta.getBeginAtTimestamp());
+		    }
+		    
+		    if(_meta.isEndAtTimestampSet()) {
+		    	updated = updated.withEndAt(_meta.getEndAtTimestamp());
+		    }
 		    
 		    this.statusId = _meta.getStatusId().or(() -> this.statusId);
 		    

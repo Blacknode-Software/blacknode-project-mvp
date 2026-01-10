@@ -11,6 +11,7 @@ import software.blacknode.backend.domain.task.meta.modify.TaskModificationMeta;
 public class TaskDescriptionModificationMeta implements TaskModificationMeta {
 	private final String description;
 
+	@Override
 	public Optional<String> getDescription() {
 		return Optional.ofNullable(description);
 	}
