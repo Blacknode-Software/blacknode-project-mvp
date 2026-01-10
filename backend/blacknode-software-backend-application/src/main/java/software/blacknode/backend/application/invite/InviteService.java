@@ -73,12 +73,12 @@ public class InviteService {
 				.orElseThrow(() -> new BlacknodeException("Invite not found: " + inviteId));
 	}
 	
-	public Optional<Invite> getByEmail(HUID organizationId, String email) {
-		return repository.findByEmail(organizationId, email);
+	public List<Invite> getAllByEmail(HUID organizationId, String email) {
+		return repository.findAllByEmail(organizationId, email);
 	}
 	
-	public Optional<Invite> getByToken(HUID organizationId, String token) {
-		return repository.findByToken(organizationId, token);
+	public Optional<Invite> getByToken(String token) {
+		return repository.findByToken(token);
 	}
 	
 	public List<Invite> getByIds(HUID organizationId, List<HUID> inviteIds) {

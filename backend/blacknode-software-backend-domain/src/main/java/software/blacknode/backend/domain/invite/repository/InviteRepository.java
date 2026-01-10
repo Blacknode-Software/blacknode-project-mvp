@@ -13,7 +13,7 @@ public interface InviteRepository {
 	
 	Optional<Invite> findById(HUID organizationId, HUID id);
 	
-	Optional<Invite> findByEmail(HUID organizationId, String email);
+	List<Invite> findAllByEmail(HUID organizationId, String email);
 	
 	List<Invite> findAll(HUID organizationId);
 	

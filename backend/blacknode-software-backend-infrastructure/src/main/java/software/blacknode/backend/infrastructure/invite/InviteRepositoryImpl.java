@@ -43,14 +43,16 @@ public class InviteRepositoryImpl implements InviteRepository, OrganizationRelat
 	}
 
 	@Override
-	public Optional<Invite> findByEmail(HUID organizationId, String email) {
+	public List<Invite> findAllByEmail(HUID organizationId, String email) {
 		var invites = repository.findAllByOrganizationIdAndState(
 				organizationId.toUUID(), EntityState.ACTIVE);
 	
 		return invites.stream()
 				.map(this::toDomainEntity)
-				.filter(invite -> invite.getMeta().getEmail().equalsIgnoreCase(email))
-				.findFirst();
+				.filter(invite -> invite.getMeta()
+						.getEmail()
+						.equalsIgnoreCase(email))
+				.toList();
 	}
 
 	@Override

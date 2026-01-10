@@ -143,6 +143,14 @@ public class Invite implements DomainEntity, Creatable, Modifiable, Deletable {
                      .encodeToString(buffer);
 	}
 	
+	public boolean isRevoked() {
+		return meta.isRevoked();
+	}
+	
+	public boolean isClaimed() {
+		return meta.isClaimed();
+	}
+	
 	public boolean isExpired() {
 		return meta.getExpiresAt().isPast();
 	}
