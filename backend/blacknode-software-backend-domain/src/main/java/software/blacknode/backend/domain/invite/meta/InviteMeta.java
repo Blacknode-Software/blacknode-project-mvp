@@ -17,12 +17,10 @@ public class InviteMeta {
 	
 	private Timestamp expiresAt;
 	
-	private boolean claimed;
-	
 	private boolean revoked;
 	
 	private Optional<Timestamp> claimedAt;
 	
-	private Optional<HUID> claimedByMemberId;
+	private Optional<HUID> claimedBy;
 	
 }

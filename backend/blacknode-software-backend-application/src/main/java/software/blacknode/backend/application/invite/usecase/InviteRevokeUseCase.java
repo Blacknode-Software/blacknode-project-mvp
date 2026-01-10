@@ -2,22 +2,19 @@ package software.blacknode.backend.application.invite.usecase;
 
 import org.springframework.stereotype.Service;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 import software.blacknode.backend.application.access.impl.OrganizationAccessControl;
 import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.invite.InviteService;
-import software.blacknode.backend.application.invite.command.InviteFetchCommand;
-import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
-import software.blacknode.backend.domain.invite.Invite;
+import software.blacknode.backend.application.invite.command.InviteRevokeCommand;
+import software.blacknode.backend.application.usecase.ExecutionUseCase;
+import software.blacknode.backend.domain.exception.BlacknodeException;
+import software.blacknode.backend.domain.invite.meta.modify.impl.InviteRevokeModificationMeta;
 import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
 
 @Service
 @RequiredArgsConstructor
-public class InviteFetchUseCase implements ResultExecutionUseCase<InviteFetchCommand, InviteFetchUseCase.Result> {
+public class InviteRevokeUseCase implements ExecutionUseCase<InviteRevokeCommand> {
 
 	private final OrganizationAccessControl organizationAccessControl;
 	
@@ -26,9 +23,9 @@ public class InviteFetchUseCase implements ResultExecutionUseCase<InviteFetchCom
 	private final SessionContextHolder sessionContextHolder;
 	
 	@Override
-	public Result execute(InviteFetchCommand command) {
-		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
+	public void execute(InviteRevokeCommand command) {
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
+		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		
 		organizationAccessControl.ensureMemberHasOrganizationAccess(
 				organizationId, memberId, AccessLevel.MANAGE);
@@ -36,19 +33,15 @@ public class InviteFetchUseCase implements ResultExecutionUseCase<InviteFetchCom
 		var inviteId = command.getInviteId();
 		var invite = inviteService.getOrThrow(organizationId, inviteId);
 		
-		return Result.builder()
-				.invite(invite)
+		if(invite.isRevoked()) {
+			throw new BlacknodeException("Invite already revoked: " + inviteId);
+		}
+		
+		var meta = InviteRevokeModificationMeta.builder()
+				.revoked(true)
 				.build();
-	}
-
-	@Builder
-	@Getter
-	@ToString
-	public static class Result {
 		
-		@NonNull
-		private final Invite invite;
-		
+		inviteService.modify(organizationId, inviteId, meta);	
 	}
 
 }

@@ -14,13 +14,11 @@ public interface InviteModificationMeta extends ModificationMeta {
 	
 	public default Optional<Boolean> isRevoked() { return Optional.empty(); };
 	
-	public default Optional<Boolean> isClaimed() { return Optional.empty(); };
-	
 	public default boolean isClaimedAtSet() { return false; };
 	
 	public default Optional<Timestamp> getClaimedAt() { return Optional.empty(); };
 
-	public default boolean isClaimedByMemberIdSet() { return false; };
+	public default boolean isClaimedBySet() { return false; };
 	
-	public default Optional<HUID> getClaimedByMemberId() { return Optional.empty(); };
+	public default Optional<HUID> getClaimedBy() { return Optional.empty(); };
 }

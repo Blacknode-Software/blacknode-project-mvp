@@ -7,7 +7,7 @@ import software.blacknode.backend.application.command.ExecutionCommand;
 
 @Getter
 @Builder
-public class InviteFetchCommand implements ExecutionCommand{
+public class InviteRevokeCommand implements ExecutionCommand{
 
 	private HUID inviteId;
 	

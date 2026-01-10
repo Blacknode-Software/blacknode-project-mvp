@@ -2,26 +2,23 @@ package software.blacknode.backend.application.invite.usecase;
 
 import org.springframework.stereotype.Service;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.application.account.AccountService;
 import software.blacknode.backend.application.invite.InviteService;
 import software.blacknode.backend.application.invite.command.InviteClaimCommand;
 import software.blacknode.backend.application.member.MemberService;
 import software.blacknode.backend.application.member.association.MemberAssociationService;
 import software.blacknode.backend.application.role.RoleService;
-import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
+import software.blacknode.backend.application.usecase.ExecutionUseCase;
 import software.blacknode.backend.domain.account.meta.create.impl.AccountInviteCreationMeta;
 import software.blacknode.backend.domain.exception.BlacknodeException;
+import software.blacknode.backend.domain.invite.meta.modify.impl.InviteClaimModificationMeta;
 import software.blacknode.backend.domain.member.association.meta.create.impl.MemberOrganizationAssociationCreationMeta;
 import software.blacknode.backend.domain.member.meta.create.impl.MemberInviteCreationMeta;
 
 @Service
 @RequiredArgsConstructor
-public class InviteClaimUseCase implements ResultExecutionUseCase<InviteClaimCommand, InviteClaimUseCase.Result> {
+public class InviteClaimUseCase implements ExecutionUseCase<InviteClaimCommand> {
 
 	private final AccountService accountService;
 	
@@ -34,7 +31,7 @@ public class InviteClaimUseCase implements ResultExecutionUseCase<InviteClaimCom
 	private final MemberAssociationService memberAssociationService;
 	
 	@Override
-	public Result execute(InviteClaimCommand command) {
+	public void execute(InviteClaimCommand command) {
 		var token = command.getToken();
 		
 		var invite = inviteService.getByToken(token).orElseThrow(() -> 
@@ -92,22 +89,10 @@ public class InviteClaimUseCase implements ResultExecutionUseCase<InviteClaimCom
 		
 		var association = memberAssociationService.create(organizationId, associationMeta);
 		
-		return Result.builder()
-				.accountId(account.getId())
-				.email(email)
+		var inviteMeta = InviteClaimModificationMeta.builder()
+				.memberId(member.getId())
 				.build();
-	}
-
-	@Getter
-	@Builder
-	public static class Result {
-
-		@NonNull 
-		private final HUID accountId;
 		
-		@NonNull 
-		private final String email;
-		
+		inviteService.modify(organizationId, invite.getId(), inviteMeta);
 	}
-
 }

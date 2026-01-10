@@ -71,9 +71,8 @@ public class Invite implements DomainEntity, Creatable, Modifiable, Deletable {
 			
 			var revoked = false;
 			
-			var claimed = false;
+			var claimedBy = Optional.<HUID>empty();
 			var claimedAt = Optional.<Timestamp>empty();
-			var claimedByMemberId = Optional.<HUID>empty();
 			
 			this.token = token;
 			
@@ -81,9 +80,8 @@ public class Invite implements DomainEntity, Creatable, Modifiable, Deletable {
 								  .email(email)
 								  .expiresAt(expiresAt)
 								  .revoked(revoked)
-								  .claimed(claimed)
+								  .claimedBy(claimedBy)
 								  .claimedAt(claimedAt)
-								  .claimedByMemberId(claimedByMemberId)
 								  .build();
 			
 		} else throwUnsupportedCreationMeta(meta);
@@ -104,15 +102,14 @@ public class Invite implements DomainEntity, Creatable, Modifiable, Deletable {
 			
 			updated = _meta.getEmail().map(updated::withEmail).orElse(updated);
 			updated = _meta.getExpiresAt().map(updated::withExpiresAt).orElse(updated);
-			updated = _meta.isClaimed().map(updated::withClaimed).orElse(updated);
 			updated = _meta.isRevoked().map(updated::withRevoked).orElse(updated);
 			
 			if(_meta.isClaimedAtSet()) {
 				updated = updated.withClaimedAt(_meta.getClaimedAt());
 			}
 			
-			if(_meta.isClaimedByMemberIdSet()) {
-				updated = updated.withClaimedByMemberId(_meta.getClaimedByMemberId());
+			if(_meta.isClaimedBySet()) {
+				updated = updated.withClaimedBy(_meta.getClaimedBy());
 			}
 			
 			this.meta = updated;
@@ -153,7 +150,7 @@ public class Invite implements DomainEntity, Creatable, Modifiable, Deletable {
 	}
 	
 	public boolean isClaimed() {
-		return meta.isClaimed();
+		return meta.getClaimedBy().isPresent();
 	}
 	
 	public boolean isExpired() {

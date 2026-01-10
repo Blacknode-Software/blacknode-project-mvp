@@ -14,29 +14,26 @@ import software.blacknode.backend.domain.invite.meta.modify.InviteModificationMe
 public class InviteClaimModificationMeta implements InviteModificationMeta{
 
 	@NonNull
-	private final HUID claimedByMemberId;
+	private final HUID memberId;
 	
-	public boolean isClaimedByMemberIdSet() {
+	@Override
+	public boolean isClaimedBySet() {
 		return true;
 	}
 	
+	@Override
 	public boolean isClaimedAtSet() {
 		return true;
 	}
 	
 	@Override
-	public Optional<HUID> getClaimedByMemberId() {
-		return Optional.of(claimedByMemberId);
+	public Optional<HUID> getClaimedBy() {
+		return Optional.of(memberId);
 	}
 	
 	@Override
 	public Optional<Timestamp> getClaimedAt() {
 		return Optional.of(Timestamp.now());
-	}
-	
-	@Override
-	public Optional<Boolean> isClaimed() {
-		return Optional.of(true);
 	}
 	
 }
