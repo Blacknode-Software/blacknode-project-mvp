@@ -46,8 +46,8 @@ public class AuthenticateWithPasswordUseCase implements ResultExecutionUseCase<A
 		if(!result) throw new AuthenticationException("Account couldn't be authenticated!");
 		
 		return Result.builder()
-				.email(email)
 				.accountId(accountId)
+				.email(email)
 				.build();
 	}
 

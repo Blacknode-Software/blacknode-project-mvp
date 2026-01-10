@@ -13,6 +13,7 @@ public class TaskStatusIdModificationMeta implements TaskModificationMeta {
 
     private final HUID statusId;
 
+    @Override
     public Optional<HUID> getStatusId() {
         return Optional.ofNullable(statusId);
     }

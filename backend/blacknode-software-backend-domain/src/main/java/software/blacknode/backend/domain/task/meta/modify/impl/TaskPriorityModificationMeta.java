@@ -13,6 +13,11 @@ public class TaskPriorityModificationMeta implements TaskModificationMeta {
     private final Integer priority;
 
     @Override
+    public boolean isPrioritySet() {
+		return true;
+	}
+    
+    @Override
     public Optional<Integer> getPriority() {
         return Optional.ofNullable(priority);
     }

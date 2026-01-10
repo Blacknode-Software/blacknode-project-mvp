@@ -66,7 +66,7 @@ public class Account implements DomainEntity, Creatable, Modifiable, Deletable {
 			var firstName = _meta.getFirstName().orElse("Unknown");
 			var lastName = _meta.getLastName().orElse("User");
 			
-			this.email = email;
+			this.email = email.toLowerCase();
 			
 			this.meta = AccountMeta.builder()
 					.firstName(firstName)
