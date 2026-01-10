@@ -102,8 +102,11 @@ public class InviteClaimUseCase implements ResultExecutionUseCase<InviteClaimCom
 	@Builder
 	public static class Result {
 
-		@NonNull private final HUID accountId;
-		@NonNull private final String email;
+		@NonNull 
+		private final HUID accountId;
+		
+		@NonNull 
+		private final String email;
 		
 	}
 

@@ -1,8 +1,10 @@
 package software.blacknode.backend.domain.invite;
 
+import java.net.IDN;
 import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,12 +25,15 @@ import software.blacknode.backend.domain.invite.meta.InviteMeta;
 import software.blacknode.backend.domain.invite.meta.create.InviteCreationMeta;
 import software.blacknode.backend.domain.invite.meta.delete.InviteDeletionMeta;
 import software.blacknode.backend.domain.invite.meta.modify.InviteModificationMeta;
+import software.blacknode.backend.domain.validate.exception.BlacknodeValidationException;
 
 @Builder
 @AllArgsConstructor(onConstructor = @__({ @Deprecated }))
 @ToString
 public class Invite implements DomainEntity, Creatable, Modifiable, Deletable {
 
+	private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}$", Pattern.CASE_INSENSITIVE);
+	
 	private static final SecureRandom RNG = new SecureRandom();
 	private static final int BYTES = 32;
 	
@@ -163,5 +168,45 @@ public class Invite implements DomainEntity, Creatable, Modifiable, Deletable {
 
 	public boolean belongsToOrganization(HUID organizationId) {
 		return this.organizationId.equals(organizationId);
+	}
+	
+	private void validateEmail(String email) {
+		 if (email == null) {
+	        throw new BlacknodeValidationException("Invalid email address: null");
+	    }
+
+	    String trimmed = email.trim();
+	    if (trimmed.isEmpty()) {
+	        throw new BlacknodeValidationException("Invalid email address: empty");
+	    }
+
+	    // Overall length limit per RFCs (practical)
+	    if (trimmed.length() > 254) {
+	        throw new BlacknodeValidationException("Invalid email address (too long): " + email);
+	    }
+
+	    int atIndex = trimmed.lastIndexOf('@');
+	    if (atIndex <= 0 || atIndex == trimmed.length() - 1) {
+	        throw new BlacknodeValidationException("Invalid email address: " + email);
+	    }
+
+	    String local = trimmed.substring(0, atIndex);
+	    String domain = trimmed.substring(atIndex + 1);
+
+	    // Convert internationalized domain names to ASCII form (punycode)
+	    try {
+	        domain = IDN.toASCII(domain);
+	    } catch (Exception ex) {
+	        throw new BlacknodeValidationException("Invalid email domain: " + email);
+	    }
+
+	    String normalized = local + "@" + domain;
+	    if (normalized.length() > 254) {
+	        throw new BlacknodeValidationException("Invalid email address (too long after normalization): " + email);
+	    }
+
+	    if (!EMAIL_PATTERN.matcher(normalized).matches()) {
+	        throw new BlacknodeValidationException("Invalid email address: " + email);
+	    }
 	}
 }
