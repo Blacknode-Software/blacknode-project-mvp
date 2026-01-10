@@ -1,5 +1,6 @@
 package software.blacknode.backend.api.controller.invite.mapper.impl;
 
+import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import software.blacknode.backend.api.controller.invite.mapper.InviteMapper;
@@ -10,6 +11,7 @@ import software.blacknode.backend.api.controller.mapper.impl.ResponseMapper;
 import software.blacknode.backend.application.invite.command.InvitesBatchFetchCommand;
 import software.blacknode.backend.application.invite.usecase.InvitesBatchFetchUseCase;
 
+@Mapper(componentModel = "spring")
 public interface InvitesBatchFetchMapper extends InviteMapper, RequestMapper<InvitesBatchFetchRequest, InvitesBatchFetchCommand>, ResponseMapper<InvitesBatchFetchUseCase.Result, InvitesBatchFetchResponse> {
 
 	@Override

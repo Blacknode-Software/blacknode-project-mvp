@@ -1,6 +1,7 @@
 package software.blacknode.backend.application.invite.usecase;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import software.blacknode.backend.application.access.impl.OrganizationAccessControl;
@@ -23,6 +24,7 @@ public class InviteRevokeUseCase implements ExecutionUseCase<InviteRevokeCommand
 	private final SessionContextHolder sessionContextHolder;
 	
 	@Override
+	@Transactional
 	public void execute(InviteRevokeCommand command) {
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();

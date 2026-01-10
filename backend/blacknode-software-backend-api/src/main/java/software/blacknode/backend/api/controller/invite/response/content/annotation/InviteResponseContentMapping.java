@@ -16,12 +16,15 @@ import org.mapstruct.Mappings;
 	@Mapping(target = "token", source = "invite.token"),
 	
 	@Mapping(target = "email", source = "invite.meta.email"),
+	
+	@Mapping(target = "expired", source = "invite.expired"),
 	@Mapping(target = "expiresAt", source = "invite.meta.expiresAt"),
 	
 	@Mapping(target = "revoked", source = "invite.meta.revoked"),
 	
-	@Mapping(target = "claimedAt", source = "invite.claimedAt"),
-	@Mapping(target = "claimedBy", source = "invite.claimedBy"),
+	@Mapping(target = "claimed", source = "invite.claimed"),
+	@Mapping(target = "claimedAt", source = "invite.meta.claimedAt"),
+	@Mapping(target = "claimedBy", source = "invite.meta.claimedBy"),
 })
 public @interface InviteResponseContentMapping {
 

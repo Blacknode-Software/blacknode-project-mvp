@@ -1,5 +1,7 @@
 package software.blacknode.backend.api.controller.invite;
 
+import java.util.UUID;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -78,9 +80,9 @@ public class InviteController {
 	@Operation(summary = "Fetch Invite", description = "Fetch an invite by its ID.")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Invite fetched") })
 	@GetMapping("/invites/{id}")
-	public ResponseEntity<InviteResponse> getInvite(@PathVariable("id") HUID id) {
+	public ResponseEntity<InviteResponse> getInvite(@PathVariable("id") UUID id) {
 		var command = InviteFetchCommand.builder()
-				.inviteId(id)
+				.inviteId(HUID.fromUUID(id))
 				.build();
 		
 		var result = inviteFetchUseCase.execute(command);
@@ -94,7 +96,7 @@ public class InviteController {
 	@OrganizationHeader
 	@Operation(summary = "Create Invite", description = "Create a new invite.")
 	@ApiResponses(value = { @ApiResponse(responseCode = "201", description = "Invite created") })
-	@PostMapping("/invites")
+	@PostMapping("/organization/invites")
 	public ResponseEntity<InviteCreateResponse> createInvite(@RequestBody InviteCreateRequest request) {
 		var command = inviteCreateMapper.toCommand(request);
 		
@@ -141,9 +143,9 @@ public class InviteController {
 	@Operation(summary = "Delete Invite", description = "Delete an invite by its ID.")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Invite deleted") })
 	@DeleteMapping("/invites/{id}")
-	public ResponseEntity<SuccessResponse> deleteInvite(@PathVariable("id") HUID id) {
+	public ResponseEntity<SuccessResponse> deleteInvite(@PathVariable("id") UUID id) {
 		var command = InviteDeleteCommand.builder()
-				.inviteId(id)
+				.inviteId(HUID.fromUUID(id))
 				.build();
 		
 		inviteDeleteUseCase.execute(command);
@@ -156,9 +158,9 @@ public class InviteController {
 	@Operation(summary = "Revoke Invite", description = "Revoke an invite by its ID.")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Invite revoked") })
 	@PostMapping("/invites/{id}/revoke")
-	public ResponseEntity<SuccessResponse> revokeInvite(@PathVariable("id") HUID id) {
+	public ResponseEntity<SuccessResponse> revokeInvite(@PathVariable("id") UUID id) {
 		var command = InviteRevokeCommand.builder()
-				.inviteId(id)
+				.inviteId(HUID.fromUUID(id))
 				.build();
 		
 		inviteRevokeUseCase.execute(command);

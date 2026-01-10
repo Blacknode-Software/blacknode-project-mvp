@@ -28,11 +28,8 @@ public class InviteEntityMeta implements VersionableEntity {
 	@NotNull private Timestamp expiresAt;
 	
 	private boolean revoked;
-
-	private boolean claimed;
 	
-	@NonNull private Instant claimedAt;
-	
-	@Nullable private HUID claimedByMemberId;
+	@Nullable private Instant claimedAt;
+	@Nullable private HUID claimedBy;
 	
 }

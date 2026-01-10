@@ -1,6 +1,7 @@
 package software.blacknode.backend.application.invite.usecase;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import software.blacknode.backend.application.access.impl.OrganizationAccessControl;
@@ -21,6 +22,7 @@ public class InviteDeleteUseCase implements ExecutionUseCase<InviteDeleteCommand
 	private final SessionContextHolder sessionContextHolder;
 	
 	@Override
+	@Transactional
 	public void execute(InviteDeleteCommand command) {
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();

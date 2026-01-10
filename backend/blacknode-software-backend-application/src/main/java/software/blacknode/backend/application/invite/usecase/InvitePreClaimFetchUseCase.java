@@ -1,6 +1,7 @@
 package software.blacknode.backend.application.invite.usecase;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -19,6 +20,7 @@ public class InvitePreClaimFetchUseCase implements ResultExecutionUseCase<Invite
 	private final InviteService inviteService;
 	
 	@Override
+	@Transactional
 	public Result execute(InvitePreClaimFetchCommand command) {
 		var token = command.getToken();
 		

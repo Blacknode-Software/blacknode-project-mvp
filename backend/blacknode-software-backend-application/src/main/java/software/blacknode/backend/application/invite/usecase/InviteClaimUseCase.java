@@ -1,9 +1,11 @@
 package software.blacknode.backend.application.invite.usecase;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import software.blacknode.backend.application.account.AccountService;
+import software.blacknode.backend.application.auth.AuthService;
 import software.blacknode.backend.application.invite.InviteService;
 import software.blacknode.backend.application.invite.command.InviteClaimCommand;
 import software.blacknode.backend.application.member.MemberService;
@@ -11,6 +13,7 @@ import software.blacknode.backend.application.member.association.MemberAssociati
 import software.blacknode.backend.application.role.RoleService;
 import software.blacknode.backend.application.usecase.ExecutionUseCase;
 import software.blacknode.backend.domain.account.meta.create.impl.AccountInviteCreationMeta;
+import software.blacknode.backend.domain.auth.meta.create.impl.PasswordAuthCreationMeta;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.invite.meta.modify.impl.InviteClaimModificationMeta;
 import software.blacknode.backend.domain.member.association.meta.create.impl.MemberOrganizationAssociationCreationMeta;
@@ -22,6 +25,8 @@ public class InviteClaimUseCase implements ExecutionUseCase<InviteClaimCommand> 
 
 	private final AccountService accountService;
 	
+	private final AuthService authService;
+	
 	private final InviteService inviteService;
 	
 	private final MemberService memberService;
@@ -31,6 +36,7 @@ public class InviteClaimUseCase implements ExecutionUseCase<InviteClaimCommand> 
 	private final MemberAssociationService memberAssociationService;
 	
 	@Override
+	@Transactional
 	public void execute(InviteClaimCommand command) {
 		var token = command.getToken();
 		
@@ -60,6 +66,8 @@ public class InviteClaimUseCase implements ExecutionUseCase<InviteClaimCommand> 
 		var firstName = command.getFirstName();
 		var lastName = command.getLastName();
 		
+		var password = command.getPassword();
+		
 		var accountMeta = AccountInviteCreationMeta.builder()
 				.email(email)
 				.firstName(firstName)
@@ -67,6 +75,12 @@ public class InviteClaimUseCase implements ExecutionUseCase<InviteClaimCommand> 
 				.build();
 		
 		var account = accountService.create(accountMeta);
+		
+		var authMeta = PasswordAuthCreationMeta.builder()
+				.password(password)
+				.build();
+		
+		var auth = authService.create(account.getId(), authMeta);
 		
 		var memberMeta = MemberInviteCreationMeta.builder()
 				.accountId(account.getId())

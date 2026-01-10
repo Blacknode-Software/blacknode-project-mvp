@@ -18,8 +18,11 @@ public class InviteResponseContent {
 	
 	private boolean revoked;
 
-	private UUID claimedBy;
+	private boolean expired;
+	private Instant expiresAt;
 	
+	private boolean claimed;
+	private UUID claimedBy;
 	private Instant claimedAt; 
 	
 }
