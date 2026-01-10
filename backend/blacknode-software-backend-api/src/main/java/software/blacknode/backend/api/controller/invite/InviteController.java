@@ -2,6 +2,7 @@ package software.blacknode.backend.api.controller.invite;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,19 +15,34 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
+import software.blacknode.backend.api.controller.annotation.BearerAuth;
+import software.blacknode.backend.api.controller.invite.mapper.impl.InviteClaimMapper;
 import software.blacknode.backend.api.controller.invite.mapper.impl.InviteCreateMapper;
 import software.blacknode.backend.api.controller.invite.mapper.impl.InviteFetchMapper;
+import software.blacknode.backend.api.controller.invite.mapper.impl.InvitePreClaimFetchMapper;
 import software.blacknode.backend.api.controller.invite.mapper.impl.InvitesBatchFetchMapper;
+import software.blacknode.backend.api.controller.invite.mapper.impl.InvitesListMapper;
+import software.blacknode.backend.api.controller.invite.request.InviteClaimRequest;
 import software.blacknode.backend.api.controller.invite.request.InviteCreateRequest;
 import software.blacknode.backend.api.controller.invite.request.InvitesBatchFetchRequest;
 import software.blacknode.backend.api.controller.invite.response.InviteCreateResponse;
+import software.blacknode.backend.api.controller.invite.response.InvitePreClaimFetchResponse;
 import software.blacknode.backend.api.controller.invite.response.InviteResponse;
 import software.blacknode.backend.api.controller.invite.response.InvitesBatchFetchResponse;
+import software.blacknode.backend.api.controller.invite.response.InvitesListResponse;
 import software.blacknode.backend.api.controller.organization.annotation.OrganizationHeader;
+import software.blacknode.backend.api.controller.response.impl.SuccessResponse;
+import software.blacknode.backend.application.invite.command.InviteDeleteCommand;
 import software.blacknode.backend.application.invite.command.InviteFetchCommand;
+import software.blacknode.backend.application.invite.command.InvitePreClaimFetchCommand;
+import software.blacknode.backend.application.invite.command.InvitesInOrganizationCommand;
+import software.blacknode.backend.application.invite.usecase.InviteClaimUseCase;
 import software.blacknode.backend.application.invite.usecase.InviteCreateUseCase;
+import software.blacknode.backend.application.invite.usecase.InviteDeleteUseCase;
 import software.blacknode.backend.application.invite.usecase.InviteFetchUseCase;
+import software.blacknode.backend.application.invite.usecase.InvitePreClaimFetchUseCase;
 import software.blacknode.backend.application.invite.usecase.InvitesBatchFetchUseCase;
+import software.blacknode.backend.application.invite.usecase.InvitesInOrganizationUseCase;
 
 @RestController
 @RequiredArgsConstructor
@@ -42,6 +58,18 @@ public class InviteController {
 	private final InvitesBatchFetchMapper invitesBatchFetchMapper;
 	private final InvitesBatchFetchUseCase invitesBatchFetchUseCase;
 	
+	private final InvitesListMapper invitesListMapper;
+	private final InvitesInOrganizationUseCase invitesInOrganizationUseCase;
+	
+	private final InviteDeleteUseCase inviteDeleteUseCase;
+	
+	private final InvitePreClaimFetchMapper invitePreClaimFetchMapper;
+	private final InvitePreClaimFetchUseCase invitePreClaimFetchUseCase;
+	
+	private final InviteClaimUseCase inviteClaimUseCase;
+	private final InviteClaimMapper inviteClaimMapper;
+	
+	@BearerAuth
 	@OrganizationHeader
 	@Operation(summary = "Fetch Invite", description = "Fetch an invite by its ID.")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Invite fetched") })
@@ -58,6 +86,7 @@ public class InviteController {
 		return response.toOkResponse("Invite fetched successfully.");
 	}
 	
+	@BearerAuth
 	@OrganizationHeader
 	@Operation(summary = "Create Invite", description = "Create a new invite.")
 	@ApiResponses(value = { @ApiResponse(responseCode = "201", description = "Invite created") })
@@ -72,6 +101,7 @@ public class InviteController {
 		return response.toSuccessResponse("Invite created successfully.", HttpStatus.CREATED);
 	}
 	
+	@BearerAuth
 	@OrganizationHeader
 	@Operation(summary = "Batch Fetch Invites", description = "Fetch multiple invites by their IDs.")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Invites fetched") })
@@ -86,7 +116,61 @@ public class InviteController {
 		return response.toOkResponse("Invites fetched successfully.");
 	}
 	
+	@BearerAuth
+	@OrganizationHeader
+	@Operation(summary = "Get Organization Invites", description = "Fetch all invites for the current organization.")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Organization invites fetched") })
+	@GetMapping("/organization/invites")
+	public ResponseEntity<InvitesListResponse> getOrganizationInvites() {
+		var command = InvitesInOrganizationCommand.builder()
+				.build();
+		
+		var result = invitesInOrganizationUseCase.execute(command);
+		
+		var response = invitesListMapper.toResponse(result);
+		
+		return response.toOkResponse("Organization invites fetched successfully.");
+	}
 	
+	@BearerAuth
+	@OrganizationHeader
+	@Operation(summary = "Delete Invite", description = "Delete an invite by its ID.")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Invite deleted") })
+	@DeleteMapping("/invites/{id}")
+	public ResponseEntity<SuccessResponse> deleteInvite(@PathVariable("id") HUID id) {
+		var command = InviteDeleteCommand.builder()
+				.inviteId(id)
+				.build();
+		
+		inviteDeleteUseCase.execute(command);
+		
+		return SuccessResponse.with("Invite deleted successfully.");
+	}
 	
+	@Operation(summary = "Get Invite Info", description = "Fetch pre-claim information about an invite using its token.")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Invite info fetched") })
+	@GetMapping("/invites/pre-claim/{token}/info")
+	public ResponseEntity<InvitePreClaimFetchResponse> getInviteInfo(@PathVariable("token") String token) {
+		var command = InvitePreClaimFetchCommand.builder()
+				.token(token)
+				.build();
+		
+		var result = invitePreClaimFetchUseCase.execute(command);
+		
+		var response = invitePreClaimFetchMapper.toResponse(result);
+		
+		return response.toOkResponse("Invite info fetched successfully.");
+	}
+
+	@Operation(summary = "Claim Invite", description = "Claim an invite using its token.")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Invite claimed") })
+	@PostMapping("/invites/claim")
+	public ResponseEntity<SuccessResponse> claimInvite(@RequestBody InviteClaimRequest request) {
+		var command = inviteClaimMapper.toCommand(request);
+		
+		inviteClaimUseCase.execute(command);
+		
+		return SuccessResponse.with("Invite claimed successfully.");
+	}
 	
 }
