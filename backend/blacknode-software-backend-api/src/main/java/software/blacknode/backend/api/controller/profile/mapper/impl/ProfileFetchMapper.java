@@ -1,11 +1,14 @@
 package software.blacknode.backend.api.controller.profile.mapper.impl;
 
+import org.mapstruct.Mapper;
+
 import software.blacknode.backend.api.controller.mapper.impl.ResponseMapper;
 import software.blacknode.backend.api.controller.profile.mapper.ProfileMapper;
 import software.blacknode.backend.api.controller.profile.response.ProfileResponse;
 import software.blacknode.backend.api.controller.profile.response.content.annotation.ProfileResponseContentMapping;
 import software.blacknode.backend.application.profile.usecase.ProfileFetchUseCase;
 
+@Mapper(componentModel = "spring")
 public interface ProfileFetchMapper extends ProfileMapper, ResponseMapper<ProfileFetchUseCase.Result, ProfileResponse> {
 
 	@Override

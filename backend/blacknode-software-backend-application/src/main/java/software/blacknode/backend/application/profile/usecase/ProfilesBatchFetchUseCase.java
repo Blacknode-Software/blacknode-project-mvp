@@ -11,6 +11,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import software.blacknode.backend.application.access.impl.OrganizationAccessControl;
+import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.account.AccountService;
 import software.blacknode.backend.application.member.MemberService;
 import software.blacknode.backend.application.profile.command.ProfilesBatchFetchCommand;
@@ -36,7 +37,7 @@ public class ProfilesBatchFetchUseCase implements ResultExecutionUseCase<Profile
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		
 		organizationAccessControl.ensureMemberHasOrganizationAccess(
-				organizationId, memberId, null);
+				organizationId, memberId, AccessLevel.READ);
 		
 		var memberIds = command.getMemberIds();
 		
