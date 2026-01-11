@@ -13,14 +13,14 @@ import lombok.ToString;
 import software.blacknode.backend.application.access.impl.OrganizationAccessControl;
 import software.blacknode.backend.application.account.AccountService;
 import software.blacknode.backend.application.member.MemberService;
-import software.blacknode.backend.application.profile.command.ProfileBatchFetchCommand;
+import software.blacknode.backend.application.profile.command.ProfilesBatchFetchCommand;
 import software.blacknode.backend.application.profile.dto.ProfileDTO;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
 import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
 
 @Service
 @RequiredArgsConstructor
-public class ProfileBatchFetchUseCase implements ResultExecutionUseCase<ProfileBatchFetchCommand, ProfileBatchFetchUseCase.Result> {
+public class ProfilesBatchFetchUseCase implements ResultExecutionUseCase<ProfilesBatchFetchCommand, ProfilesBatchFetchUseCase.Result> {
 
 	private final OrganizationAccessControl organizationAccessControl;
 	
@@ -31,7 +31,7 @@ public class ProfileBatchFetchUseCase implements ResultExecutionUseCase<ProfileB
 	private final SessionContextHolder sessionContextHolder;
 	
 	@Override
-	public Result execute(ProfileBatchFetchCommand command) {
+	public Result execute(ProfilesBatchFetchCommand command) {
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		
@@ -59,6 +59,7 @@ public class ProfileBatchFetchUseCase implements ResultExecutionUseCase<ProfileB
 			var email = account.getEmail();
 			
 			var profile = ProfileDTO.builder()
+					.memberId(member.getId())
 					.displayName(displayName)
 					.email(email)
 					.build();

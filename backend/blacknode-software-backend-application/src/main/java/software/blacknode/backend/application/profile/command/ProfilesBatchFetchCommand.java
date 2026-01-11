@@ -12,7 +12,7 @@ import software.blacknode.backend.application.command.ExecutionCommand;
 @Getter
 @Builder
 @ToString
-public class ProfileBatchFetchCommand implements ExecutionCommand {
+public class ProfilesBatchFetchCommand implements ExecutionCommand {
 
 	@NonNull
 	private final List<HUID> memberIds;

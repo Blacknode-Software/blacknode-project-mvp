@@ -51,6 +51,7 @@ public class ProfileFetchUseCase implements ResultExecutionUseCase<ProfileFetchC
 		var email = targetAccount.getEmail();
 		
 		var profile = ProfileDTO.builder()
+				.memberId(targetMemberId)
 				.displayName(displayName)
 				.email(email)
 				.build();
