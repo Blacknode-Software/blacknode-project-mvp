@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import KanbanBoardView from '@/views/KanbanBoardView.vue';
 import TasksListView from '@/views/TasksListView.vue';
 import LoginView from '@/views/LoginView.vue';
+import ChannelSettingsView from '@/views/ChannelSettingsView.vue';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,6 +21,11 @@ const router = createRouter({
             path: '/kanban/:organization_id/:channel_id',
             name: 'Tasks Kanban board',
             component: KanbanBoardView,
+        },
+        {
+            path: '/settings/:organization_id/:channel_id',
+            name: 'Channel settings',
+            component: ChannelSettingsView,
         },
     ],
 });
