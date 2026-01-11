@@ -41,7 +41,7 @@ const emit = defineEmits<{
                 <td>{{ task.description }}</td>
                 <td><PriorityText :value="task.priority" /></td>
                 <td>
-                    <TimestampDate :formatter="dateFormatter" :timestmap="task.timestamp" />
+                    <TimestampDate :formatter="dateFormatter" :timestmap="task.beginAt" />
                 </td>
                 <td>
                     <ProgressBar :value="task.progress" :max-value="100">
