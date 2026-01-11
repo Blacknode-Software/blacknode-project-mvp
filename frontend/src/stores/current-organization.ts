@@ -1,13 +1,27 @@
+import { useOrganizationsApiService } from '@/api-services';
 import type { Organization } from '@/shared-types/organization';
 import { defineStore } from 'pinia';
+import { ref } from 'vue';
 
-export const useCurrentOrganizationStore = defineStore('currentChannelTasks', () => {
-    const organization: Organization = {
-        uuid: '5b898dae-5509-4743-aa24-ab9711d83719',
-        name: 'test',
-    };
+export const useCurrentOrganizationStore = defineStore('currentOrganization', () => {
+    const organizationsApiService = useOrganizationsApiService();
 
-    async function changeOrganization(/* organizationId: string */) {}
+    const organization = ref<Organization>();
 
-    return { changeOrganization, organization };
+    async function requestOrganization(organizationId: string) {
+        const res = await organizationsApiService.requestOrganization({ organizationId });
+
+        if (res.isErr()) {
+            console.log('currentOrganization: requestOrganization error', res.value);
+        }
+
+        const { id, name } = res.unwrap();
+
+        organization.value = {
+            id,
+            name,
+        } satisfies Organization;
+    }
+
+    return { requestOrganization, organization };
 });

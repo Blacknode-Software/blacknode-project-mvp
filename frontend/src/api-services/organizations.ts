@@ -6,7 +6,28 @@ interface Organization {
     any: number; // todo
 }
 
+interface RequestOrganizationSuccess {
+    status: 'success';
+    message: string;
+    id: string;
+    name: string;
+}
+
 export const useOrganizationsApiService = defineApiService('dummy url', {
+    async requestOrganization(
+        baseUrl,
+        payload: { organizationId: string },
+    ): Promise<Result<RequestOrganizationSuccess, ApiError>> {
+        return parseResponse(
+            fetch(`${baseUrl}/organization`, {
+                method: 'GET',
+                headers: {
+                    'X-Organization-Id': payload.organizationId,
+                },
+            }),
+        );
+    },
+
     async requestAllOrganizations(baseUrl): Promise<Result<Organization[], ApiError>> {
         return parseResponse(
             fetch(`${baseUrl}/organizations`, {
