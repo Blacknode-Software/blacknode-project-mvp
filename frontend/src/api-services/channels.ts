@@ -6,14 +6,52 @@ interface Channel {
     any: number; // todo
 }
 
+interface RequestAllChannelsForProjectSuccess {
+    message: 'Operation completed successfully.';
+    status: 'success';
+    ids: string[];
+}
+
+interface RequestChannelsBatchSuccess {
+    message: 'Operation completed successfully.';
+    status: 'success';
+    items: {
+        id: string;
+        name: string;
+        description: string;
+        color: string;
+    }[];
+}
+
 export const useChannelsApiService = defineApiService('dummy url', {
     async requestAllChannelsForProject(
         baseUrl,
         payload: { organizationId: string; projectId: string },
-    ): Promise<Result<Channel[], ApiError>> {
+    ): Promise<Result<RequestAllChannelsForProjectSuccess, ApiError>> {
         return parseResponse(
             fetch(`${baseUrl}/projects/${payload.projectId}/channels`, {
                 method: 'GET',
+                headers: {
+                    'X-Organization-Id': payload.organizationId,
+                },
+            }),
+        );
+    },
+
+    async requestChannelsBatch(
+        baseUrl,
+        payload: { organizationId: string; ids: string[] },
+    ): Promise<Result<RequestChannelsBatchSuccess, ApiError>> {
+        return parseResponse(
+            fetch(`${baseUrl}/channels/batch-fetch`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    ids: payload.ids,
+                }),
+                headers: {
+                    'X-Organization-Id': payload.organizationId,
+                    'Content-Type': 'application/json',
+                },
             }),
         );
     },
@@ -23,6 +61,9 @@ export const useChannelsApiService = defineApiService('dummy url', {
             fetch(`${baseUrl}/projects/${payload.organizationId}/channels`, {
                 method: 'POST',
                 body: JSON.stringify({}),
+                headers: {
+                    'X-Organization-Id': payload.organizationId,
+                },
             }),
         );
     },
