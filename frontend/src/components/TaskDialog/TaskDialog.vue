@@ -1,13 +1,16 @@
 <script setup lang="ts">
-import { onMounted, onBeforeUnmount } from 'vue';
+import { onMounted, onBeforeUnmount, computed } from 'vue';
 import { UniDialog } from '@/layout';
 import { UnixTimestamp } from '@/utils';
 import ActivityComment from '../DialogCommon/ActivityComment.vue';
 import ActivityEvent from '../DialogCommon/ActivityEvent.vue';
 import { PriorityText } from '@/ui-toolkit';
 import type { Task } from '@/shared-types';
+import { useCurrentChannelTasksStore } from '@/stores';
 
-defineProps<{
+const currentChannelTasksStore = useCurrentChannelTasksStore();
+
+const props = defineProps<{
     task: Task;
 }>();
 
@@ -18,6 +21,8 @@ const emit = defineEmits<{
 function onKeyDown(e: KeyboardEvent) {
     if (e.key === 'Escape') emit('close');
 }
+
+const status = computed(() => currentChannelTasksStore.getStatusWithId(props.task.id));
 
 onMounted(() => window.addEventListener('keydown', onKeyDown));
 onBeforeUnmount(() => window.removeEventListener('keydown', onKeyDown));
@@ -41,7 +46,9 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeyDown));
                     <div class="meta-grid">
                         <div class="meta-row">
                             <div class="label">Status</div>
-                            <div class="value"></div>
+                            <div class="value" :style="{ color: status?.color }">
+                                {{ status?.name }}
+                            </div>
                         </div>
 
                         <div class="meta-row">

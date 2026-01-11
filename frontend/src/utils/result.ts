@@ -1,6 +1,8 @@
 export interface Result<T, E> {
     unwrapOr(fallback: T): T;
 
+    unwrap(): T;
+
     isOk(): this is Ok<T>;
 
     isErr(): this is Err<E>;
@@ -12,6 +14,10 @@ export class Ok<T> implements Result<T, never> {
     constructor(public readonly value: T) {}
 
     unwrapOr(): T {
+        return this.value;
+    }
+
+    unwrap(): T {
         return this.value;
     }
 
@@ -31,6 +37,10 @@ export class Err<E> implements Result<never, E> {
 
     unwrapOr<T>(fallback: T): T {
         return fallback;
+    }
+
+    unwrap(): never {
+        throw new Error('unwrap failed');
     }
 
     isOk(): this is Ok<never> {

@@ -54,6 +54,19 @@ interface Task {
     statusId: string;
 }
 
+interface RequestTaskStatusesSuccess {
+    message: 'Operation completed successfully.';
+    status: 'success';
+    items: [
+        {
+            id: string;
+            name: string;
+            description: string;
+            color: string;
+        },
+    ];
+}
+
 export const useTasksApiService = defineApiService(API_URL, {
     async requestTasksBatch(
         baseUrl,
@@ -143,6 +156,20 @@ export const useTasksApiService = defineApiService(API_URL, {
                     operations: Object.keys(payload.updates),
                     ...payload.updates,
                 }),
+            }),
+        );
+    },
+
+    async requestStatusesBatch(
+        baseUrl,
+        payload: { organizationId: string },
+    ): Promise<Result<RequestTaskStatusesSuccess, ApiError>> {
+        return parseResponse(
+            fetch(`${baseUrl}/statuses/batch-fetch`, {
+                method: 'POST',
+                headers: {
+                    'X-Organization-Id': payload.organizationId,
+                },
             }),
         );
     },

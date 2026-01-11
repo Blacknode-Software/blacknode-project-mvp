@@ -4,7 +4,9 @@ export interface Task {
     id: string;
     title: string;
     description: string;
-    timestamp: UnixTimestamp;
     priority: number;
+    beginAt: UnixTimestamp;
+    endAt: UnixTimestamp;
+    statusId: string;
     progress?: number;
 }

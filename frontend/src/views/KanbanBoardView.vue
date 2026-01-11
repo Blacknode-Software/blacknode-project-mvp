@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { FixedBackground, MainSidebar, KanbanColumn, TaskDialog } from '@/components';
 import { MainHeader, UniSidebar, MainView } from '@/layout';
-import type { Task } from '@/shared-types';
-import { UnixTimestamp } from '@/utils';
-import { ref } from 'vue';
+import type { Task, TaskStatus } from '@/shared-types';
+import { useCurrentChannelTasksStore } from '@/stores';
+import { onMounted, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 
+const currentChannelTasksStore = useCurrentChannelTasksStore();
 const selectedTask = ref<Task | null>(null);
 
 function openTask(task: Task) {
@@ -15,49 +17,29 @@ function closeTask() {
     selectedTask.value = null;
 }
 
-const tasks = {
-    todo: [
-        {
-            id: '1',
-            title: 'Lorem ipsum dolor sit amet',
-            description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.',
-            priority: 0,
-            timestamp: new UnixTimestamp(1766333438),
-        },
-        {
-            id: '2',
-            title: 'Lorem ipsum dolor sit amet',
-            description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.',
-            priority: 1,
-            timestamp: new UnixTimestamp(1766333438),
-        },
-        {
-            id: '3',
-            title: 'Lorem ipsum dolor sit amet',
-            description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.',
-            priority: 2,
-            timestamp: new UnixTimestamp(1766333438),
-        },
-        {
-            id: '4',
-            title: 'Lorem ipsum dolor sit amet',
-            description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.',
-            priority: 2,
-            timestamp: new UnixTimestamp(1766333438),
-        },
-    ],
-    progress: [],
-    review: [],
-    done: [
-        {
-            id: '1',
-            title: 'Lorem ipsum dolor sit amet',
-            description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.',
-            priority: 2,
-            timestamp: new UnixTimestamp(1766333438),
-        },
-    ],
-} as Record<string, Task[]>;
+function getTasksWithStatus(status: TaskStatus) {
+    return currentChannelTasksStore.tasks.filter((task) => task.statusId === status.id);
+}
+
+const route = useRoute();
+
+onMounted(() => {
+    currentChannelTasksStore.requestTasksForChannel(
+        route.params.channel_id as string,
+        route.params.organization_id as string,
+    );
+});
+
+watch(
+    () => [route.params.organization_id, route.params.channel_id],
+    ([newOrganizatonId, newChannelId]) => {
+        currentChannelTasksStore.requestTasksForChannel(
+            newChannelId as string,
+            newOrganizatonId as string,
+        );
+    },
+    { immediate: true },
+);
 </script>
 
 <template>
@@ -70,27 +52,11 @@ const tasks = {
         <MainView>
             <div class="kanban-board">
                 <KanbanColumn
-                    title="To do"
-                    :tasks="tasks.todo!"
-                    color="white"
-                    @open-task="openTask"
-                />
-                <KanbanColumn
-                    title="In progress"
-                    color="var(--color-main-yellow)"
-                    :tasks="tasks.progress!"
-                    @open-task="openTask"
-                />
-                <KanbanColumn
-                    title="In review"
-                    color="var(--color-magenta)"
-                    :tasks="tasks.review!"
-                    @open-task="openTask"
-                />
-                <KanbanColumn
-                    title="Completed"
-                    color="var(--color-main-green)"
-                    :tasks="tasks.done!"
+                    v-for="status in currentChannelTasksStore.statuses"
+                    :key="status.id"
+                    :tasks="getTasksWithStatus(status)"
+                    :title="status.name"
+                    :color="status.color"
                     @open-task="openTask"
                 />
             </div>

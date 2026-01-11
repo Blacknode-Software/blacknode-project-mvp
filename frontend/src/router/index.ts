@@ -12,12 +12,12 @@ const router = createRouter({
             component: LoginView,
         },
         {
-            path: '/list',
+            path: '/list/:organization_id/:channel_id',
             name: 'Tasks list',
             component: TasksListView,
         },
         {
-            path: '/kanban',
+            path: '/kanban/:organization_id/:channel_id',
             name: 'Tasks Kanban board',
             component: KanbanBoardView,
         },
