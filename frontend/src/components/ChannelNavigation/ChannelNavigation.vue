@@ -2,8 +2,9 @@
 
 <template>
     <div class="channel-navigation">
-        <router-link to="/list">List</router-link>
-        <router-link to="/kanban">Board</router-link>
+        <router-link to="/list/1/1">List</router-link>
+        <router-link to="/kanban/1/1">Board</router-link>
+        <router-link to="/settings/1/1">Settings</router-link>
     </div>
 </template>
 
