@@ -21,6 +21,9 @@ export const useAuthenticationApiService = defineApiService(API_URL, {
                     email: payload.email,
                     password: payload.password, // TODO: SHA256
                 }),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
             }),
         );
     },
