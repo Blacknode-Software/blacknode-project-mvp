@@ -74,5 +74,16 @@ export const useCurrentChannelTasksStore = defineStore('currentChannelTasks', ()
         return statuses.value.find((status) => status.id === id);
     }
 
-    return { requestTaskStatuses, requestTasksForChannel, getStatusWithId, tasks, statuses };
+    function getTasksWithStatus(status: TaskStatus) {
+        return tasks.value.filter((task) => task.statusId === status.id);
+    }
+
+    return {
+        requestTaskStatuses,
+        requestTasksForChannel,
+        getStatusWithId,
+        getTasksWithStatus,
+        tasks,
+        statuses,
+    };
 });

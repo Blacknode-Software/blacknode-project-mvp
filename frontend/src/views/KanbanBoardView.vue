@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { FixedBackground, MainSidebar, KanbanColumn, TaskDialog } from '@/components';
 import { MainHeader, UniSidebar, MainView } from '@/layout';
-import type { Task, TaskStatus } from '@/shared-types';
+import type { Task } from '@/shared-types';
 import { useCurrentChannelTasksStore } from '@/stores';
 import { onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
@@ -15,10 +15,6 @@ function openTask(task: Task) {
 
 function closeTask() {
     selectedTask.value = null;
-}
-
-function getTasksWithStatus(status: TaskStatus) {
-    return currentChannelTasksStore.tasks.filter((task) => task.statusId === status.id);
 }
 
 const route = useRoute();
@@ -54,7 +50,7 @@ watch(
                 <KanbanColumn
                     v-for="status in currentChannelTasksStore.statuses"
                     :key="status.id"
-                    :tasks="getTasksWithStatus(status)"
+                    :tasks="currentChannelTasksStore.getTasksWithStatus(status)"
                     :title="status.name"
                     :color="status.color"
                     @open-task="openTask"
