@@ -101,12 +101,9 @@ function onDelete() {}
 
 <style scoped>
 .cs-root {
-    height: 100%;
-    width: 100%;
     background: transparent;
     padding: 26px 28px;
     box-sizing: border-box;
-    color: rgba(255, 255, 255, 0.92);
     display: flex;
     flex-direction: column;
     gap: 14px;
@@ -125,6 +122,7 @@ function onDelete() {}
     gap: 10px;
     letter-spacing: 0.2px;
     font-size: 18px;
+    color: white;
 }
 
 .cs-gear {
@@ -185,11 +183,10 @@ function onDelete() {}
     content: '';
     position: absolute;
     left: 0;
-    bottom: -6px;
+    bottom: -1px;
     height: 2px;
     width: 100%;
-    background: rgba(255, 255, 255, 0.38);
-    border-radius: 999px;
+    background: white;
 }
 
 .cs-panel {
@@ -285,7 +282,7 @@ function onDelete() {}
 }
 
 .cs-color-hex {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     gap: 8px;
     background: rgba(15, 17, 24, 0.42);
@@ -295,8 +292,7 @@ function onDelete() {}
 }
 
 .cs-hash {
-    opacity: 0.6;
-    font-weight: 700;
+    color: white;
 }
 
 .cs-hex-input {
@@ -304,9 +300,8 @@ function onDelete() {}
     background: transparent;
     border: none;
     outline: none;
-    color: rgba(255, 255, 255, 0.88);
-    font-weight: 650;
-    letter-spacing: 0.6px;
+    color: white;
+    height: fit-content;
 }
 
 .cs-actions {
@@ -332,5 +327,14 @@ function onDelete() {}
 .cs-btn.primary {
     background: rgba(90, 110, 255, 0.92);
     color: rgba(255, 255, 255, 0.95);
+}
+
+/* TODO: Move to App.vue */
+.view-sections-container {
+    flex-direction: row;
+    display: flex;
+    flex-grow: 1;
+    background-color: transparent;
+    height: 0;
 }
 </style>
