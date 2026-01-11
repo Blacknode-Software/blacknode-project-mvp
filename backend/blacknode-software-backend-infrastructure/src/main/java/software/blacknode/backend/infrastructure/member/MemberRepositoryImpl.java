@@ -2,6 +2,7 @@ package software.blacknode.backend.infrastructure.member;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.stereotype.Repository;
 
@@ -35,7 +36,7 @@ public class MemberRepositoryImpl implements MemberRepository, OrganizationRelat
 	}
 
 	@Override
-	public List<Member> findByIds(@NonNull HUID organizationId, @NonNull List<HUID> ids) {
+	public List<Member> findByIds(@NonNull HUID organizationId, @NonNull Set<HUID> ids) {
 		var uuidIds = ids.stream().map(HUID::toUUID).toList();
 		
 		var members = repository.queryAllByIdInOrganizationIdAndState(
