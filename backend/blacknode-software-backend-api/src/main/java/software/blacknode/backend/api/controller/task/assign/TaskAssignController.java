@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 import software.blacknode.backend.api.controller.organization.annotation.OrganizationHeader;
 import software.blacknode.backend.api.controller.response.impl.SuccessResponse;
 import software.blacknode.backend.api.controller.task.assign.mapper.impl.TaskAssignMemberMapper;
-import software.blacknode.backend.api.controller.task.assign.request.TaskAssignRequest;
+import software.blacknode.backend.api.controller.task.assign.request.TaskAssignMemberRequest;
 import software.blacknode.backend.application.task.assign.usecase.TaskAssignMemberUseCase;
 
 @RestController
@@ -33,7 +33,7 @@ public class TaskAssignController {
 	@Operation(summary = "Assign Task", description = "Assign a task to a member")
 	@ApiResponses(value = @ApiResponse(responseCode = "200", description = "Task assigned successfully"))
 	@PostMapping("/tasks/{taskId}/assigns")
-	public ResponseEntity<SuccessResponse> assignTask(@PathVariable UUID taskId, @RequestBody TaskAssignRequest request) {
+	public ResponseEntity<SuccessResponse> assignTask(@PathVariable UUID taskId, @RequestBody TaskAssignMemberRequest request) {
 		var command = taskAssignMapper.toCommand(request, taskId);
 		
 		taskAssignUseCase.execute(command);

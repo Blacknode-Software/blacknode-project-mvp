@@ -8,7 +8,7 @@ import software.blacknode.backend.api.controller.request.BaseRequest;
 
 @Getter
 @NoArgsConstructor
-public class TaskAssignRequest extends BaseRequest {
+public class TaskAssignMemberRequest extends BaseRequest {
 	
 	private UUID memberId;
 	
