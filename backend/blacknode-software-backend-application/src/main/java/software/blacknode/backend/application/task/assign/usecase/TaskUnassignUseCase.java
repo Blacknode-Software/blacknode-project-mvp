@@ -43,7 +43,7 @@ public class TaskUnassignUseCase implements ExecutionUseCase<TaskUnassignCommand
 		
 		taskAccessControl.ensureMemberHasTaskAccess(memberId, task, AccessLevel.WRITE);
 		
-		taskAccessControl.ensureMemberHasTaskAccess(assignee, task, AccessLevel.READ);
+		// taskAccessControl.ensureMemberHasTaskAccess(assignee, task, AccessLevel.READ);
 		
 		var currentAssignment = taskAssignService.getByMemberIdAndTaskId(organizationId, taskId, assigneeId)
 				.orElseThrow(() -> new BlacknodeException("Member with id " + assigneeId + " is not assigned to task with id " + taskId));
