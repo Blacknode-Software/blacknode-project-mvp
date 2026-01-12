@@ -9,15 +9,15 @@ import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.member.MemberService;
 import software.blacknode.backend.application.task.TaskService;
 import software.blacknode.backend.application.task.assign.TaskAssignService;
-import software.blacknode.backend.application.task.assign.command.TaskAssignCommand;
+import software.blacknode.backend.application.task.assign.command.TaskUnassignMemberCommand;
 import software.blacknode.backend.application.usecase.ExecutionUseCase;
 import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
-import software.blacknode.backend.domain.task.assign.meta.create.impl.TaskAssignByMemberCreationMeta;
+import software.blacknode.backend.domain.task.assign.meta.delete.impl.TaskUnassignDeletionMeta;
 
 @Service
 @RequiredArgsConstructor
-public class TaskAssignUseCase implements ExecutionUseCase<TaskAssignCommand> {
+public class TaskUnassignMemberUseCase implements ExecutionUseCase<TaskUnassignMemberCommand> {
 
 	private final TaskAccessControl taskAccessControl;
 	
@@ -31,7 +31,7 @@ public class TaskAssignUseCase implements ExecutionUseCase<TaskAssignCommand> {
 	
 	@Override
 	@Transactional
-	public void execute(TaskAssignCommand command) {
+	public void execute(TaskUnassignMemberCommand command) {
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		
@@ -43,21 +43,15 @@ public class TaskAssignUseCase implements ExecutionUseCase<TaskAssignCommand> {
 		
 		taskAccessControl.ensureMemberHasTaskAccess(memberId, task, AccessLevel.WRITE);
 		
-		taskAccessControl.ensureMemberHasTaskAccess(assignee, task, AccessLevel.READ);
+		// taskAccessControl.ensureMemberHasTaskAccess(assignee, task, AccessLevel.READ);
 		
-		var currentAssignment = taskAssignService.getByMemberIdAndTaskId(organizationId, taskId, assigneeId);
+		var currentAssignment = taskAssignService.getByMemberIdAndTaskId(organizationId, taskId, assigneeId)
+				.orElseThrow(() -> new BlacknodeException("Member with id " + assigneeId + " is not assigned to task with id " + taskId));
 		
-		if(currentAssignment.isPresent()) {
-			throw new BlacknodeException("Member with id " + assigneeId + " is already assigned to task with id " + taskId);
-		}
-		
-		var meta = TaskAssignByMemberCreationMeta.builder()
-				.assignerId(memberId)
-				.assigneeId(assigneeId)
-				.taskId(taskId)
+		var meta = TaskUnassignDeletionMeta.builder()
 				.build();
 		
-		var assignment = taskAssignService.create(organizationId, meta);
+		taskAssignService.delete(organizationId, currentAssignment.getId(), meta);
 	}
 
 }
