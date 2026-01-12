@@ -2,6 +2,7 @@ package software.blacknode.backend.application.account;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -73,6 +74,14 @@ public class AccountService {
 	
 	public Optional<Account> getByEmail(String email) {
 		return repository.findByEmail(email);
+	}
+	
+	public List<Account> getByIds(List<HUID> ids) {
+		return getByIds(Set.copyOf(ids));
+	}
+	
+	public List<Account> getByIds(Set<HUID> ids) {
+		return repository.findByIds(ids);
 	}
 	
 }

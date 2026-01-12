@@ -2,6 +2,7 @@ package software.blacknode.backend.application.member;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
@@ -39,6 +40,14 @@ public class MemberService {
 	public Member getByAccountIdOrThrow(HUID accountId, HUID organizationId) {
 		return getByAccountId(accountId, organizationId)
 				.orElseThrow(() -> new BlacknodeException("Member with Account ID " + accountId + " not found."));
+	}
+	
+	public List<Member> getByIds(HUID organizationId, List<HUID> accountIds) {
+		return getByIds(organizationId, Set.copyOf(accountIds));
+	}
+	
+	public List<Member> getByIds(HUID organizationId, Set<HUID> memberIds) {
+		return repository.findByIds(organizationId, memberIds);
 	}
 	
 	public List<Member> getAll(HUID organizationId) {

@@ -1,6 +1,8 @@
 package software.blacknode.backend.infrastructure.account;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.stereotype.Repository;
 
@@ -34,6 +36,14 @@ public class AccountRepositoryImpl implements AccountRepository, InfrastructureR
 		var account = repository.queryByEmailAndState(email, EntityState.ACTIVE);
 		
 		return account.map(this::toDomainEntity);
+	}
+	
+	public List<Account> findByIds(@NonNull Set<HUID> ids) {
+		var uuidIds = ids.stream().map(HUID::toUUID).toList();
+		
+		var accounts = repository.queryAllByIdInAndState(uuidIds, EntityState.ACTIVE);
+		
+		return accounts.stream().map(this::toDomainEntity).toList();
 	}
 	
 	@Override
