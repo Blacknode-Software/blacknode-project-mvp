@@ -25,7 +25,7 @@ public class InviteClaimUseCase implements ExecutionUseCase<InviteClaimCommand> 
 
 	private final AccountService accountService;
 	
-	private final AuthService authService;
+ 	private final AuthService authService;
 	
 	private final InviteService inviteService;
 	

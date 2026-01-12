@@ -1,5 +1,6 @@
 package software.blacknode.backend.infrastructure.account.entity.repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -17,4 +18,7 @@ public interface AccountEntityRepository extends JpaRepository<AccountEntity, UU
 	
 	@Query("SELECT a FROM AccountEntity a WHERE a.email = :email AND a.state = :state")
 	Optional<AccountEntity> queryByEmailAndState(@Param("email") String email, @Param("state") EntityState state);
+
+	@Query("SELECT a FROM AccountEntity a WHERE a.id IN :ids AND a.state = :state")
+	List<AccountEntity> queryAllByIdInAndState(@Param("ids") List<UUID> ids, @Param("state") EntityState state);
 }
