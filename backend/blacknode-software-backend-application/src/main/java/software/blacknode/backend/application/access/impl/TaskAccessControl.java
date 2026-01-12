@@ -74,7 +74,7 @@ public class TaskAccessControl {
 		task.ensureBelongsToOrganization(organizationId);
 		
 		var channelId = task.getChannelId();
-		
+		 
 		var access = channelAccessControl.getRoleAccessInChannel(member, channelId);
 		
 		/* If the member is the owner of the task, grant MANAGE access regardless of their role access in the channel. */

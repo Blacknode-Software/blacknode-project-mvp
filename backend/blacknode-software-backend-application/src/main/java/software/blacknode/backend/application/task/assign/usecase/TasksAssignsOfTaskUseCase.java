@@ -47,7 +47,7 @@ public class TasksAssignsOfTaskUseCase implements ResultExecutionUseCase<TasksAs
 				.toList();
 		
 		return Result.builder()
-				.taskAssignsIds(assignments)
+				.assignIds(assignments)
 				.build();
 	}
 
@@ -56,7 +56,7 @@ public class TasksAssignsOfTaskUseCase implements ResultExecutionUseCase<TasksAs
 	@ToString
 	public static class Result {
 		
-		private final List<HUID> taskAssignsIds;
+		private final List<HUID> assignIds;
 		
 	}
 

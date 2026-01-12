@@ -1,6 +1,7 @@
 package software.blacknode.backend.api.controller.task.assign.mapper.impl;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import software.blacknode.backend.api.controller.task.assign.mapper.TaskAssignMapper;
 import software.blacknode.backend.api.controller.task.assign.request.TasksAssignsOfMembersRequest;
@@ -20,12 +21,16 @@ public interface TasksAssignsListMapper extends TaskAssignMapper {
 	
 	TasksAssignsOfMembersCommand toCommand(TasksAssignsOfMembersRequest request);
 	
+	@Mapping(target = "ids", source = "assignIds")
 	TasksAssignsListResponse toAssignsOfTaskResponse(TasksAssignsOfTaskUseCase.Result result);
 	
+	@Mapping(target = "ids", source = "assignIds")
 	TasksAssignsListResponse toAssignsOfTasksResponse(TasksAssignsOfTasksUseCase.Result result);
 	
+	@Mapping(target = "ids", source = "assignIds")
 	TasksAssignsListResponse toAssingsOfMemberResponse(TasksAssignsOfMemberUseCase.Result result);
 	
+	@Mapping(target = "ids", source = "assignIds")
 	TasksAssignsListResponse toAssingsOfMembersResponse(TasksAssignsOfMembersUseCase.Result result);
 	
 }
