@@ -9,7 +9,7 @@ import software.blacknode.backend.api.controller.task.assign.request.TaskAssignM
 import software.blacknode.backend.application.task.assign.command.TaskAssignMemberCommand;
 
 @Mapper(componentModel = "spring")
-public interface TaskAssignMemberMapper extends TaskAssignMapper{
+public interface TaskAssignMemberMapper extends TaskAssignMapper {
 
 	TaskAssignMemberCommand toCommand(TaskAssignMemberRequest request, UUID taskId);
 	

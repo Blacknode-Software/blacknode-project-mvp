@@ -1,6 +1,7 @@
 package software.blacknode.backend.application.task.assign.usecase;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -29,6 +30,7 @@ public class TaskAssignFetchUseCase implements ResultExecutionUseCase<TaskAssign
 	private final SessionContextHolder sessionContextHolder;
 	
 	@Override
+	@Transactional
 	public Result execute(TaskAssignFetchCommand command) {
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();

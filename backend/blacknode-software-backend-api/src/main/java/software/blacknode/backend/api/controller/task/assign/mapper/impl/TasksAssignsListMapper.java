@@ -1,5 +1,8 @@
 package software.blacknode.backend.api.controller.task.assign.mapper.impl;
 
+import org.mapstruct.Mapper;
+
+import software.blacknode.backend.api.controller.task.assign.mapper.TaskAssignMapper;
 import software.blacknode.backend.api.controller.task.assign.request.TasksAssignsOfMembersRequest;
 import software.blacknode.backend.api.controller.task.assign.request.TasksAssignsOfTasksRequest;
 import software.blacknode.backend.api.controller.task.assign.response.TasksAssignsListResponse;
@@ -10,7 +13,8 @@ import software.blacknode.backend.application.task.assign.usecase.TasksAssignsOf
 import software.blacknode.backend.application.task.assign.usecase.TasksAssignsOfTaskUseCase;
 import software.blacknode.backend.application.task.assign.usecase.TasksAssignsOfTasksUseCase;
 
-public interface TasksAssignsListMapper {
+@Mapper(componentModel = "spring")
+public interface TasksAssignsListMapper extends TaskAssignMapper {
 
 	TasksAssignsOfTasksCommand toCommand(TasksAssignsOfTasksRequest request);
 	

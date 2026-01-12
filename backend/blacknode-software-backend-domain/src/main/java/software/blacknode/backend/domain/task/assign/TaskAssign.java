@@ -2,8 +2,11 @@ package software.blacknode.backend.domain.task.assign;
 
 import java.util.Optional;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.ToString;
 import me.hinsinger.hinz.common.huid.HUID;
 import me.hinsinger.hinz.common.time.timestamp.Timestamp;
 import software.blacknode.backend.domain.entity.DomainEntity;
@@ -15,6 +18,9 @@ import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.task.assign.meta.TaskAssignMeta;
 import software.blacknode.backend.domain.task.assign.meta.create.TaskAssignCreationMeta;
 
+@Builder
+@AllArgsConstructor(onConstructor = @__({ @Deprecated }))
+@ToString
 public class TaskAssign implements DomainEntity, Creatable, Deletable {
 
 	@Getter private HUID id;
