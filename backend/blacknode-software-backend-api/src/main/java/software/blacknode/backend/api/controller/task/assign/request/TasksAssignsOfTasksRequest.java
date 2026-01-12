@@ -11,6 +11,6 @@ import software.blacknode.backend.api.controller.request.BaseRequest;
 @NoArgsConstructor
 public class TasksAssignsOfTasksRequest extends BaseRequest {
 
-	private List<UUID> tasksIds;
+	private List<UUID> taskIds;
 	
 }
