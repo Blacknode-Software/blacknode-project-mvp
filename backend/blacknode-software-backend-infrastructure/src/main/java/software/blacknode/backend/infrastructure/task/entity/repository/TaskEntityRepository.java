@@ -7,10 +7,12 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import software.blacknode.backend.infrastructure.entity.state.EntityState;
 import software.blacknode.backend.infrastructure.task.entity.TaskEntity;
 
+@Repository
 public interface TaskEntityRepository extends JpaRepository<TaskEntity, UUID> {
 
 	@Query("SELECT t FROM TaskEntity t WHERE t.id = :id AND t.organizationId = :organizationId AND t.state = :state")

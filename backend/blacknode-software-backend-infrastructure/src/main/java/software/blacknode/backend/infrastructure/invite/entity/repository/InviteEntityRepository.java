@@ -7,10 +7,12 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import software.blacknode.backend.infrastructure.entity.state.EntityState;
 import software.blacknode.backend.infrastructure.invite.entity.InviteEntity;
 
+@Repository
 public interface InviteEntityRepository extends JpaRepository<InviteEntity, UUID> {
 
 	@Query("SELECT i FROM InviteEntity i WHERE i.id = :id AND i.organizationId = :organizationId AND i.state = :state")

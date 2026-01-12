@@ -1,9 +1,7 @@
-package software.blacknode.backend.infrastructure.task.entity;
+package software.blacknode.backend.infrastructure.task.assign.entity;
 
 import java.time.Instant;
-import java.util.UUID;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.Access;
 import jakarta.persistence.AccessType;
 import jakarta.persistence.Column;
@@ -14,41 +12,35 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.infrastructure.entity.version.annotation.VersionedEntity;
 import software.blacknode.backend.infrastructure.organization.related.OrganizationRelatedEntity;
-import software.blacknode.backend.infrastructure.task.entity.meta.TaskEntityMeta;
+import software.blacknode.backend.infrastructure.task.assign.entity.meta.TaskAssignEntityMeta;
 
 @Getter
 @Entity
 @SuperBuilder
-@Table(name = "tasks")
+@Table(name = "task_assigns")
 @Access(AccessType.FIELD)
 @NoArgsConstructor
 @ToString
-public class TaskEntity extends OrganizationRelatedEntity {
+public class TaskAssignEntity extends OrganizationRelatedEntity {
 
 	@NotNull
 	@Column(name = "meta", length = 65_535)
 	@VersionedEntity
-	private TaskEntityMeta meta;
-	
-	@Nullable 
-	@Column(name = "status_id", nullable = true)
-	private UUID statusId;
+	private TaskAssignEntityMeta meta;
 	
 	@NotNull
-	@Column(name = "owner_member_id", nullable = false)
-	private UUID ownerMemberId;
+	@Column(name = "member_id", nullable = false)
+	private HUID memberId;
 	
 	@NotNull
-	@Column(name = "channel_id", nullable = false)
-	private UUID channelId;
+	@Column(name = "task_id", nullable = false)
+	private HUID taskId;
 	
 	@Column(name = "created_at", nullable = false, updatable = false)
 	private Instant createdAt;
-	
-	@Column(name = "modified_at")
-	private Instant modifiedAt;
 	
 	@Column(name = "deleted_at")
 	private Instant deletedAt;

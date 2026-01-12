@@ -11,6 +11,7 @@ import software.blacknode.backend.domain.entity.modifier.impl.create.Creatable;
 import software.blacknode.backend.domain.entity.modifier.impl.create.meta.CreationMeta;
 import software.blacknode.backend.domain.entity.modifier.impl.delete.Deletable;
 import software.blacknode.backend.domain.entity.modifier.impl.delete.meta.DeletionMeta;
+import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.task.assign.meta.TaskAssignMeta;
 import software.blacknode.backend.domain.task.assign.meta.create.TaskAssignCreationMeta;
 
@@ -47,9 +48,7 @@ public class TaskAssign implements DomainEntity, Creatable, Deletable {
 			
 			var assignerId = Optional.<HUID>empty();
 			
-			if(_meta.isAssignerIdSet()) {
-				assignerId = _meta.getAssignerId();
-			}
+			assignerId = _meta.getAssignerId();
 			
 			this.taskId = taskId;
 			this.memberId = memberId;
@@ -74,5 +73,15 @@ public class TaskAssign implements DomainEntity, Creatable, Deletable {
 		} else throwUnsupportedDeletionMeta(meta);
 		
 		this.deletionTimestamp = Timestamp.now();
+	}
+	
+	public void ensureBelongsToOrganization(HUID organizationId) {
+		if(!this.organizationId.equals(organizationId)) {
+			throw new BlacknodeException("Task assign does not belong to the specified organization.");
+		}
+	}
+	
+	public boolean belongsToOrganization(HUID organizationId) {
+		return this.organizationId.equals(organizationId);
 	}
 }
