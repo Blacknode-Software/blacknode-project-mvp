@@ -3,60 +3,57 @@ package software.blacknode.backend.application.task.assign.usecase;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.application.access.impl.TaskAccessControl;
 import software.blacknode.backend.application.access.level.AccessLevel;
-import software.blacknode.backend.application.task.TaskService;
+import software.blacknode.backend.application.member.MemberService;
 import software.blacknode.backend.application.task.assign.TaskAssignService;
-import software.blacknode.backend.application.task.assign.command.TaskAssignmentsOfTaskCommand;
+import software.blacknode.backend.application.task.assign.command.TasksAssignBatchFetchCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
 import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
+import software.blacknode.backend.domain.task.assign.TaskAssign;
 
 @Service
 @RequiredArgsConstructor
-public class TaskAssignmentsOfTaskUseCase implements ResultExecutionUseCase<TaskAssignmentsOfTaskCommand, TaskAssignmentsOfTaskUseCase.Result> {
-	
+public class TasksAssignBatchFetchUseCase implements ResultExecutionUseCase<TasksAssignBatchFetchCommand, TasksAssignBatchFetchUseCase.Result> {
+
 	private final TaskAccessControl taskAccessControl;
 	
 	private final TaskAssignService taskAssignService;
 	
-	private final TaskService taskService;
+	private final MemberService memberService;
 	
 	private final SessionContextHolder sessionContextHolder;
 	
 	@Override
-	@Transactional
-	public Result execute(TaskAssignmentsOfTaskCommand command) {
+	public Result execute(TasksAssignBatchFetchCommand command) {
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		
-		var taskId = command.getTaskId();
-		var task = taskService.getOrThrow(organizationId, taskId);
+		var member = memberService.getOrThrow(organizationId, memberId);
 		
-		taskAccessControl.ensureMemberHasTaskAccess(memberId, task, AccessLevel.READ);
+		var assignIds = command.getAssignIds();
 		
-		var assignments = taskAssignService.getByTaskId(organizationId, taskId)
+		var assignments = taskAssignService.getByIds(organizationId, assignIds)
 				.stream()
-				.map(ta -> ta.getId())
+				.filter(ta -> taskAccessControl.hasAccessToTask(member, ta.getTaskId(), AccessLevel.READ))
 				.toList();
 		
 		return Result.builder()
-				.taskAssignments(assignments)
+				.taskAssigns(assignments)
 				.build();
 	}
 
-	@Getter
 	@Builder
+	@Getter
 	@ToString
 	public static class Result {
-		
-		private final List<HUID> taskAssignments;
+
+		private final List<TaskAssign> taskAssigns;
 		
 	}
 

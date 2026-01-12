@@ -63,6 +63,18 @@ public class TaskAssignService {
 		return repository.findAll(organizationId);
 	}
 	
+	public List<TaskAssign> getByIds(HUID organizationId, List<HUID> ids) {
+		return getByIds(organizationId, Set.copyOf(ids));
+	}
+	
+	public List<TaskAssign> getByIdents(HUID organizationId, List<HUID> ids) {
+		return getByIds(organizationId, List.copyOf(ids));
+	}
+	
+	public List<TaskAssign> getByIds(HUID organizationId, Set<HUID> ids) {
+		return repository.findByIds(organizationId, ids);
+	}
+	
 	public List<TaskAssign> getByTaskId(HUID organizationId, HUID taskId) {
 		return repository.findByTaskId(organizationId, taskId);
 	}
