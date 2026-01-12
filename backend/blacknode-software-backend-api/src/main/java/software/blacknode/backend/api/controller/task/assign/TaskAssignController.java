@@ -72,10 +72,10 @@ public class TaskAssignController {
 	@OrganizationHeader
 	@Operation(summary = "Get Task Assignment", description = "Fetch a specific task assignment by its ID")
 	@ApiResponses(value = @ApiResponse(responseCode = "200", description = "Task assignment fetched successfully"))
-	@GetMapping("/tasks/assigns/{assignId}")
-	public ResponseEntity<TaskAssignResponse> getTaskAssign(@PathVariable UUID assignId) {
+	@GetMapping("/tasks/assigns/{id}")
+	public ResponseEntity<TaskAssignResponse> getTaskAssign(@PathVariable UUID id) {
 		var command = TaskAssignFetchCommand.builder()
-				.assignId(HUID.fromUUID(assignId))
+				.assignId(HUID.fromUUID(id))
 				.build();
 		
 		var result = taskAssignFetchUseCase.execute(command);

@@ -1,6 +1,7 @@
 package software.blacknode.backend.infrastructure.task.assign.entity;
 
 import java.time.Instant;
+import java.util.UUID;
 
 import jakarta.persistence.Access;
 import jakarta.persistence.AccessType;
@@ -12,7 +13,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.infrastructure.entity.version.annotation.VersionedEntity;
 import software.blacknode.backend.infrastructure.organization.related.OrganizationRelatedEntity;
 import software.blacknode.backend.infrastructure.task.assign.entity.meta.TaskAssignEntityMeta;
@@ -33,11 +33,11 @@ public class TaskAssignEntity extends OrganizationRelatedEntity {
 	
 	@NotNull
 	@Column(name = "member_id", nullable = false)
-	private HUID memberId;
+	private UUID memberId;
 	
 	@NotNull
 	@Column(name = "task_id", nullable = false)
-	private HUID taskId;
+	private UUID taskId;
 	
 	@Column(name = "created_at", nullable = false, updatable = false)
 	private Instant createdAt;
