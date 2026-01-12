@@ -1,6 +1,5 @@
 package software.blacknode.backend.api.controller.task.request;
 
-import java.time.Instant;
 import java.util.UUID;
 
 import lombok.Getter;
@@ -15,8 +14,8 @@ public class TaskCreateRequest extends BaseRequest {
 	private String description;
 	
 	private Integer priority;
-	private Instant beginAt;
-	private Instant endAt;
+	private Long beginAt;
+	private Long endAt;
 	
 	private UUID statusId;
 	
