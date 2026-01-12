@@ -12,14 +12,14 @@ import software.blacknode.backend.application.access.impl.TaskAccessControl;
 import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.member.MemberService;
 import software.blacknode.backend.application.task.assign.TaskAssignService;
-import software.blacknode.backend.application.task.assign.command.TasksAssignBatchFetchCommand;
+import software.blacknode.backend.application.task.assign.command.TasksAssignsBatchFetchCommand;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
 import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
 import software.blacknode.backend.domain.task.assign.TaskAssign;
 
 @Service
 @RequiredArgsConstructor
-public class TasksAssignBatchFetchUseCase implements ResultExecutionUseCase<TasksAssignBatchFetchCommand, TasksAssignBatchFetchUseCase.Result> {
+public class TasksAssignsBatchFetchUseCase implements ResultExecutionUseCase<TasksAssignsBatchFetchCommand, TasksAssignsBatchFetchUseCase.Result> {
 
 	private final TaskAccessControl taskAccessControl;
 	
@@ -30,7 +30,7 @@ public class TasksAssignBatchFetchUseCase implements ResultExecutionUseCase<Task
 	private final SessionContextHolder sessionContextHolder;
 	
 	@Override
-	public Result execute(TasksAssignBatchFetchCommand command) {
+	public Result execute(TasksAssignsBatchFetchCommand command) {
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		

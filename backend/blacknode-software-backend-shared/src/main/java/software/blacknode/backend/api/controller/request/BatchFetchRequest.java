@@ -7,6 +7,6 @@ import java.util.UUID;
 import lombok.Getter;
 
 @Getter
-public abstract class BatchRequest extends BaseRequest {
+public abstract class BatchFetchRequest extends BaseRequest {
 	private List<UUID> ids = new ArrayList<>();
 }

@@ -11,8 +11,8 @@ import software.blacknode.backend.application.command.ExecutionCommand;
 @Getter
 @Builder
 @ToString
-public class TasksAssignBatchFetchCommand implements ExecutionCommand {
+public class TasksAssignsOfTasksCommand implements ExecutionCommand {
 
-	private final List<HUID> assignIds;
-
+	private List<HUID> taskIds;
+	
 }
