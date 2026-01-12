@@ -49,6 +49,20 @@ public class TaskAssignRepositoryImpl implements TaskAssignRepository, Organizat
 				.map(this::toDomainEntity)
 				.toList();
 	}
+	
+	@Override
+	public List<TaskAssign> findByIds(HUID organizationId, Set<HUID> ids) {
+		var uuids = ids.stream()
+				.map(HUID::toUUID)
+				.toList();
+		
+		var taskAssignEntities = repository.queryByOrganizationIdAndIdInAndState(
+				organizationId.toUUID(), uuids, EntityState.ACTIVE);
+		
+		return taskAssignEntities.stream()
+				.map(this::toDomainEntity)
+				.toList();
+	}
 
 	@Override
 	public List<TaskAssign> findByTaskId(HUID organizationId, HUID taskId) {
@@ -116,5 +130,6 @@ public class TaskAssignRepositoryImpl implements TaskAssignRepository, Organizat
 	public TaskAssign toDomainEntity(TaskAssignEntity infrastructureEntity) {
 		return mapper.toDomainEntity(infrastructureEntity);
 	}
+
 
 }

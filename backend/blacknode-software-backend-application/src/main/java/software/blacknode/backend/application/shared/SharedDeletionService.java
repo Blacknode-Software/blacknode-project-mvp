@@ -11,6 +11,7 @@ import software.blacknode.backend.application.organization.OrganizationService;
 import software.blacknode.backend.application.project.ProjectService;
 import software.blacknode.backend.application.role.RoleService;
 import software.blacknode.backend.application.task.TaskService;
+import software.blacknode.backend.application.task.assign.TaskAssignService;
 import software.blacknode.backend.application.view.ViewService;
 import software.blacknode.backend.domain.channel.meta.delete.impl.ChannelCascadeDeletionMeta;
 import software.blacknode.backend.domain.exception.BlacknodeException;
@@ -18,6 +19,7 @@ import software.blacknode.backend.domain.member.association.MemberAssociation;
 import software.blacknode.backend.domain.member.association.meta.create.impl.MemberFallbackAssociationCreationMeta;
 import software.blacknode.backend.domain.project.meta.delete.impl.ProjectCascadeDeletionMeta;
 import software.blacknode.backend.domain.role.meta.delete.impl.RoleCascadeDeletionMeta;
+import software.blacknode.backend.domain.task.assign.meta.delete.impl.TaskAssignCascadeDeletionMeta;
 import software.blacknode.backend.domain.task.meta.delete.impl.TaskCascadeDeletionMeta;
 import software.blacknode.backend.domain.view.meta.delete.impl.ViewCascadeDeletionMeta;
 
@@ -28,6 +30,7 @@ public class SharedDeletionService {
 
 	private final MemberAssociationService memberAssociationService;
 	private final OrganizationService organizationService;
+	private final TaskAssignService taskAssignService;
 	private final ProjectService projectService;
 	private final ChannelService channelService;
 	private final ViewService viewService;
@@ -79,6 +82,8 @@ public class SharedDeletionService {
 	}
 	
 	public void deleteTaskCascade(HUID organizationId, HUID taskId) {
+		unassignMembersFromTask(organizationId, taskId);
+		
 		var meta = TaskCascadeDeletionMeta.builder().build();
 		
 		taskService.delete(organizationId, taskId, meta);
@@ -112,6 +117,16 @@ public class SharedDeletionService {
 		}
 		
 		roleService.delete(organizationId, roleId, meta);
+	}
+	
+	private void unassignMembersFromTask(HUID organizationId, HUID taskId) {
+		var assigns = taskAssignService.getByTaskId(organizationId, taskId);
+		
+		var meta = TaskAssignCascadeDeletionMeta.builder().build();
+		
+		for(var assign : assigns) {
+			taskAssignService.delete(organizationId, assign.getId(), meta);
+		}
 	}
 	
 	private void assignFallbackRoleToMember(HUID organizationId, MemberAssociation association, HUID defaultRoleId) {

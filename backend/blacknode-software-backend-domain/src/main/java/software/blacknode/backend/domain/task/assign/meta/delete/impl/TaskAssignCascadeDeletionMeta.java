@@ -6,6 +6,6 @@ import software.blacknode.backend.domain.task.assign.meta.delete.TaskAssignDelet
 
 @Getter
 @Builder
-public class TaskUnassignDeletionMeta implements TaskAssignDeletionMeta {
+public class TaskAssignCascadeDeletionMeta implements TaskAssignDeletionMeta {
 
 }

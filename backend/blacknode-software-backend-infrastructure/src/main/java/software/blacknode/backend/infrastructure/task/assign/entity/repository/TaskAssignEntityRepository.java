@@ -22,10 +22,18 @@ public interface TaskAssignEntityRepository extends JpaRepository<TaskAssignEnti
 			@Param("state") EntityState state
 	);
 	
+	@Query("SELECT t FROM TaskAssignEntity t WHERE t.taskId = :taskId AND t.memberId = :memberId AND t.organizationId = :organizationId AND t.state = :state")
 	Optional<TaskAssignEntity> queryByOrganizationIdAndTaskIdAndMemberIdAndState(
 			@Param("organizationId") UUID organizationId,
 			@Param("taskId") UUID taskId,
 			@Param("memberId") UUID memberId,
+			@Param("state") EntityState state
+	);
+	
+	@Query("SELECT t FROM TaskAssignEntity t WHERE t.id IN :ids AND t.organizationId = :organizationId AND t.state = :state")
+	List<TaskAssignEntity> queryByOrganizationIdAndIdInAndState(
+			@Param("organizationId") UUID organizationId,
+			@Param("ids") List<UUID> ids,
 			@Param("state") EntityState state
 	);
 	
