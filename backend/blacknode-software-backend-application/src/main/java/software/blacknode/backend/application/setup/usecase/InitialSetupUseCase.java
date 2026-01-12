@@ -27,6 +27,7 @@ import software.blacknode.backend.domain.member.association.meta.create.impl.Mem
 import software.blacknode.backend.domain.member.meta.create.impl.MemberInitialAdminCreationMeta;
 import software.blacknode.backend.domain.organization.meta.create.impl.OrganizationInitialCreationMeta;
 import software.blacknode.backend.domain.project.meta.create.impl.ProjectInitialCreationMeta;
+import software.blacknode.backend.domain.role.meta.create.impl.RoleInitialChannelScopeCreationMeta;
 import software.blacknode.backend.domain.role.meta.create.impl.RoleInitialOrganizationScopeCreationMeta;
 import software.blacknode.backend.domain.role.meta.create.impl.RoleInitialProjectScopeCreationMeta;
 import software.blacknode.backend.domain.view.View;
@@ -97,7 +98,7 @@ public class InitialSetupUseCase implements ResultExecutionUseCase<InitialSetupC
 		
 		var memberProjRole = roleService.create(organizationId, memberProjRoleMeta);
 
-		var leadChnlRoleMeta = RoleInitialProjectScopeCreationMeta.builder()
+		var leadChnlRoleMeta = RoleInitialChannelScopeCreationMeta.builder()
 				.name("Lead")
 				.description("Default lead channel role with elevated permissions")
 				.color("#5B80DA")
@@ -106,7 +107,7 @@ public class InitialSetupUseCase implements ResultExecutionUseCase<InitialSetupC
 		
 		var leadChnlRole = roleService.create(organizationId, leadChnlRoleMeta);
 
-		var memberChnlRoleMeta = RoleInitialProjectScopeCreationMeta.builder()
+		var memberChnlRoleMeta = RoleInitialChannelScopeCreationMeta.builder()
 				.name("Channel Member")
 				.description("Default member channel role with standard permissions")
 				.color("#FAFAFF")

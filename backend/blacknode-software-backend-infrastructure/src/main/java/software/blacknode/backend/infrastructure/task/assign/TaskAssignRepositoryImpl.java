@@ -32,6 +32,14 @@ public class TaskAssignRepositoryImpl implements TaskAssignRepository, Organizat
 		return taskAssign.map(this::toDomainEntity);
 	}
 
+	@Override 
+	public Optional<TaskAssign> findByMemberIdAndTaskId(HUID organizationId, HUID taskId, HUID memberId) {
+		var taskAssign = repository.queryByOrganizationIdAndTaskIdAndMemberIdAndState(
+				organizationId.toUUID(), taskId.toUUID(), memberId.toUUID(), EntityState.ACTIVE);
+		
+		return taskAssign.map(this::toDomainEntity);
+	}
+	
 	@Override
 	public List<TaskAssign> findAll(HUID organizationId) {
 		var taskAssignEntities = repository.queryAllByOrganizationIdAndState(

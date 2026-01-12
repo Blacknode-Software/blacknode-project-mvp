@@ -11,6 +11,8 @@ public interface TaskAssignRepository {
 
 	Optional<TaskAssign> findById(HUID organizationId, HUID id);
 	
+	Optional<TaskAssign> findByMemberIdAndTaskId(HUID organizationId, HUID taskId, HUID memberId);	
+	
 	List<TaskAssign> findAll(HUID organizationId);
 	
 	List<TaskAssign> findByTaskId(HUID organizationId, HUID taskId);
