@@ -9,7 +9,7 @@ import software.blacknode.backend.api.controller.request.BaseRequest;
 
 @Getter
 @NoArgsConstructor
-public class TasksAssingsOfMembersRequest extends BaseRequest {
+public class TasksAssignsOfMembersRequest extends BaseRequest {
 
 	private List<UUID> memberIds;
 	

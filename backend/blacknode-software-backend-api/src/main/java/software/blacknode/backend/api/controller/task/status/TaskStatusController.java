@@ -3,7 +3,6 @@ package software.blacknode.backend.api.controller.task.status;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,7 +22,6 @@ import software.blacknode.backend.api.controller.task.status.response.TaskStatus
 import software.blacknode.backend.api.controller.task.status.response.TaskStatusResponse;
 import software.blacknode.backend.api.controller.task.status.response.content.TaskStatusResponseContent;
 import software.blacknode.backend.application.task.status.TaskStatusService;
-import software.blacknode.backend.domain.session.context.SessionContext;
 import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
 
 

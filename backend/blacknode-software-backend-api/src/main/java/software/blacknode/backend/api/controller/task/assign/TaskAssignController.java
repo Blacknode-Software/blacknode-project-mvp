@@ -22,16 +22,26 @@ import software.blacknode.backend.api.controller.task.assign.mapper.impl.TaskAss
 import software.blacknode.backend.api.controller.task.assign.mapper.impl.TaskAssignMemberMapper;
 import software.blacknode.backend.api.controller.task.assign.mapper.impl.TaskUnassignMemberMapper;
 import software.blacknode.backend.api.controller.task.assign.mapper.impl.TasksAssignsBatchFetchMapper;
+import software.blacknode.backend.api.controller.task.assign.mapper.impl.TasksAssignsListMapper;
 import software.blacknode.backend.api.controller.task.assign.request.TaskAssignMemberRequest;
 import software.blacknode.backend.api.controller.task.assign.request.TaskUnassignMemberRequest;
 import software.blacknode.backend.api.controller.task.assign.request.TasksAssignsBatchFetchRequest;
+import software.blacknode.backend.api.controller.task.assign.request.TasksAssignsOfMembersRequest;
+import software.blacknode.backend.api.controller.task.assign.request.TasksAssignsOfTasksRequest;
 import software.blacknode.backend.api.controller.task.assign.response.TaskAssignResponse;
 import software.blacknode.backend.api.controller.task.assign.response.TasksAssignsBatchFetchResponse;
+import software.blacknode.backend.api.controller.task.assign.response.TasksAssignsListResponse;
 import software.blacknode.backend.application.task.assign.command.TaskAssignFetchCommand;
+import software.blacknode.backend.application.task.assign.command.TasksAssignsOfMemberCommand;
+import software.blacknode.backend.application.task.assign.command.TasksAssignsOfTaskCommand;
 import software.blacknode.backend.application.task.assign.usecase.TaskAssignFetchUseCase;
 import software.blacknode.backend.application.task.assign.usecase.TaskAssignMemberUseCase;
 import software.blacknode.backend.application.task.assign.usecase.TaskUnassignMemberUseCase;
 import software.blacknode.backend.application.task.assign.usecase.TasksAssignsBatchFetchUseCase;
+import software.blacknode.backend.application.task.assign.usecase.TasksAssignsOfMemberUseCase;
+import software.blacknode.backend.application.task.assign.usecase.TasksAssignsOfMembersUseCase;
+import software.blacknode.backend.application.task.assign.usecase.TasksAssignsOfTaskUseCase;
+import software.blacknode.backend.application.task.assign.usecase.TasksAssignsOfTasksUseCase;
 
 @BearerAuth
 @RestController
@@ -50,6 +60,14 @@ public class TaskAssignController {
 	
 	private final TasksAssignsBatchFetchMapper tasksAssignsBatchFetchMapper;
 	private final TasksAssignsBatchFetchUseCase tasksAssignsBatchFetchUseCase;
+	
+	private final TasksAssignsListMapper taskAssignsListMapper;
+	
+	private final TasksAssignsOfMemberUseCase tasksAssignsOfMemberUseCase;
+	private final TasksAssignsOfMembersUseCase tasksAssignsOfMembersUseCase;
+
+	private final TasksAssignsOfTaskUseCase tasksAssignsOfTaskUseCase;
+	private final TasksAssignsOfTasksUseCase tasksAssignsOfTasksUseCase;
 	
 	@OrganizationHeader
 	@Operation(summary = "Get Task Assignment", description = "Fetch a specific task assignment by its ID")
@@ -105,7 +123,65 @@ public class TaskAssignController {
 		return response.toOkResponse("Task assignments fetched successfully");
 	}
 	
+	@OrganizationHeader
+	@Operation(summary = "Get Task Assignments of a Task", description = "Fetch all task assignments associated with a specific task")
+	@ApiResponses(value = @ApiResponse(responseCode = "200", description = "Task assignments fetched successfully"))
+	@GetMapping("/tasks/{taskId}/assigns")
+	public ResponseEntity<TasksAssignsListResponse> getTaskAssigns(@PathVariable UUID taskId) {
+		var command = TasksAssignsOfTaskCommand.builder()
+				.taskId(HUID.fromUUID(taskId))
+				.build();
+		
+		var result = tasksAssignsOfTaskUseCase.execute(command);
+		
+		var response = taskAssignsListMapper.toAssignsOfTaskResponse(result);
+		
+		return response.toOkResponse("Task assignments fetched successfully");
+	}
 	
+	@OrganizationHeader
+	@Operation(summary = "Get Task Assignments of Multiple Tasks", description = "Fetch task assignments for multiple tasks")
+	@ApiResponses(value = @ApiResponse(responseCode = "200", description = "Task assignments fetched successfully"))
+	@PostMapping("/tasks/assigns")
+	public ResponseEntity<TasksAssignsListResponse> getTasksAssigns(@RequestBody TasksAssignsOfTasksRequest request) {
+		var command = taskAssignsListMapper.toCommand(request);
+		
+		var result = tasksAssignsOfTasksUseCase.execute(command);
+		
+		var response = taskAssignsListMapper.toAssignsOfTasksResponse(result);
+		
+		return response.toOkResponse("Tasks assignments fetched successfully");
+	}
+	
+	@OrganizationHeader
+	@Operation(summary = "Get Task Assignments of a Member", description = "Fetch all task assignments associated with a specific member")
+	@ApiResponses(value = @ApiResponse(responseCode = "200", description = "Member task assignments fetched successfully"))
+	@GetMapping("/members/{memberId}/assigns")
+	public ResponseEntity<TasksAssignsListResponse> getMemberAssigns(@PathVariable UUID memberId) {
+		var command = TasksAssignsOfMemberCommand.builder()
+				.memberId(HUID.fromUUID(memberId))
+				.build();
+		
+		var result = tasksAssignsOfMemberUseCase.execute(command);
+		
+		var response = taskAssignsListMapper.toAssingsOfMemberResponse(result);
+		
+		return response.toOkResponse("Member task assignments fetched successfully");
+	}
+	
+	@OrganizationHeader
+	@Operation(summary = "Get Task Assignments of Members", description = "Fetch all task assignments associated with a list of members")
+	@ApiResponses(value = @ApiResponse(responseCode = "200", description = "Members task assignments fetched successfully"))
+	@PostMapping("/members/assigns")
+	public ResponseEntity<TasksAssignsListResponse> getMembersAssigns(@RequestBody TasksAssignsOfMembersRequest request) {
+		var command = taskAssignsListMapper.toCommand(request);
+		
+		var result = tasksAssignsOfMembersUseCase.execute(command);
+		
+		var response = taskAssignsListMapper.toAssingsOfMembersResponse(result);
+		
+		return response.toOkResponse("Members task assignments fetched successfully");
+	}
 	
 	
 }
