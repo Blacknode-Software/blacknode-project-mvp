@@ -7,10 +7,12 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import software.blacknode.backend.infrastructure.entity.state.EntityState;
 import software.blacknode.backend.infrastructure.role.entity.RoleEntity;
 
+@Repository
 public interface RoleEntityRepository extends JpaRepository<RoleEntity, UUID> {
 
 	@Query("SELECT r FROM RoleEntity r WHERE r.id = :id AND r.organizationId = :organizationId AND r.state = :state")

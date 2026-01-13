@@ -91,7 +91,13 @@ public class ChannelAccessControl {
 		
 		var roleId = association.get().getRoleId();
 		
-		return projectAccessControl.getRoleAccess(organizationId, roleId);
+		access = projectAccessControl.getRoleAccess(organizationId, roleId);
+		
+		if(access.atLeast(AccessLevel.READ)) {
+			return AccessLevel.WRITE;
+		}
+		
+		return access;
 	}
 	
 	public boolean hasAccessToChannel(HUID organizationId, HUID memberId, HUID channelId, AccessLevel level) {

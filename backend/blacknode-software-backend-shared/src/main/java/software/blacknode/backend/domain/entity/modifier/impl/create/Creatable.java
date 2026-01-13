@@ -53,7 +53,7 @@ public interface Creatable extends DomainEntityModifier {
 		}
     }
     
-    default void throwUnspportedCreationMeta(Optional<? extends CreationMeta> meta) {
+    default void throwUnsupportedCreationMeta(Optional<? extends CreationMeta> meta) {
     	throwUnsupportedCreationMeta(meta.map(m -> (DomainEntityModifierMeta) m).orElse(new EmptyModifierMeta()));
     }
     

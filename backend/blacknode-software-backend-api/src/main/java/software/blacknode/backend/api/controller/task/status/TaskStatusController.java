@@ -3,7 +3,6 @@ package software.blacknode.backend.api.controller.task.status;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,12 +17,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.api.controller.organization.annotation.OrganizationHeader;
+import software.blacknode.backend.api.controller.task.status.mapper.TaskStatusMapper;
 import software.blacknode.backend.api.controller.task.status.request.TaskStatusBatchFetchRequest;
 import software.blacknode.backend.api.controller.task.status.response.TaskStatusBatchFetchResponse;
+import software.blacknode.backend.api.controller.task.status.response.TaskStatusListResponse;
 import software.blacknode.backend.api.controller.task.status.response.TaskStatusResponse;
 import software.blacknode.backend.api.controller.task.status.response.content.TaskStatusResponseContent;
 import software.blacknode.backend.application.task.status.TaskStatusService;
-import software.blacknode.backend.domain.session.context.SessionContext;
 import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
 
 
@@ -33,6 +33,8 @@ import software.blacknode.backend.domain.session.context.holder.SessionContextHo
 public class TaskStatusController {
 	
 	private final TaskStatusService taskStatusService;
+	
+	private final TaskStatusMapper taskStatusMapper;
 	
 	private final SessionContextHolder sessionContextHolder;
 	
@@ -68,12 +70,7 @@ public class TaskStatusController {
 		var statues = taskStatusService.getByIds(organizationId, ids);
 		
 		List<TaskStatusResponseContent> items = statues.stream()
-				.map(status -> TaskStatusResponseContent.builder()
-						.id(status.getId().toUUID())
-						.name(status.getName())
-						.color(status.getColor())
-						.build())
-				.map((TaskStatusResponseContent status) -> status)
+				.map(status -> taskStatusMapper.map(status))
 				.toList();
 		
 		var response = TaskStatusBatchFetchResponse.builder()
@@ -82,6 +79,26 @@ public class TaskStatusController {
 				
 		
 		return response.toOkResponse("Task statuses fetched successfully");
+	}
+	
+	@OrganizationHeader
+	@Operation(summary = "Get task statuses in a channel")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Task statuses in channel fetched successfully") })
+	@GetMapping("/channels/{channelId}/statuses")
+	public ResponseEntity<TaskStatusListResponse> taskStatusesInChannel(@PathVariable UUID channelId) {
+		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
+		
+		var statuses = taskStatusService.getAllInChannel(organizationId, HUID.fromUUID(channelId));
+		
+		List<UUID> statusIds = statuses.stream()
+				.map(status -> status.getId().toUUID())
+				.toList();
+		
+		var response = TaskStatusListResponse.builder()
+				.ids(statusIds)
+				.build();
+				
+		return response.toOkResponse("Task statuses in channel fetched successfully");
 	}
 	
 }
