@@ -14,7 +14,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.infrastructure.entity.version.annotation.VersionedEntity;
 import software.blacknode.backend.infrastructure.organization.related.OrganizationRelatedEntity;
 import software.blacknode.backend.infrastructure.task.entity.meta.TaskEntityMeta;

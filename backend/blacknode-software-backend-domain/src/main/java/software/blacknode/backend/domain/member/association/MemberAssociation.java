@@ -44,6 +44,7 @@ public class MemberAssociation implements DomainEntity, Creatable, Deletable {
 	@Override
 	public void create(Optional<CreationMeta> meta0) {
 		ensureNotCreated(meta0);
+		ensureNotDeleted(meta0);
 		ensureCreationMetaProvided(meta0);
 		
 		this.id = HUID.random();

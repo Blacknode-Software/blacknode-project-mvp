@@ -7,10 +7,12 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import software.blacknode.backend.infrastructure.entity.state.EntityState;
 import software.blacknode.backend.infrastructure.member.association.entity.MemberAssociationEntity;
 
+@Repository
 public interface MemberAssociationEntityRepository extends JpaRepository<MemberAssociationEntity, UUID> {
 
 	@Query("SELECT m FROM MemberAssociationEntity m WHERE m.id = :id AND m.organizationId = :organizationId AND m.state = :state")

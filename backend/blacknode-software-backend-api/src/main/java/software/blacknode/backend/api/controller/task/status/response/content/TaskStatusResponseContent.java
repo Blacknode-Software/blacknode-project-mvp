@@ -10,6 +10,7 @@ import lombok.experimental.SuperBuilder;
 public class TaskStatusResponseContent {
 
 	private final UUID id;
+	
 	private final String name;
 	private final String description;
 	private final String color;

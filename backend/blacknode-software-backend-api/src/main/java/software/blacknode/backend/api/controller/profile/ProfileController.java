@@ -57,7 +57,7 @@ public class ProfileController {
 	@OrganizationHeader
 	@Operation(summary = "Fetch Profiles Batch", description = "Fetch multiple profiles by their member IDs")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Profiles batch fetched" ) })
-	@PostMapping("/profiles/batch")
+	@PostMapping("/profiles/batch-fetch")
 	public ResponseEntity<ProfilesBatchFetchResponse> getProfilesBatch(@RequestBody ProfilesBatchFetchRequest request) {
 		var command = profilesBatchFetchMapper.toCommand(request);
 		

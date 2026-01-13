@@ -1,6 +1,5 @@
 package software.blacknode.backend.api.controller.invite.response.content;
 
-import java.time.Instant;
 import java.util.UUID;
 
 import lombok.Getter;
@@ -19,10 +18,10 @@ public class InviteResponseContent {
 	private boolean revoked;
 
 	private boolean expired;
-	private Instant expiresAt;
+	private Long expiresAt;
 	
 	private boolean claimed;
 	private UUID claimedBy;
-	private Instant claimedAt; 
+	private Long claimedAt; 
 	
 }

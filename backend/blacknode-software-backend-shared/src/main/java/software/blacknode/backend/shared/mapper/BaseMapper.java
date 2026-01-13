@@ -47,4 +47,20 @@ public interface BaseMapper {
 		}
 		return timestamp.toInstant();
 	}
+	
+	default Long mapTimestamp2Long(Timestamp timestamp) {
+		if (timestamp == null) {
+			return null;
+		}
+		
+		return timestamp.toUnixMillis();
+	}
+	
+	default Timestamp mapLong2Timestamp(Long unixMillis) {
+		if (unixMillis == null) {
+			return null;
+		}
+		
+		return Timestamp.of(unixMillis);
+	}
 }

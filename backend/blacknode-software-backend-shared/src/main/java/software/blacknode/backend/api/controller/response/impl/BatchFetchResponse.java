@@ -9,7 +9,7 @@ import lombok.experimental.SuperBuilder;
 
 @Getter
 @SuperBuilder
-public abstract class BatchResponse<R extends BatchResponse<R, T>, T> extends BaseResponse<R> {
+public abstract class BatchFetchResponse<R extends BatchFetchResponse<R, T>, T> extends BaseResponse<R> {
 	
 	@Builder.Default
 	private List<T> items = new ArrayList<>();
