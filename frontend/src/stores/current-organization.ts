@@ -135,7 +135,6 @@ export const useCurrentOrganizationStore = defineStore('currentOrganization', ()
                     description: apiProjects.description,
                     id: apiProjects.id,
                     name: apiProjects.name,
-                    channelsIds: [],
                 }) satisfies Project,
         );
     }
