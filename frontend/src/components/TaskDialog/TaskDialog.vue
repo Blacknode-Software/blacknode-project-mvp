@@ -1,14 +1,20 @@
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount, computed } from 'vue';
 import { UniDialog } from '@/layout';
-import { UnixTimestamp } from '@/utils';
-import ActivityComment from '../DialogCommon/ActivityComment.vue';
-import ActivityEvent from '../DialogCommon/ActivityEvent.vue';
-import { PriorityText } from '@/ui-toolkit';
+import { PriorityText, TimestampDate } from '@/ui-toolkit';
 import type { Task } from '@/shared-types';
 import { useCurrentChannelTasksStore } from '@/stores';
 
 const currentChannelTasksStore = useCurrentChannelTasksStore();
+
+const dateFormatter = computed(
+    () =>
+        new Intl.DateTimeFormat('en-US', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+        }),
+);
 
 const props = defineProps<{
     task: Task;
@@ -34,7 +40,9 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeyDown));
             <div class="header">
                 <span></span>
                 <div class="header-right-container">
-                    <span class="creation-date">Dec 22 2025</span>
+                    <span class="creation-date"
+                        ><TimestampDate :formatter="dateFormatter" :timestmap="task.beginAt"
+                    /></span>
                     <button class="btn" type="button" @click="emit('close')">Close</button>
                 </div>
             </div>
@@ -79,82 +87,6 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeyDown));
                     <p class="description">
                         {{ task.description ?? 'No description.' }}
                     </p>
-                </div>
-
-                <div class="right">
-                    <div class="right-header">
-                        <div class="right-title">Activity</div>
-                    </div>
-
-                    <div class="activity">
-                        <ActivityEvent :timestamp="new UnixTimestamp(12312321)"
-                            >You changed title: Some docs file</ActivityEvent
-                        >
-                        <ActivityComment
-                            author-name="Nikodem Cyrzan"
-                            content="Test"
-                            :timestamp="new UnixTimestamp(12312321)"
-                        />
-                        <ActivityComment
-                            author-name="Nikodem Cyrzan"
-                            content="Test"
-                            :timestamp="new UnixTimestamp(12312321)"
-                        />
-                        <ActivityComment
-                            author-name="Nikodem Cyrzan"
-                            content="Test"
-                            :timestamp="new UnixTimestamp(12312321)"
-                        />
-                        <ActivityComment
-                            author-name="Nikodem Cyrzan"
-                            content="Test"
-                            :timestamp="new UnixTimestamp(12312321)"
-                        />
-                        <ActivityComment
-                            author-name="Nikodem Cyrzan"
-                            content="Test"
-                            :timestamp="new UnixTimestamp(12312321)"
-                        />
-                        <ActivityComment
-                            author-name="Nikodem Cyrzan"
-                            content="Test"
-                            :timestamp="new UnixTimestamp(12312321)"
-                        />
-                        <ActivityComment
-                            author-name="Nikodem Cyrzan"
-                            content="Test"
-                            :timestamp="new UnixTimestamp(12312321)"
-                        />
-                        <ActivityComment
-                            author-name="Nikodem Cyrzan"
-                            content="Test"
-                            :timestamp="new UnixTimestamp(12312321)"
-                        />
-                        <ActivityComment
-                            author-name="Nikodem Cyrzan"
-                            content="Test"
-                            :timestamp="new UnixTimestamp(12312321)"
-                        />
-                        <ActivityComment
-                            author-name="Nikodem Cyrzan"
-                            content="Test"
-                            :timestamp="new UnixTimestamp(12312321)"
-                        />
-                        <ActivityComment
-                            author-name="Nikodem Cyrzan"
-                            content="Test"
-                            :timestamp="new UnixTimestamp(12312321)"
-                        />
-                        <ActivityComment
-                            author-name="Nikodem Cyrzan"
-                            content="Test"
-                            :timestamp="new UnixTimestamp(12312321)"
-                        />
-                    </div>
-                    <div class="commentbar">
-                        <input class="comment-input" placeholder="Write down your comment..." />
-                        <button class="send-button" type="button">Send</button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -209,7 +141,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeyDown));
 }
 
 .left {
-    padding: 22px 22px 18px;
+    padding: 22px;
     border-right: 1px solid rgba(255, 255, 255, 0.08);
     overflow: auto;
     display: flex;

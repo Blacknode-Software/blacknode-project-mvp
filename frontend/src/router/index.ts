@@ -25,7 +25,7 @@ const router = createRouter({
             component: KanbanBoardView,
         },
         {
-            path: '/settings/:organization_id/:channel_id/channel-profile',
+            path: '/settings/:organization_id/:channel_id',
             name: 'Channel settings',
             component: ChannelSettingsView,
         },

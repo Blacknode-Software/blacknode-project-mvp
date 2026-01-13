@@ -9,21 +9,7 @@ import { useRoute } from 'vue-router';
 
 const authStore = useAuthUserStore();
 const invitesApiService = useInvitesApiService();
-const invites = ref<Invite[]>([
-    {
-        id: 'test',
-        claimed: false,
-        claimedAt: new UnixTimestamp(12312312),
-        claimedBy: 'Nikodem',
-        email: 'nikodem@com',
-        expired: false,
-        expiresAt: new UnixTimestamp(47147289),
-        message: 'asdasdasdasdas',
-        revoked: false,
-        status: 'Asdasdasdas',
-        token: 'asdyasdasdyasydasysdyui',
-    },
-]);
+const invites = ref<Invite[]>([]);
 
 const dateFormatter = computed(
     () =>
