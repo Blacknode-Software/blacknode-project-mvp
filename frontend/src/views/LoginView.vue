@@ -1,16 +1,31 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
+import { useAuthUserStore } from '@/stores/auth-user';
+import { reactive, ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
+
+const authUserStorage = useAuthUserStore();
 
 const loading = ref(false);
 
 const form = reactive({
-    username: '',
+    email: '',
     password: '',
 });
 
 async function onSubmit() {
     loading.value = true;
+    authUserStorage.requestAuthentication(form.email, form.password);
 }
+
+const router = useRouter();
+
+watch(
+    () => authUserStorage.accessToken,
+    () => {
+        router.push('/list/1/1');
+    },
+    { immediate: true },
+);
 </script>
 
 <template>
@@ -22,12 +37,12 @@ async function onSubmit() {
                 <form class="form" @submit.prevent="onSubmit">
                     <label class="label" for="username">Username</label>
                     <input
-                        id="username"
-                        v-model.trim="form.username"
+                        id="emial"
+                        v-model.trim="form.email"
                         class="input"
                         type="text"
-                        placeholder="Enter your username"
-                        autocomplete="username"
+                        placeholder="Enter your emial"
+                        autocomplete="email"
                     />
 
                     <label class="label" for="password">Password</label>
@@ -43,8 +58,6 @@ async function onSubmit() {
                     <button class="btn" type="submit" :disabled="loading">
                         {{ loading ? 'Logging in...' : 'Login' }}
                     </button>
-
-                    <RouterLink class="forgot" to="/forgot-password"> Forgot password? </RouterLink>
                 </form>
             </section>
 
@@ -135,7 +148,6 @@ async function onSubmit() {
     font-weight: 600;
     cursor: pointer;
     background: linear-gradient(90deg, #c7a8ff, #5b6cff);
-    box-shadow: 0 12px 30px rgba(91, 108, 255, 0.35);
     transition:
         transform 0.08s ease,
         opacity 0.12s ease;

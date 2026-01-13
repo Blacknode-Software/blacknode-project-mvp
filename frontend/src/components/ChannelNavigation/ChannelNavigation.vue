@@ -1,9 +1,22 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+function applyStyle(expectedRoute: string) {
+    if (!router) {
+        return [];
+    }
+
+    return [router.currentRoute.value.path.includes(expectedRoute) ? 'link-selected' : ''];
+}
+</script>
 
 <template>
     <div class="channel-navigation">
-        <router-link to="/list">List</router-link>
-        <router-link to="/kanban">Board</router-link>
+        <router-link to="/list/1/1" :class="applyStyle('list')">List</router-link>
+        <router-link to="/kanban/1/1" :class="applyStyle('kanban')">Board</router-link>
+        <router-link to="/settings/1/1" :class="applyStyle('settings')">Settings</router-link>
     </div>
 </template>
 
@@ -19,5 +32,9 @@
     color: white;
     text-decoration: none;
     font-size: 16px;
+}
+
+.channel-navigation a.link-selected {
+    color: var(--color-main-green);
 }
 </style>

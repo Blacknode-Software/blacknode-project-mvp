@@ -1,4 +1,4 @@
-export interface Project {
+export interface TaskStatus {
     id: string;
     name: string;
     description: string;

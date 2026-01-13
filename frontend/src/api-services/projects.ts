@@ -9,26 +9,41 @@ type Project = {
     color: string;
 };
 
-type AllProjectsIds = {
-    ids: string[];
-};
-
 type NewProject = {
     projectId: string;
 };
 
+interface RequestAllProjectsForOrganizationSuccess {
+    message: 'Operation completed successfully.';
+    status: 'success';
+    ids: string[];
+}
+
+interface RequestAllProjectsBatchSuccess {
+    message: 'Operation completed successfully.';
+    status: 'success';
+    items: {
+        id: string;
+        name: string;
+        description: string;
+        color: string;
+    }[];
+}
+
 export const useProjectsApiService = defineApiService('dummy url', {
-    async requestAllProjectsIds(
+    async requestAllProjectsForOrganization(
         baseUrl,
         payload: {
             organizationId: string;
+            authToken: string;
         },
-    ): Promise<Result<AllProjectsIds & ApiStatus, ApiError>> {
+    ): Promise<Result<RequestAllProjectsForOrganizationSuccess, ApiError>> {
         return parseResponse(
             fetch(`${baseUrl}/projects`, {
                 method: 'GET',
                 headers: {
                     'X-Organization-Id': payload.organizationId,
+                    Authorization: `Bearer ${payload.authToken}`,
                 },
             }),
         );
@@ -39,60 +54,76 @@ export const useProjectsApiService = defineApiService('dummy url', {
         payload: {
             organizationId: string;
             ids: string[];
+            authToken: string;
         },
-    ): Promise<Result<AllProjectsIds & ApiStatus, ApiError>> {
+    ): Promise<Result<RequestAllProjectsBatchSuccess, ApiError>> {
         return parseResponse(
             fetch(`${baseUrl}/projects/batch-fetch`, {
                 method: 'GET',
-                headers: {
-                    'X-Organization-Id': payload.organizationId,
-                },
                 body: JSON.stringify({
                     identifiers: payload.ids,
                 }),
+                headers: {
+                    'X-Organization-Id': payload.organizationId,
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${payload.authToken}`,
+                },
             }),
         );
     },
 
     async createNewProject(
         baseUrl,
-        payload: { organizationId: string; name: string; description: string; color: string },
+        payload: {
+            organizationId: string;
+            name: string;
+            description: string;
+            color: string;
+            authToken: string;
+        },
     ): Promise<Result<NewProject & ApiStatus, ApiError>> {
         return parseResponse(
             fetch(`${baseUrl}/projects`, {
                 method: 'POST',
-                headers: {
-                    'X-Organization-Id': payload.organizationId,
-                },
                 body: JSON.stringify({
                     name: payload.name,
                     description: payload.description,
                     color: payload.color,
                 }),
+                headers: {
+                    'X-Organization-Id': payload.organizationId,
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${payload.authToken}`,
+                },
             }),
         );
     },
 
     async requestProject(
         baseUrl,
-        payload: { organizationId: string; projectId: string },
+        payload: { organizationId: string; projectId: string; authToken: string },
     ): Promise<Result<Project & ApiStatus, ApiError>> {
         return parseResponse(
             fetch(`${baseUrl}/projects/${payload.projectId}`, {
                 method: 'GET',
                 headers: {
                     'X-Organization-Id': payload.organizationId,
+                    Authorization: `Bearer ${payload.authToken}`,
                 },
             }),
         );
     },
 
-    async deleteProject(baseUrl, payload: { organizationId: string; projectId: string }) {
+    async deleteProject(
+        baseUrl,
+        payload: { organizationId: string; projectId: string; authToken: string },
+    ) {
         return passResult(
             fetch(`${baseUrl}/projects/${payload.projectId}`, {
                 method: 'DELETE',
                 headers: {
                     'X-Organization-Id': payload.organizationId,
+                    Authorization: `Bearer ${payload.authToken}`,
                 },
             }),
         );
@@ -100,18 +131,25 @@ export const useProjectsApiService = defineApiService('dummy url', {
 
     async updateProject(
         baseUrl,
-        payload: { organizationId: string; projectId: string; updates: Partial<Project> },
+        payload: {
+            organizationId: string;
+            projectId: string;
+            updates: Partial<Project>;
+            authToken: string;
+        },
     ) {
         return passResult(
             fetch(`${baseUrl}/projects/${payload.projectId}`, {
                 method: 'PATCH',
-                headers: {
-                    'X-Organization-Id': payload.organizationId,
-                },
                 body: JSON.stringify({
                     operations: Object.keys(payload.updates),
                     ...payload.updates,
                 }),
+                headers: {
+                    'X-Organization-Id': payload.organizationId,
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${payload.authToken}`,
+                },
             }),
         );
     },
