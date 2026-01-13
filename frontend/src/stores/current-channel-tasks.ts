@@ -3,8 +3,11 @@ import type { Task, TaskStatus } from '@/shared-types';
 import { UnixTimestamp } from '@/utils';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
+import { useAuthUserStore } from './auth-user';
 
 export const useCurrentChannelTasksStore = defineStore('currentChannelTasks', () => {
+    const authStore = useAuthUserStore();
+
     const tasksApiSerive = useTasksApiService();
 
     const tasks = ref<Task[]>([]);
@@ -18,6 +21,7 @@ export const useCurrentChannelTasksStore = defineStore('currentChannelTasks', ()
         const tasksForChannelRes = await tasksApiSerive.requestTasksForChannel({
             channelId,
             organizationId,
+            authToken: authStore.accessToken!,
         });
 
         if (tasksForChannelRes.isErr()) {
@@ -30,7 +34,11 @@ export const useCurrentChannelTasksStore = defineStore('currentChannelTasks', ()
 
         const ids = tasksForChannelRes.unwrap().ids;
 
-        const tasksBatchRes = await tasksApiSerive.requestTasksBatch({ ids, organizationId });
+        const tasksBatchRes = await tasksApiSerive.requestTasksBatch({
+            ids,
+            organizationId,
+            authToken: authStore.accessToken!,
+        });
 
         if (tasksBatchRes.isErr()) {
             console.error('currentChannelTasks: requestTasksBatch error', tasksBatchRes.value);
@@ -52,7 +60,10 @@ export const useCurrentChannelTasksStore = defineStore('currentChannelTasks', ()
     }
 
     async function requestTaskStatuses(organizationId: string) {
-        const statusesRes = await tasksApiSerive.requestStatusesBatch({ organizationId });
+        const statusesRes = await tasksApiSerive.requestStatusesBatch({
+            organizationId,
+            authToken: authStore.accessToken!,
+        });
 
         if (statusesRes.isErr()) {
             console.error('currentChannelTasks: requestStatusesBatch error', statusesRes.value);
