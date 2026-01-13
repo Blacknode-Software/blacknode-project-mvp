@@ -1,5 +1,11 @@
 <script setup lang="ts">
-import { FixedBackground, MainSidebar, LocalNavigation, InvitesView } from '@/components';
+import {
+    FixedBackground,
+    MainSidebar,
+    LocalNavigation,
+    InvitesView,
+    InvitationDialog,
+} from '@/components';
 import { MainHeader, UniSidebar } from '@/layout';
 </script>
 
@@ -16,6 +22,7 @@ import { MainHeader, UniSidebar } from '@/layout';
             <InvitesView />
         </div>
     </div>
+    <InvitationDialog />
 </template>
 
 <style scoped>
