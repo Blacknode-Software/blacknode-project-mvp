@@ -4,6 +4,7 @@ import ExpandableProject from './ExpandableProject.vue';
 import { onMounted, watch } from 'vue';
 import { useCurrentOrganizationStore } from '@/stores/current-organization';
 import { useRoute } from 'vue-router';
+import type { Project } from '@/shared-types';
 
 const currentOrganizationStore = useCurrentOrganizationStore();
 
@@ -20,6 +21,10 @@ watch(
     },
     { immediate: true },
 );
+
+function getChannelsForProject(project: Project) {
+    return currentOrganizationStore.channels[project.id]!;
+}
 </script>
 
 <template>
@@ -30,6 +35,7 @@ watch(
             <ExpandableProject
                 v-for="project in currentOrganizationStore.projects"
                 :project="project"
+                :channels="getChannelsForProject(project)"
                 :key="project.id"
             />
         </ul>
