@@ -3,6 +3,8 @@ import KanbanBoardView from '@/views/KanbanBoardView.vue';
 import TasksListView from '@/views/TasksListView.vue';
 import LoginView from '@/views/LoginView.vue';
 import ChannelSettingsView from '@/views/ChannelSettingsView.vue';
+import RedirectView from '@/views/RedirectView.vue';
+import SettingsView from '@/views/SettingsView.vue';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,9 +25,18 @@ const router = createRouter({
             component: KanbanBoardView,
         },
         {
-            path: '/settings/:organization_id/:channel_id',
+            path: '/settings/:organization_id/:channel_id/channel-profile',
             name: 'Channel settings',
             component: ChannelSettingsView,
+        },
+        {
+            path: '/settings-main/:organization_id/:channel_id/',
+            name: 'Main settings',
+            component: SettingsView,
+        },
+        {
+            path: '/:pathMatch(.*)*',
+            component: RedirectView,
         },
     ],
 });

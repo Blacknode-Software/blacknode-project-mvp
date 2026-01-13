@@ -26,13 +26,14 @@ interface RequestChannelsBatchSuccess {
 export const useChannelsApiService = defineApiService('dummy url', {
     async requestAllChannelsForProject(
         baseUrl,
-        payload: { organizationId: string; projectId: string },
+        payload: { organizationId: string; projectId: string; authToken: string },
     ): Promise<Result<RequestAllChannelsForProjectSuccess, ApiError>> {
         return parseResponse(
             fetch(`${baseUrl}/projects/${payload.projectId}/channels`, {
                 method: 'GET',
                 headers: {
                     'X-Organization-Id': payload.organizationId,
+                    Authorization: `Bearer ${payload.authToken}`,
                 },
             }),
         );
@@ -40,7 +41,7 @@ export const useChannelsApiService = defineApiService('dummy url', {
 
     async requestChannelsBatch(
         baseUrl,
-        payload: { organizationId: string; ids: string[] },
+        payload: { organizationId: string; ids: string[]; authToken: string },
     ): Promise<Result<RequestChannelsBatchSuccess, ApiError>> {
         return parseResponse(
             fetch(`${baseUrl}/channels/batch-fetch`, {
@@ -51,18 +52,23 @@ export const useChannelsApiService = defineApiService('dummy url', {
                 headers: {
                     'X-Organization-Id': payload.organizationId,
                     'Content-Type': 'application/json',
+                    Authorization: `Bearer ${payload.authToken}`,
                 },
             }),
         );
     },
 
-    async createNewChannel(baseUrl, payload: { organizationId: string; projectId: string }) {
+    async createNewChannel(
+        baseUrl,
+        payload: { organizationId: string; projectId: string; authToken: string },
+    ) {
         return passResult(
             fetch(`${baseUrl}/projects/${payload.organizationId}/channels`, {
                 method: 'POST',
                 body: JSON.stringify({}),
                 headers: {
                     'X-Organization-Id': payload.organizationId,
+                    Authorization: `Bearer ${payload.authToken}`,
                 },
             }),
         );
@@ -70,26 +76,42 @@ export const useChannelsApiService = defineApiService('dummy url', {
 
     async requestChannel(
         baseUrl,
-        payload: { organizationId: string; channelId: string },
+        payload: { organizationId: string; channelId: string; authToken: string },
     ): Promise<Result<Channel, ApiError>> {
         return parseResponse(
             fetch(`${baseUrl}/channels/${payload.channelId}`, {
                 method: 'GET',
+                headers: {
+                    'X-Organization-Id': payload.organizationId,
+                    Authorization: `Bearer ${payload.authToken}`,
+                },
             }),
         );
     },
 
-    async deleteChannel(baseUrl, payload: { organizationId: string; channelId: string }) {
+    async deleteChannel(
+        baseUrl,
+        payload: { organizationId: string; channelId: string; authToken: string },
+    ) {
         return passResult(
             fetch(`${baseUrl}/channels/${payload.channelId}`, {
                 method: 'DELETE',
+                headers: {
+                    'X-Organization-Id': payload.organizationId,
+                    Authorization: `Bearer ${payload.authToken}`,
+                },
             }),
         );
     },
 
     async updateChannel(
         baseUrl,
-        payload: { organizationId: string; channelId: string; updates: Partial<Channel> },
+        payload: {
+            organizationId: string;
+            channelId: string;
+            updates: Partial<Channel>;
+            authToken: string;
+        },
     ) {
         return passResult(
             fetch(`${baseUrl}/channels/${payload.channelId}`, {
@@ -98,6 +120,11 @@ export const useChannelsApiService = defineApiService('dummy url', {
                     operations: Object.keys(payload.updates),
                     ...payload.updates,
                 }),
+                headers: {
+                    'X-Organization-Id': payload.organizationId,
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${payload.authToken}`,
+                },
             }),
         );
     },

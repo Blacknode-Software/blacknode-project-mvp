@@ -1,7 +1,7 @@
-import type { Channel } from './channel';
-
 export interface Project {
-    uuid: string;
+    id: string;
     name: string;
-    channels: Channel[];
+    description: string;
+    color: string;
+    channelsIds: string[];
 }
