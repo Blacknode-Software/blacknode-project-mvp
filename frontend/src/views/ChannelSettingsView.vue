@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { MainHeader, UniSidebar, MainView } from '@/layout';
-import { FixedBackground, MainSidebar } from '@/components';
+import { FixedBackground, LocalNavigation, MainSidebar } from '@/components';
 import { ref } from 'vue';
 
 const channelName = ref('Section II');
@@ -28,10 +28,7 @@ function onDelete() {}
                     <div class="cs-title">Channel Settings</div>
                 </div>
 
-                <div class="cs-tabs">
-                    <button class="cs-tab is-active" type="button">Channel Profile</button>
-                    <button class="cs-tab" type="button">Members</button>
-                </div>
+                <LocalNavigation :options="['Channel Profile', 'Members']" />
 
                 <div class="cs-panel">
                     <button class="cs-danger" type="button" @click="onDelete">
