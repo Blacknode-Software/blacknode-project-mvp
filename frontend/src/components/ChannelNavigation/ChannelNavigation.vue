@@ -3,11 +3,12 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
-const routerUrl = router.currentRoute.value;
-
 function applyStyle(expectedRoute: string) {
-    console.log(routerUrl.path.includes(expectedRoute));
-    return [routerUrl.path.includes(expectedRoute) ? 'link-selected' : ''];
+    if (!router) {
+        return [];
+    }
+
+    return [router.currentRoute.value.path.includes(expectedRoute) ? 'link-selected' : ''];
 }
 </script>
 
