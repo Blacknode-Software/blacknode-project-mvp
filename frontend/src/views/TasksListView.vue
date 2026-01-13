@@ -2,9 +2,11 @@
 import { FixedBackground, MainSidebar, TasksGroup, TaskDialog } from '@/components';
 import { MainHeader, UniSidebar, MainView } from '@/layout';
 import type { Task } from '@/shared-types';
-import { UnixTimestamp } from '@/utils';
-import { ref } from 'vue';
+import { useCurrentChannelTasksStore } from '@/stores';
+import { onMounted, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 
+const currentChannelTasksStore = useCurrentChannelTasksStore();
 const selectedTask = ref<Task | null>(null);
 
 function openTask(task: Task) {
@@ -14,6 +16,26 @@ function openTask(task: Task) {
 function closeTask() {
     selectedTask.value = null;
 }
+
+const route = useRoute();
+
+onMounted(() => {
+    currentChannelTasksStore.requestTasksForChannel(
+        route.params.channel_id as string,
+        route.params.organization_id as string,
+    );
+});
+
+watch(
+    () => [route.params.organization_id, route.params.channel_id],
+    ([newOrganizatonId, newChannelId]) => {
+        currentChannelTasksStore.requestTasksForChannel(
+            newChannelId as string,
+            newOrganizatonId as string,
+        );
+    },
+    { immediate: true },
+);
 </script>
 
 <template>
@@ -25,239 +47,16 @@ function closeTask() {
         </UniSidebar>
         <MainView>
             <div class="tasks-list-wrapper">
-                <div class="tasks-group">
-                    <span class="tasks-group-header">To do</span>
+                <div
+                    class="tasks-group"
+                    v-for="status in currentChannelTasksStore.statuses"
+                    :key="status.id"
+                >
+                    <span class="tasks-group-header" :style="{ color: status.color }">{{
+                        status.id
+                    }}</span>
                     <TasksGroup
-                        :tasks="[
-                            {
-                                description: 'Some docs file',
-                                id: 'adsdasadsdasdasdas',
-                                priority: 0,
-                                timestamp: new UnixTimestamp(1766333438),
-                                title: 'Some docs file',
-                                progress: 0,
-                            },
-                            {
-                                description: 'Some docs file',
-                                id: 'dsgagssgsagasd',
-                                priority: 1,
-                                timestamp: new UnixTimestamp(1766333438),
-                                title: 'Some docs file',
-                                progress: 0,
-                            },
-                            {
-                                description: 'Some docs file',
-                                id: 'tww2tweaweweawe',
-                                priority: 2,
-                                timestamp: new UnixTimestamp(1766333438),
-                                title: 'Some docs file',
-                                progress: 0,
-                            },
-                        ]"
-                        @open-task="openTask"
-                    />
-                </div>
-                <div class="tasks-group">
-                    <span class="tasks-group-header" style="color: var(--color-main)"
-                        >In progress</span
-                    >
-                    <TasksGroup
-                        :tasks="[
-                            {
-                                description: 'Some docs file',
-                                id: 'adsdasadsdasdasdas',
-                                priority: 0,
-                                timestamp: new UnixTimestamp(1766333438),
-                                title: 'Some docs file',
-                                progress: 15,
-                            },
-                            {
-                                description: 'Some docs file',
-                                id: 'dsgagssgsagasd',
-                                priority: 1,
-                                timestamp: new UnixTimestamp(1766333438),
-                                title: 'Some docs file',
-                                progress: 50,
-                            },
-                            {
-                                description: 'Some docs file',
-                                id: 'tww2tweaweweawe',
-                                priority: 2,
-                                timestamp: new UnixTimestamp(1766333438),
-                                title: 'Some docs file',
-                                progress: 75,
-                            },
-                        ]"
-                        @open-task="openTask"
-                    />
-                </div>
-                <div class="tasks-group">
-                    <span class="tasks-group-header" style="color: var(--color-main-green)"
-                        >Completed</span
-                    >
-                    <TasksGroup
-                        :tasks="[
-                            {
-                                description: 'Some docs file',
-                                id: 'adsdasadsdasdasdas',
-                                priority: 0,
-                                timestamp: new UnixTimestamp(1766333438),
-                                title: 'Some docs file',
-                                progress: 100,
-                            },
-                            {
-                                description: 'Some docs file',
-                                id: 'dsgagssgsagasd',
-                                priority: 1,
-                                timestamp: new UnixTimestamp(1766333438),
-                                title: 'Some docs file',
-                                progress: 100,
-                            },
-                            {
-                                description: 'Some docs file',
-                                id: 'dsgagssgsagasd',
-                                priority: 1,
-                                timestamp: new UnixTimestamp(1766333438),
-                                title: 'Some docs file',
-                                progress: 100,
-                            },
-                            {
-                                description: 'Some docs file',
-                                id: 'dsgagssgsagasd',
-                                priority: 1,
-                                timestamp: new UnixTimestamp(1766333438),
-                                title: 'Some docs file',
-                                progress: 100,
-                            },
-                            {
-                                description: 'Some docs file',
-                                id: 'dsgagssgsagasd',
-                                priority: 1,
-                                timestamp: new UnixTimestamp(1766333438),
-                                title: 'Some docs file',
-                                progress: 100,
-                            },
-                            {
-                                description: 'Some docs file',
-                                id: 'dsgagssgsagasd',
-                                priority: 1,
-                                timestamp: new UnixTimestamp(1766333438),
-                                title: 'Some docs file',
-                                progress: 100,
-                            },
-                            {
-                                description: 'Some docs file',
-                                id: 'dsgagssgsagasd',
-                                priority: 1,
-                                timestamp: new UnixTimestamp(1766333438),
-                                title: 'Some docs file',
-                                progress: 100,
-                            },
-                            {
-                                description: 'Some docs file',
-                                id: 'dsgagssgsagasd',
-                                priority: 1,
-                                timestamp: new UnixTimestamp(1766333438),
-                                title: 'Some docs file',
-                                progress: 100,
-                            },
-                            {
-                                description: 'Some docs file',
-                                id: 'dsgagssgsagasd',
-                                priority: 1,
-                                timestamp: new UnixTimestamp(1766333438),
-                                title: 'Some docs file',
-                                progress: 100,
-                            },
-                            {
-                                description: 'Some docs file',
-                                id: 'dsgagssgsagasd',
-                                priority: 1,
-                                timestamp: new UnixTimestamp(1766333438),
-                                title: 'Some docs file',
-                                progress: 100,
-                            },
-                            {
-                                description: 'Some docs file',
-                                id: 'dsgagssgsagasd',
-                                priority: 1,
-                                timestamp: new UnixTimestamp(1766333438),
-                                title: 'Some docs file',
-                                progress: 100,
-                            },
-                            {
-                                description: 'Some docs file',
-                                id: 'dsgagssgsagasd',
-                                priority: 1,
-                                timestamp: new UnixTimestamp(1766333438),
-                                title: 'Some docs file',
-                                progress: 100,
-                            },
-                            {
-                                description: 'Some docs file',
-                                id: 'dsgagssgsagasd',
-                                priority: 1,
-                                timestamp: new UnixTimestamp(1766333438),
-                                title: 'Some docs file',
-                                progress: 100,
-                            },
-                            {
-                                description: 'Some docs file',
-                                id: 'dsgagssgsagasd',
-                                priority: 1,
-                                timestamp: new UnixTimestamp(1766333438),
-                                title: 'Some docs file',
-                                progress: 100,
-                            },
-                            {
-                                description: 'Some docs file',
-                                id: 'dsgagssgsagasd',
-                                priority: 1,
-                                timestamp: new UnixTimestamp(1766333438),
-                                title: 'Some docs file',
-                                progress: 100,
-                            },
-                            {
-                                description: 'Some docs file',
-                                id: 'dsgagssgsagasd',
-                                priority: 1,
-                                timestamp: new UnixTimestamp(1766333438),
-                                title: 'Some docs file',
-                                progress: 100,
-                            },
-                            {
-                                description: 'Some docs file',
-                                id: 'dsgagssgsagasd',
-                                priority: 1,
-                                timestamp: new UnixTimestamp(1766333438),
-                                title: 'Some docs file',
-                                progress: 100,
-                            },
-                            {
-                                description: 'Some docs file',
-                                id: 'dsgagssgsagasd',
-                                priority: 1,
-                                timestamp: new UnixTimestamp(1766333438),
-                                title: 'Some docs file',
-                                progress: 100,
-                            },
-                            {
-                                description: 'Some docs file',
-                                id: 'dsgagssgsagasd',
-                                priority: 1,
-                                timestamp: new UnixTimestamp(1766333438),
-                                title: 'Some docs file',
-                                progress: 100,
-                            },
-                            {
-                                description: 'Some docs file',
-                                id: 'dsgagssgsagasd',
-                                priority: 1,
-                                timestamp: new UnixTimestamp(1766333438),
-                                title: 'Some docs file',
-                                progress: 100,
-                            },
-                        ]"
+                        :tasks="currentChannelTasksStore.getTasksWithStatus(status)"
                         @open-task="openTask"
                     />
                 </div>

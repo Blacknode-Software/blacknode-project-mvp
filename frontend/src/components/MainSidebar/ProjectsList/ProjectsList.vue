@@ -1,54 +1,30 @@
 <script setup lang="ts">
-import type { Project as ProjectType } from '@/shared-types/project';
 import ProjectsSearch from './ProjectsSearch.vue';
 import ExpandableProject from './ExpandableProject.vue';
+import { onMounted, watch } from 'vue';
+import { useCurrentOrganizationStore } from '@/stores/current-organization';
+import { useRoute } from 'vue-router';
+import type { Project } from '@/shared-types';
 
-const projects = [
-    {
-        uuid: 'asdasdsa',
-        name: 'Projekt 1',
-        channels: [
-            {
-                name: 'Kanał 1',
-                uuid: 'asddsad',
-            },
-            {
-                name: 'Kanał 2',
-                uuid: 'adfgdfgdfgdfgdf',
-            },
-        ],
+const currentOrganizationStore = useCurrentOrganizationStore();
+
+const route = useRoute();
+
+onMounted(() => {
+    currentOrganizationStore.requestWholeOrganization(route.params.organization_id as string);
+});
+
+watch(
+    () => [route.params.organization_id],
+    ([newOrganizatonId]) => {
+        currentOrganizationStore.requestWholeOrganization(newOrganizatonId as string);
     },
-    {
-        uuid: 'asdasdsa22',
-        name: 'Projekt 2',
-        channels: [
-            {
-                name: 'Kanał 1',
-                uuid: 'asddsad22',
-            },
-            {
-                name: 'Kanał 2',
-                uuid: 'adfgdfgdfgdfgdf',
-            },
-            {
-                name: 'Kanał 3',
-                uuid: 'adfgdfgdfgdfgdf',
-            },
-            {
-                name: 'Kanał 4',
-                uuid: 'adfgdfgdfgdfgdf',
-            },
-            {
-                name: 'Kanał 5',
-                uuid: 'adfgdfgdfgdfgdf',
-            },
-            {
-                name: 'Kanał 6',
-                uuid: 'adfgdfgdfgdfgdf',
-            },
-        ],
-    },
-] as ProjectType[];
+    { immediate: true },
+);
+
+function getChannelsForProject(project: Project) {
+    return currentOrganizationStore.channels[project.id]!;
+}
 </script>
 
 <template>
@@ -56,7 +32,12 @@ const projects = [
         <ProjectsSearch />
         <hr class="projects-list-divide" />
         <ul class="projects-list">
-            <ExpandableProject v-for="project in projects" :project="project" :key="project.uuid" />
+            <ExpandableProject
+                v-for="project in currentOrganizationStore.projects"
+                :project="project"
+                :channels="getChannelsForProject(project)"
+                :key="project.id"
+            />
         </ul>
     </div>
 </template>

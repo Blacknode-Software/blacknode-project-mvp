@@ -27,7 +27,7 @@ const emit = defineEmits<{
     >
         <div class="kanban-card-top">
             <div class="kanban-timestamp-pill">
-                <TimestampDate :timestmap="task.timestamp" :formatter="dateFormatter" />
+                <TimestampDate :timestmap="task.beginAt" :formatter="dateFormatter" />
             </div>
         </div>
 

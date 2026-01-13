@@ -1,4 +1,4 @@
 export interface Organization {
-    uuid: string;
+    id: string;
     name: string;
 }

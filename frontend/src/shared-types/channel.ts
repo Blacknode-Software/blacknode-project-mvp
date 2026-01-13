@@ -1,4 +1,6 @@
 export interface Channel {
-    uuid: string;
+    id: string;
     name: string;
+    description: string;
+    color: string;
 }

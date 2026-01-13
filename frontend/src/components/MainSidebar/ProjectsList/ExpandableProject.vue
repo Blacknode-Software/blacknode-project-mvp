@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { Project } from '@/shared-types/project';
+import type { Channel, Project } from '@/shared-types';
 import { ref } from 'vue';
 
-const props = defineProps<{ project: Project; forceExpand?: boolean }>();
+const props = defineProps<{ project: Project; channels: Channel[]; forceExpand?: boolean }>();
 
 const isExpanded = ref(props.forceExpand);
 
@@ -17,7 +17,7 @@ const handleExpand = () => {
             {{ project.name }}
         </div>
         <ul :class="[isExpanded! ? 'project-drawer-closed' : '', 'project-drawer']">
-            <li v-for="channel in project.channels" :key="channel.uuid">
+            <li v-for="channel in channels" :key="channel.id">
                 <div class="channel-button">
                     {{ channel.name }}
                 </div>
