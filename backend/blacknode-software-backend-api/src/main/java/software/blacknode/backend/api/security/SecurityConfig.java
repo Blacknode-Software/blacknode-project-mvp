@@ -6,7 +6,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import lombok.RequiredArgsConstructor;
 import software.blacknode.backend.api.filter.JwtSessonContextFilter;
@@ -24,10 +24,14 @@ public class SecurityConfig {
 			.csrf(csrf -> csrf.disable())
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.authorizeHttpRequests(auth -> auth
-				.requestMatchers("/auth/**", "/setup", "/invite/pre-claim/**").permitAll()
+				.requestMatchers(
+						"/auth/**",
+						"/setup",
+						"/invite/pre-claim/**",
+						"/invite/claim").permitAll()
 				.anyRequest().authenticated()
 			)
-			.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+			.addFilterBefore(jwtFilter, BasicAuthenticationFilter.class);
 
 		return http.build();
 	}
