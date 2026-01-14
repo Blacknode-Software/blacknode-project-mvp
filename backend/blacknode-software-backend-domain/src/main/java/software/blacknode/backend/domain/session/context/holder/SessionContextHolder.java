@@ -20,21 +20,23 @@ public class SessionContextHolder {
 		this.context = context;
 	}
 	
-	public void ensureIsAuthenticated() {
-		if (!isAuthenticated()) throw new SessionException("Session is not authenticated");
-	}
-	
 	public HUID getAccountIdOrThrow() {
+		ensureAuthenticated();
+		
 		return context.getAccountId().orElseThrow(() -> 
 			new SessionException("No account ID in session context"));
 	}
 	
 	public HUID getOrganizationIdOrThrow() {
+		ensureOrganizationScoped();
+		
 		return context.getOrganizationId().orElseThrow(() -> 
 			new SessionException("No organization ID in session context"));
 	}
 	
 	public HUID getMemberIdOrThrow() {
+		ensureOrganizationScoped();
+		
 		return context.getMemberId().orElseThrow(() -> 
 			new SessionException("No member ID in session context"));
 	}
@@ -42,6 +44,20 @@ public class SessionContextHolder {
 	public HUID getSessionIdOrThrow() {
 		return context.getSessionId().orElseThrow(() -> 
 			new SessionException("No session ID in session context"));
+	}
+	
+	public void ensureAuthenticated() {
+		if (!isAuthenticated()) {
+			throw new SessionException("Session is not authenticated");
+		}
+	}
+	
+	public void ensureOrganizationScoped() {
+		ensureAuthenticated();
+		
+		if (!isOrganizationScoped()) {
+			throw new SessionException("Session is not organization scoped");
+		}
 	}
 	
 	public boolean isAuthenticated() {

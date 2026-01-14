@@ -38,6 +38,8 @@ public class MemberAssignedProjectRoleFetchUseCase implements ResultExecutionUse
 	@Override
 	@Transactional
 	public Result execute(MemberAssignedProjectRoleFetchCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		

@@ -29,6 +29,8 @@ public class ViewFetchUseCase implements ResultExecutionUseCase<ViewFetchCommand
 	@Override
 	@Transactional
 	public Result execute(ViewFetchCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		

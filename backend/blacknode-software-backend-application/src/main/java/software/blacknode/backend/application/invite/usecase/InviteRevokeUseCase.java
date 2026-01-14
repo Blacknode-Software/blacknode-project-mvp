@@ -26,6 +26,8 @@ public class InviteRevokeUseCase implements ExecutionUseCase<InviteRevokeCommand
 	@Override
 	@Transactional
 	public void execute(InviteRevokeCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		

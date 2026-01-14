@@ -37,7 +37,10 @@ public class MemberAssignedChannelRoleFetchUseCase implements ResultExecutionUse
 	
 	@Override
 	@Transactional
-	public Result execute(MemberAssignedChannelRoleFetchCommand command) {
+	public Result execute(MemberAssignedChannelRoleFetchCommand command)
+	{
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		

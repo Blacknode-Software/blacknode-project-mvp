@@ -30,6 +30,8 @@ public class MemberAssignChannelRoleUseCase implements ExecutionUseCase<MemberAs
 	@Override
 	@Transactional
 	public void execute(MemberAssignChannelRoleCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		

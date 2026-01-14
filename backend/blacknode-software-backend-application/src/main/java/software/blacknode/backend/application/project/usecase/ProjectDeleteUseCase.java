@@ -23,6 +23,8 @@ public class ProjectDeleteUseCase implements ExecutionUseCase<ProjectDeleteComma
 	@Override
 	@Transactional
 	public void execute(ProjectDeleteCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		

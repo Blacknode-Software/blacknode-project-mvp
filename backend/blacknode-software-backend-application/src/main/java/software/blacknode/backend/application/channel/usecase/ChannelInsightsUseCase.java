@@ -31,6 +31,8 @@ public class ChannelInsightsUseCase implements ResultExecutionUseCase<ChannelIsi
 	@Override
 	@Transactional
 	public Result execute(ChannelIsightsCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		

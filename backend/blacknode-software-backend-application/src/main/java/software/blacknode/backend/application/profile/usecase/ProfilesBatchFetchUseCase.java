@@ -33,6 +33,8 @@ public class ProfilesBatchFetchUseCase implements ResultExecutionUseCase<Profile
 	
 	@Override
 	public Result execute(ProfilesBatchFetchCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		

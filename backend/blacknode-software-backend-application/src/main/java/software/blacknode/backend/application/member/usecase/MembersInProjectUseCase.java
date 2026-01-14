@@ -34,6 +34,8 @@ public class MembersInProjectUseCase implements ResultExecutionUseCase<MembersIn
 	@Override
 	@Transactional
 	public Result execute(MembersInProjectCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 	

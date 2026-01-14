@@ -27,6 +27,8 @@ public class ChannelDeleteUseCase implements ExecutionUseCase<ChannelDeleteComma
 	@Override
 	@Transactional
 	public void execute(ChannelDeleteCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		
