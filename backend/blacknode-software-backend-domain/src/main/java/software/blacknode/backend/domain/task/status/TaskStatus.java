@@ -9,28 +9,28 @@ import me.hinsinger.hinz.common.huid.HUID;
 public interface TaskStatus {
 	
 	public static final TaskStatus STATUS_TODO = of(
-			HUID.fromString("039465d28-a4b7-44f6-8dfb-000000000001"),
+			HUID.fromString("03946528-a4b7-44f6-8dfb-000000000001"),
 			"To Do",
 			"Task to be done",
 			"#FAFAFF"
 	);
 	
 	public static final TaskStatus STATUS_IN_PROGRESS = of(
-			HUID.fromString("39465d28-a4b7-44f6-8dfb-000000000002"),
+			HUID.fromString("03946528-a4b7-44f6-8dfb-000000000002"),
 			"In Progress",
 			"Task is in progress",
 			"#E6AE6E"
 	);
 	
 	public static final TaskStatus STATUS_ON_HOLD = of(
-			HUID.fromString("39465d28-a4b7-44f6-8dfb-000000000003"),
+			HUID.fromString("03946528-a4b7-44f6-8dfb-000000000003"),
 			"In Review",
 			"Task is on hold for review",
 			"#A748CE"
 	);
 	
 	public static final TaskStatus STATUS_DONE = of(
-			HUID.fromString("39465d28-a4b7-44f6-8dfb-000000000004"),
+			HUID.fromString("03946528-a4b7-44f6-8dfb-000000000004"),
 			"DONE",
 			"Task is completed",
 			"#33C4a8"
@@ -87,5 +87,9 @@ public interface TaskStatus {
 	String getName();
 	String getDescription();
 	String getColor();
+	
+	default boolean isSameAs(HUID statusId) {
+		return getId().equals(statusId);
+	}
 	
 }
