@@ -1,6 +1,7 @@
 package software.blacknode.backend.application.channel.usecase;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -10,9 +11,7 @@ import software.blacknode.backend.application.access.impl.ChannelAccessControl;
 import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.channel.ChannelService;
 import software.blacknode.backend.application.channel.command.ChannelIsightsCommand;
-import software.blacknode.backend.application.member.MemberService;
 import software.blacknode.backend.application.task.TaskService;
-import software.blacknode.backend.application.task.assign.TaskAssignService;
 import software.blacknode.backend.application.usecase.ResultExecutionUseCase;
 import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
 import software.blacknode.backend.domain.task.status.TaskStatus;
@@ -30,6 +29,7 @@ public class ChannelInsightsUseCase implements ResultExecutionUseCase<ChannelIsi
 	private final SessionContextHolder sessionContextHolder;
 	
 	@Override
+	@Transactional
 	public Result execute(ChannelIsightsCommand command) {
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
