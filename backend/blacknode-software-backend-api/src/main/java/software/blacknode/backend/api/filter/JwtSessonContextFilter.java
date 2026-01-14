@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -18,6 +19,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
+import software.blacknode.backend.api.security.JwtAuthenticationToken;
 import software.blacknode.backend.application.member.MemberService;
 import software.blacknode.backend.domain.session.context.SessionContext;
 import software.blacknode.backend.domain.session.context.holder.SessionContextHolder;
@@ -58,16 +60,25 @@ public class JwtSessonContextFilter extends OncePerRequestFilter {
 	            context = context.withAccountId(Optional.ofNullable(accountId));
 	        
 	            String orgHeader = request.getHeader(ORG_HEADER);
+	            HUID organizationId = null;
+	            HUID memberId = null;
 	            
 	            if (orgHeader != null && !orgHeader.isBlank()) {
-	            	var organizationId = HUID.fromString(orgHeader);
+	            	organizationId = HUID.fromString(orgHeader);
 	            	
-	            	var memberId = memberService.getByAccountIdOrThrow(accountId, organizationId);
+	            	var member = memberService.getByAccountIdOrThrow(accountId, organizationId);
+	            	memberId = member.getId();
 	            	
 	                context = context.withOrganizationId(Optional.ofNullable(organizationId))
-	                			 .withMemberId(Optional.ofNullable(memberId.getId()));
+	                			 .withMemberId(Optional.ofNullable(memberId));
 	                
 	            }
+	            
+	            JwtAuthenticationToken authentication = new JwtAuthenticationToken(
+	            	accountId, organizationId, memberId, token
+	            );
+	            SecurityContextHolder.getContext().setAuthentication(authentication);
+	            
         	} catch (ExpiredJwtException ex) {
         		log.debug("Expired JWT token provided: {}", ex.getMessage());
         	} catch (JwtException ex) {
