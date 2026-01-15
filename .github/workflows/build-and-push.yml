@@ -26,29 +26,29 @@ jobs:
         run: |
           docker build \
             --build-arg REVISION=${{ inputs.version }} \
-            -t blacknode-software/blacknode-backend:${{ inputs.version }} \
-            -t blacknode-software/blacknode-backend:latest \
+            -t blacknodesoftware/blacknode-backend:${{ inputs.version }} \
+            -t blacknodesoftware/blacknode-backend:latest \
             -f backend/Dockerfile backend
 
       - name: Build frontend image
         run: |
           docker build \
-            -t blacknode-software/blacknode-frontend:${{ inputs.version }} \
-            -t blacknode-software/blacknode-frontend:latest \
+            -t blacknodesoftware/blacknode-frontend:${{ inputs.version }} \
+            -t blacknodesoftware/blacknode-frontend:latest \
             -f frontend/Dockerfile frontend
 
       - name: Build proxy image
         run: |
           docker build \
-            -t blacknode-software/blacknode-proxy:${{ inputs.version }} \
-            -t blacknode-software/blacknode-proxy:latest \
+            -t blacknodesoftware/blacknode-proxy:${{ inputs.version }} \
+            -t blacknodesoftware/blacknode-proxy:latest \
             -f proxy/Dockerfile proxy
 
       - name: Push images
         run: |
-          docker push blacknode-software/blacknode-backend:${{ inputs.version }}
-          docker push blacknode-software/blacknode-backend:latest
-          docker push blacknode-software/blacknode-frontend:${{ inputs.version }}
-          docker push blacknode-software/blacknode-frontend:latest
-          docker push blacknode-software/blacknode-proxy:${{ inputs.version }}
-          docker push blacknode-software/blacknode-proxy:latest
+          docker push blacknodesoftware/blacknode-backend:${{ inputs.version }}
+          docker push blacknodesoftware/blacknode-backend:latest
+          docker push blacknodesoftware/blacknode-frontend:${{ inputs.version }}
+          docker push blacknodesoftware/blacknode-frontend:latest
+          docker push blacknodesoftware/blacknode-proxy:${{ inputs.version }}
+          docker push blacknodesoftware/blacknode-proxy:latest
