@@ -19,7 +19,7 @@ spring:
 
 jwt:
   issuer: "blacknode-backend"
-  expiration: 600000
+  expiration: ${JWT_EXPIRATION_TIME:600000}
   development-auto-generate: true
   
 logging:

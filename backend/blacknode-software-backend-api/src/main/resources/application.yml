@@ -1,6 +1,16 @@
 application:
-  base-url: "${APPLICATION_URL:http://localhost:8080}"
+  base-url: "${APPLICATION_URL:http://localhost}"
 
+server:
+  servlet:
+    context-path: /api
+  
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+  
 spring:
   datasource:
     url: "${DB_URL:}"
