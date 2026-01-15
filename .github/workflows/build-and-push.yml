@@ -1,0 +1,54 @@
+name: Build and Push Images on Docker Hub
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (e.g. 26.0)"
+        required: true
+        type: string
+
+jobs:
+  build-and-push:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Docker login
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_LOGIN }}
+          password: ${{ secrets.DOCKER_HUB_PAT }}
+
+      - name: Build backend image
+        run: |
+          docker build \
+            --build-arg REVISION=${{ inputs.version }} \
+            -t blacknode-software/blacknode-backend:${{ inputs.version }} \
+            -t blacknode-software/blacknode-backend:latest \
+            -f backend/Dockerfile backend
+
+      - name: Build frontend image
+        run: |
+          docker build \
+            -t blacknode-software/blacknode-frontend:${{ inputs.version }} \
+            -t blacknode-software/blacknode-frontend:latest \
+            -f frontend/Dockerfile frontend
+
+      - name: Build proxy image
+        run: |
+          docker build \
+            -t blacknode-software/blacknode-proxy:${{ inputs.version }} \
+            -t blacknode-software/blacknode-proxy:latest \
+            -f proxy/Dockerfile proxy
+
+      - name: Push images
+        run: |
+          docker push blacknode-software/blacknode-backend:${{ inputs.version }}
+          docker push blacknode-software/blacknode-backend:latest
+          docker push blacknode-software/blacknode-frontend:${{ inputs.version }}
+          docker push blacknode-software/blacknode-frontend:latest
+          docker push blacknode-software/blacknode-proxy:${{ inputs.version }}
+          docker push blacknode-software/blacknode-proxy:latest
