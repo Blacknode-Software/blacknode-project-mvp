@@ -7,6 +7,8 @@ services:
     restart: unless-stopped
     environment:
       - spring.profiles.active=dev
+      - APPLICATION_URL=${APPLICATION_URL}
+      - JWT_EXPIRATION_TIME=${JWT_EXPIRATION_TIME}
     expose:
       - "8080"
 
