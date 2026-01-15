@@ -12,6 +12,7 @@ import io.jsonwebtoken.JwtException;
 import software.blacknode.backend.api.controller.response.impl.ErrorResponse;
 import software.blacknode.backend.domain.auth.exception.AuthenticationException;
 import software.blacknode.backend.domain.exception.BlacknodeException;
+import software.blacknode.backend.domain.session.exception.SessionException;
 
 @RestControllerAdvice
 public class BaseControllerAdvice {
@@ -34,6 +35,11 @@ public class BaseControllerAdvice {
 	@ExceptionHandler(AccessDeniedException.class)
 	public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException ex) {
 		return ErrorResponse.with(ex.getMessage(), HttpStatus.FORBIDDEN);
+	}
+	
+	@ExceptionHandler(SessionException.class)
+	public ResponseEntity<ErrorResponse> handleSessionException(SessionException ex) {
+		return ErrorResponse.with(ex.getMessage(), HttpStatus.UNAUTHORIZED);
 	}
 	
 	@ExceptionHandler(BlacknodeException.class)

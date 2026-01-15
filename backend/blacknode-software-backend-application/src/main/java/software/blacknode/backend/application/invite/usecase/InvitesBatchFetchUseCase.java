@@ -31,6 +31,8 @@ public class InvitesBatchFetchUseCase implements ResultExecutionUseCase<InvitesB
 	@Override
 	@Transactional
 	public Result execute(InvitesBatchFetchCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		

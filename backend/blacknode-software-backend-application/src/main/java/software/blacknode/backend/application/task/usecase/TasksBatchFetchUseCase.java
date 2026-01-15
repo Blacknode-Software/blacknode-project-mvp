@@ -30,6 +30,8 @@ public class TasksBatchFetchUseCase implements ResultExecutionUseCase<TasksBatch
 	@Override
 	@Transactional
 	public Result execute(TasksBatchFetchCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		

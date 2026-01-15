@@ -27,6 +27,8 @@ public class MemberAddToProjectUseCase implements ExecutionUseCase<MemberAddToPr
 	
 	@Override
 	public void execute(MemberAddToProjectCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		

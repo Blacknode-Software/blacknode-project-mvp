@@ -30,6 +30,8 @@ public class ViewsBatchFetchUseCase implements ResultExecutionUseCase<ViewsBatch
 	@Override
 	@Transactional
 	public Result execute(ViewsBatchFetchCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		

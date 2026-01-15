@@ -34,6 +34,8 @@ public class TaskPatchUseCase implements ResultExecutionUseCase<TaskPatchCommand
 	@Override
 	@Transactional
 	public Result execute(TaskPatchCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		

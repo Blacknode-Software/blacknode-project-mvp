@@ -27,6 +27,8 @@ public class ProjectFetchUseCase implements ResultExecutionUseCase<ProjectFetchC
 	@Override
 	@Transactional
 	public Result execute(ProjectFetchCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		

@@ -29,6 +29,8 @@ public class ChannelsBatchFetchUseCase implements ResultExecutionUseCase<Channel
 	@Override
 	@Transactional
 	public Result execute(ChannelsBatchFetchCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		

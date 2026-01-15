@@ -29,6 +29,8 @@ public class InviteFetchUseCase implements ResultExecutionUseCase<InviteFetchCom
 	@Override
 	@Transactional
 	public Result execute(InviteFetchCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		
