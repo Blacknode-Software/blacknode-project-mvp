@@ -32,6 +32,7 @@ public class SecurityConfig {
 						"/swagger-ui/**",
 						"/v3/api-docs/**",
 						"/auth/**",
+						"/health",
 						"/setup",
 						"/invite/pre-claim/**",
 						"/invite/claim").permitAll()

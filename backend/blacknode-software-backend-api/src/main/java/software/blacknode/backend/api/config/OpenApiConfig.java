@@ -1,9 +1,11 @@
 package software.blacknode.backend.api.config;
 
 import org.springdoc.core.customizers.OperationCustomizer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
@@ -13,16 +15,16 @@ import software.blacknode.backend.application.patch.impl.PatchOperationEnum;
 
 @Configuration
 public class OpenApiConfig {
+	
     @Bean
-    public OpenAPI customOpenAPI() {
-        return new OpenAPI()
-        	.addServersItem(new Server().url("http://localhost:8080/api").description("Development (HTTP)"))
-            .addServersItem(new Server().url("https://test.int.blacknode.software/api").description("Testing (HTTPS)"))
-            .addServersItem(new Server().url("https://app.blacknode.software/api").description("Production (HTTPS)"))
+    public OpenAPI customOpenAPI(@Value("${application.base-url:http://localhost:8080}") String applicationUrl) {
+        var apiUrl = applicationUrl.endsWith("/") ? applicationUrl + "api" : applicationUrl + "/api";
+    	
+    	return new OpenAPI()
+        	.addServersItem(new Server().url(apiUrl).description("API"))
             .addSecurityItem(new SecurityRequirement().addList("BearerAuth"))
-            .components(new io.swagger.v3.oas.models.Components()
-                .addSecuritySchemes("BearerAuth",
-                    new SecurityScheme()
+            .components(new Components()
+            		.addSecuritySchemes("BearerAuth", new SecurityScheme()
                         .type(SecurityScheme.Type.HTTP)
                         .scheme("bearer")
                         .bearerFormat("JWT")));
