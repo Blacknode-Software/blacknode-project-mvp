@@ -92,15 +92,5 @@ public interface Response<T extends Response<T>> {
 	public static enum Status {
 		SUCCESS,
 		FAILURE;
-
-		@JsonValue
-		public String toLowerCase() {
-			return name().toLowerCase();
-		}
-
-		@JsonCreator
-		public static Status fromString(String value) {
-			return Status.valueOf(value.toUpperCase());
-		}
 	}
 }
