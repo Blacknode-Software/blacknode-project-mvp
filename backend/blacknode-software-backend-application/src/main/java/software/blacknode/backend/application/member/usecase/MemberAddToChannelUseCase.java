@@ -34,6 +34,8 @@ public class MemberAddToChannelUseCase implements ExecutionUseCase<MemberAddToCh
 	
 	@Override
 	public void execute(MemberAddToChannelCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		

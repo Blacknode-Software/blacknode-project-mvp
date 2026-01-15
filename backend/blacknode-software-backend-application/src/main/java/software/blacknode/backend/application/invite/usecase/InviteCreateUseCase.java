@@ -37,6 +37,8 @@ public class InviteCreateUseCase implements ResultExecutionUseCase<InviteCreateC
 	@Override
 	@Transactional
 	public Result execute(InviteCreateCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		

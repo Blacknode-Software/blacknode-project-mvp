@@ -33,6 +33,8 @@ public class RolePatchUseCase implements ResultExecutionUseCase<RolePatchCommand
 	@Override
 	@Transactional
 	public Result execute(RolePatchCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		

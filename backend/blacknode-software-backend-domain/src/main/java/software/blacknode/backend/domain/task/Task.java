@@ -21,6 +21,7 @@ import software.blacknode.backend.domain.task.meta.TaskMeta;
 import software.blacknode.backend.domain.task.meta.create.TaskCreationMeta;
 import software.blacknode.backend.domain.task.meta.delete.TaskDeletionMeta;
 import software.blacknode.backend.domain.task.meta.modify.TaskModificationMeta;
+import software.blacknode.backend.domain.task.status.TaskStatus;
 
 @Builder
 @AllArgsConstructor(onConstructor = @__({ @Deprecated }))
@@ -156,5 +157,19 @@ public class Task implements DomainEntity, Creatable, Modifiable, Deletable {
 	
 	public boolean isOwnedByMember(HUID memberId) {
 		return this.ownerMemberId.equals(memberId);
+	}
+	
+	public boolean isOverdue() {
+		return meta.getEndAt()
+				.map(endAt -> endAt.isFuture())
+				.orElse(false);
+	}
+	
+	public boolean hasStatus(TaskStatus status) {
+		if(statusId.isEmpty()) {
+			return false;
+		}
+		
+		return status.isSameAs(statusId.get());
 	}
 }

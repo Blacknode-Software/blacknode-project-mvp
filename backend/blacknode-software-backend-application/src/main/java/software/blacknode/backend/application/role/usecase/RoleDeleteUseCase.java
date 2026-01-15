@@ -28,6 +28,8 @@ public class RoleDeleteUseCase implements ExecutionUseCase<RoleDeleteCommand> {
 	@Override
 	@Transactional
 	public void execute(RoleDeleteCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		

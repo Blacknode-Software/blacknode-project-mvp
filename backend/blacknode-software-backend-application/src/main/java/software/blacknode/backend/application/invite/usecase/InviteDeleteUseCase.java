@@ -24,6 +24,8 @@ public class InviteDeleteUseCase implements ExecutionUseCase<InviteDeleteCommand
 	@Override
 	@Transactional
 	public void execute(InviteDeleteCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 	

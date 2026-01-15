@@ -34,6 +34,8 @@ public class ChannelsInProjectUseCase implements ResultExecutionUseCase<Channels
 	@Override
 	@Transactional
 	public Result execute(ChannelsInProjectCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		

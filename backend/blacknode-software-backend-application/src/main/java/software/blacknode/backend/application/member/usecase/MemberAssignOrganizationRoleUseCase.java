@@ -29,6 +29,8 @@ public class MemberAssignOrganizationRoleUseCase implements ExecutionUseCase<Mem
 	@Override
 	@Transactional
 	public void execute(MemberAssignOrganizationRoleCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		

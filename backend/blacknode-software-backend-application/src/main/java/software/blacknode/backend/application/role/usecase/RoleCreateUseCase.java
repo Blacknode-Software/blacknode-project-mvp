@@ -30,6 +30,8 @@ public class RoleCreateUseCase implements ResultExecutionUseCase<RoleCreateComma
 	@Override
 	@Transactional
 	public Result execute(RoleCreateCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		

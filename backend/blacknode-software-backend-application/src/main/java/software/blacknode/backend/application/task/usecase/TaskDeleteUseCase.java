@@ -23,6 +23,8 @@ public class TaskDeleteUseCase implements ExecutionUseCase<TaskDeleteCommand> {
 	@Override
 	@Transactional
 	public void execute(TaskDeleteCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		

@@ -30,6 +30,8 @@ public class RolesInOrganizationUseCase implements ResultExecutionUseCase<RolesI
 	@Override
 	@Transactional
 	public Result execute(RolesInOrganizationCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		

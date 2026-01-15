@@ -31,6 +31,8 @@ public class ViewsInChannelUseCase implements ResultExecutionUseCase<ViewsInChan
 	@Override
 	@Transactional
 	public Result execute(ViewsInChannelCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		

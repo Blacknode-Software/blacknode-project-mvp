@@ -28,6 +28,8 @@ public class ProjectCreateUseCase implements ResultExecutionUseCase<ProjectCreat
 	@Override
 	@Transactional
 	public Result execute(ProjectCreateCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		

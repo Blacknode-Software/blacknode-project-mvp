@@ -30,6 +30,8 @@ public class MemberAssignProjectRoleUseCase implements ExecutionUseCase<MemberAs
 	@Override
 	@Transactional
 	public void execute(MemberAssignProjectRoleCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		
