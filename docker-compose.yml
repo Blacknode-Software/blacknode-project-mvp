@@ -7,19 +7,8 @@ services:
     restart: unless-stopped
     environment:
       - spring.profiles.active=dev
-      - JWT_EXPIRATION_TIME=${JWT_EXPIRATION_TIME}
-      - APPLICATION_URL=${APPLICATION_URL:http://localhost}
     expose:
       - "8080"
-    healthcheck:
-      test: >
-        CMD-SHELL
-        curl -fs http://localhost:8080/api/health
-        | grep -q '"status":"SUCCESS"'
-      interval: 30s
-      timeout: 5s
-      retries: 3
-      start_period: 15s
 
   frontend:
     build:
