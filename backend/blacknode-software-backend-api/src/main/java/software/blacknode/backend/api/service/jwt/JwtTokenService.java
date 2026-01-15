@@ -21,7 +21,8 @@ public class JwtTokenService {
     private final String issuer;
     private final SecretKey key;
 
-    public JwtTokenService(SecretKey jwtSigningKey, @Value("${jwt.expiration}") long expiration,
+    public JwtTokenService(SecretKey jwtSigningKey, 
+    		@Value("${jwt.expiration}") long expiration,
             @Value("${jwt.issuer}") String issuer) {
         this.key = jwtSigningKey;
         this.expiration = expiration;

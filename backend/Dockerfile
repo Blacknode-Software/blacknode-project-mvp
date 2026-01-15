@@ -11,18 +11,18 @@ COPY blacknode-software-backend-api/pom.xml \
 	blacknode-software-backend-infrastructure/pom.xml \
 	blacknode-software-backend-shared/pom.xml ./
 
-# Copy all sources and build only the API module (and modules it depends on)
+# Copy all sources and build only the API module
 COPY . .
-RUN mvn -B -pl blacknode-software-backend-api -am package -T 1C
+RUN mvn -B -pl blacknode-software-backend-api -am package
 
 
 FROM eclipse-temurin:17-jre AS runtime
 WORKDIR /app
 
-# Copy the API module JAR from the build stage (wildcard handles version)
-COPY --from=build /workspace/blacknode-software-backend-api/target/*.jar /app/app.jar
+# Copy the API module JAR from the build stage
+COPY --from=build /workspace/blacknode-software-backend-api/target/*.jar /app/api.jar
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+ENTRYPOINT ["java", "-jar", "/app/api.jar"]
 

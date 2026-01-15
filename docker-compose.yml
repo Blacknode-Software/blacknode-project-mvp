@@ -5,19 +5,10 @@ services:
       dockerfile: Dockerfile
     image: blacknode-backend:latest
     restart: unless-stopped
+    environment:
+      - spring.profiles.active=dev
     expose:
       - "8080"
-
-  nginx:
-    build:
-      context: ./proxy
-      dockerfile: Dockerfile
-    image: blacknode-nginx:latest
-    depends_on:
-      - backend
-    expose:
-      - "80"
-    restart: unless-stopped
 
   frontend:
     build:
@@ -27,3 +18,15 @@ services:
     expose:
       - "80"
     restart: unless-stopped
+
+  proxy:
+    build:
+      context: ./proxy
+      dockerfile: Dockerfile
+    image: blacknode-proxy:latest
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+    restart: unless-stopped
+
