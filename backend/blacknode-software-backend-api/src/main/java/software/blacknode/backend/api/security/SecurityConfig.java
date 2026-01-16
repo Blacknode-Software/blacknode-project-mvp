@@ -21,12 +21,11 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http
-			.csrf(csrf -> csrf.disable())
+		http.csrf(csrf -> csrf.disable()) /* Disabled because we are not using cookies for session tracking */
+			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.formLogin(form -> form.disable())
 			.httpBasic(basic -> basic.disable())
 			.logout(logout -> logout.disable())
-			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.authorizeHttpRequests(auth -> auth
 				.requestMatchers(
 						"/swagger-ui/**",
