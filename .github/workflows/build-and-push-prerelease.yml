@@ -12,9 +12,16 @@ jobs:
   build-and-push-prerelease:
     if: startsWith(github.ref, 'refs/heads/release/')
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: Docker login
         uses: docker/login-action@v3
@@ -22,33 +29,37 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_LOGIN }}
           password: ${{ secrets.DOCKER_HUB_PAT }}
 
-      - name: Build backend image (pre-release)
-        run: |
-          docker build \
-            --build-arg REVISION=${{ inputs.version }} \
-            -t blacknodesoftware/blacknode-backend:${{ inputs.version }} \
-            -t blacknodesoftware/blacknode-backend:pre-release \
-            -f backend/Dockerfile backend
+      - name: Build & push backend (pre-release)
+        uses: docker/build-push-action@v5
+        with:
+          context: backend
+          file: backend/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          build-args: |
+            REVISION=${{ inputs.version }}
+          push: true
+          tags: |
+            blacknodesoftware/blacknode-backend:${{ inputs.version }}
+            blacknodesoftware/blacknode-backend:pre-release
 
-      - name: Build frontend image (pre-release)
-        run: |
-          docker build \
-            -t blacknodesoftware/blacknode-frontend:${{ inputs.version }} \
-            -t blacknodesoftware/blacknode-frontend:pre-release \
-            -f frontend/Dockerfile frontend
+      - name: Build & push frontend (pre-release)
+        uses: docker/build-push-action@v5
+        with:
+          context: frontend
+          file: frontend/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            blacknodesoftware/blacknode-frontend:${{ inputs.version }}
+            blacknodesoftware/blacknode-frontend:pre-release
 
-      - name: Build proxy image (pre-release)
-        run: |
-          docker build \
-            -t blacknodesoftware/blacknode-proxy:${{ inputs.version }} \
-            -t blacknodesoftware/blacknode-proxy:pre-release \
-            -f proxy/Dockerfile proxy
-
-      - name: Push pre-release images
-        run: |
-          docker push blacknodesoftware/blacknode-backend:${{ inputs.version }}
-          docker push blacknodesoftware/blacknode-backend:pre-release
-          docker push blacknodesoftware/blacknode-frontend:${{ inputs.version }}
-          docker push blacknodesoftware/blacknode-frontend:pre-release
-          docker push blacknodesoftware/blacknode-proxy:${{ inputs.version }}
-          docker push blacknodesoftware/blacknode-proxy:pre-release
+      - name: Build & push proxy (pre-release)
+        uses: docker/build-push-action@v5
+        with:
+          context: proxy
+          file: proxy/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            blacknodesoftware/blacknode-proxy:${{ inputs.version }}
+            blacknodesoftware/blacknode-proxy:pre-release
