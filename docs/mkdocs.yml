@@ -1,17 +1,50 @@
-site_name: Blacknode Software - DOCS
+site_name: Blacknode Software - Documentation
+site_description: Internal docs and examples for the Blacknode platform.
+site_url: https://docs.blacknode.software
+
+repo_url: https://github.com/Blacknode-Software/blacknode-project-mvp
+repo_name: Blacknode-Software/blacknode-project-mvp
 
 theme:
-  name: material
+  name: shadcn
+  font:
+    text: "Inter"
+    code: "JetBrains Mono"
+  icon: assets/blacknode-software-icon.png
   palette:
-    - scheme: default
-      toggle:
-        icon: material/weather-night
-        name: Dark mode
-    - scheme: slate
-      toggle:
-        icon: material/weather-sunny
-        name: Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: amber
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: amber
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
 
 nav:
   - Home: index.md
-  - Guide: guide.md
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - toc:
+      permalink: true
+
+plugins:
+  - search
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/Blacknode-Software/blacknode-project-mvp
+      name: GitHub
