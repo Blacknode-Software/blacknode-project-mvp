@@ -26,29 +26,29 @@ jobs:
         run: |
           docker build \
             --build-arg REVISION=${{ inputs.version }} \
-            -t blacknode-software/blacknode-backend:${{ inputs.version }} \
-            -t blacknode-software/blacknode-backend:pre-release \
+            -t blacknodesoftware/blacknode-backend:${{ inputs.version }} \
+            -t blacknodesoftware/blacknode-backend:pre-release \
             -f backend/Dockerfile backend
 
       - name: Build frontend image (pre-release)
         run: |
           docker build \
-            -t blacknode-software/blacknode-frontend:${{ inputs.version }} \
-            -t blacknode-software/blacknode-frontend:pre-release \
+            -t blacknodesoftware/blacknode-frontend:${{ inputs.version }} \
+            -t blacknodesoftware/blacknode-frontend:pre-release \
             -f frontend/Dockerfile frontend
 
       - name: Build proxy image (pre-release)
         run: |
           docker build \
-            -t blacknode-software/blacknode-proxy:${{ inputs.version }} \
-            -t blacknode-software/blacknode-proxy:pre-release \
+            -t blacknodesoftware/blacknode-proxy:${{ inputs.version }} \
+            -t blacknodesoftware/blacknode-proxy:pre-release \
             -f proxy/Dockerfile proxy
 
       - name: Push pre-release images
         run: |
-          docker push blacknode-software/blacknode-backend:${{ inputs.version }}
-          docker push blacknode-software/blacknode-backend:pre-release
-          docker push blacknode-software/blacknode-frontend:${{ inputs.version }}
-          docker push blacknode-software/blacknode-frontend:pre-release
-          docker push blacknode-software/blacknode-proxy:${{ inputs.version }}
-          docker push blacknode-software/blacknode-proxy:pre-release
+          docker push blacknodesoftware/blacknode-backend:${{ inputs.version }}
+          docker push blacknodesoftware/blacknode-backend:pre-release
+          docker push blacknodesoftware/blacknode-frontend:${{ inputs.version }}
+          docker push blacknodesoftware/blacknode-frontend:pre-release
+          docker push blacknodesoftware/blacknode-proxy:${{ inputs.version }}
+          docker push blacknodesoftware/blacknode-proxy:pre-release
