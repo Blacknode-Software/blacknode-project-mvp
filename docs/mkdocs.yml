@@ -7,9 +7,6 @@ repo_name: Blacknode-Software/blacknode-project-mvp
 
 theme:
   name: shadcn
-  font:
-    text: "Inter"
-    code: "JetBrains Mono"
   icon: assets/blacknode-software-icon.png
   palette:
     - media: "(prefers-color-scheme: light)"
@@ -29,7 +26,14 @@ theme:
     - content.code.copy
 
 nav:
-  - Home: index.md
+  - Introduction:
+      - Welcome: introduction/welcome.md
+      - Installation: introduction/installation.md
+      - Uninstall: introduction/uninstall.md
+      - Troubleshooting: introduction/troubleshooting.md
+  - User Guide:
+      - Getting Started: user-guide/getting-started.md
+      
 
 markdown_extensions:
   - admonition
