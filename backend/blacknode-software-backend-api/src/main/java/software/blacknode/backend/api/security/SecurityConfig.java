@@ -33,8 +33,8 @@ public class SecurityConfig {
 						"/auth/**",
 						"/health",
 						"/setup",
-						"/invite/pre-claim/**",
-						"/invite/claim").permitAll()
+						"/invites/pre-claim/**",
+						"/invites/claim").permitAll()
 				.anyRequest().authenticated()
 			)
 			.addFilterBefore(jwtFilter, BasicAuthenticationFilter.class);
