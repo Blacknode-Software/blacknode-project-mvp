@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: mkdocs-static
+    image: blacknode-docs:latest
     expose:
       - "80"
     restart: unless-stopped
