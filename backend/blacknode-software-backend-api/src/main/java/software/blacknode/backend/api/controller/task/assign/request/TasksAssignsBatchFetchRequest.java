@@ -9,7 +9,7 @@ import lombok.ToString;
 import software.blacknode.backend.api.controller.request.BatchFetchRequest;
 
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor
 @ToString
 public class TasksAssignsBatchFetchRequest extends BatchFetchRequest {
 	

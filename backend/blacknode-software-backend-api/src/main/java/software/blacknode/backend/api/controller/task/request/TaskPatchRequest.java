@@ -9,7 +9,7 @@ import lombok.ToString;
 import software.blacknode.backend.api.controller.request.PatchRequest;
 
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor
 @ToString
 public class TaskPatchRequest extends PatchRequest {
 

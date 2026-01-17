@@ -7,7 +7,7 @@ import lombok.ToString;
 import software.blacknode.backend.api.controller.request.PatchRequest;
 
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor
 @ToString
 public class ChannelPatchRequest extends PatchRequest {
 
