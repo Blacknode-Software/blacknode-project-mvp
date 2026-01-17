@@ -3,6 +3,7 @@ package software.blacknode.backend.application.health.usecase;
 import java.util.Optional;
 
 import org.springframework.boot.info.BuildProperties;
+import org.springframework.context.annotation.ImportRuntimeHints;
 import org.springframework.stereotype.Service;
 
 import lombok.Builder;

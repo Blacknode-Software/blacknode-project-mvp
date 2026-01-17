@@ -10,8 +10,8 @@ import software.blacknode.backend.api.controller.request.BaseRequest;
 @Getter
 @AllArgsConstructor
 @ToString
-public class MemberAssignRoleRequest extends BaseRequest {
+public class MemberRemoveRequest extends BaseRequest {
 
-	private final UUID roleId;
+	private UUID memberId;
 	
 }
