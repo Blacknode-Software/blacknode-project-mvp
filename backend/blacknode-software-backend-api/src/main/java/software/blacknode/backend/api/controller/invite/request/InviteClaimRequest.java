@@ -7,7 +7,7 @@ import lombok.ToString;
 import software.blacknode.backend.api.controller.request.BaseRequest;
 
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor
 @ToString
 public class InviteClaimRequest extends BaseRequest {
 

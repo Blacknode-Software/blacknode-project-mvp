@@ -5,11 +5,12 @@ import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import software.blacknode.backend.api.controller.request.BaseRequest;
 
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor
 @ToString
 public class TaskUnassignMemberRequest extends BaseRequest {
 
