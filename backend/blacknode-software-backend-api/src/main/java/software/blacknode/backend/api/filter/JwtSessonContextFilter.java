@@ -50,6 +50,11 @@ public class JwtSessonContextFilter extends OncePerRequestFilter {
 
         String authHeader = request.getHeader(AUTH_HEADER);
         
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
         	try {
 	            String token = authHeader.substring(7);
