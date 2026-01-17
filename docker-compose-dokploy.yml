@@ -3,7 +3,7 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    image: blacknode-backend:latest
+    image: blacknode-backend:latest-dev
     restart: unless-stopped
     environment:
       - spring.profiles.active=dev
@@ -16,7 +16,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    image: blacknode-frontend:latest
+    image: blacknode-frontend:latest-dev
     expose:
       - "80"
     restart: unless-stopped
@@ -25,9 +25,10 @@ services:
     build:
       context: ./proxy
       dockerfile: Dockerfile
-    image: blacknode-proxy:latest
+    image: blacknode-proxy:latest-dev
     depends_on:
       - backend
+      - frontend
     expose:
       - "80"
     restart: unless-stopped
