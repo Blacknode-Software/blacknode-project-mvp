@@ -1,12 +1,13 @@
 import { type Result } from '@/utils';
 import { defineApiService } from './utils/DefineApiService';
 import { parseResponse, passResult, type ApiError } from './utils';
+import { API_URL } from '@/config/env';
 
 interface Member {
     any: number; // todo
 }
 
-export const useMembersApiService = defineApiService('dummy url', {
+export const useMembersApiService = defineApiService(API_URL, {
     async createNewMember(baseUrl, payload: { organizationId: string }) {
         return passResult(
             fetch(`${baseUrl}/organization/${payload.organizationId}/members`, {

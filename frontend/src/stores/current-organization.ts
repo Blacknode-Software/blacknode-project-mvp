@@ -139,11 +139,18 @@ export const useCurrentOrganizationStore = defineStore('currentOrganization', ()
         );
     }
 
+    function findProjectWithChannel(channelId: string) {
+        projects.value?.find((project) =>
+            channels.value[project.id]?.find((channel) => channel.id === channelId),
+        );
+    }
+
     return {
         requestOrganization,
         requestAllChannelsForProject,
         requestAllProjectsForOrganization,
         requestWholeOrganization,
+        findProjectWithChannel,
         organization,
         projects,
         channels,

@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import type { Channel, Project } from '@/shared-types';
+import { useCurrentOrganizationStore } from '@/stores/current-organization';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const currentOrganizationState = useCurrentOrganizationStore();
 
 const props = defineProps<{ project: Project; channels: Channel[]; forceExpand?: boolean }>();
 
@@ -9,6 +13,8 @@ const isExpanded = ref(props.forceExpand);
 const handleExpand = () => {
     isExpanded.value = !isExpanded.value;
 };
+
+const router = useRouter();
 </script>
 
 <template>
@@ -18,7 +24,15 @@ const handleExpand = () => {
         </div>
         <ul :class="[isExpanded! ? 'project-drawer-closed' : '', 'project-drawer']">
             <li v-for="channel in channels" :key="channel.id">
-                <div class="channel-button">
+                <div
+                    class="channel-button"
+                    @click="
+                        () =>
+                            router.push(
+                                `/list/${currentOrganizationState.organization?.id}/${channel.id}`,
+                            )
+                    "
+                >
                     {{ channel.name }}
                 </div>
             </li>

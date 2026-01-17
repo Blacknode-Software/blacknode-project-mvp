@@ -1,6 +1,7 @@
 import { type Result } from '@/utils';
 import { defineApiService } from './utils/DefineApiService';
 import { parseResponse, passResult, type ApiError } from './utils';
+import { API_URL } from '@/config/env';
 
 interface Channel {
     any: number; // todo
@@ -23,7 +24,7 @@ interface RequestChannelsBatchSuccess {
     }[];
 }
 
-export const useChannelsApiService = defineApiService('dummy url', {
+export const useChannelsApiService = defineApiService(API_URL, {
     async requestAllChannelsForProject(
         baseUrl,
         payload: { organizationId: string; projectId: string; authToken: string },
