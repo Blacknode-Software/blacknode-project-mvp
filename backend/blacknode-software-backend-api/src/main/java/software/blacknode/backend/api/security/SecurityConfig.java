@@ -56,7 +56,11 @@ public class SecurityConfig {
 	@Bean
 	CorsConfigurationSource corsConfigurationSource() {
 	    CorsConfiguration cfg = new CorsConfiguration();
-	    cfg.setAllowedOrigins(List.of("http://localhost:3000", "https://your-frontend.com"));
+	    cfg.setAllowedOrigins(List.of(
+	        "https://preview.blacknode.software",
+	        "https://test.int.blacknode.software",
+	        "https://app.blacknode.software"
+	    ));
 	    cfg.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
 	    cfg.setAllowedHeaders(List.of("*"));
 	    cfg.setAllowCredentials(true);
