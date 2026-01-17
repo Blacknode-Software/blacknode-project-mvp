@@ -1,9 +1,6 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
 
-# Install build tools (some native deps may require them)
-RUN apk add --no-cache python3 make g++
-
 # Copy lockfile first when present to leverage layer caching
 COPY package*.json ./
 

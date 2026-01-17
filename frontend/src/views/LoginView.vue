@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useAuthUserStore } from '@/stores/auth-user';
 import { reactive, ref, watch } from 'vue';
-import { useRouter } from 'vue-router';
+// import { useRouter } from 'vue-router';
 
 const authUserStorage = useAuthUserStore();
 
@@ -17,12 +17,12 @@ async function onSubmit() {
     authUserStorage.requestAuthentication(form.email, form.password);
 }
 
-const router = useRouter();
+// const router = useRouter();
 
 watch(
     () => authUserStorage.accessToken,
     () => {
-        router.push('/list/1/1');
+        // router.push('/list/1/1');
     },
     { immediate: true },
 );

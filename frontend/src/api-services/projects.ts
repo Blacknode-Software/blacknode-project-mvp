@@ -1,6 +1,7 @@
 import { type Result } from '@/utils';
 import { defineApiService } from './utils/DefineApiService';
 import { parseResponse, passResult, type ApiError, type ApiStatus } from './utils';
+import { API_URL } from '@/config/env';
 
 type Project = {
     id: string;
@@ -30,7 +31,7 @@ interface RequestAllProjectsBatchSuccess {
     }[];
 }
 
-export const useProjectsApiService = defineApiService('dummy url', {
+export const useProjectsApiService = defineApiService(API_URL, {
     async requestAllProjectsForOrganization(
         baseUrl,
         payload: {
@@ -59,9 +60,9 @@ export const useProjectsApiService = defineApiService('dummy url', {
     ): Promise<Result<RequestAllProjectsBatchSuccess, ApiError>> {
         return parseResponse(
             fetch(`${baseUrl}/projects/batch-fetch`, {
-                method: 'GET',
+                method: 'POST',
                 body: JSON.stringify({
-                    identifiers: payload.ids,
+                    ids: payload.ids,
                 }),
                 headers: {
                     'X-Organization-Id': payload.organizationId,

@@ -14,9 +14,7 @@ export const useCurrentChannelTasksStore = defineStore('currentChannelTasks', ()
     const statuses = ref<TaskStatus[]>([]);
 
     async function requestTasksForChannel(channelId: string, organizationId: string) {
-        if (statuses.value.length <= 0) {
-            await requestTaskStatuses(organizationId);
-        }
+        await requestTaskStatuses(organizationId);
 
         const tasksForChannelRes = await tasksApiSerive.requestTasksForChannel({
             channelId,
@@ -63,6 +61,12 @@ export const useCurrentChannelTasksStore = defineStore('currentChannelTasks', ()
         const statusesRes = await tasksApiSerive.requestStatusesBatch({
             organizationId,
             authToken: authStore.accessToken!,
+            ids: [
+                '03946528-a4b7-44f6-8dfb-000000000001',
+                '03946528-a4b7-44f6-8dfb-000000000002',
+                '03946528-a4b7-44f6-8dfb-000000000003',
+                '03946528-a4b7-44f6-8dfb-000000000004',
+            ],
         });
 
         if (statusesRes.isErr()) {
@@ -81,6 +85,22 @@ export const useCurrentChannelTasksStore = defineStore('currentChannelTasks', ()
         );
     }
 
+    function updateTask(organizationId: string, projectId: string, task: Task) {
+        tasksApiSerive.updateTask({
+            authToken: authStore.accessToken!,
+            organizationId,
+            projectId,
+            updates: {
+                beginAt: task.beginAt.unixTimestamp,
+                endAt: task.endAt.unixTimestamp,
+                description: task.description,
+                priority: task.priority,
+                statusId: task.statusId,
+                title: task.title,
+            },
+        });
+    }
+
     function getStatusWithId(id: string) {
         return statuses.value.find((status) => status.id === id);
     }
@@ -94,6 +114,7 @@ export const useCurrentChannelTasksStore = defineStore('currentChannelTasks', ()
         requestTasksForChannel,
         getStatusWithId,
         getTasksWithStatus,
+        updateTask,
         tasks,
         statuses,
     };

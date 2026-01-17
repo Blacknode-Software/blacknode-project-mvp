@@ -3,11 +3,16 @@ import { FixedBackground, MainSidebar, TasksGroup, TaskDialog } from '@/componen
 import { MainHeader, UniSidebar, MainView } from '@/layout';
 import type { Task } from '@/shared-types';
 import { useCurrentChannelTasksStore } from '@/stores';
+import { useCurrentOrganizationStore } from '@/stores/current-organization';
 import { onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
+const currentOrganizationStore = useCurrentOrganizationStore();
 const currentChannelTasksStore = useCurrentChannelTasksStore();
 const selectedTask = ref<Task | null>(null);
+const taskEditMode = ref<boolean>(false);
+const organizationId = ref<string>();
+const projectId = ref<string>();
 
 function openTask(task: Task) {
     selectedTask.value = task;
@@ -15,6 +20,7 @@ function openTask(task: Task) {
 
 function closeTask() {
     selectedTask.value = null;
+    taskEditMode.value = false;
 }
 
 const route = useRoute();
@@ -29,10 +35,13 @@ onMounted(() => {
 watch(
     () => [route.params.organization_id, route.params.channel_id],
     ([newOrganizatonId, newChannelId]) => {
-        currentChannelTasksStore.requestTasksForChannel(
-            newChannelId as string,
-            newOrganizatonId as string,
-        );
+        const orgId = newOrganizatonId as string;
+        const chnlId = newChannelId as string;
+
+        currentChannelTasksStore.requestTasksForChannel(chnlId, orgId);
+
+        organizationId.value = orgId;
+        projectId.value = currentOrganizationStore.findProjectWithChannel(chnlId)!;
     },
     { immediate: true },
 );
@@ -52,9 +61,9 @@ watch(
                     v-for="status in currentChannelTasksStore.statuses"
                     :key="status.id"
                 >
-                    <span class="tasks-group-header" :style="{ color: status.color }">{{
-                        status.id
-                    }}</span>
+                    <span class="tasks-group-header" :style="{ color: status.color }">
+                        {{ status.name }}
+                    </span>
                     <TasksGroup
                         :tasks="currentChannelTasksStore.getTasksWithStatus(status)"
                         @open-task="openTask"
@@ -63,7 +72,14 @@ watch(
             </div>
         </MainView>
     </div>
-    <TaskDialog v-if="selectedTask" :task="selectedTask" @close="closeTask" />
+    <TaskDialog
+        v-if="selectedTask"
+        :edit-mode="taskEditMode"
+        :task="selectedTask"
+        :organization-id="organizationId!"
+        :project-id="projectId!"
+        @close="closeTask"
+    />
 </template>
 
 <style scoped>

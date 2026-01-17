@@ -1,23 +1,32 @@
 <script setup lang="ts">
-import { onMounted, onBeforeUnmount, computed } from 'vue';
+import { onMounted, onBeforeUnmount, computed, ref } from 'vue';
 import { UniDialog } from '@/layout';
 import { PriorityText, TimestampDate } from '@/ui-toolkit';
 import type { Task } from '@/shared-types';
 import { useCurrentChannelTasksStore } from '@/stores';
+import { UnixTimestamp } from '@/utils';
+// import { useTasksApiService } from '@/api-services/tasks';
 
 const currentChannelTasksStore = useCurrentChannelTasksStore();
+// const tasksApiService = useTasksApiService();
+const localEditMode = ref<boolean>(false);
 
 const dateFormatter = computed(
     () =>
-        new Intl.DateTimeFormat('en-US', {
+        new Intl.DateTimeFormat('pl-PL', {
             year: 'numeric',
             month: '2-digit',
             day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
         }),
 );
 
 const props = defineProps<{
+    organizationId: string;
+    projectId: string;
     task: Task;
+    editMode?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -32,6 +41,33 @@ const status = computed(() => currentChannelTasksStore.getStatusWithId(props.tas
 
 onMounted(() => window.addEventListener('keydown', onKeyDown));
 onBeforeUnmount(() => window.removeEventListener('keydown', onKeyDown));
+
+function handleEditClick() {
+    localEditMode.value = true;
+}
+
+function handleSaveClick() {
+    localEditMode.value = false;
+    console.log(props);
+    currentChannelTasksStore.updateTask(props.organizationId, props.projectId, props.task);
+}
+
+const isInEditMode = computed(() => localEditMode.value || props.editMode);
+
+const beginAtLocal = computed({
+    get: () => props.task.beginAt.toInputString(),
+    set: (inputStr: string) => {
+        /* eslint-disable  vue/no-mutating-props */
+        props.task.beginAt = UnixTimestamp.fromInputString(inputStr);
+    },
+});
+const endAtLocal = computed({
+    get: () => props.task.endAt.toInputString(),
+    set: (inputStr: string) => {
+        /* eslint-disable  vue/no-mutating-props */
+        props.task.endAt = UnixTimestamp.fromInputString(inputStr);
+    },
+});
 </script>
 
 <template>
@@ -40,53 +76,107 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeyDown));
             <div class="header">
                 <span></span>
                 <div class="header-right-container">
-                    <span class="creation-date"
-                        ><TimestampDate :formatter="dateFormatter" :timestmap="task.beginAt"
-                    /></span>
+                    <button
+                        class="btn"
+                        type="button"
+                        @click="handleEditClick()"
+                        v-if="!isInEditMode"
+                    >
+                        Edit
+                    </button>
+                    <button
+                        class="btn edit-btn"
+                        type="button"
+                        @click="handleSaveClick()"
+                        v-if="isInEditMode"
+                    >
+                        Save
+                    </button>
                     <button class="btn" type="button" @click="emit('close')">Close</button>
                 </div>
             </div>
 
             <div class="content">
                 <div class="left">
-                    <h1 class="title">{{ task.title }}</h1>
+                    <h1 v-if="!isInEditMode" class="title">
+                        {{ task.title }}
+                    </h1>
+                    <input
+                        v-if="isInEditMode"
+                        type="text"
+                        class="title-input input"
+                        v-model="task.title"
+                    />
 
                     <div class="meta-grid">
                         <div class="meta-row">
                             <div class="label">Status</div>
-                            <div class="value" :style="{ color: status?.color }">
+                            <div
+                                v-if="!isInEditMode"
+                                class="value value-pill"
+                                :style="{ color: status?.color }"
+                            >
                                 {{ status?.name }}
+                            </div>
+                            <div v-if="isInEditMode" class="value">
+                                <select class="input">
+                                    <option value="">test</option>
+                                </select>
                             </div>
                         </div>
 
                         <div class="meta-row">
-                            <div class="label">Dates</div>
-                            <div class="value muted"></div>
+                            <div class="label">Begins at</div>
+                            <div v-if="!isInEditMode" class="value value-pill">
+                                <TimestampDate
+                                    :formatter="dateFormatter"
+                                    :timestmap="task.beginAt"
+                                />
+                            </div>
+                            <div v-if="isInEditMode">
+                                <input class="input" type="datetime-local" v-model="beginAtLocal" />
+                            </div>
+                        </div>
+
+                        <div class="meta-row">
+                            <div class="label">Ends at</div>
+                            <div v-if="!isInEditMode" class="value value-pill">
+                                <TimestampDate :formatter="dateFormatter" :timestmap="task.endAt" />
+                            </div>
+                            <div v-if="isInEditMode">
+                                <input class="input" type="datetime-local" v-model="endAtLocal" />
+                            </div>
                         </div>
 
                         <div class="meta-row">
                             <div class="label">Assigned</div>
-                            <div class="value">
-                                <div class="assignees">
-                                    <span class="dot a1" />
-                                    <span class="dot a2" />
-                                    <span class="dot a3" />
-                                    <span class="dot a4" />
-                                </div>
-                            </div>
+                            <div class="value value-pill"></div>
                         </div>
 
                         <div class="meta-row">
                             <div class="label">Priority</div>
-                            <div class="value">
+                            <div v-if="!isInEditMode" class="value value-pill">
                                 <PriorityText :value="task.priority" />
+                            </div>
+                            <div v-if="isInEditMode">
+                                <select class="input" v-model="task.priority">
+                                    <option :value="0">Low</option>
+                                    <option :value="1">Medium</option>
+                                    <option :value="2">High</option>
+                                </select>
                             </div>
                         </div>
                     </div>
                     <div class="divider" />
-                    <p class="description">
-                        {{ task.description ?? 'No description.' }}
+                    <p v-if="!isInEditMode" class="description">
+                        {{ task.description }}
                     </p>
+                    <textarea
+                        v-if="isInEditMode"
+                        class="input"
+                        rows="10"
+                        v-model="task.description"
+                    ></textarea>
                 </div>
             </div>
         </div>
@@ -101,9 +191,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeyDown));
 }
 
 .dialog {
-    max-width: 1180px;
-    width: 100%;
-    max-height: 800px;
+    width: min(1180px, calc(100vw - 40px));
     display: flex;
     flex-direction: column;
 }
@@ -135,8 +223,6 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeyDown));
 }
 
 .content {
-    display: grid;
-    grid-template-columns: 1.35fr 0.65fr;
     min-height: 520px;
 }
 
@@ -163,16 +249,16 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeyDown));
 }
 
 .meta-grid {
+    width: fit-content;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 14px 22px;
 }
 
 .meta-row {
-    display: grid;
-    grid-template-columns: 140px 1fr;
+    display: flex;
+    gap: 10px;
     align-items: center;
-    gap: 12px;
 }
 
 .label {
@@ -307,6 +393,10 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeyDown));
     background: transparent;
 }
 
+.edit-btn {
+    background-color: oklch(69.137% 0.14992 158.536);
+}
+
 .send-button {
     background: rgba(255, 255, 255, 0.06);
     color: white;
@@ -316,5 +406,33 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeyDown));
     height: 100%;
     width: 100%;
     padding: 0 10px;
+}
+
+.value-pill,
+.input {
+    padding: 5px 10px;
+    border-radius: 8px;
+    min-height: 32px;
+    min-width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: inherit;
+}
+
+.title-input {
+    font-size: 36px;
+    margin-bottom: 14px;
+    font-weight: 700;
+}
+
+.input {
+    border: none;
+    color: white;
+    background-color: oklch(0 0 0 / 30%);
+}
+
+textarea.input {
+    resize: vertical;
 }
 </style>
