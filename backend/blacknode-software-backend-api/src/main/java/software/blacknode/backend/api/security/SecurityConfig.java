@@ -2,6 +2,7 @@ package software.blacknode.backend.api.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -27,14 +28,16 @@ public class SecurityConfig {
 			.httpBasic(basic -> basic.disable())
 			.logout(logout -> logout.disable())
 			.authorizeHttpRequests(auth -> auth
-				.requestMatchers(
-						"/swagger-ui/**",
-						"/v3/api-docs/**",
-						"/auth/**",
-						"/health",
-						"/setup",
-						"/invites/pre-claim/**",
-						"/invites/claim").permitAll()
+				.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+			    .requestMatchers(
+			            "/swagger-ui/**",
+			            "/v3/api-docs/**",
+			            "/auth/**",
+			            "/health",
+			            "/setup",
+			            "/invites/pre-claim/**",
+			            "/invites/claim"
+			        ).permitAll()
 				.anyRequest().authenticated()
 			)
 			.addFilterBefore(jwtFilter, BasicAuthenticationFilter.class);
