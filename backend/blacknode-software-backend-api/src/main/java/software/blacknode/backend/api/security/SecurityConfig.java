@@ -61,7 +61,7 @@ public class SecurityConfig {
 	        "https://test.int.blacknode.software",
 	        "https://app.blacknode.software"
 	    ));
-	    cfg.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
+	    cfg.setAllowedMethods(List.of("GET","POST","PUT","DELETE","PATCH","OPTIONS"));
 	    cfg.setAllowedHeaders(List.of(
 	    	    "Authorization",
 	    	    "Content-Type",
