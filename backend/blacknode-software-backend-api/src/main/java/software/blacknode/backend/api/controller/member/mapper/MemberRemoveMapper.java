@@ -4,12 +4,13 @@ import java.util.UUID;
 
 import org.mapstruct.Mapper;
 
+import software.blacknode.backend.api.controller.mapper.ControllerMapper;
 import software.blacknode.backend.api.controller.member.request.MemberRemoveRequest;
 import software.blacknode.backend.application.member.command.MemberRemoveFromChannelCommand;
 import software.blacknode.backend.application.member.command.MemberRemoveFromProjectCommand;
 
 @Mapper(componentModel = "spring")
-public interface MemberRemoveMapper {
+public interface MemberRemoveMapper extends ControllerMapper {
 
 	MemberRemoveFromChannelCommand toChannelCommand(MemberRemoveRequest request, UUID channelId);
 	
