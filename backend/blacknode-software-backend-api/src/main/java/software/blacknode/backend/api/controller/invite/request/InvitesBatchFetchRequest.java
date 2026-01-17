@@ -1,7 +1,13 @@
 package software.blacknode.backend.api.controller.invite.request;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.ToString;
 import software.blacknode.backend.api.controller.request.BatchFetchRequest;
 
+@Getter
+@AllArgsConstructor
+@ToString
 public class InvitesBatchFetchRequest extends BatchFetchRequest {
 
 }

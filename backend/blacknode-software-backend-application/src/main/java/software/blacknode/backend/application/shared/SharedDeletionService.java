@@ -5,7 +5,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import me.hinsinger.hinz.common.huid.HUID;
+import software.blacknode.backend.application.access.impl.ChannelAccessControl;
+import software.blacknode.backend.application.access.impl.ProjectAccessControl;
+import software.blacknode.backend.application.access.level.AccessLevel;
 import software.blacknode.backend.application.channel.ChannelService;
+import software.blacknode.backend.application.member.MemberService;
 import software.blacknode.backend.application.member.association.MemberAssociationService;
 import software.blacknode.backend.application.organization.OrganizationService;
 import software.blacknode.backend.application.project.ProjectService;
@@ -17,6 +21,7 @@ import software.blacknode.backend.domain.channel.meta.delete.impl.ChannelCascade
 import software.blacknode.backend.domain.exception.BlacknodeException;
 import software.blacknode.backend.domain.member.association.MemberAssociation;
 import software.blacknode.backend.domain.member.association.meta.create.impl.MemberFallbackAssociationCreationMeta;
+import software.blacknode.backend.domain.member.association.meta.delete.impl.MemberAssociationCascadeDeletionMeta;
 import software.blacknode.backend.domain.project.meta.delete.impl.ProjectCascadeDeletionMeta;
 import software.blacknode.backend.domain.role.meta.delete.impl.RoleCascadeDeletionMeta;
 import software.blacknode.backend.domain.task.assign.meta.delete.impl.TaskAssignCascadeDeletionMeta;
@@ -28,11 +33,15 @@ import software.blacknode.backend.domain.view.meta.delete.impl.ViewCascadeDeleti
 @RequiredArgsConstructor
 public class SharedDeletionService {
 
+	private final ProjectAccessControl projectAccessControl;
+	private final ChannelAccessControl channelAccessControl;
+	
 	private final MemberAssociationService memberAssociationService;
 	private final OrganizationService organizationService;
 	private final TaskAssignService taskAssignService;
 	private final ProjectService projectService;
 	private final ChannelService channelService;
+	private final MemberService memberService;
 	private final ViewService viewService;
 	private final RoleService roleService;
 	private final TaskService taskService;
@@ -50,10 +59,22 @@ public class SharedDeletionService {
 	*/
 	
 	public void deleteProjectCascade(HUID organizationId, HUID projectId) {
+		var project = projectService.getOrThrow(organizationId, projectId);
+		
 		var channels = channelService.getAllInProject(organizationId, projectId);
 		
 		for(var channel : channels) {
 			deleteChannelCascade(organizationId, channel.getId());
+		}
+		
+		var members = memberService.getAll(organizationId)
+				.stream()
+				.filter(m -> projectAccessControl.hasAccessToProject(m, project, AccessLevel.READ))
+				.map(member -> member.getId())
+				.toList();
+		
+		for(var member : members) {
+			deleteMemberFromProject(organizationId, member, projectId);
 		}
 		
 		var meta = ProjectCascadeDeletionMeta.builder().build();
@@ -62,6 +83,8 @@ public class SharedDeletionService {
 	}
 	
 	public void deleteChannelCascade(HUID organizationId, HUID channelId) {
+		var channel = channelService.getOrThrow(organizationId, channelId);
+		
 		var views = viewService.getAllInChannel(organizationId, channelId);
 		
 		for(var view : views) {
@@ -74,7 +97,15 @@ public class SharedDeletionService {
 			deleteTaskCascade(organizationId, task.getId());
 		}
 	
-		// TODO RESOURCE DELETION HANDLING
+		var members = memberService.getAll(organizationId)
+				.stream()
+				.filter(m -> channelAccessControl.hasAccessToChannel(m, channel, AccessLevel.READ))
+				.map(member -> member.getId())
+				.toList();
+		
+		for(var member : members) {
+			deleteMemberFromChannel(organizationId, member, channelId);
+		}
 
 		var meta = ChannelCascadeDeletionMeta.builder().build();
 		
@@ -119,6 +150,25 @@ public class SharedDeletionService {
 		roleService.delete(organizationId, roleId, meta);
 	}
 	
+	public void deleteMemberFromProject(HUID organizationId, HUID memberId, HUID projectId) {
+		var project = projectService.getOrThrow(organizationId, projectId);
+		
+		var channels = channelService.getAllInProject(organizationId, projectId);
+		
+		for(var channel : channels) {
+			deleteMemberFromChannel(organizationId, memberId, channel.getId());
+		}
+		
+		removeMemberProjectAssociation(organizationId, memberId, projectId);
+	}
+	
+	public void deleteMemberFromChannel(HUID organizationId, HUID memberId, HUID channelId) {
+		/* TODO: Add task assignment removal? */
+		
+		removeMemberChannelAssociation(organizationId, memberId, channelId);
+	}
+	
+	
 	private void unassignMembersFromTask(HUID organizationId, HUID taskId) {
 		var assigns = taskAssignService.getByTaskId(organizationId, taskId);
 		
@@ -145,5 +195,30 @@ public class SharedDeletionService {
 		memberAssociationService.create(organizationId, fallbackMeta);
 	}
 	
+	private void removeMemberProjectAssociation(HUID organizationId, HUID memberId, HUID projectId) {
+		var associationOpt = memberAssociationService.getMemberProjectAssociation(organizationId, memberId, projectId);
+		
+		if(associationOpt.isEmpty()) return;
+		
+		var association = associationOpt.get();
+		
+		var meta = MemberAssociationCascadeDeletionMeta.builder()
+				.build();
+		
+		memberAssociationService.delete(organizationId, association.getId(), meta);
+	}
+	
+	private void removeMemberChannelAssociation(HUID organizationId, HUID memberId, HUID channelId) {
+		var associationOpt = memberAssociationService.getMemberChannelAssociation(organizationId, memberId, channelId);
+		
+		if(associationOpt.isEmpty()) return;
+		
+		var association = associationOpt.get();
+		
+		var meta = MemberAssociationCascadeDeletionMeta.builder()
+				.build();
+		
+		memberAssociationService.delete(organizationId, association.getId(), meta);
+	}
 	
 }
