@@ -62,7 +62,11 @@ public class SecurityConfig {
 	        "https://app.blacknode.software"
 	    ));
 	    cfg.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
-	    cfg.setAllowedHeaders(List.of("*"));
+	    cfg.setAllowedHeaders(List.of(
+	    	    "Authorization",
+	    	    "Content-Type",
+	    	    "X-Organization-Id"
+	    	));
 	    cfg.setAllowCredentials(true);
 	    cfg.setMaxAge(3600L);
 
