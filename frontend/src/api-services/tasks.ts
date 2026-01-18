@@ -156,12 +156,26 @@ export const useTasksApiService = defineApiService(API_URL, {
             authToken: string;
         },
     ) {
+        const patch = {
+            beginAt: null,
+            description: null,
+            endAt: null,
+            priority: null,
+            statusId: null,
+            title: null,
+        } satisfies { [K in keyof Task]: Task[K] | null };
+
+        Object.entries(payload.updates).forEach(([key, value]) => {
+            /* eslint-disable  @typescript-eslint/no-explicit-any */
+            (patch as any)[key] = value;
+        });
+
         return passResult(
             fetch(`${baseUrl}/projects/${payload.projectId}`, {
                 method: 'PATCH',
                 body: JSON.stringify({
                     operations: Object.keys(payload.updates),
-                    ...payload.updates,
+                    ...patch,
                 }),
                 headers: {
                     'X-Organization-Id': payload.organizationId,
@@ -174,13 +188,17 @@ export const useTasksApiService = defineApiService(API_URL, {
 
     async requestStatusesBatch(
         baseUrl,
-        payload: { organizationId: string; authToken: string },
+        payload: { organizationId: string; authToken: string; ids: string[] },
     ): Promise<Result<RequestTaskStatusesSuccess, ApiError>> {
         return parseResponse(
             fetch(`${baseUrl}/statuses/batch-fetch`, {
                 method: 'POST',
+                body: JSON.stringify({
+                    ids: payload.ids,
+                }),
                 headers: {
                     'X-Organization-Id': payload.organizationId,
+                    'Content-Type': 'application/json',
                     Authorization: `Bearer ${payload.authToken}`,
                 },
             }),

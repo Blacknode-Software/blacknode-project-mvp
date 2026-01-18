@@ -31,6 +31,8 @@ public class TasksInChannelUseCase implements ResultExecutionUseCase<TasksInChan
 	@Override
 	@Transactional
 	public TasksInChannelUseCase.Result execute(TasksInChannelCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		

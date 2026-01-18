@@ -29,6 +29,8 @@ public class AccountPatchUseCase implements ResultExecutionUseCase<AccountPatchC
 	@Override
 	@Transactional
 	public Result execute(AccountPatchCommand command) {
+		sessionContextHolder.ensureAuthenticated();
+		
 		var accountId = sessionContextHolder.getAccountIdOrThrow();
 	
 		var operations = command.getOperations();

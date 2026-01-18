@@ -25,6 +25,8 @@ public class AccountFetchUseCase implements ResultExecutionUseCase<AccountFetchC
 	@Override
 	@Transactional
 	public Result execute(AccountFetchCommand command) {
+		sessionContextHolder.ensureAuthenticated();
+		
 		var accountId = sessionContextHolder.getAccountIdOrThrow();
 		
 		var account = accountService.getOrThrow(accountId);

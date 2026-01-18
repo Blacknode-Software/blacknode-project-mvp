@@ -23,6 +23,7 @@ import software.blacknode.backend.api.controller.annotation.BearerAuth;
 import software.blacknode.backend.api.controller.annotation.DisplayPatchOperations;
 import software.blacknode.backend.api.controller.channel.mapper.impl.ChannelCreateMapper;
 import software.blacknode.backend.api.controller.channel.mapper.impl.ChannelFetchMapper;
+import software.blacknode.backend.api.controller.channel.mapper.impl.ChannelInsightsMapper;
 import software.blacknode.backend.api.controller.channel.mapper.impl.ChannelPatchMapper;
 import software.blacknode.backend.api.controller.channel.mapper.impl.ChannelsBatchFetchMapper;
 import software.blacknode.backend.api.controller.channel.mapper.impl.ChannelsInProjectMapper;
@@ -30,6 +31,7 @@ import software.blacknode.backend.api.controller.channel.request.ChannelCreateRe
 import software.blacknode.backend.api.controller.channel.request.ChannelPatchRequest;
 import software.blacknode.backend.api.controller.channel.request.ChannelsBatchFetchRequest;
 import software.blacknode.backend.api.controller.channel.response.ChannelCreateResponse;
+import software.blacknode.backend.api.controller.channel.response.ChannelInsightsResponse;
 import software.blacknode.backend.api.controller.channel.response.ChannelPatchResponse;
 import software.blacknode.backend.api.controller.channel.response.ChannelResponse;
 import software.blacknode.backend.api.controller.channel.response.ChannelsBatchFetchResponse;
@@ -38,10 +40,12 @@ import software.blacknode.backend.api.controller.organization.annotation.Organiz
 import software.blacknode.backend.api.controller.response.impl.SuccessResponse;
 import software.blacknode.backend.application.channel.command.ChannelDeleteCommand;
 import software.blacknode.backend.application.channel.command.ChannelFetchCommand;
+import software.blacknode.backend.application.channel.command.ChannelIsightsCommand;
 import software.blacknode.backend.application.channel.command.ChannelsInProjectCommand;
 import software.blacknode.backend.application.channel.usecase.ChannelCreateUseCase;
 import software.blacknode.backend.application.channel.usecase.ChannelDeleteUseCase;
 import software.blacknode.backend.application.channel.usecase.ChannelFetchUseCase;
+import software.blacknode.backend.application.channel.usecase.ChannelInsightsUseCase;
 import software.blacknode.backend.application.channel.usecase.ChannelPatchUseCase;
 import software.blacknode.backend.application.channel.usecase.ChannelPatchUseCase.ChannelPatchOperation;
 import software.blacknode.backend.application.channel.usecase.ChannelsBatchFetchUseCase;
@@ -69,6 +73,9 @@ public class ChannelController extends BaseController {
 	private final ChannelPatchUseCase channelPatchUseCase;
 	
 	private final ChannelDeleteUseCase channelDeleteUseCase;
+	
+	private final ChannelInsightsMapper channelInsightsMapper;
+	private final ChannelInsightsUseCase channelInsightsUseCase;
 	
 	@OrganizationHeader
 	@Operation(summary = "Get a channel by ID")
@@ -159,5 +166,19 @@ public class ChannelController extends BaseController {
 		return SuccessResponse.with("Channel deleted successfully");
 	}
 	
-	
+	@OrganizationHeader
+	@Operation(summary = "Get channel insights")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Channel insights fetched") })
+	@GetMapping("/channels/{id}/insights")
+	public ResponseEntity<ChannelInsightsResponse> getChannelInsights(@PathVariable UUID id) {
+		var command = ChannelIsightsCommand.builder()
+				.channelId(HUID.fromUUID(id))
+				.build();
+		
+		var result = channelInsightsUseCase.execute(command);
+		
+		var response = channelInsightsMapper.toResponse(result);
+		
+		return response.toOkResponse("Channel insights fetched successfully");
+	}
 }

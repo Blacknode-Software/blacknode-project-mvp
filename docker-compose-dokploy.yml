@@ -1,0 +1,35 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: blacknode-backend:latest-dev
+    restart: unless-stopped
+    environment:
+      - spring.profiles.active=dev
+      - APPLICATION_URL=${APPLICATION_URL}
+      - JWT_EXPIRATION_TIME=${JWT_EXPIRATION_TIME}
+    expose:
+      - "8080"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: blacknode-frontend:latest-dev
+    expose:
+      - "80"
+    restart: unless-stopped
+
+  proxy:
+    build:
+      context: ./proxy
+      dockerfile: Dockerfile
+    image: blacknode-proxy:latest-dev
+    depends_on:
+      - backend
+      - frontend
+    expose:
+      - "80"
+    restart: unless-stopped
+

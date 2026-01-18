@@ -20,8 +20,10 @@ import software.blacknode.backend.api.controller.member.mapper.MemberAddMapper;
 import software.blacknode.backend.api.controller.member.mapper.MemberAssignRoleMapper;
 import software.blacknode.backend.api.controller.member.mapper.MemberAssignedRoleMapper;
 import software.blacknode.backend.api.controller.member.mapper.MemberListMapper;
+import software.blacknode.backend.api.controller.member.mapper.MemberRemoveMapper;
 import software.blacknode.backend.api.controller.member.request.MemberAddRequest;
 import software.blacknode.backend.api.controller.member.request.MemberAssignRoleRequest;
+import software.blacknode.backend.api.controller.member.request.MemberRemoveRequest;
 import software.blacknode.backend.api.controller.member.response.MemberAssignedRoleResponse;
 import software.blacknode.backend.api.controller.member.response.MemberListResponse;
 import software.blacknode.backend.api.controller.organization.annotation.OrganizationHeader;
@@ -40,6 +42,8 @@ import software.blacknode.backend.application.member.usecase.MemberAssignProject
 import software.blacknode.backend.application.member.usecase.MemberAssignedChannelRoleFetchUseCase;
 import software.blacknode.backend.application.member.usecase.MemberAssignedOrganizationRoleFetchUseCase;
 import software.blacknode.backend.application.member.usecase.MemberAssignedProjectRoleFetchUseCase;
+import software.blacknode.backend.application.member.usecase.MemberRemoveFromChannelUseCase;
+import software.blacknode.backend.application.member.usecase.MemberRemoveFromProjectUseCase;
 import software.blacknode.backend.application.member.usecase.MembersInChannelUseCase;
 import software.blacknode.backend.application.member.usecase.MembersInOrganizationUseCase;
 import software.blacknode.backend.application.member.usecase.MembersInProjectUseCase;
@@ -72,6 +76,11 @@ public class MemberController extends BaseController {
 	
 	private final MemberAddToProjectUseCase memberAddToProjectUseCase;
 	private final MemberAddToChannelUseCase memberAddToChannelUseCase;
+	
+	private final MemberRemoveMapper memberRemoveMapper;
+	
+	private final MemberRemoveFromProjectUseCase memberRemoveFromProjectUseCase;
+	private final MemberRemoveFromChannelUseCase memberRemoveFromChannelUseCase;
 	
 	@OrganizationHeader
 	@Operation(summary = "Assign Organization Role to Member", description = "Assigns a specific role to a member within the organization.")
@@ -211,7 +220,7 @@ public class MemberController extends BaseController {
 	@ApiResponse(responseCode = "200", description = "Member added to project successfully.")
 	@PostMapping("/projects/{projectId}/members/add")
 	public ResponseEntity<SuccessResponse> addMemberToProject(@RequestBody MemberAddRequest request, @PathVariable UUID projectId) {
-		var command = memberAddMapper.toProjectCommand(request, HUID.fromUUID(projectId));
+		var command = memberAddMapper.toProjectCommand(request, projectId);
 		
 		memberAddToProjectUseCase.execute(command);
 		
@@ -223,11 +232,35 @@ public class MemberController extends BaseController {
 	@ApiResponse(responseCode = "200", description = "Member added to channel successfully.")
 	@PostMapping("/channels/{channelId}/members/add")
 	public ResponseEntity<SuccessResponse> addMemberToChannel(@RequestBody MemberAddRequest request, @PathVariable UUID channelId) {
-		var command = memberAddMapper.toChannelCommand(request, HUID.fromUUID(channelId));
+		var command = memberAddMapper.toChannelCommand(request, channelId);
 		
 		memberAddToChannelUseCase.execute(command);
 		
 		return SuccessResponse.with("Member added to channel successfully.");
+	}
+	
+	@OrganizationHeader
+	@Operation(summary = "Remove Member from Channel", description = "Removes a member from the specified channel.")
+	@ApiResponse(responseCode = "200", description = "Member removed from channel successfully.")
+	@PostMapping("/projects/{projectId}/members/remove")
+	public ResponseEntity<SuccessResponse> removeMemberFromProject(@RequestBody MemberRemoveRequest request, @PathVariable UUID projectId) {
+		var command = memberRemoveMapper.toProjectCommand(request, projectId);
+		
+		memberRemoveFromProjectUseCase.execute(command);
+		
+		return SuccessResponse.with("Member removed from project successfully.");
+	}
+	
+	@OrganizationHeader
+	@Operation(summary = "Remove Member from Channel", description = "Removes a member from the specified channel.")
+	@ApiResponse(responseCode = "200", description = "Member removed from channel successfully.")
+	@PostMapping("/channels/{channelId}/members/remove")
+	public ResponseEntity<SuccessResponse> removeMemberFromChannel(@RequestBody MemberRemoveRequest request, @PathVariable UUID channelId) {
+		var command = memberRemoveMapper.toChannelCommand(request, channelId);
+		
+		memberRemoveFromChannelUseCase.execute(command);
+		
+		return SuccessResponse.with("Member removed from channel successfully.");
 	}
 	
 }

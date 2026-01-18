@@ -31,6 +31,8 @@ public class RolesBatchFetchUseCase implements ResultExecutionUseCase<RolesBatch
 	@Override
 	@Transactional
 	public Result execute(RolesBatchFetchCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		

@@ -3,11 +3,25 @@ import { FixedBackground, MainSidebar, KanbanColumn, TaskDialog } from '@/compon
 import { MainHeader, UniSidebar, MainView } from '@/layout';
 import type { Task } from '@/shared-types';
 import { useCurrentChannelTasksStore } from '@/stores';
+import { useCurrentOrganizationStore } from '@/stores/current-organization';
+import { UnixTimestamp } from '@/utils';
 import { onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
+const currentOrganizationStore = useCurrentOrganizationStore();
 const currentChannelTasksStore = useCurrentChannelTasksStore();
-const selectedTask = ref<Task | null>(null);
+const selectedTask = ref<Task | null>({
+    title: 'test',
+    description: 'test',
+    beginAt: new UnixTimestamp(123123),
+    endAt: new UnixTimestamp(12312321),
+    id: 'adasdasdas',
+    priority: 0,
+    statusId: 'asdasdasd',
+});
+const taskEditMode = ref<boolean>(false);
+const organizationId = ref<string>();
+const projectId = ref<string>();
 
 function openTask(task: Task) {
     selectedTask.value = task;
@@ -15,24 +29,31 @@ function openTask(task: Task) {
 
 function closeTask() {
     selectedTask.value = null;
+    taskEditMode.value = false;
 }
 
 const route = useRoute();
 
 onMounted(() => {
-    currentChannelTasksStore.requestTasksForChannel(
-        route.params.channel_id as string,
-        route.params.organization_id as string,
-    );
+    const orgId = route.params.organization_id as string;
+    const chnlId = route.params.channel_id as string;
+
+    currentChannelTasksStore.requestTasksForChannel(chnlId, orgId);
+
+    organizationId.value = orgId;
+    projectId.value = currentOrganizationStore.findProjectWithChannel(chnlId)!;
 });
 
 watch(
     () => [route.params.organization_id, route.params.channel_id],
     ([newOrganizatonId, newChannelId]) => {
-        currentChannelTasksStore.requestTasksForChannel(
-            newChannelId as string,
-            newOrganizatonId as string,
-        );
+        const orgId = newOrganizatonId as string;
+        const chnlId = newChannelId as string;
+
+        currentChannelTasksStore.requestTasksForChannel(chnlId, orgId);
+
+        organizationId.value = orgId;
+        projectId.value = currentOrganizationStore.findProjectWithChannel(chnlId)!;
     },
     { immediate: true },
 );
@@ -58,7 +79,14 @@ watch(
             </div>
         </MainView>
     </div>
-    <TaskDialog v-if="selectedTask" :task="selectedTask" @close="closeTask" />
+    <TaskDialog
+        v-if="selectedTask"
+        :edit-mode="taskEditMode"
+        :task="selectedTask"
+        :organization-id="organizationId!"
+        :project-id="projectId!"
+        @close="closeTask"
+    />
 </template>
 
 <style scoped>

@@ -31,6 +31,8 @@ public class ProjectPatchUseCase implements ResultExecutionUseCase<ProjectPatchC
 	@Override
 	@Transactional
 	public Result execute(ProjectPatchCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		

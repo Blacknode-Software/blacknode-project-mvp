@@ -28,6 +28,8 @@ public class TaskCreateUseCase implements ResultExecutionUseCase<TaskCreateComma
 	@Override
 	@Transactional
 	public Result execute(TaskCreateCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		

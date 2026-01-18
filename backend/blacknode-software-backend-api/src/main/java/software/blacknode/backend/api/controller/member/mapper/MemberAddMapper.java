@@ -1,8 +1,9 @@
 package software.blacknode.backend.api.controller.member.mapper;
 
+import java.util.UUID;
+
 import org.mapstruct.Mapper;
 
-import me.hinsinger.hinz.common.huid.HUID;
 import software.blacknode.backend.api.controller.mapper.ControllerMapper;
 import software.blacknode.backend.api.controller.member.request.MemberAddRequest;
 import software.blacknode.backend.application.member.command.MemberAddToChannelCommand;
@@ -11,8 +12,8 @@ import software.blacknode.backend.application.member.command.MemberAddToProjectC
 @Mapper(componentModel = "spring")
 public interface MemberAddMapper extends ControllerMapper {
 
-	MemberAddToChannelCommand toChannelCommand(MemberAddRequest request, HUID channelId);
+	MemberAddToChannelCommand toChannelCommand(MemberAddRequest request, UUID channelId);
 	
-	MemberAddToProjectCommand toProjectCommand(MemberAddRequest request, HUID projectId);
+	MemberAddToProjectCommand toProjectCommand(MemberAddRequest request, UUID projectId);
 	
 }

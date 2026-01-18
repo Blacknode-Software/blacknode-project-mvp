@@ -1,4 +1,7 @@
-name: Build and Push Pre-Release Images
+name: Build and Push Pre-Release Images (Multi-Arch, Native)
+
+permissions:
+  contents: read
 
 on:
   workflow_dispatch:
@@ -9,46 +12,81 @@ on:
         type: string
 
 jobs:
-  build-and-push-prerelease:
+  build:
     if: startsWith(github.ref, 'refs/heads/release/')
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    strategy:
+      matrix:
+        include:
+          - runner: ubuntu-latest
+            platform: linux/amd64
+            suffix: amd64
+          - runner: ubuntu-24.04-arm
+            platform: linux/arm64
+            suffix: arm64
 
-      - name: Docker login
-        uses: docker/login-action@v3
+    runs-on: ${{ matrix.runner }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_HUB_LOGIN }}
           password: ${{ secrets.DOCKER_HUB_PAT }}
 
-      - name: Build backend image (pre-release)
+      - name: Build & push backend
         run: |
           docker build \
+            --platform=${{ matrix.platform }} \
             --build-arg REVISION=${{ inputs.version }} \
-            -t blacknode-software/blacknode-backend:${{ inputs.version }} \
-            -t blacknode-software/blacknode-backend:pre-release \
+            -t blacknodesoftware/blacknode-backend:${{ inputs.version }}-${{ matrix.suffix }} \
             -f backend/Dockerfile backend
+          docker push blacknodesoftware/blacknode-backend:${{ inputs.version }}-${{ matrix.suffix }}
 
-      - name: Build frontend image (pre-release)
+      - name: Build & push frontend
         run: |
           docker build \
-            -t blacknode-software/blacknode-frontend:${{ inputs.version }} \
-            -t blacknode-software/blacknode-frontend:pre-release \
+            --platform=${{ matrix.platform }} \
+            -t blacknodesoftware/blacknode-frontend:${{ inputs.version }}-${{ matrix.suffix }} \
             -f frontend/Dockerfile frontend
+          docker push blacknodesoftware/blacknode-frontend:${{ inputs.version }}-${{ matrix.suffix }}
 
-      - name: Build proxy image (pre-release)
+      - name: Build & push proxy
         run: |
           docker build \
-            -t blacknode-software/blacknode-proxy:${{ inputs.version }} \
-            -t blacknode-software/blacknode-proxy:pre-release \
+            --platform=${{ matrix.platform }} \
+            -t blacknodesoftware/blacknode-proxy:${{ inputs.version }}-${{ matrix.suffix }} \
             -f proxy/Dockerfile proxy
+          docker push blacknodesoftware/blacknode-proxy:${{ inputs.version }}-${{ matrix.suffix }}
 
-      - name: Push pre-release images
+  manifest:
+    if: startsWith(github.ref, 'refs/heads/release/')
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_LOGIN }}
+          password: ${{ secrets.DOCKER_HUB_PAT }}
+
+      - name: Push backend manifest (pre-release)
         run: |
-          docker push blacknode-software/blacknode-backend:${{ inputs.version }}
-          docker push blacknode-software/blacknode-backend:pre-release
-          docker push blacknode-software/blacknode-frontend:${{ inputs.version }}
-          docker push blacknode-software/blacknode-frontend:pre-release
-          docker push blacknode-software/blacknode-proxy:${{ inputs.version }}
-          docker push blacknode-software/blacknode-proxy:pre-release
+          docker manifest create blacknodesoftware/blacknode-backend:pre-release \
+            blacknodesoftware/blacknode-backend:${{ inputs.version }}-amd64 \
+            blacknodesoftware/blacknode-backend:${{ inputs.version }}-arm64
+          docker manifest push blacknodesoftware/blacknode-backend:pre-release
+
+      - name: Push frontend manifest (pre-release)
+        run: |
+          docker manifest create blacknodesoftware/blacknode-frontend:pre-release \
+            blacknodesoftware/blacknode-frontend:${{ inputs.version }}-amd64 \
+            blacknodesoftware/blacknode-frontend:${{ inputs.version }}-arm64
+          docker manifest push blacknodesoftware/blacknode-frontend:pre-release
+
+      - name: Push proxy manifest (pre-release)
+        run: |
+          docker manifest create blacknodesoftware/blacknode-proxy:pre-release \
+            blacknodesoftware/blacknode-proxy:${{ inputs.version }}-amd64 \
+            blacknodesoftware/blacknode-proxy:${{ inputs.version }}-arm64
+          docker manifest push blacknodesoftware/blacknode-proxy:pre-release

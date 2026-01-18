@@ -1,5 +1,6 @@
 import type { Result } from '@/utils';
 import { defineApiService, parseResponse, type ApiError } from './utils';
+import { API_URL } from '@/config/env';
 
 interface RequestOrganizationInvitesSuccess {
     message: 'Operation completed successfully.';
@@ -37,7 +38,7 @@ interface BatchFeatchInvites {
     }[];
 }
 
-export const useInvitesApiService = defineApiService('dummy url', {
+export const useInvitesApiService = defineApiService(API_URL, {
     async requestOrganizationInvites(
         baseUrl,
         payload: { organizationId: string; authToken: string },

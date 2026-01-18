@@ -29,6 +29,8 @@ public class ChannelCreateUseCase implements ResultExecutionUseCase<ChannelCreat
 	@Override
 	@Transactional
 	public Result execute(ChannelCreateCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		

@@ -33,6 +33,8 @@ public class ChannelPatchUseCase implements ResultExecutionUseCase<ChannelPatchC
 	@Override
 	@Transactional
 	public Result execute(ChannelPatchCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		

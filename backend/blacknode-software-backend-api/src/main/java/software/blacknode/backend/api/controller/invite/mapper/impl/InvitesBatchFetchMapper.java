@@ -19,7 +19,7 @@ public interface InvitesBatchFetchMapper extends InviteMapper, RequestMapper<Inv
 	InvitesBatchFetchCommand toCommand(InvitesBatchFetchRequest request);
 	
 	@Override
-	@Mapping(target = "items", source = "result.invites")
+	@Mapping(target = "items", source = "invites")
 	InvitesBatchFetchResponse toResponse(InvitesBatchFetchUseCase.Result result);
 
 }

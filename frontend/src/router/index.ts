@@ -3,7 +3,6 @@ import KanbanBoardView from '@/views/KanbanBoardView.vue';
 import TasksListView from '@/views/TasksListView.vue';
 import LoginView from '@/views/LoginView.vue';
 import ChannelSettingsView from '@/views/ChannelSettingsView.vue';
-import RedirectView from '@/views/RedirectView.vue';
 import SettingsView from '@/views/SettingsView.vue';
 
 const router = createRouter({
@@ -34,10 +33,10 @@ const router = createRouter({
             name: 'Main settings',
             component: SettingsView,
         },
-        {
-            path: '/:pathMatch(.*)*',
-            component: RedirectView,
-        },
+        // {
+        //     path: '/:pathMatch(.*)*',
+        //     component: RedirectView,
+        // },
     ],
 });
 

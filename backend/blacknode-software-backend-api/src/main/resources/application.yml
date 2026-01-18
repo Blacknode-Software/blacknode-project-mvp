@@ -1,31 +1,40 @@
+application:
+  base-url: "${APPLICATION_URL:http://localhost}"
+
 server:
   servlet:
     context-path: /api
-
+  
 springdoc:
   api-docs:
     path: /v3/api-docs
   swagger-ui:
-    path: /swagger-ui
+    path: /swagger-ui.html
+  
+spring:
+  datasource:
+    url: "${DB_URL:}"
+    username: "${DB_USERNAME:}"
+    password: "${DB_PASSWORD:}"
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
 
-management:
-  endpoints:
-    web:
-      base-path: /actuator
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
 jwt:
-  issuer: "blacknode-backend-dev"
-  audience: "api"
-  expiration: 900000
-  secret: "f0KeSbOwDytCaVKhPKqaBOkFM7t80hMc6mGVIArVJdI="
+  issuer: "blacknode-backend-prod"
+  expiration: 3600000
+  secret: "${JWT_SECRET:}"
   
 logging:
   level:
-    org.hibernate: TRACE
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql: TRACE
-    org.hibernate.orm.jdbc.bind: TRACE
-    org.hibernate.type.descriptor.converter: TRACE
-    org.hibernate.metamodel.model.convert: TRACE
-    org.springframework.orm.jpa: DEBUG
-    org.springframework.transaction: TRACE
+    root: INFO
+    org.springframework: INFO
+    org.hibernate: WARN
+    org.hibernate.SQL: OFF

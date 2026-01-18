@@ -32,6 +32,8 @@ public class ProfileFetchUseCase implements ResultExecutionUseCase<ProfileFetchC
 	@Override
 	@Transactional
 	public Result execute(ProfileFetchCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		

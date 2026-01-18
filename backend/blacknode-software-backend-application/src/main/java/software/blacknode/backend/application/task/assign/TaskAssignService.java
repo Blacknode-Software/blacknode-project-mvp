@@ -38,7 +38,7 @@ public class TaskAssignService {
 	}
 	
 	public void delete(HUID organizationId, HUID id, DeletionMeta meta) {
-		var taskAssign = getOrThrow(organizationId, organizationId);
+		var taskAssign = getOrThrow(organizationId, id);
 		
 		taskAssign.delete(meta);
 		

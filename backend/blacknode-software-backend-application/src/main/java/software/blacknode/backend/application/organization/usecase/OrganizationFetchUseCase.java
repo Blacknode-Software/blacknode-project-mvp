@@ -27,6 +27,8 @@ public class OrganizationFetchUseCase implements ResultExecutionUseCase<Organiza
 	@Override
 	@Transactional
 	public Result execute(OrganizationFetchCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		

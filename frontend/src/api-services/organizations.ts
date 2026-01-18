@@ -1,6 +1,7 @@
 import { type Result } from '@/utils';
 import { defineApiService } from './utils/DefineApiService';
 import { parseResponse, passResult, type ApiError } from './utils';
+import { API_URL } from '@/config/env';
 
 interface Organization {
     any: number; // todo
@@ -13,7 +14,7 @@ interface RequestOrganizationSuccess {
     name: string;
 }
 
-export const useOrganizationsApiService = defineApiService('dummy url', {
+export const useOrganizationsApiService = defineApiService(API_URL, {
     async requestOrganization(
         baseUrl,
         payload: { organizationId: string; authToken: string },

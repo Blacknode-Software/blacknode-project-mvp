@@ -31,6 +31,8 @@ public class InvitesInOrganizationUseCase implements ResultExecutionUseCase<Invi
 	@Override
 	@Transactional
 	public Result execute(InvitesInOrganizationCommand command) {
+		sessionContextHolder.ensureOrganizationScoped();
+		
 		var organizationId = sessionContextHolder.getOrganizationIdOrThrow();
 		var memberId = sessionContextHolder.getMemberIdOrThrow();
 		
